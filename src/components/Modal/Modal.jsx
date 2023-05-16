@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import clientAxios from '../config/clientAxios'
+import clientAxios from '../../config/clientAxios'
 
 function Modal () {
   const [name, setName] = useState('')
