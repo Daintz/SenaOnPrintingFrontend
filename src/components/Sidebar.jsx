@@ -1,6 +1,18 @@
+import { useState, useEffect } from 'react'
+import clientAxios from '../config/clientAxios'
 import Modal from './Modal'
-
 function Sidebar () {
+  const [dataSupplies, setDataSupplies] = useState([])
+
+  useEffect(() => {
+    get()
+  }, [])
+
+  const get = async () => {
+    const { data } = await clientAxios('/supplyCategory')
+    setDataSupplies(data)
+  }
+
   return (
     <>
       <button
@@ -125,16 +137,10 @@ function Sidebar () {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" className="px-6 py-3">
-                      Supply name
+                      Name
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Color
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price
+                      Description
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Edit
@@ -145,19 +151,21 @@ function Sidebar () {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  {dataSupplies
+                    ? dataSupplies.map(supply => (
+                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={supply.idSupplyCategory}>
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      Apple MacBook Pro 17
+                      {supply.name}
                     </th>
-                    <td className="px-6 py-4">Silver</td>
-                    <td className="px-6 py-4">Laptop</td>
-                    <td className="px-6 py-4">$2999</td>
-                    <td className="px-6 py-4"><button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button></td>
-                    <td className="px-6 py-4"><button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button></td>
+                    <td className="px-6 py-4">{supply.description}</td>
+                    <td className="px-6 py-4"><button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Editar</button></td>
+                    <td className="px-6 py-4"><button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Elimar</button></td>
                   </tr>
+                    ))
+                    : <p>No hay registros guardados</p>}
                 </tbody>
               </table>
             </div>
