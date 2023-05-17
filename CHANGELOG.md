@@ -1,5 +1,6 @@
-## <small>0.0.8 (2023-05-16)</small>
+## <small>0.0.9 (2023-05-16)</small>
 
+* refactor: :recycle: organizing folder ([9c75c74](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9c75c74))
 * build: :construction: add dashboard ([32edbb3](https://github.com/Daintz/SenaOnPrintingFrontend/commit/32edbb3))
 * build: :hammer: separate config react router dom in other folder ([4045acb](https://github.com/Daintz/SenaOnPrintingFrontend/commit/4045acb))
 * feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
