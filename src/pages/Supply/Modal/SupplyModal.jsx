@@ -2,28 +2,39 @@ import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
 function SupplyModal () {
-  const [name, setName] = useState('')
-  const [minimunUnitMeasureId, setMinimunUnitMeasureId] = useState(0)
-  const [dangerIndicators, setDangerIndicators] = useState('')
-  const [useInstructions, setUseInstructions] = useState('')
-  const [advices, setAdvices] = useState('')
-  const [supplyType, setSupplyType] = useState(0)
-  const [sortingWord, setSortingWord] = useState(0)
-  const [quantity, setQuantity] = useState(0)
-  const [averageCost, setAverageCost] = useState(0)
-  const [statedAt, setStatedAt] = useState(true)
-  const [idWarehouse, setIdWarehouse] = useState(0)
+  const [dataApi, setDataApi] = useState({
+    name: '',
+    minimunUnitMeasureId: 0,
+    dangerIndicators: '',
+    useInstructions: '',
+    advices: '',
+    supplyType: 0,
+    sortingWord: 0,
+    quantity: 0,
+    averageCost: 0,
+    statedAt: true,
+    idWarehouse: 0
+  })
 
   const handleSubmit = async e => {
     e.preventDefault()
 
     try {
-      setMinimunUnitMeasureId(1)
-      setSupplyType(1)
-      setSortingWord(1)
-      setIdWarehouse(1)
-      setStatedAt(true)
-      const { data } = await clientAxios.post('/supply', { name, minimunUnitMeasureId, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost, statedAt, idWarehouse })
+      console.log(dataApi)
+      const nuevoValorMinimunUnitMeasureId = 1
+      const nuevoValorSupplyType = 2
+      const nuevoValorSortingWord = 3
+      const nuevoValorIdWarehouse = 4
+
+      setDataApi({
+        ...dataApi,
+        minimunUnitMeasureId: nuevoValorMinimunUnitMeasureId,
+        supplyType: nuevoValorSupplyType,
+        sortingWord: nuevoValorSortingWord,
+        idWarehouse: nuevoValorIdWarehouse
+      })
+      console.log(dataApi)
+      const { data } = await clientAxios.post('/supply', dataApi)
       console.log(data)
     } catch (err) {
       console.log(err)
@@ -55,32 +66,28 @@ function SupplyModal () {
                     id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Nombre"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="useInstructions"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Instrucciones
                   </label>
                   <input
                     type="text"
-                    name="dangerIndicators"
-                    id="dangerIndicators"
+                    name="useInstructions"
+                    id="useInstructions"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Instrucciones"
-                    value={useInstructions}
-                    onChange={e => setUseInstructions(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="dangerIndicators"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Indicadores de peligro insumo
@@ -91,62 +98,54 @@ function SupplyModal () {
                     id="dangerIndicators"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Indicadores de peligro"
-                    value={dangerIndicators}
-                    onChange={e => setDangerIndicators(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="advices"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Consejos
                   </label>
                   <input
                     type="text"
-                    name="useInstructions"
-                    id="useInstructions"
+                    name="advices"
+                    id="advices"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Consejos"
-                    value={advices}
-                    onChange={e => setAdvices(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="quantity"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Cantidad
                   </label>
                   <input
-                    type="text"
-                    name="dangerIndicators"
-                    id="dangerIndicators"
+                    type="number"
+                    name="quantity"
+                    id="quantity"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Cantidad"
-                    value={quantity}
-                    onChange={e => setQuantity(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="averageCost"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Costo Promedio
                   </label>
                   <input
-                    type="text"
-                    name="dangerIndicators"
-                    id="dangerIndicators"
+                    type="number"
+                    name="averageCost"
+                    id="averageCost"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Costo Promedio"
-                    value={averageCost}
-                    onChange={e => setAverageCost(e.target.value)}
                     required
                   />
                 </div>
