@@ -2,14 +2,16 @@ import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
 function SupplyCategoryModal () {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [dataForm, setDataForm] = useState({
+    name: '',
+    description: ''
+  })
 
   const handleSubmit = async e => {
     e.preventDefault()
 
     try {
-      const { data } = await clientAxios.post('/supplyCategory', { name, description })
+      const { data } = await clientAxios.post('/supplyCategory', dataForm)
       console.log(data)
     } catch (err) {
       console.log(err)
@@ -41,8 +43,8 @@ function SupplyCategoryModal () {
                     id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Nombre"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    value={dataForm.name}
+                    onChange={e => setDataForm({ ...dataForm, name: e.target.value })}
                     required
                   />
                 </div>
@@ -59,8 +61,8 @@ function SupplyCategoryModal () {
                     id="description"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Descripción"
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    value={dataForm.description}
+                    onChange={e => setDataForm({ ...dataForm, description: e.target.value })}
                     required
                   />
                 </div>

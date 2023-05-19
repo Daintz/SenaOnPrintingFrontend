@@ -1,8 +1,9 @@
-## <small>0.0.10 (2023-05-17)</small>
+## <small>0.0.11 (2023-05-18)</small>
 
 * build: :construction: add dashboard ([32edbb3](https://github.com/Daintz/SenaOnPrintingFrontend/commit/32edbb3))
 * build: :construction: add menu supply and add reusable modal ([9004ca9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9004ca9))
 * build: :hammer: separate config react router dom in other folder ([4045acb](https://github.com/Daintz/SenaOnPrintingFrontend/commit/4045acb))
+* build: :technologist: optimize states in modal supply ([caeb678](https://github.com/Daintz/SenaOnPrintingFrontend/commit/caeb678))
 * refactor: :recycle: organizing folder ([9c75c74](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9c75c74))
 * feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
 * feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))

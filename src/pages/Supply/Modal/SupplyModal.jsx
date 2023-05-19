@@ -2,7 +2,7 @@ import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
 function SupplyModal () {
-  const [dataApi, setDataApi] = useState({
+  const [dataForm, setDataForm] = useState({
     name: '',
     minimunUnitMeasureId: 0,
     dangerIndicators: '',
@@ -20,21 +20,19 @@ function SupplyModal () {
     e.preventDefault()
 
     try {
-      console.log(dataApi)
-      const nuevoValorMinimunUnitMeasureId = 1
-      const nuevoValorSupplyType = 2
-      const nuevoValorSortingWord = 3
-      const nuevoValorIdWarehouse = 4
+      const newValorMinimunUnitMeasureId = 1
+      const newValorSupplyType = 1
+      const newValorSortingWord = 1
+      const newValorIdWarehouse = 1
 
-      setDataApi({
-        ...dataApi,
-        minimunUnitMeasureId: nuevoValorMinimunUnitMeasureId,
-        supplyType: nuevoValorSupplyType,
-        sortingWord: nuevoValorSortingWord,
-        idWarehouse: nuevoValorIdWarehouse
+      setDataForm({
+        ...dataForm,
+        minimunUnitMeasureId: newValorMinimunUnitMeasureId,
+        supplyType: newValorSupplyType,
+        sortingWord: newValorSortingWord,
+        idWarehouse: newValorIdWarehouse
       })
-      console.log(dataApi)
-      const { data } = await clientAxios.post('/supply', dataApi)
+      const { data } = await clientAxios.post('/supply', dataForm)
       console.log(data)
     } catch (err) {
       console.log(err)
@@ -44,7 +42,7 @@ function SupplyModal () {
   }
 
   const get = () => {
-    // window.location.reload()
+    window.location.reload()
   }
 
   return (
@@ -66,6 +64,8 @@ function SupplyModal () {
                     id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Nombre"
+                    value={dataForm.name}
+                    onChange={e => setDataForm({ ...dataForm, name: e.target.value })}
                     required
                   />
                 </div>
@@ -82,6 +82,8 @@ function SupplyModal () {
                     id="useInstructions"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Instrucciones"
+                    value={dataForm.useInstructions}
+                    onChange={e => setDataForm({ ...dataForm, useInstructions: e.target.value })}
                     required
                   />
                 </div>
@@ -98,6 +100,8 @@ function SupplyModal () {
                     id="dangerIndicators"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Indicadores de peligro"
+                    value={dataForm.dangerIndicators}
+                    onChange={e => setDataForm({ ...dataForm, dangerIndicators: e.target.value })}
                     required
                   />
                 </div>
@@ -114,6 +118,8 @@ function SupplyModal () {
                     id="advices"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Consejos"
+                    value={dataForm.advices}
+                    onChange={e => setDataForm({ ...dataForm, advices: e.target.value })}
                     required
                   />
                 </div>
@@ -130,6 +136,8 @@ function SupplyModal () {
                     id="quantity"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Cantidad"
+                    value={dataForm.quantity}
+                    onChange={e => setDataForm({ ...dataForm, quantity: e.target.value })}
                     required
                   />
                 </div>
@@ -146,6 +154,8 @@ function SupplyModal () {
                     id="averageCost"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Costo Promedio"
+                    value={dataForm.averageCost}
+                    onChange={e => setDataForm({ ...dataForm, averageCost: e.target.value })}
                     required
                   />
                 </div>
