@@ -7,6 +7,10 @@ const SupplyCategory = () => {
   const [dataSupplies, setDataSupplies] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [isEditingInfo, setIsEditingInfo] = useState({
+    name: '',
+    description: ''
+  })
 
   useEffect(() => {
     get()
@@ -15,6 +19,11 @@ const SupplyCategory = () => {
   const get = async () => {
     const { data } = await clientAxios('/supplyCategory')
     setDataSupplies(data)
+  }
+
+  const getSupply = async (id) => {
+    const { data } = await clientAxios(`/supplyCategory/${id}`)
+    setIsEditingInfo(data)
   }
 
   const handleIsOpen = (state) => {
@@ -43,12 +52,15 @@ const SupplyCategory = () => {
                 Crear categoria insumo
               </button>
               <Modal
-                title='Editar categoria de insumo'
+                title={'categoria de insumo'}
                 isOpen={isOpen}
+                isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
                 <SupplyCategoryModal
                   isEditing={isEditing}
+                  isEditingInfo={isEditingInfo}
+                  setIsEditingInfo={setIsEditingInfo}
                 />
               </Modal>
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -87,7 +99,10 @@ const SupplyCategory = () => {
                           <button
                             type="button"
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                            onClick={() => handleIsOpen('editing')}
+                            onClick={() => {
+                              getSupply(supply.idSupplyCategory)
+                              handleIsOpen('editing')
+                            }}
                           >
                             Editar
                           </button>

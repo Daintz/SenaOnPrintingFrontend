@@ -1,4 +1,4 @@
-function Modal ({ title, isOpen, handleIsOpen, children }) {
+function Modal ({ title, isOpen, isEditing, handleIsOpen, children }) {
   return (
     <>
       {isOpen && (
@@ -12,7 +12,7 @@ function Modal ({ title, isOpen, handleIsOpen, children }) {
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div className="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-                    {title}
+                    {isEditing ? `Editar ${title}` : `Crear ${title}`}
                   </h3>
                   <button
                     type="button"
