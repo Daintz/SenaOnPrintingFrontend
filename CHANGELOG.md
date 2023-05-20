@@ -1,5 +1,8 @@
-## <small>0.0.13 (2023-05-20)</small>
+## <small>0.0.14 (2023-05-20)</small>
 
+* feat: :sparkles: add edit in supplyCategory ([130d26d](https://github.com/Daintz/SenaOnPrintingFrontend/commit/130d26d))
+* feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
+* feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))
 * chore: :construction: in-process api consumption ([bfabba9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/bfabba9))
 * chore: :construction: update page information ([f189063](https://github.com/Daintz/SenaOnPrintingFrontend/commit/f189063))
 * chore: :tada: project structure ([328a6b4](https://github.com/Daintz/SenaOnPrintingFrontend/commit/328a6b4))
@@ -11,8 +14,6 @@
 * build: :technologist: optimize states in modal supply ([caeb678](https://github.com/Daintz/SenaOnPrintingFrontend/commit/caeb678))
 * build: :technologist: optimize states in modal supply and supply category ([137184f](https://github.com/Daintz/SenaOnPrintingFrontend/commit/137184f))
 * refactor: :recycle: organizing folder ([9c75c74](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9c75c74))
-* feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
-* feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))
 * test: :test_tube: test husky hook ([3bf1c70](https://github.com/Daintz/SenaOnPrintingFrontend/commit/3bf1c70))
 * test: :white_check_mark: deploy in vercel ([6fe892f](https://github.com/Daintz/SenaOnPrintingFrontend/commit/6fe892f))
 
