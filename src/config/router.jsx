@@ -1,9 +1,9 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
-import DashboardLayout from '../layout/DashboardLayout'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import App from '../App'
 import Supply from '../pages/Supply/Supply'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
+import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
