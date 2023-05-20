@@ -38,10 +38,6 @@ function SupplyModal () {
       console.log(err)
     }
 
-    get()
-  }
-
-  const get = () => {
     window.location.reload()
   }
 
