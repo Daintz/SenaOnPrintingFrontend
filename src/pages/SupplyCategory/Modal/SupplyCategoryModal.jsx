@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
-function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo }) {
+function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get }) {
   const [dataForm, setDataForm] = useState({
     name: '',
     description: ''
@@ -11,8 +11,8 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo }) {
     e.preventDefault()
 
     try {
-      const { data } = await clientAxios.post('/supplyCategory', dataForm)
-      console.log(data)
+      await clientAxios.post('/supplyCategory', dataForm)
+      get()
     } catch (err) {
       console.log(err)
     }
@@ -22,8 +22,8 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo }) {
     e.preventDefault()
 
     try {
-      const { data } = await clientAxios.put(`/supplyCategory/${isEditingInfo.idSupplyCategory}`, isEditingInfo)
-      console.log(data)
+      await clientAxios.put(`/supplyCategory/${isEditingInfo.idSupplyCategory}`, isEditingInfo)
+      get()
     } catch (err) {
       console.log(err)
     }

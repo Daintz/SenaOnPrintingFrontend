@@ -1,5 +1,6 @@
-## <small>0.0.14 (2023-05-20)</small>
+## <small>0.0.15 (2023-05-20)</small>
 
+* feat: :sparkles: add delete in supplyCategory ([2d648df](https://github.com/Daintz/SenaOnPrintingFrontend/commit/2d648df))
 * feat: :sparkles: add edit in supplyCategory ([130d26d](https://github.com/Daintz/SenaOnPrintingFrontend/commit/130d26d))
 * feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
 * feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))

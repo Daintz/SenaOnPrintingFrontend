@@ -28,6 +28,7 @@ const SupplyCategory = () => {
 
   const deleteSupply = async (id) => {
     await clientAxios.delete(`/supplyCategory/${id}`)
+    get()
   }
 
   const handleIsOpen = (state) => {
@@ -65,6 +66,7 @@ const SupplyCategory = () => {
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
+                  get={get}
                 />
               </Modal>
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
