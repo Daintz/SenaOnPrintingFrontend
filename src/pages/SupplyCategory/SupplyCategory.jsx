@@ -31,6 +31,12 @@ const SupplyCategory = () => {
     get()
   }
 
+  const changeStatusSupply = async (id, status) => {
+    const changeState = !status
+    await clientAxios.delete(`/supplyCategory/status/${id}?statedAt=${changeState}`)
+    get()
+  }
+
   const handleIsOpen = (state) => {
     setIsOpen(!isOpen)
     switch (state) {
@@ -45,12 +51,12 @@ const SupplyCategory = () => {
 
   return (
     <>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+      <div className="p-4">
+        <div className="p-4 border-gray-200 border-dashed rounded-lg">
           <div className="flex items-center justify-center rounded">
             <div className="relative overflow-x-auto">
               <button
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
@@ -69,20 +75,23 @@ const SupplyCategory = () => {
                   get={get}
                 />
               </Modal>
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <table className="w-full text-sm text-left text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
-                      Name
+                      Nombre
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Description
+                      Descripcion
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Edit
+                      Editar
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Delete
+                      Eliminar
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Cambiar estado
                     </th>
                   </tr>
                 </thead>
@@ -91,12 +100,12 @@ const SupplyCategory = () => {
                     ? (
                         dataSupplies.map(supply => (
                       <tr
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                        className="bg-white border-b"
                         key={supply.idSupplyCategory}
                       >
                         <th
                           scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
                           {supply.name}
                         </th>
@@ -104,7 +113,7 @@ const SupplyCategory = () => {
                         <td className="px-6 py-4">
                           <button
                             type="button"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                             onClick={() => {
                               getSupply(supply.idSupplyCategory)
                               handleIsOpen('editing')
@@ -116,12 +125,23 @@ const SupplyCategory = () => {
                         <td className="px-6 py-4">
                           <button
                             type="button"
-                            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                             onClick={() => {
                               deleteSupply(supply.idSupplyCategory)
                             }}
                           >
                             Eliminar
+                          </button>
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            type="button"
+                            className="focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+                            onClick={() => {
+                              changeStatusSupply(supply.idSupplyCategory, supply.statedAt)
+                            }}
+                          >
+                            {supply.statedAt ? 'Activo' : 'Inactivo'}
                           </button>
                         </td>
                       </tr>

@@ -9,15 +9,15 @@ function Modal ({ title, isOpen, isEditing, handleIsOpen, children }) {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto bg-gray-500 bg-opacity-50"
           >
             <div className="relative w-full max-w-2xl">
-              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <div className="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+              <div className="relative bg-white rounded-lg shadow">
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl">
                     {isEditing ? `Editar ${title}` : `Crear ${title}`}
                   </h3>
                   <button
                     type="button"
                     onClick={handleIsOpen}
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
                     <svg
                       className="w-5 h-5"
