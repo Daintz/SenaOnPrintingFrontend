@@ -73,6 +73,7 @@ const SupplyCategory = () => {
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
                   get={get}
+                  setIsOpen={setIsOpen}
                 />
               </Modal>
               <table className="w-full text-sm text-left text-gray-500">

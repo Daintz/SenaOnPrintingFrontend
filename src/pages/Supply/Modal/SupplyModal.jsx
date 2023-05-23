@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
-function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get }) {
+function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     name: '',
     minimunUnitMeasureId: 0,
@@ -32,8 +32,8 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get }) {
         sortingWord: newValorSortingWord,
         idWarehouse: newValorIdWarehouse
       })
-      const { data } = await clientAxios.post('/supply', dataForm)
-      console.log(data)
+      await clientAxios.post('/supply', dataForm)
+      setIsOpen(false)
     } catch (err) {
       console.log(err)
     }
@@ -48,7 +48,6 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get }) {
       const newValorSortingWord = 1
       const newValorIdWarehouse = 1
 
-      console.log(isEditingInfo)
       setIsEditingInfo({
         ...isEditingInfo,
         minimunUnitMeasureId: newValorMinimunUnitMeasureId,
@@ -56,11 +55,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get }) {
         sortingWord: newValorSortingWord,
         idWarehouse: newValorIdWarehouse
       })
-      console.log(isEditingInfo)
-      const { data } = await clientAxios.put(`/supply/${isEditingInfo.idSupply}`, isEditingInfo)
-      console.log(data)
-      console.log(isEditingInfo)
+      await clientAxios.put(`/supply/${isEditingInfo.idSupply}`, isEditingInfo)
       get()
+      setIsOpen(false)
     } catch (err) {
       console.log(err)
     }
