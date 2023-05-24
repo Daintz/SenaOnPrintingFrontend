@@ -30,9 +30,8 @@ const Provider = () => {
     setIsEditingInfo(data)
   }
 
-  const changeStatusProvider = async (id, status) => {
-    const changeState = !status
-    await clientAxios.delete(`/provider/status/${id}?statedAt=${changeState}`)
+  const deleteSupply = async (id) => {
+    await clientAxios.delete(`/provider/${id}`)
     get()
   }
 
@@ -122,8 +121,7 @@ const Provider = () => {
                         <td className="px-6 py-4">{Provider.phone}</td>
                         <td className="px-6 py-4">{Provider.companyAddress}</td>
                         <td className="px-6 py-4">{Provider.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
-                        <td className="px-6 py-4">
-                        <td className="grid grid-cols-2  place-content-center">
+                        <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                         <button
                           type="button"
                           onClick={() => {
@@ -139,7 +137,7 @@ const Provider = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            changeStatusProvider(Provider.idProvider, Provider.statedAt)
+                            deleteSupply(Provider.idProvider)
                           }}
 
                         >
@@ -148,7 +146,6 @@ const Provider = () => {
                           </svg>
                         </button>
                       </td>
-                        </td>
                       </tr>
                         ))
                       )
