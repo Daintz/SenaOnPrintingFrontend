@@ -4,6 +4,7 @@ import App from '../App'
 import Supply from '../pages/Supply/Supply'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
+import Provider from '../pages/Provider/Provider'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,10 @@ const router = createBrowserRouter(
       <Route path="supplyCategory"
             element={<DashboardLayout>
               <SupplyCategory />
+            </DashboardLayout>}/>
+      <Route path="provider"
+            element={<DashboardLayout>
+              <Provider/>
             </DashboardLayout>}/>
     </>
   )
