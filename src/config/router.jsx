@@ -5,6 +5,8 @@ import Supply from '../pages/Supply/Supply'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 import Provider from '../pages/Provider/Provider'
+import Machine from '../pages/Machine/Machines'
+import Finish from '../pages/Finishs/Finish'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +27,15 @@ const router = createBrowserRouter(
       <Route path="provider"
             element={<DashboardLayout>
               <Provider/>
+            </DashboardLayout>}/>
+
+            <Route path="Machine"
+            element={<DashboardLayout>
+              <Machine/>
+            </DashboardLayout>}/>
+            <Route path="Finish"
+            element={<DashboardLayout>
+              <Finish/>
             </DashboardLayout>}/>
     </>
   )
