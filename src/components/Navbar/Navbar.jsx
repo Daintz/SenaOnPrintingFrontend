@@ -13,7 +13,7 @@ function Navbar () {
               type="button"
               className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             >
-              <span className="sr-only">Open sidebar</span>
+              <span className="sr-only">Abrir sidebar</span>
               <svg
                 className="w-6 h-6"
                 aria-hidden="true"
@@ -48,7 +48,7 @@ function Navbar () {
                   aria-expanded="false"
                   data-dropdown-toggle="dropdown-user"
                 >
-                  <span className="sr-only">Open user menu</span>
+                  <span className="sr-only">Abrir menu de usuario</span>
                   <img
                     className="w-8 h-8 rounded-full"
                     src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"

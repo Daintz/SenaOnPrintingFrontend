@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import Modal from '../../components/Modal/Modal'
 import clientAxios from '../../config/clientAxios'
-import SupplyCategoryModal from './Modal/SupplyCategoryModal'
+import ProductModal from './Modal/ProductModal'
 
-const SupplyCategory = () => {
+const Product = () => {
   const [dataSupplies, setDataSupplies] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
+    typeProduct: '',
     name: '',
-    description: ''
+    characteristics: ''
   })
 
   useEffect(() => {
@@ -17,23 +18,23 @@ const SupplyCategory = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/supplyCategory')
+    const { data } = await clientAxios('/product')
     setDataSupplies(data)
   }
 
   const getSupply = async (id) => {
-    const { data } = await clientAxios(`/supplyCategory/${id}`)
+    const { data } = await clientAxios(`/product/${id}`)
     setIsEditingInfo(data)
   }
 
   const deleteSupply = async (id) => {
-    await clientAxios.delete(`/supplyCategory/${id}`)
+    await clientAxios.delete(`/product/${id}`)
     get()
   }
 
   const changeStatusSupply = async (id, status) => {
     const changeState = !status
-    await clientAxios.delete(`/supplyCategory/status/${id}?statedAt=${changeState}`)
+    await clientAxios.delete(`/product/status/${id}?statedAt=${changeState}`)
     get()
   }
 
@@ -60,15 +61,15 @@ const SupplyCategory = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear categoria insumo
+                Crear producto
               </button>
               <Modal
-                title={'categoria de insumo'}
+                title={'producto'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <SupplyCategoryModal
+                <ProductModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -80,10 +81,13 @@ const SupplyCategory = () => {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
+                      Tipo producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
                       Nombre
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Descripcion
+                      Caracteristicas
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -107,7 +111,13 @@ const SupplyCategory = () => {
                         >
                           {supply.name}
                         </th>
-                        <td className="px-6 py-4">{supply.description}</td>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {supply.typeProduct}
+                        </th>
+                        <td className="px-6 py-4">{supply.characteristics}</td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
@@ -203,4 +213,4 @@ const SupplyCategory = () => {
   )
 }
 
-export default SupplyCategory
+export default Product
