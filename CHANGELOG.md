@@ -1,7 +1,8 @@
-## <small>0.0.18 (2023-05-22)</small>
+## <small>0.0.19 (2023-05-23)</small>
 
 * chore: :construction: in-process api consumption ([bfabba9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/bfabba9))
 * chore: :construction: update page information ([f189063](https://github.com/Daintz/SenaOnPrintingFrontend/commit/f189063))
+* chore: :hammer: add close modal ([57323a4](https://github.com/Daintz/SenaOnPrintingFrontend/commit/57323a4))
 * chore: :lipstick: update UI ([f7c1812](https://github.com/Daintz/SenaOnPrintingFrontend/commit/f7c1812))
 * chore: :tada: project structure ([328a6b4](https://github.com/Daintz/SenaOnPrintingFrontend/commit/328a6b4))
 * chore: :technologist: improve code ([9d69238](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9d69238))
