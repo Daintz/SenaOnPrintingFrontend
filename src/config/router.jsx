@@ -16,6 +16,10 @@ import Machine from '../pages/Machine/Machines'
 import Finish from '../pages/Finish/Finish'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
+import Client from '../pages/Clients/Clients'
+import Substrate from '../pages/Substrate/Substrate'
+import PaperCut from '../pages/PaperCut/PaperCut'
+import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -87,6 +91,38 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <User />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="clients"
+        element={
+          <DashboardLayout>
+            <Client/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="grammage_caliber"
+        element={
+          <DashboardLayout>
+            <GrammageCaliber />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="paper_cut"
+        element={
+          <DashboardLayout>
+            <PaperCut/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="substrate"
+        element={
+          <DashboardLayout>
+            <Substrate/>
           </DashboardLayout>
         }
       />
