@@ -9,7 +9,6 @@ import Supply from '../pages/Supply/Supply'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 import Product from '../pages/Product/Product'
-import QuotationClient from '../pages/QuotationClient/QuotationClient'
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
@@ -51,15 +50,20 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
+      <Route path="provider"
+        element={<DashboardLayout>
+          <Provider/>
+      </DashboardLayout>}/>
+
+      <Route path="Machine"
+        element={<DashboardLayout>
+          <Machine/>
+      </DashboardLayout>}/>
+      <Route path="Finish"
+        element={<DashboardLayout>
+        <Finish/>
+        </DashboardLayout>}/>
       <Route
-        path="quotationClient"
-        element={
-          <DashboardLayout>
-            <QuotationClient />
-          </DashboardLayout>
-        }
-      />
-          <Route
         path="roles"
         element={
           <DashboardLayout>
