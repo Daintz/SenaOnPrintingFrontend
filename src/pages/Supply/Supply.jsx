@@ -70,7 +70,7 @@ const Supply = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear insumo
+                Crear Insumo
               </button>
               <Modal>
                 <SupplyModal />

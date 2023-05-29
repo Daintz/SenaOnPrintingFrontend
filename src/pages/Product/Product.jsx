@@ -61,7 +61,7 @@ const Product = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear producto
+                Crear Producto
               </button>
               <Modal
                 title={'producto'}
