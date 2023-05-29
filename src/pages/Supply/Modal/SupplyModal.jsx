@@ -3,35 +3,24 @@ import clientAxios from '../../../config/clientAxios'
 
 function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
-    name: '',
-    minimunUnitMeasureId: 0,
-    dangerIndicators: '',
-    useInstructions: '',
-    advices: '',
-    supplyType: 0,
-    sortingWord: 0,
-    quantity: 0,
-    averageCost: 0,
-    statedAt: true,
-    idWarehouse: 0
+    Name: '',
+    IdUnitMeasure: 1,
+    MinimunUnitMeasureId: 1,
+    DangerIndicators: '',
+    UseInstructions: '',
+    Advices: '',
+    SupplyType: 1,
+    SortingWord: 1,
+    Quantity: 0,
+    AverageCost: 0,
+    StatedAt: true,
+    IdWarehouse: 1
   })
 
   const handleSubmitCreate = async e => {
     e.preventDefault()
 
     try {
-      const newValorMinimunUnitMeasureId = 1
-      const newValorSupplyType = 1
-      const newValorSortingWord = 1
-      const newValorIdWarehouse = 1
-
-      setDataForm({
-        ...dataForm,
-        minimunUnitMeasureId: newValorMinimunUnitMeasureId,
-        supplyType: newValorSupplyType,
-        sortingWord: newValorSortingWord,
-        idWarehouse: newValorIdWarehouse
-      })
       await clientAxios.post('/supply', dataForm)
       setIsOpen(false)
     } catch (err) {
@@ -43,19 +32,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
     e.preventDefault()
 
     try {
-      const newValorMinimunUnitMeasureId = 1
-      const newValorSupplyType = 1
-      const newValorSortingWord = 1
-      const newValorIdWarehouse = 1
-
-      setIsEditingInfo({
-        ...isEditingInfo,
-        minimunUnitMeasureId: newValorMinimunUnitMeasureId,
-        supplyType: newValorSupplyType,
-        sortingWord: newValorSortingWord,
-        idWarehouse: newValorIdWarehouse
-      })
-      await clientAxios.put(`/supply/${isEditingInfo.idSupply}`, isEditingInfo)
+      await clientAxios.put(`/supply/${isEditingInfo.IdSupply}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
@@ -82,7 +59,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Nombre"
-                value={isEditingInfo.name}
+                value={isEditingInfo.Name}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, name: e.target.value })
                 }
@@ -102,7 +79,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="useInstructions"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Instrucciones"
-                value={isEditingInfo.useInstructions}
+                value={isEditingInfo.UseInstructions}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, useInstructions: e.target.value })
                 }
@@ -122,7 +99,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="dangerIndicators"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Indicadores de peligro"
-                value={isEditingInfo.dangerIndicators}
+                value={isEditingInfo.DangerIndicators}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, dangerIndicators: e.target.value })
                 }
@@ -142,7 +119,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="advices"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Consejos"
-                value={isEditingInfo.advices}
+                value={isEditingInfo.Advices}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, advices: e.target.value })
                 }
@@ -162,7 +139,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="quantity"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Cantidad"
-                value={isEditingInfo.quantity}
+                value={isEditingInfo.Quantity}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, quantity: e.target.value })
                 }
@@ -182,7 +159,7 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="averageCost"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Costo Promedio"
-                value={isEditingInfo.averageCost}
+                value={isEditingInfo.AverageCost}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, averageCost: e.target.value })
                 }
@@ -214,9 +191,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Nombre"
-                value={dataForm.name}
+                value={dataForm.Name}
                 onChange={e =>
-                  setDataForm({ ...dataForm, name: e.target.value })
+                  setDataForm({ ...dataForm, Name: e.target.value })
                 }
                 required
               />
@@ -234,9 +211,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="useInstructions"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Instrucciones"
-                value={dataForm.useInstructions}
+                value={dataForm.UseInstructions}
                 onChange={e =>
-                  setDataForm({ ...dataForm, useInstructions: e.target.value })
+                  setDataForm({ ...dataForm, UseInstructions: e.target.value })
                 }
                 required
               />
@@ -254,9 +231,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="dangerIndicators"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Indicadores de peligro"
-                value={dataForm.dangerIndicators}
+                value={dataForm.DangerIndicators}
                 onChange={e =>
-                  setDataForm({ ...dataForm, dangerIndicators: e.target.value })
+                  setDataForm({ ...dataForm, DangerIndicators: e.target.value })
                 }
                 required
               />
@@ -274,9 +251,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="advices"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Consejos"
-                value={dataForm.advices}
+                value={dataForm.Advices}
                 onChange={e =>
-                  setDataForm({ ...dataForm, advices: e.target.value })
+                  setDataForm({ ...dataForm, Advices: e.target.value })
                 }
                 required
               />
@@ -294,9 +271,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="quantity"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Cantidad"
-                value={dataForm.quantity}
+                value={dataForm.Quantity}
                 onChange={e =>
-                  setDataForm({ ...dataForm, quantity: e.target.value })
+                  setDataForm({ ...dataForm, Quantity: e.target.value })
                 }
                 required
               />
@@ -314,9 +291,9 @@ function SupplyModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
                 id="averageCost"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Costo Promedio"
-                value={dataForm.averageCost}
+                value={dataForm.AverageCost}
                 onChange={e =>
-                  setDataForm({ ...dataForm, averageCost: e.target.value })
+                  setDataForm({ ...dataForm, AverageCost: e.target.value })
                 }
                 required
               />

@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
 
-function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
+function ProductModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
+    typeProduct: '',
     name: '',
-    description: ''
+    characteristics: ''
   })
 
   const handleSubmitCreate = async e => {
     e.preventDefault()
 
     try {
-      await clientAxios.post('/supplyCategory', dataForm)
+      await clientAxios.post('/product', dataForm)
       get()
       setIsOpen(false)
     } catch (err) {
@@ -23,7 +24,7 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
     e.preventDefault()
 
     try {
-      await clientAxios.put(`/supplyCategory/${isEditingInfo.id}`, isEditingInfo)
+      await clientAxios.put(`/product/${isEditingInfo.id}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
@@ -42,7 +43,7 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre categoria insumo
+                Nombre producto
               </label>
               <input
                 type="text"
@@ -59,20 +60,40 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
             </div>
             <div>
               <label
-                htmlFor="description"
+                htmlFor="type"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Descripción categoria insumo
+                Tipo producto
               </label>
               <input
                 type="text"
-                name="description"
-                id="description"
+                name="type"
+                id="type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Descripción"
-                value={isEditingInfo.description}
+                value={isEditingInfo.typeProduct}
                 onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, description: e.target.value })
+                  setIsEditingInfo({ ...isEditingInfo, typeProduct: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="characteristics"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Caracteristicas producto
+              </label>
+              <input
+                type="text"
+                name="characteristics"
+                id="characteristics"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Caracteristicas"
+                value={isEditingInfo.characteristics}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, characteristics: e.target.value })
                 }
                 required
               />
@@ -81,7 +102,7 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Editar categoria insumo
+              Editar producto
             </button>
           </form>
         </>
@@ -94,7 +115,7 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre categoria insumo
+                Nombre producto
               </label>
               <input
                 type="text"
@@ -111,20 +132,40 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
             </div>
             <div>
               <label
-                htmlFor="description"
+                htmlFor="type"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Descripción categoria insumo
+                Tipo de producto
               </label>
               <input
                 type="text"
-                name="description"
-                id="description"
+                name="type"
+                id="type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Descripción"
-                value={dataForm.description}
+                value={dataForm.typeProduct}
                 onChange={e =>
-                  setDataForm({ ...dataForm, description: e.target.value })
+                  setDataForm({ ...dataForm, typeProduct: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="characteristics"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Caracteristicas producto
+              </label>
+              <input
+                type="text"
+                name="characteristics"
+                id="characteristics"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Descripción"
+                value={dataForm.characteristics}
+                onChange={e =>
+                  setDataForm({ ...dataForm, characteristics: e.target.value })
                 }
                 required
               />
@@ -133,7 +174,7 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Crear categoria insumo
+              Crear producto
             </button>
           </form>
         </>
@@ -142,4 +183,4 @@ function SupplyCategoryModal ({ isEditingInfo, isEditing, setIsEditingInfo, get,
   )
 }
 
-export default SupplyCategoryModal
+export default ProductModal

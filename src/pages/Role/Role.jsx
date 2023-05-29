@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
-import Modal from '../../components/Modal/Modal'
 import clientAxios from '../../config/clientAxios'
-import SupplyCategoryModal from './Modal/SupplyCategoryModal'
+import Modal from '../../components/Modal/Modal'
+import RoleModal from './Modal/RoleModal'
 
-const SupplyCategory = () => {
-  const [dataSupplies, setDataSupplies] = useState([])
+const Role = () => {
+  const [dataRoles, setDataRoles] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
     name: '',
-    description: ''
+    description: '',
+    statedAt: true,
   })
 
   useEffect(() => {
@@ -17,25 +18,21 @@ const SupplyCategory = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/supplyCategory')
-    setDataSupplies(data)
+    const { data } = await clientAxios('/role')
+    setDataRoles(data)
   }
 
-  const getSupply = async (id) => {
-    const { data } = await clientAxios(`/supplyCategory/${id}`)
+  const getRole = async (id) => {
+    const { data } = await clientAxios(`/role/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteSupply = async (id) => {
-    await clientAxios.delete(`/supplyCategory/${id}`)
+  const deleteRole = async (id) => {
+    await clientAxios.delete(`/role/${id}`)
     get()
   }
 
-  const changeStatusSupply = async (id, status) => {
-    const changeState = !status
-    await clientAxios.delete(`/supplyCategory/status/${id}?statedAt=${changeState}`)
-    get()
-  }
+  const changeStatusSupply = async () => {}
 
   const handleIsOpen = (state) => {
     setIsOpen(!isOpen)
@@ -60,15 +57,18 @@ const SupplyCategory = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Categoria de Insumo
+                Crear Rol
               </button>
+              <Modal>
+                <RoleModal />
+              </Modal>
               <Modal
-                title={'categoria de insumo'}
+                title={'rol'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <SupplyCategoryModal
+                <RoleModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -94,25 +94,26 @@ const SupplyCategory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataSupplies
+                {dataRoles
                     ? (
-                        dataSupplies.map(supply => (
+                        dataRoles.map(role => (
                       <tr
                         className="bg-white border-b"
-                        key={supply.id}
+                        key={role.id}
                       >
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {supply.name}
+                          {role.name}
                         </th>
-                        <td className="px-6 py-4">{supply.description}</td>
+                        <td className="px-6 py-4">{role.description}</td>
+                        <td className="px-6 py-4">{role.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
                             onClick={() => {
-                              getSupply(supply.id)
+                              getRole(role.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -134,7 +135,7 @@ const SupplyCategory = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteSupply(supply.id)
+                              deleteRole(role.id)
                             }}
                           >
                             <svg
@@ -152,40 +153,6 @@ const SupplyCategory = () => {
                               />
                             </svg>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              changeStatusSupply(supply.id, supply.statedAt)
-                            }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-6 h-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                        <td className="px-6 py-4">
-                          {supply.statedAt
-                            ? (
-                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                              Activo
-                            </span>
-                              )
-                            : (
-                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                              Inactivo
-                            </span>
-                              )}
                         </td>
                       </tr>
                         ))
@@ -203,4 +170,4 @@ const SupplyCategory = () => {
   )
 }
 
-export default SupplyCategory
+export default Role
