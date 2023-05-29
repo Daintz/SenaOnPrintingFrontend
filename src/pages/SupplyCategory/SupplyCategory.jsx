@@ -60,7 +60,7 @@ const SupplyCategory = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear categoria insumo
+                Crear Categoria de Insumo
               </button>
               <Modal
                 title={'categoria de insumo'}
