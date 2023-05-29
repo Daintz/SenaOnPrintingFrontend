@@ -4,21 +4,15 @@ module.exports = {
     commonjs: true,
     es2021: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'standard'
-  ],
-  overrides: [
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'standard'],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  plugins: [
-    'react'
-  ],
+  plugins: ['react'],
   rules: {
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off'
   },
   settings: {
     react: {
