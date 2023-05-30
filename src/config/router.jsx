@@ -26,6 +26,7 @@ import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
 import Lineature from '../pages/Lineature/Lineature'
 import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
+import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 
 
 
@@ -171,6 +172,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <OrderProduction/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="supplyDetails"
+        element={
+          <DashboardLayout>
+          <SupplyDetails />
           </DashboardLayout>
         }
       />
