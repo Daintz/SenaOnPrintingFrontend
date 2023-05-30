@@ -20,6 +20,9 @@ import Client from '../pages/Clients/Clients'
 import Substrate from '../pages/Substrate/Substrate'
 import PaperCut from '../pages/PaperCut/PaperCut'
 import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
+import Lineature from '../pages/Lineature/Lineature'
+import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
+import OrderProduction from '../pages/OrderProduction/OrderProduction'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -123,6 +126,30 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <Substrate/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="Lineature"
+        element={
+          <DashboardLayout>
+            <Lineature/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="impositionPlanch"
+        element={
+          <DashboardLayout>
+            <ImpositionPlanch/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="OrderProduction"
+        element={
+          <DashboardLayout>
+            <OrderProduction/>
           </DashboardLayout>
         }
       />
