@@ -28,8 +28,10 @@ import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
 import Lineature from '../pages/Lineature/Lineature'
 import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
+import TypeServices from '../pages/TypeServices/TypeServices'
+import SupplyPictogrmas from '../pages/SupplyPictogrmas/SupplyPictogrmas'
+import QuotationProviders from '../pages/QuptationProviders/QuotitationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
-
 
 
 const router = createBrowserRouter(
@@ -115,8 +117,6 @@ const router = createBrowserRouter(
             </DashboardLayout>
         }
         />
-          <Route
-        path="roles"
       <Route
         path="usuarios"
         element={
@@ -135,9 +135,6 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-
-
-
 
       <Route
         path="clients"
@@ -195,6 +192,32 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
+
+       <Route
+        path="typeServices"
+        element={
+          <DashboardLayout>
+            <TypeServices/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="supplyPictograms"
+        element={
+          <DashboardLayout>
+            <SupplyPictogrmas/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="quotitationProviders"
+        element={
+          <DashboardLayout>
+            <QuotationProviders/>
+          </DashboardLayout>
+        }
+      />
+          
       <Route
         path="supplyDetails"
         element={
