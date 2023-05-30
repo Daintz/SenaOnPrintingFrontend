@@ -1,20 +1,22 @@
 import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
+import UnitMesure from '../UnitMesure'
 
-function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
+function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     name: '',
-    ubication: '',
-    warehouseTypeId: 0,
-    statedAt: true
+    statedAt : true,
+    abbreviation:'',
+    type:'',
+    conversionFactor:'',
+
   })
 
   const handleSubmitCreate = async e => {
     e.preventDefault()
 
     try {
-      await clientAxios.post('/warehause', dataForm)
-      get()
+      await clientAxios.post('/UnitMesure', dataForm)
       setIsOpen(false)
     } catch (err) {
       console.log(err)
@@ -25,7 +27,7 @@ function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setI
     e.preventDefault()
 
     try {
-      await clientAxios.put(`/warehause/${isEditingInfo.id}`, isEditingInfo)
+      await clientAxios.put(`/UnitMesure/${isEditingInfo.id}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
@@ -44,14 +46,13 @@ function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setI
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-               Nombre de la bodega
-              </label>
+                 Nombre            </label>
               <input
                 type="text"
                 name="name"
                 id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre del tipo de bodega"
+                placeholder="Nombre"
                 value={isEditingInfo.name}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, name: e.target.value })
@@ -61,69 +62,87 @@ function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setI
             </div>
             <div>
               <label
-                htmlFor="ubication"
+                htmlFor="abbreviation"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Ubicacion de la bodega
-              </label>
-              <textarea
-                type="text"
-                name="ubication"
-                id="ubication"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Ubicacion de la bodega "
-                value={isEditingInfo.ubication}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, ubication: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="warehouseTypeId"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Tipo de bodega
-              </label>
+           Abreviatura           </label>
               <input
-                type="number"
-                name="warehouseTypeId"
-                id="warehouseTypeId"
+                type="text"
+                name="abbreviation"
+                id="abbreviation"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Ubicacion de la bodega "
-                value={isEditingInfo.warehouseTypeId}
+                placeholder="Nombre"
+                value={isEditingInfo.abbreviation}
                 onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, warehouseTypeId: e.target.value })
+                  setIsEditingInfo({ ...isEditingInfo, abbreviation: e.target.value })
                 }
                 required
               />
-            </div>
+            </div> 
+            
+              <div>
+              <label
+                htmlFor="type"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                 Tipo               </label>
+              <input
+                type="text"
+                name="type"
+                id="type"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Nombre"
+                value={isEditingInfo.type}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, type: e.target.value })
+                }
+                required
+              />
+            </div>   <div>
+              <label
+                htmlFor="conversionFactor"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                 Factor            </label>
+              <input
+                type="text"
+                name="conversionFactor"
+                id="conversionFactor"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Nombre"
+                value={isEditingInfo.conversionFactor}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, conversionFactor: e.target.value })
+                }
+                required
+              />
+            </div>   
+           
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Editar bodega
+              Editar Unidad
             </button>
           </form>
         </>
           )
         : (
-          <>
+        <>
           <form className="space-y-6" onSubmit={handleSubmitCreate}>
             <div>
               <label
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre de la bodega
+                Nombre 
               </label>
               <input
                 type="text"
                 name="name"
                 id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre tipo de bodega"
+                placeholder="Nombre"
                 value={dataForm.name}
                 onChange={e =>
                   setDataForm({ ...dataForm, name: e.target.value })
@@ -131,51 +150,75 @@ function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setI
                 required
               />
             </div>
+
             <div>
               <label
-                htmlFor="ubication"
+                htmlFor="abbreviation"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Ubicacion
+               Abreviatura
               </label>
               <input
                 type="text"
-                name="ubication"
-                id="ubication"
+                name="abbreviation"
+                id="abbreviation"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Ubicacion"
-                value={dataForm.ubication}
+                placeholder="Nombre"
+                value={dataForm.abbreviation}
                 onChange={e =>
-                  setDataForm({ ...dataForm, ubication: e.target.value })
+                  setDataForm({ ...dataForm, abbreviation: e.target.value })
                 }
                 required
               />
-            </div>
+            </div> 
+            
             <div>
               <label
-                htmlFor="warehouseTypeId"
+                htmlFor="type"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-               Tipo de Bodega
+               Tipo
               </label>
               <input
-                type="number"
-                name="warehouseTypeId"
-                id="warehouseTypeId"
+                type="text"
+                name="type"
+                id="type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Descripcion"
-                value={dataForm.warehouseTypeId}
+                placeholder="Nombre"
+                value={dataForm.type}
                 onChange={e =>
-                  setDataForm({ ...dataForm, warehouseTypeId: e.target.value })
+                  setDataForm({ ...dataForm, type: e.target.value })
                 }
                 required
               />
-              </div>
+            </div> 
+
+             <div>
+              <label
+                htmlFor="conversionFactor"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+               Factor
+              </label>
+              <input
+                type="text"
+                name="conversionFactor"
+                id="conversionFactor"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Nombre"
+                value={dataForm.conversionFactor}
+                onChange={e =>
+                  setDataForm({ ...dataForm, conversionFactor: e.target.value })
+                }
+                required
+              />
+            </div>  
+           
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-             Registrar  bodega
+              Crear Unidad
             </button>
           </form>
         </>
@@ -184,4 +227,4 @@ function WareHauseModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setI
   )
 }
 
-export default WareHauseModal
+export default UnitMesureModal

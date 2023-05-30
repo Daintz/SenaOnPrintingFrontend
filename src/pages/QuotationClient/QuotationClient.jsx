@@ -114,7 +114,7 @@ const QuotationClient = () => {
                         </th>
                         <td className="px-6 py-4">{QuotationClient.deliverDate}</td>
                         <td className="px-6 py-4">
-                          {QuotationClient.StatedAt
+                          {QuotationClient.statedAt
                             ? (
                             <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                               Activo
@@ -149,10 +149,10 @@ const QuotationClient = () => {
                               />
                             </svg>
                           </button>
-                          <button
+                             <button
                             type="button"
                             onClick={() => {
-                                deleteQuotationClient(QuotationClient.id)
+                              deleteQuotationClient(QuotationClient.id)
                             }}
                           >
                             <svg

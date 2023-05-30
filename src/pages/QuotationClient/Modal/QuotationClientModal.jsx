@@ -50,9 +50,9 @@ function QuotationClientModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
                 Fecha De Orden
               </label>
               <input
-                type="date"
+                type="text"
                 name="orderDate"
-                id="name"
+                id="orderDate"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Nombre"
                 value={isEditingInfo.orderDate}
@@ -70,9 +70,9 @@ function QuotationClientModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
                 Fecha De Entrega
               </label>
               <input
-                type="date"
+                type="text"
                 name="deliverDate"
-                id="useInstructions"
+                id="deliverDate"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Instrucciones"
                 value={isEditingInfo.deliverDate}

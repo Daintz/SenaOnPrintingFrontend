@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import clientAxios from '../../../config/clientAxios'
-import Machine from '../Machines'
 
-function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
+function SupplyDetailsModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
-    name: '',
-    statedAt : true,
-    minimumHeight: '',
-    minimumWidth: '',
-    maximumHeight: '',
-    maximumWidth:'',
-    costByUnit:'',
-    costByHour :'',
+    supplyId: 1,
+    providerId: 1,
+    description: '',
+    supplyCost: 0,
+    batch: '',
+    initialQuantity: 0,
+    entryDate: 0,
+    expirationDate: 0,
+    actualQuantity: 0,
+    statedAt: true
 
   })
 
@@ -19,7 +20,8 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
     e.preventDefault()
 
     try {
-      await clientAxios.post('/Machine', dataForm)
+      await clientAxios.post('/SupplyDetails', dataForm)
+      get()
       setIsOpen(false)
     } catch (err) {
       console.log(err)
@@ -30,7 +32,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
     e.preventDefault()
 
     try {
-      await clientAxios.put(`/Machine/${isEditingInfo.id}`, isEditingInfo)
+      await clientAxios.put(`/SupplyDetails/${isEditingInfo.id}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
@@ -46,293 +48,302 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
           <form className="space-y-6" onSubmit={handleSubmitEdit}>
             <div>
               <label
-                htmlFor="name"
+                htmlFor="description"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                 Nombre De la maquina              </label>
+                Descripcion
+              </label>
               <input
                 type="text"
-                name="name"
-                id="name"
+                name="description"
+                id="description"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.name}
+                placeholder="Descripcion"
+                value={isEditingInfo.description}
                 onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, name: e.target.value })
+                  setIsEditingInfo({ ...isEditingInfo, description: e.target.value })
                 }
                 required
               />
             </div>
             <div>
               <label
-                htmlFor="minimumHeight"
+                htmlFor="supplyCost"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-               Altura Minima              </label>
+                Costo insumo
+              </label>
               <input
                 type="number"
-                name="minimumHeight"
-                id="minimumHeight"
+                name="supplyCost"
+                id="supplyCost"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.minimumHeight}
+                placeholder="Costo insumo"
+                value={isEditingInfo.supplyCost}
                 onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, minimumHeight: e.target.value })
-                }
-                required
-              />
-            </div> 
-            
-              <div>
-              <label
-                htmlFor="minimumWidth"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                 Ancho Minimo               </label>
-              <input
-                type="text"
-                name="minimumWidth"
-                id="minimumWidth"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.minimumWidth}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, minimumWidth: e.target.value })
-                }
-                required
-              />
-            </div>   <div>
-              <label
-                htmlFor="maximumHeight"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                 Altura maxima             </label>
-              <input
-                type="text"
-                name="maximumHeight"
-                id="maximumHeight"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.maximumHeight}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, maximumHeight: e.target.value })
-                }
-                required
-              />
-            </div>   <div>
-              <label
-                htmlFor="maximumWidth"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-              Ancho Maximo        </label>
-              <input
-                type="text"
-                name="maximumWidth"
-                id="maximumWidth"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.maximumWidth}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, maximumWidth: e.target.value })
-                }
-                required
-              />
-            </div>   <div>
-              <label
-                htmlFor="costByUnit"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                 Costo Por unidad             </label>
-              <input
-                type="text"
-                name="costByUnit"
-                id="costByUnit"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.costByUnit}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, costByUnit: e.target.value })
-                }
-                required
-              />
-            </div>   
-            <div>
-              <label
-                htmlFor="costByHour"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Costo por Hora             </label>
-              <input
-                type="text"
-                name="costByHour"
-                id="costByHour"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={isEditingInfo.costByHour}
-                onChange={e =>
-                  setIsEditingInfo({ ...isEditingInfo, costByHour: e.target.value })
+                  setIsEditingInfo({ ...isEditingInfo, supplyCost: e.target.value })
                 }
                 required
               />
             </div>
-           
+            <div>
+              <label
+                htmlFor="batch"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Lote
+              </label>
+              <input
+                type="text"
+                name="batch"
+                id="batch"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Lote"
+                value={isEditingInfo.batch}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, batch: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="initialQuantity"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Cantidad inicial
+              </label>
+              <input
+                type="number"
+                name="initialQuantity"
+                id="initialQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Cantidad inicial"
+                value={isEditingInfo.initialQuantity}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, initialQuantity: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="entryDate"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Fecha de entrada
+              </label>
+              <input
+                type="text"
+                name="entryDate"
+                id="entryDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Fecha de entrada"
+                value={isEditingInfo.entryDate}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, entryDate: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="expirationDate"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Fecha de caducidad
+              </label>
+              <input
+                type="text"
+                name="expirationDate"
+                id="expirationDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Fecha de caducidad"
+                value={isEditingInfo.expirationDate}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, expirationDate: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="actualQuantity"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Cantidad actual
+              </label>
+              <input
+                type="number"
+                name="actualQuantity"
+                id="actualQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Cantidad actual"
+                value={isEditingInfo.actualQuantity}
+                onChange={e =>
+                  setIsEditingInfo({ ...isEditingInfo, actualQuantity: e.target.value })
+                }
+                required
+              />
+            </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Editar insumo
+              Editar loteo de insumo
             </button>
           </form>
         </>
           )
         : (
-        <>
+          <>
           <form className="space-y-6" onSubmit={handleSubmitCreate}>
             <div>
               <label
-                htmlFor="name"
+                htmlFor="description"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre de la  Maquina
+                Descripcion
               </label>
               <input
                 type="text"
-                name="name"
-                id="name"
+                name="description"
+                id="description"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.name}
+                placeholder="Descripcion"
+                value={dataForm.description}
                 onChange={e =>
-                  setDataForm({ ...dataForm, name: e.target.value })
+                  setDataForm({ ...dataForm, description: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="supplyCost"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Costo insumo
+              </label>
+              <input
+                type="number"
+                name="supplyCost"
+                id="supplyCost"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Costo insumo"
+                value={dataForm.supplyCost}
+                onChange={e =>
+                  setDataForm({ ...dataForm, supplyCost: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="batch"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Lote
+              </label>
+              <input
+                type="text"
+                name="batch"
+                id="batch"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Lote"
+                value={dataForm.batch}
+                onChange={e =>
+                  setDataForm({ ...dataForm, batch: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="initialQuantity"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Cantidad inicial
+              </label>
+              <input
+                type="number"
+                name="initialQuantity"
+                id="initialQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Cantidad inicial"
+                value={dataForm.initialQuantity}
+                onChange={e =>
+                  setDataForm({ ...dataForm, initialQuantity: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="entryDate"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Fecha de entrada
+              </label>
+              <input
+                type="date"
+                name="entryDate"
+                id="entryDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Fecha de entrada"
+                value={dataForm.entryDate}
+                onChange={e =>
+                  setDataForm({ ...dataForm, entryDate: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="expirationDate"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Fecha de caducidad
+              </label>
+              <input
+                type="date"
+                name="expirationDate"
+                id="expirationDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Fecha de caducidad"
+                value={dataForm.expirationDate}
+                onChange={e =>
+                  setDataForm({ ...dataForm, expirationDate: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="actualQuantity"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Cantidad actual
+              </label>
+              <input
+                type="number"
+                name="actualQuantity"
+                id="actualQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Cantidad actual"
+                value={dataForm.actualQuantity}
+                onChange={e =>
+                  setDataForm({ ...dataForm, actualQuantity: e.target.value })
                 }
                 required
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="minimumHeight"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Altura Minima
-              </label>
-              <input
-                type="text"
-                name="minimumHeight"
-                id="minimumHeight"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.minimumHeight}
-                onChange={e =>
-                  setDataForm({ ...dataForm, minimumHeight: e.target.value })
-                }
-                required
-              />
-            </div> 
-            
-            <div>
-              <label
-                htmlFor="minimumWidth"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Ancho Minima
-              </label>
-              <input
-                type="text"
-                name="minimumWidth"
-                id="minimumWidth"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.minimumWidth}
-                onChange={e =>
-                  setDataForm({ ...dataForm, minimumWidth: e.target.value })
-                }
-                required
-              />
-            </div> 
-
-             <div>
-              <label
-                htmlFor="maximumHeight"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Altura Maximo
-              </label>
-              <input
-                type="text"
-                name="maximumHeight"
-                id="maximumHeight"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.maximumHeight}
-                onChange={e =>
-                  setDataForm({ ...dataForm, maximumHeight: e.target.value })
-                }
-                required
-              />
-            </div>  <div>
-              <label
-                htmlFor="maximumWidth"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-               Ancho Maximo              </label>
-              <input
-                type="text"
-                name="maximumWidth"
-                id="maximumWidth"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.maximumWidth}
-                onChange={e =>
-                  setDataForm({ ...dataForm, maximumWidth: e.target.value })
-                }
-                required
-              />
-            </div>  <div>
-              <label
-                htmlFor="costByUnit"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-         Costo por unidad
-              </label>
-              <input
-                type="text"
-                name="costByUnit"
-                id="costByUnit"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.costByUnit}
-                onChange={e =>
-                  setDataForm({ ...dataForm, costByUnit: e.target.value })
-                }
-                required
-              />
-            </div>  <div>
-              <label
-                htmlFor="costByHour"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                costo por Hora
-              </label>
-              <input
-                type="text"
-                name="costByHour"
-                id="costByHour"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
-                value={dataForm.costByHour}
-                onChange={e =>
-                  setDataForm({ ...dataForm, costByHour: e.target.value })
-                }
-                required
-              />
-            </div>  
-           
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Crear Maquina
+              Crear loteo de insumo
             </button>
           </form>
         </>
@@ -341,4 +352,4 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
   )
 }
 
-export default MachineModal
+export default SupplyDetailsModal

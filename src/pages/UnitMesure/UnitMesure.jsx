@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import FinisModal from './Modal/FinishModal'
+import UnitMesureModal from './Modal/UnitmesureModal'
 
-const Finish = () => {
-  const [dataFinish, setDataFinish] = useState([])
+const UnitMesure = () => {
+  const [dataUnitMesure, setDataUnitMesure] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
     name: '',
-   statedAt: true,
-
+    statedAt : true,
+    abbreviation:'',
+    type:'',
+    conversionFactor:'',
   })
 
   useEffect(() => {
@@ -18,27 +20,27 @@ const Finish = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/Finish')
-    setDataFinish(data)
+    const { data } = await clientAxios('/UnitMesure')
+    setDataUnitMesure(data)
   }
 
-  const getFinish = async id => {
-    const { data } = await clientAxios(`/Finish/${id}`)
+  const getUnitMesure = async (id) => {
+    const { data } = await clientAxios(`/UnitMesure/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteFinish = async id => {
-    await clientAxios.delete(`/Finish/${id}`)
+  const deleteUnitMesure = async (id) => {
+    await clientAxios.delete(`/UnitMesure/${id}`)
     get()
   }
 
-  const changeStatusFinish = async (id, status) => {
+  const changeStatusUnitMesure = async (id, status) => {
     const changeState = !status
-    await clientAxios.delete(`/Finish/status/${id}?statedAt=${changeState}`)
+    await clientAxios.delete(`/UnitMesure/status/${id}?statedAt=${changeState}`)
     get()
   }
 
-  const handleIsOpen = state => {
+  const handleIsOpen = (state) => {
     setIsOpen(!isOpen)
     switch (state) {
       case 'creating':
@@ -61,18 +63,18 @@ const Finish = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Acabado
+                Crear Unidad de medida
               </button>
               <Modal>
-                <FinisModal />
+                <UnitMesureModal />
               </Modal>
               <Modal
-                title={'Acabado'}
+                title={'Machine'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <FinisModal
+                <UnitMesureModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -84,31 +86,59 @@ const Finish = () => {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
-                      Nombre
+                      Nombre 
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                     Abreviatura
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Tipo
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                       Factor 
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      Acciones
+                     <th scope="col" className="px-6 py-3">
+                     Acciones
                     </th>
-                   
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFinish
+                  {dataUnitMesure
                     ? (
-                        dataFinish.map(Finish => (
-                      <tr className="bg-white border-b" key={Finish.id}>
+                        dataUnitMesure.map(Unit => (
+                      <tr className="bg-white border-b" key={Unit.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {Finish.name}
+                          {Unit.name}
                         </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Unit.abbreviation}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Unit.type}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-10 py-6 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Unit.conversionFactor}
+                        </th>
+                       
+                    
                      
                         <td className="px-6 py-4">
-                          {Finish.statedAt
+                          {Unit.statedAt
                             ? (
                             <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                               Activo
@@ -124,7 +154,7 @@ const Finish = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              getFinish(Finish.id)
+                              getUnitMesure(Unit.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -146,7 +176,7 @@ const Finish = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteFinish(Finish.id)
+                              deleteUnitMesure(Unit.id)
                             }}
                           >
                             <svg
@@ -167,7 +197,7 @@ const Finish = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              changeStatusFinish(Finish.id)
+                              changeStatusUnitMesure(Unit.id)
                             }}
                           >
                       
@@ -189,4 +219,4 @@ const Finish = () => {
   )
 }
 
-export default Finish
+export default UnitMesure

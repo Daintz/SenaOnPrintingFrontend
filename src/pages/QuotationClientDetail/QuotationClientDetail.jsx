@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import FinisModal from './Modal/FinishModal'
+import QuotationClientDetailModal from './Modal/QuotationClientDetailModal'
 
-const Finish = () => {
-  const [dataFinish, setDataFinish] = useState([])
+const QuotationClientDetail = () => {
+  const [dataQuotationClientDetails, setDataQuotationClientDetails] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    name: '',
-   statedAt: true,
-
+    quotationClientDetailId: 7,
+    technicalSpecifications: '',
+    productHeight: 0,
+    productWidth: 0,
+    numberOfPages: 0,
+    inkQuantity: 0,
+    productQuantity: 0,
+    unitValue: 0,
+    fullValue: 0,
+    statedAt: true
   })
 
   useEffect(() => {
@@ -18,23 +25,23 @@ const Finish = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/Finish')
-    setDataFinish(data)
+    const { data } = await clientAxios('/quotationclientDetail')
+    setDataQuotationClientDetails(data)
   }
 
-  const getFinish = async id => {
-    const { data } = await clientAxios(`/Finish/${id}`)
+  const getQuotationClientDetail = async id => {
+    const { data } = await clientAxios(`/quotationclientDetail/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteFinish = async id => {
-    await clientAxios.delete(`/Finish/${id}`)
+  const deleteQuotationClientDetail = async id => {
+    await clientAxios.delete(`/quotationclientDetail/${id}`)
     get()
   }
 
-  const changeStatusFinish = async (id, status) => {
+  const changeStatusQuotationClientDetail = async (id, status) => {
     const changeState = !status
-    await clientAxios.delete(`/Finish/status/${id}?statedAt=${changeState}`)
+    await clientAxios.delete(`/quotationclientDetail/${id}?statedAt=${changeState}`)
     get()
   }
 
@@ -61,18 +68,18 @@ const Finish = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Acabado
+                Crear Cotizacion
               </button>
               <Modal>
-                <FinisModal />
+                <QuotationClientDetailModal />
               </Modal>
               <Modal
-                title={'Acabado'}
+                title={'Cotizacion Cliente Detalle'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <FinisModal
+                <QuotationClientDetailModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -84,7 +91,28 @@ const Finish = () => {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
-                      Nombre
+                    Especificaciones tecnicas
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Altura del producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Ancho del producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Numero de paginas
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Cantidad de tintas
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Cantidad de producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Valor unico
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Valor total
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -92,23 +120,28 @@ const Finish = () => {
                     <th scope="col" className="px-6 py-3">
                       Acciones
                     </th>
-                   
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFinish
+                  {dataQuotationClientDetails
                     ? (
-                        dataFinish.map(Finish => (
-                      <tr className="bg-white border-b" key={Finish.id}>
+                        dataQuotationClientDetails.map(QuotationClientDetail => (
+                      <tr className="bg-white border-b" key={QuotationClientDetail.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {Finish.name}
+                          {QuotationClientDetail.technicalSpecifications}
                         </th>
-                     
+                        <td className="px-6 py-4">{QuotationClientDetail.productHeight}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.productWidth}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.numberOfPages}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.inkQuantity}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.productQuantity}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.unitValue}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.fullValue}</td>
                         <td className="px-6 py-4">
-                          {Finish.statedAt
+                          {QuotationClientDetail.statedAt
                             ? (
                             <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                               Activo
@@ -124,7 +157,7 @@ const Finish = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              getFinish(Finish.id)
+                            getQuotationClientDetail(QuotationClientDetail.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -146,7 +179,7 @@ const Finish = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteFinish(Finish.id)
+                              deleteQuotationClientDetail(QuotationClientDetail.id)
                             }}
                           >
                             <svg
@@ -164,14 +197,7 @@ const Finish = () => {
                               />
                             </svg>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              changeStatusFinish(Finish.id)
-                            }}
-                          >
-                      
-                          </button>
+
                         </td>
                       </tr>
                         ))
@@ -189,4 +215,4 @@ const Finish = () => {
   )
 }
 
-export default Finish
+export default QuotationClientDetail
