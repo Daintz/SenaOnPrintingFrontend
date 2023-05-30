@@ -23,7 +23,9 @@ import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
 import Lineature from '../pages/Lineature/Lineature'
 import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
-
+import TypeServices from '../pages/TypeServices/TypeServices'
+import SupplyPictogrmas from '../pages/SupplyPictogrmas/SupplyPictogrmas'
+import QuotationProviders from '../pages/QuptationProviders/QuotitationProviders'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -150,6 +152,30 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <OrderProduction/>
+          </DashboardLayout>
+        }
+      />
+       <Route
+        path="typeServices"
+        element={
+          <DashboardLayout>
+            <TypeServices/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="supplyPictograms"
+        element={
+          <DashboardLayout>
+            <SupplyPictogrmas/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="quotitationProviders"
+        element={
+          <DashboardLayout>
+            <QuotationProviders/>
           </DashboardLayout>
         }
       />
