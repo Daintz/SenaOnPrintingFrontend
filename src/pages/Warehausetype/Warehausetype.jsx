@@ -1,22 +1,17 @@
-import { useEffect, useState } from 'react'
-import clientAxios from '../../config/clientAxios'
-import Modal from '../../components/Modal/Modal'
-import UserModal from './Modal/UserModal'
 
-const User = () => {
-  const [dataUsers, setDataUsers] = useState([])
+import { useEffect, useState } from 'react'
+import Modal from '../../components/Modal/Modal'
+import clientAxios from '../../config/clientAxios'
+import WareHauseTypeModal from './Modal/WarehaustypeModal'
+
+const Warehausetype = () => {
+  const [dataWarehausestype, setDataWarehausetype] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    names: '',
-    surnames: '',
-    typeDocumentId: 0,
-    documentNumber: 0,
-    phone: '',
-    address: '',
-    email: '',
-    roleId: 0,
-    passwordDigest: '',
+    name: '',
+    description: '',
+    statedAt: true
   })
 
   useEffect(() => {
@@ -24,29 +19,21 @@ const User = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/user')
-    setDataUsers(data)
+    const { data } = await clientAxios('/warehausetype')
+    setDataWarehausetype(data)
   }
 
-  const getUser = async id => {
-    const { data } = await clientAxios(`/user/${id}`)
+  const getWarehausetype = async (id) => {
+    const { data } = await clientAxios(`/warehausetype/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteUser = async id => {
-    await clientAxios.delete(`/user/${id}`)
+  const deleteWarehausetype = async (id) => {
+    await clientAxios.delete(`/warehausetype/${id}`)
     get()
   }
 
-  // const changeStatusSupply = async (id, status) => {
-  //   const changeState = !status
-  //   await clientAxios.delete(`/user/status/${id}?statedAt=${changeState}`)
-  //   get()
-  // }
-
-  const changeStatusSupply = async () => {}
-
-  const handleIsOpen = state => {
+  const handleIsOpen = (state) => {
     setIsOpen(!isOpen)
     switch (state) {
       case 'creating':
@@ -69,18 +56,15 @@ const User = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Usuario
+                registrar tipo de bodega
               </button>
-              <Modal>
-                <UserModal />
-              </Modal>
               <Modal
-                title={'usuario'}
+                title={'categoria de insumo'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <UserModal
+                <WareHauseTypeModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -91,24 +75,11 @@ const User = () => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
-                  <th scope="col" className="px-6 py-3">
-                      Numero de Documento
-                  </th>
                     <th scope="col" className="px-6 py-3">
-                      Nombres
+                      Nombre
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Apellidos
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      Telefono
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Direccion
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Correo Electronico
+                      Descripcion
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -119,27 +90,37 @@ const User = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataUsers
-                    ? (
-                        dataUsers.map(user => (
-                      <tr className="bg-white border-b" key={user.id}>
+                  {dataWarehausestype
+                    ? (dataWarehausestype.map(warehausetype => (
+                      <tr
+                        className="bg-white border-b"
+                        key={warehausetype.id}
+                      >
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {user.documentNumber}
+                          {warehausetype.name}
                         </th>
-                        <td className="px-6 py-4">{user.names}</td>
-                        <td className="px-6 py-4">{user.surnames}</td>
-                        <td className="px-6 py-4">{user.phone}</td>
-                        <td className="px-6 py-4">{user.address}</td>
-                        <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">{user.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
+                        <td className="px-6 py-4">{warehausetype.description}</td>
+                        <td className="px-6 py-4">
+                          {warehausetype.statedAt
+                            ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                              )
+                            : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                              )}
+                        </td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
                             onClick={() => {
-                              getUser(user.id)
+                              getWarehausetype(warehausetype.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -161,7 +142,7 @@ const User = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteUser(user.id)
+                              deleteWarehausetype(warehausetype.id)
                             }}
                           >
                             <svg
@@ -180,8 +161,7 @@ const User = () => {
                             </svg>
                           </button>
                         </td>
-                      </tr>
-                        ))
+                      </tr>))
                       )
                     : (
                     <p>No hay registros guardados</p>
@@ -196,4 +176,4 @@ const User = () => {
   )
 }
 
-export default User
+export default Warehausetype

@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import UserModal from './Modal/UserModal'
+import FinisModal from './Modal/FinishModal'
 
-const User = () => {
-  const [dataUsers, setDataUsers] = useState([])
+const Finish = () => {
+  const [dataFinish, setDataFinish] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    names: '',
-    surnames: '',
-    typeDocumentId: 0,
-    documentNumber: 0,
-    phone: '',
-    address: '',
-    email: '',
-    roleId: 0,
-    passwordDigest: '',
+    name: '',
+   statedAt: true,
+
   })
 
   useEffect(() => {
@@ -24,27 +18,25 @@ const User = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/user')
-    setDataUsers(data)
+    const { data } = await clientAxios('/Finish')
+    setDataFinish(data)
   }
 
-  const getUser = async id => {
-    const { data } = await clientAxios(`/user/${id}`)
+  const getFinish = async id => {
+    const { data } = await clientAxios(`/Finish/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteUser = async id => {
-    await clientAxios.delete(`/user/${id}`)
+  const deleteFinish = async id => {
+    await clientAxios.delete(`/Finish/${id}`)
     get()
   }
 
-  // const changeStatusSupply = async (id, status) => {
-  //   const changeState = !status
-  //   await clientAxios.delete(`/user/status/${id}?statedAt=${changeState}`)
-  //   get()
-  // }
-
-  const changeStatusSupply = async () => {}
+  const changeStatusFinish = async (id, status) => {
+    const changeState = !status
+    await clientAxios.delete(`/Finish/status/${id}?statedAt=${changeState}`)
+    get()
+  }
 
   const handleIsOpen = state => {
     setIsOpen(!isOpen)
@@ -69,18 +61,18 @@ const User = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Usuario
+                Crear Acabado
               </button>
               <Modal>
-                <UserModal />
+                <FinisModal />
               </Modal>
               <Modal
-                title={'usuario'}
+                title={'Acabado'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <UserModal
+                <FinisModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -91,24 +83,8 @@ const User = () => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
-                  <th scope="col" className="px-6 py-3">
-                      Numero de Documento
-                  </th>
                     <th scope="col" className="px-6 py-3">
-                      Nombres
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Apellidos
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      Telefono
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Direccion
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Correo Electronico
+                      Nombre
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -116,30 +92,39 @@ const User = () => {
                     <th scope="col" className="px-6 py-3">
                       Acciones
                     </th>
+                   
                   </tr>
                 </thead>
                 <tbody>
-                  {dataUsers
+                  {dataFinish
                     ? (
-                        dataUsers.map(user => (
-                      <tr className="bg-white border-b" key={user.id}>
+                        dataFinish.map(Finish => (
+                      <tr className="bg-white border-b" key={Finish.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {user.documentNumber}
+                          {Finish.name}
                         </th>
-                        <td className="px-6 py-4">{user.names}</td>
-                        <td className="px-6 py-4">{user.surnames}</td>
-                        <td className="px-6 py-4">{user.phone}</td>
-                        <td className="px-6 py-4">{user.address}</td>
-                        <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">{user.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
+                     
+                        <td className="px-6 py-4">
+                          {Finish.statedAt
+                            ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                              )
+                            : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                              )}
+                        </td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
                             onClick={() => {
-                              getUser(user.id)
+                              getFinish(Finish.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -161,7 +146,7 @@ const User = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteUser(user.id)
+                              deleteFinish(Finish.id)
                             }}
                           >
                             <svg
@@ -178,6 +163,14 @@ const User = () => {
                                 d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                               />
                             </svg>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              changeStatusFinish(Finish.id)
+                            }}
+                          >
+                      
                           </button>
                         </td>
                       </tr>
@@ -196,4 +189,4 @@ const User = () => {
   )
 }
 
-export default User
+export default Finish

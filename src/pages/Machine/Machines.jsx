@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import UserModal from './Modal/UserModal'
+import MachineModal from './Modal/MachineModal'
 
-const User = () => {
-  const [dataUsers, setDataUsers] = useState([])
+const Machine = () => {
+  const [dataMachine, setDataMachine] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    names: '',
-    surnames: '',
-    typeDocumentId: 0,
-    documentNumber: 0,
-    phone: '',
-    address: '',
-    email: '',
-    roleId: 0,
-    passwordDigest: '',
+    name: '',
+    statedAt : true,
+    minimumHeight: '',
+    minimumWidth: '',
+    maximumHeight: '',
+    maximumWidth:'',
+    costByUnit:'',
+    costByHour :'',
   })
 
   useEffect(() => {
@@ -24,29 +23,27 @@ const User = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/user')
-    setDataUsers(data)
+    const { data } = await clientAxios('/Machine')
+    setDataMachine(data)
   }
 
-  const getUser = async id => {
-    const { data } = await clientAxios(`/user/${id}`)
+  const getMachine = async (id) => {
+    const { data } = await clientAxios(`/Machine/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteUser = async id => {
-    await clientAxios.delete(`/user/${id}`)
+  const deleteMachine = async (id) => {
+    await clientAxios.delete(`/Machine/${id}`)
     get()
   }
 
-  // const changeStatusSupply = async (id, status) => {
-  //   const changeState = !status
-  //   await clientAxios.delete(`/user/status/${id}?statedAt=${changeState}`)
-  //   get()
-  // }
+  const changeStatusMachine = async (id, status) => {
+    const changeState = !status
+    await clientAxios.delete(`/Machine/status/${id}?statedAt=${changeState}`)
+    get()
+  }
 
-  const changeStatusSupply = async () => {}
-
-  const handleIsOpen = state => {
+  const handleIsOpen = (state) => {
     setIsOpen(!isOpen)
     switch (state) {
       case 'creating':
@@ -69,18 +66,18 @@ const User = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Usuario
+                Crear Maquina
               </button>
               <Modal>
-                <UserModal />
+                <MachineModal />
               </Modal>
               <Modal
-                title={'usuario'}
+                title={'Machine'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <UserModal
+                <MachineModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -91,55 +88,102 @@ const User = () => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
-                  <th scope="col" className="px-6 py-3">
-                      Numero de Documento
-                  </th>
                     <th scope="col" className="px-6 py-3">
-                      Nombres
+                      Nombre de la Maquina
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Apellidos
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      Telefono
+                      Altura Mininma
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Direccion
+                      Ancho Minimo
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Correo Electronico
+                      Altura Msxima
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Ancho Maximo
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Costo por unidad
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Costo por hora
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      Acciones
+                     <th scope="col" className="px-6 py-3">
+                     Acciones
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {dataUsers
+                  {dataMachine
                     ? (
-                        dataUsers.map(user => (
-                      <tr className="bg-white border-b" key={user.id}>
+                        dataMachine.map(Machine => (
+                      <tr className="bg-white border-b" key={Machine.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {user.documentNumber}
+                          {Machine.name}
                         </th>
-                        <td className="px-6 py-4">{user.names}</td>
-                        <td className="px-6 py-4">{user.surnames}</td>
-                        <td className="px-6 py-4">{user.phone}</td>
-                        <td className="px-6 py-4">{user.address}</td>
-                        <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">{user.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.maximumHeight}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.maximumWidth}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.maximumHeight}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.maximumWidth}
+                        </th>   <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.costByUnit}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {Machine.costByHour}
+                        </th>
+                     
+                     
+                     
+                        <td className="px-6 py-4">
+                          {Machine.statedAt
+                            ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                              )
+                            : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                              )}
+                        </td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
                             onClick={() => {
-                              getUser(user.id)
+                              getMachine(Machine.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -161,7 +205,7 @@ const User = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteUser(user.id)
+                              deleteMachine(Machine.id)
                             }}
                           >
                             <svg
@@ -178,6 +222,14 @@ const User = () => {
                                 d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                               />
                             </svg>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              changeStatusMachine(Machine.id)
+                            }}
+                          >
+                      
                           </button>
                         </td>
                       </tr>
@@ -196,4 +248,4 @@ const User = () => {
   )
 }
 
-export default User
+export default Machine

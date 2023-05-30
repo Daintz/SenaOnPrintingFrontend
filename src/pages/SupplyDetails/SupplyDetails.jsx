@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import UserModal from './Modal/UserModal'
+import SupplyDetailsModal from './Modal/SupplyDetailsModal'
 
-const User = () => {
-  const [dataUsers, setDataUsers] = useState([])
+const SupplyDetails = () => {
+  const [dataSuppliesDetails, setDataSuppliesDetails] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    names: '',
-    surnames: '',
-    typeDocumentId: 0,
-    documentNumber: 0,
-    phone: '',
-    address: '',
-    email: '',
-    roleId: 0,
-    passwordDigest: '',
+    supplyId: 1,
+    providerId: 1,
+    description: '',
+    supplyCost: 0,
+    batch: '',
+    initialQuantity: 0,
+    entryDate: 0,
+    expirationDate: 0,
+    actualQuantity: 0,
+    statedAt: true
   })
 
   useEffect(() => {
@@ -24,27 +25,25 @@ const User = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/user')
-    setDataUsers(data)
+    const { data } = await clientAxios('/SupplyDetails')
+    setDataSuppliesDetails(data)
   }
 
-  const getUser = async id => {
-    const { data } = await clientAxios(`/user/${id}`)
+  const getSupplyDetails = async id => {
+    const { data } = await clientAxios(`/SupplyDetails/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteUser = async id => {
-    await clientAxios.delete(`/user/${id}`)
+  const deleteSupplyDetails = async id => {
+    await clientAxios.delete(`/SupplyDetails/${id}`)
     get()
   }
 
-  // const changeStatusSupply = async (id, status) => {
-  //   const changeState = !status
-  //   await clientAxios.delete(`/user/status/${id}?statedAt=${changeState}`)
-  //   get()
-  // }
-
-  const changeStatusSupply = async () => {}
+  const changeStatusSupplyDetails = async (id, status) => {
+    const changeState = !status
+    await clientAxios.delete(`/SupplyDetails/status/${id}?statedAt=${changeState}`)
+    get()
+  }
 
   const handleIsOpen = state => {
     setIsOpen(!isOpen)
@@ -69,18 +68,18 @@ const User = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Usuario
+                Crear loteo de insumo
               </button>
               <Modal>
-                <UserModal />
+                <SupplyDetailsModal />
               </Modal>
               <Modal
-                title={'usuario'}
+                title={'Loteo de insumo'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <UserModal
+                <SupplyDetailsModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -91,24 +90,26 @@ const User = () => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
-                  <th scope="col" className="px-6 py-3">
-                      Numero de Documento
-                  </th>
                     <th scope="col" className="px-6 py-3">
-                      Nombres
+                      Descripcion
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Apellidos
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      Telefono
+                      Costo insumo
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Direccion
+                      Lote
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Correo Electronico
+                      Cantidad inicial
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Fecha de entrada
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Fecha de caducidad
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Cantidad actual
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -119,27 +120,40 @@ const User = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataUsers
+                  {dataSuppliesDetails
                     ? (
-                        dataUsers.map(user => (
-                      <tr className="bg-white border-b" key={user.id}>
+                        dataSuppliesDetails.map(SupplyDetails => (
+                      <tr className="bg-white border-b" key={SupplyDetails.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {user.documentNumber}
+                          {SupplyDetails.description}
                         </th>
-                        <td className="px-6 py-4">{user.names}</td>
-                        <td className="px-6 py-4">{user.surnames}</td>
-                        <td className="px-6 py-4">{user.phone}</td>
-                        <td className="px-6 py-4">{user.address}</td>
-                        <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">{user.statedAt ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Activo</span> : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactivo</span>}</td>
+                        <td className="px-6 py-4">{SupplyDetails.supplyCost}</td>
+                        <td className="px-6 py-4">{SupplyDetails.batch}</td>
+                        <td className="px-6 py-4">{SupplyDetails.initialQuantity}</td>
+                        <td className="px-6 py-4">{SupplyDetails.entryDate}</td>
+                        <td className="px-6 py-4">{SupplyDetails.expirationDate}</td>
+                        <td className="px-6 py-4">{SupplyDetails.actualQuantity}</td>
+                        <td className="px-6 py-4">
+                          {SupplyDetails.statedAt
+                            ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                              )
+                            : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                              )}
+                        </td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
                             onClick={() => {
-                              getUser(user.id)
+                              getSupplyDetails(SupplyDetails.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -161,7 +175,7 @@ const User = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              deleteUser(user.id)
+                              deleteSupplyDetails(SupplyDetails.id)
                             }}
                           >
                             <svg
@@ -179,6 +193,27 @@ const User = () => {
                               />
                             </svg>
                           </button>
+                          {/* <button
+                            type="button"
+                            onClick={() => {
+                              changeStatusSupplyDetails(SupplyDetails.id, SupplyDetails.statedAt)
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                          </button> */}
                         </td>
                       </tr>
                         ))
@@ -196,4 +231,4 @@ const User = () => {
   )
 }
 
-export default User
+export default SupplyDetails
