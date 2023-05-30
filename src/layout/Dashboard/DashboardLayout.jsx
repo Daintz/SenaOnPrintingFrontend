@@ -4,15 +4,13 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 const DashboardLayout = ({ children }) => {
   return (
     <>
-    <Navbar />
-    <div className="dashboard-layout grid grid-cols-12 gap-4">
+      <Navbar />
       <Sidebar />
-      <div className="p-4 col-span-10">
-        <div className="overflow-x-auto">
+      <div className="p-4 sm:ml-64">
+        <div className="p-4 mt-14">
           {children}
         </div>
       </div>
-    </div>
     </>
   )
 }
