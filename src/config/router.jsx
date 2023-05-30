@@ -5,21 +5,20 @@ import {
 } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import App from '../App'
-import Supply from '../pages/Supply/Supply'
 import Provider from '../pages/Provider/Provider'
+import Warehausetype from '../pages/Warehausetype/Warehausetype'
+import Warehause from '../pages/Warehause/Warehause'
+import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
 import Finish from '../pages/Finish/Finish'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
-
 import UnitMesure from '../pages/UnitMesure/UnitMesure'
-
 import Product from '../pages/Product/Product'
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
-
 import Client from '../pages/Clients/Clients'
 import Substrate from '../pages/Substrate/Substrate'
 import PaperCut from '../pages/PaperCut/PaperCut'
@@ -29,9 +28,23 @@ import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
 
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+
+      <Route path="provider"
+            element={<DashboardLayout>
+              <Provider/>
+            </DashboardLayout>}/>
+      <Route path="warehausetype"
+            element={<DashboardLayout>
+              <Warehausetype/>
+            </DashboardLayout>}/>
+      <Route path="warehause"
+            element={<DashboardLayout>
+              <Warehause/>
+            </DashboardLayout>}/>
       <Route path="/" element={<Login />} />
       <Route
         path="dashboard"
@@ -58,10 +71,6 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-      <Route path="provider"
-        element={<DashboardLayout>
-          <Provider/>
-      </DashboardLayout>}/>
 
       <Route path="Machine"
         element={<DashboardLayout>
@@ -165,7 +174,6 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-
     </>
   )
 )

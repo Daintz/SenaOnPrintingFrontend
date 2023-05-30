@@ -1,3 +1,5 @@
+
+
 import { Link } from 'react-router-dom'
 
 function Sidebar () {
@@ -153,24 +155,6 @@ function Sidebar () {
               <span className="ml-3">Acabados</span>
             </Link>
           </li>
-          <li>
-              <Link
-                to='/provider'
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-7 h-7 text-gray-500 transition duration-75"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                </svg>
-                <span className="ml-3 text-base">Proveedor</span>
-              </Link>
-            </li>
             <li>
               <Link
                 to='/Machine'
@@ -192,10 +176,6 @@ function Sidebar () {
 
             <li>
               <Link
-                to='/Finish'
-
-            <li>
-              <Link
                 to='/clients'
 
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
@@ -213,16 +193,12 @@ function Sidebar () {
 
                 <span className="ml-3 text-base">Acabados</span>
 
-
               </Link>
             </li>
             <li>
               <Link
 
                 to='/UnitMesure'
-
-                to='/substrate'
-
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
               >
                 <svg
@@ -237,14 +213,6 @@ function Sidebar () {
                 </svg>
 
                 <span className="ml-3 text-base">Unidades de Medida</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </div>
-
-                <span className="ml-3 text-base">Sustratos</span>
               </Link>
             </li>
             <li>
@@ -335,6 +303,60 @@ function Sidebar () {
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
                 <span className="ml-3 text-base">Orden de producción</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/provider'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Proveedor</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/warehausetype'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Tipo de bodega</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/warehause'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Bodega</span>
               </Link>
             </li>
 
