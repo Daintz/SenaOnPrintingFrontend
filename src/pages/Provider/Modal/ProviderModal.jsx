@@ -26,7 +26,7 @@ function ProviderModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIs
     e.preventDefault()
 
     try {
-      await clientAxios.put(`/provider/${isEditingInfo.idProvider}`, isEditingInfo)
+      await clientAxios.put(`/provider/${isEditingInfo.id}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
