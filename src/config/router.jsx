@@ -6,16 +6,20 @@ import {
 import Dashboard from '../pages/Dashboard/Dashboard'
 import App from '../App'
 import Supply from '../pages/Supply/Supply'
-import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
-import DashboardLayout from '../layout/Dashboard/DashboardLayout'
-import Product from '../pages/Product/Product'
-import Role from '../pages/Role/Role'
-import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import Provider from '../pages/Provider/Provider'
 import Machine from '../pages/Machine/Machines'
 import Finish from '../pages/Finish/Finish'
+import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
+import DashboardLayout from '../layout/Dashboard/DashboardLayout'
+
+import UnitMesure from '../pages/UnitMesure/UnitMesure'
+
+import Product from '../pages/Product/Product'
+import Role from '../pages/Role/Role'
+import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
+
 import Client from '../pages/Clients/Clients'
 import Substrate from '../pages/Substrate/Substrate'
 import PaperCut from '../pages/PaperCut/PaperCut'
@@ -23,6 +27,7 @@ import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
 import Lineature from '../pages/Lineature/Lineature'
 import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,14 +41,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-      <Route
-        path="product"
-        element={
-          <DashboardLayout>
-            <Product />
-          </DashboardLayout>
-        }
-      />
+    
       <Route
         path="supply"
         element={
@@ -97,6 +95,20 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
+
+
+<Route
+        path="UnitMesure"
+        element={
+          <DashboardLayout>
+            <UnitMesure />
+          </DashboardLayout>
+        }
+      />
+
+
+
+
       <Route
         path="clients"
         element={
@@ -153,6 +165,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
+
     </>
   )
 )
