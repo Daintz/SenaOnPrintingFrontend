@@ -2,8 +2,12 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import Dashboard from '../pages/Dashboard/Dashboard'
 import App from '../App'
 import Supply from '../pages/Supply/Supply'
+import Provider from '../pages/Provider/Provider'
+import Machine from '../pages/Machine/Machines'
+import Finish from '../pages/Finish/Finish'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
+import UnitMesure from '../pages/UnitMesure/UnitMesure'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,14 +49,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-      <Route
-        path="product"
-        element={
-          <DashboardLayout>
-            <Product />
-          </DashboardLayout>
-        }
-      />
+    
       <Route
         path="supply"
         element={
@@ -74,6 +71,15 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <Finish />
+          </DashboardLayout>
+        }
+      />
+
+<Route
+        path="UnitMesure"
+        element={
+          <DashboardLayout>
+            <UnitMesure />
           </DashboardLayout>
         }
       />

@@ -5,7 +5,7 @@ import Finish from '../Finish'
 function FinishModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     Name: '',
-    StatedAt: true,
+    statedAt: true,
 
   })
 
@@ -24,7 +24,7 @@ function FinishModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOp
     e.preventDefault()
 
     try {
-      await clientAxios.put(`/Finish/${isEditingInfo.id}`, isEditingInfo)
+      await clientAxios.put(`/Finish/${isEditingInfo.Id}`, isEditingInfo)
       get()
       setIsOpen(false)
     } catch (err) {
