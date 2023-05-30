@@ -189,10 +189,15 @@ function Sidebar () {
                 <span className="ml-3 text-base">Maquinas</span>
               </Link>
             </li>
-<<<<<<< HEAD
+
             <li>
               <Link
                 to='/Finish'
+
+            <li>
+              <Link
+                to='/clients'
+
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
               >
                 <svg
@@ -205,12 +210,19 @@ function Sidebar () {
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
+
                 <span className="ml-3 text-base">Acabados</span>
+
+
               </Link>
             </li>
             <li>
               <Link
+
                 to='/UnitMesure'
+
+                to='/substrate'
+
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
               >
                 <svg
@@ -223,6 +235,7 @@ function Sidebar () {
                   <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
+
                 <span className="ml-3 text-base">Unidades de Medida</span>
               </Link>
             </li>
@@ -230,11 +243,105 @@ function Sidebar () {
         </div>
       </aside>
     </div>
-=======
+
+                <span className="ml-3 text-base">Sustratos</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/paper_cut'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Corte Papel</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/grammage_caliber'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Gramaje & Calibre</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/Lineature'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Lineatura</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/impositionPlanch'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Imposición plancha</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/OrderProduction'
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-green-500"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-7 h-7 text-gray-500 transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span className="ml-3 text-base">Orden de producción</span>
+              </Link>
+            </li>
+
         </ul>
       </div>
     </aside>
->>>>>>> 73ccf6888efd98bebb7b142dc2cc146f90f17a55
+
   )
 }
 

@@ -11,15 +11,23 @@ import Machine from '../pages/Machine/Machines'
 import Finish from '../pages/Finish/Finish'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
-<<<<<<< HEAD
+
 import UnitMesure from '../pages/UnitMesure/UnitMesure'
-=======
+
 import Product from '../pages/Product/Product'
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
->>>>>>> 73ccf6888efd98bebb7b142dc2cc146f90f17a55
+
+import Client from '../pages/Clients/Clients'
+import Substrate from '../pages/Substrate/Substrate'
+import PaperCut from '../pages/PaperCut/PaperCut'
+import GrammageCaliber from '../pages/GrammageCaliber/GrammageCaliber'
+import Lineature from '../pages/Lineature/Lineature'
+import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
+import OrderProduction from '../pages/OrderProduction/OrderProduction'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -87,7 +95,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-<<<<<<< HEAD
+
 
 <Route
         path="UnitMesure"
@@ -98,8 +106,66 @@ const router = createBrowserRouter(
         }
       />
 
-=======
->>>>>>> 73ccf6888efd98bebb7b142dc2cc146f90f17a55
+
+
+
+      <Route
+        path="clients"
+        element={
+          <DashboardLayout>
+            <Client/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="grammage_caliber"
+        element={
+          <DashboardLayout>
+            <GrammageCaliber />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="paper_cut"
+        element={
+          <DashboardLayout>
+            <PaperCut/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="substrate"
+        element={
+          <DashboardLayout>
+            <Substrate/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="Lineature"
+        element={
+          <DashboardLayout>
+            <Lineature/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="impositionPlanch"
+        element={
+          <DashboardLayout>
+            <ImpositionPlanch/>
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="OrderProduction"
+        element={
+          <DashboardLayout>
+            <OrderProduction/>
+          </DashboardLayout>
+        }
+      />
+
     </>
   )
 )
