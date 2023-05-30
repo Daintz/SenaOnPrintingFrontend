@@ -15,6 +15,8 @@ import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 import UnitMesure from '../pages/UnitMesure/UnitMesure'
 import Product from '../pages/Product/Product'
+import QuotationClient from '../pages/QuotationClient/QuotationClient'
+import QuotationClientDetail from '../pages/QuotationClientDetail/QuotationClientDetail'
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
@@ -97,6 +99,24 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
+      <Route
+        path="quotationClient"
+        element={
+          <DashboardLayout>
+            <QuotationClient />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="quotationclientDetail"
+        element={
+          <DashboardLayout>
+            <QuotationClientDetail />
+            </DashboardLayout>
+        }
+        />
+          <Route
+        path="roles"
       <Route
         path="usuarios"
         element={
