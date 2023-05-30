@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import Modal from '../../components/Modal/Modal'
-import QuotationClientModal from './Modal/QuotationClientModal'
+import QuotationClientDetailModal from './Modal/QuotationClientDetailModal'
 
-const QuotationClient = () => {
-  const [dataQuotationClients, setDataQuotationClients] = useState([])
+const QuotationClientDetail = () => {
+  const [dataQuotationClientDetails, setDataQuotationClientDetails] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
-    userId: 4,
-    client_id: 1,
-    typeServiceId: 1,
-    orderDate: '',
-    deliverDate: '',
-    quotationStatus: true,
+    quotationClientDetailId: 7,
+    technicalSpecifications: '',
+    productHeight: 0,
+    productWidth: 0,
+    numberOfPages: 0,
+    inkQuantity: 0,
+    productQuantity: 0,
+    unitValue: 0,
+    fullValue: 0,
     statedAt: true
   })
 
@@ -22,23 +25,23 @@ const QuotationClient = () => {
   }, [])
 
   const get = async () => {
-    const { data } = await clientAxios('/quotationClient')
-    setDataQuotationClients(data)
+    const { data } = await clientAxios('/quotationclientDetail')
+    setDataQuotationClientDetails(data)
   }
 
-  const getQuotationClient = async id => {
-    const { data } = await clientAxios(`/quotationClient/${id}`)
+  const getQuotationClientDetail = async id => {
+    const { data } = await clientAxios(`/quotationclientDetail/${id}`)
     setIsEditingInfo(data)
   }
 
-  const deleteQuotationClient = async id => {
-    await clientAxios.delete(`/quotationClient/${id}`)
+  const deleteQuotationClientDetail = async id => {
+    await clientAxios.delete(`/quotationclientDetail/${id}`)
     get()
   }
 
-  const changeStatusQuotationClient = async (id, status) => {
+  const changeStatusQuotationClientDetail = async (id, status) => {
     const changeState = !status
-    await clientAxios.delete(`/quotationClient/status/${id}?statedAt=${changeState}`)
+    await clientAxios.delete(`/quotationclientDetail/${id}?statedAt=${changeState}`)
     get()
   }
 
@@ -68,15 +71,15 @@ const QuotationClient = () => {
                 Crear Cotizacion
               </button>
               <Modal>
-                <QuotationClientModal />
+                <QuotationClientDetailModal />
               </Modal>
               <Modal
-                title={'insumo'}
+                title={'Cotizacion Cliente Detalle'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
               >
-                <QuotationClientModal
+                <QuotationClientDetailModal
                   isEditing={isEditing}
                   isEditingInfo={isEditingInfo}
                   setIsEditingInfo={setIsEditingInfo}
@@ -88,10 +91,28 @@ const QuotationClient = () => {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
-                    Fecha De Orden
+                    Especificaciones tecnicas
                     </th>
                     <th scope="col" className="px-6 py-3">
-                    Fecha De Entrega
+                    Altura del producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Ancho del producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Numero de paginas
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Cantidad de tintas
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Cantidad de producto
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Valor unico
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                    Valor total
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Estado
@@ -102,19 +123,25 @@ const QuotationClient = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataQuotationClients
+                  {dataQuotationClientDetails
                     ? (
-                        dataQuotationClients.map(QuotationClient => (
-                      <tr className="bg-white border-b" key={QuotationClient.id}>
+                        dataQuotationClientDetails.map(QuotationClientDetail => (
+                      <tr className="bg-white border-b" key={QuotationClientDetail.id}>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {QuotationClient.orderDate}
+                          {QuotationClientDetail.technicalSpecifications}
                         </th>
-                        <td className="px-6 py-4">{QuotationClient.deliverDate}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.productHeight}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.productWidth}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.numberOfPages}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.inkQuantity}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.productQuantity}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.unitValue}</td>
+                        <td className="px-6 py-4">{QuotationClientDetail.fullValue}</td>
                         <td className="px-6 py-4">
-                          {QuotationClient.statedAt
+                          {QuotationClientDetail.statedAt
                             ? (
                             <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                               Activo
@@ -130,7 +157,7 @@ const QuotationClient = () => {
                           <button
                             type="button"
                             onClick={() => {
-                            getQuotationClient(QuotationClient.id)
+                            getQuotationClientDetail(QuotationClientDetail.id)
                               handleIsOpen('editing')
                             }}
                           >
@@ -149,10 +176,10 @@ const QuotationClient = () => {
                               />
                             </svg>
                           </button>
-                             <button
+                          <button
                             type="button"
                             onClick={() => {
-                              deleteQuotationClient(QuotationClient.id)
+                              deleteQuotationClientDetail(QuotationClientDetail.id)
                             }}
                           >
                             <svg
@@ -188,4 +215,4 @@ const QuotationClient = () => {
   )
 }
 
-export default QuotationClient
+export default QuotationClientDetail

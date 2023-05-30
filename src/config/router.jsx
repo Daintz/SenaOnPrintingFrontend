@@ -10,6 +10,7 @@ import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
 import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 import Product from '../pages/Product/Product'
 import QuotationClient from '../pages/QuotationClient/QuotationClient'
+import QuotationClientDetail from '../pages/QuotationClientDetail/QuotationClientDetail'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +53,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <QuotationClient />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="quotationclientDetail"
+        element={
+          <DashboardLayout>
+            <QuotationClientDetail />
           </DashboardLayout>
         }
       />
