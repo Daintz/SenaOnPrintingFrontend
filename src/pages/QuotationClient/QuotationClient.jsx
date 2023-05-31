@@ -71,7 +71,7 @@ const QuotationClient = () => {
                 <QuotationClientModal />
               </Modal>
               <Modal
-                title={'insumo'}
+                title={'cotización'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}

@@ -59,10 +59,10 @@ const PaperCut = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear Sustrato
+                Crear corte papel
               </button>
               <Modal
-                title={'Sustrato'}
+                title={'Corte papel'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
@@ -103,6 +103,19 @@ const PaperCut = () => {
                         >
                           {PaperCut.name}
                         </th>
+                        <td className="px-6 py-4">
+                          {PaperCut.statedAt
+                            ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                              )
+                            : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                              )}
+                        </td>
                         <td className=" px-6 py-4 grid grid-cols-2  place-content-center">
                           <button
                             type="button"
@@ -147,40 +160,6 @@ const PaperCut = () => {
                               />
                             </svg>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              changeStatusPaperCut(PaperCut.id, PaperCut.statedAt)
-                            }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-6 h-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                        <td className="px-6 py-4">
-                          {PaperCut.statedAt
-                            ? (
-                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                              Activo
-                            </span>
-                              )
-                            : (
-                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                              Inactivo
-                            </span>
-                              )}
                         </td>
                       </tr>
                         ))

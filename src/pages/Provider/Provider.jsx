@@ -61,7 +61,7 @@ const provider = () => {
                 Registrar provedor
               </button>
               <Modal
-                title={'categoria de insumo'}
+                title={'Proveedor'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}

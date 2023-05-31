@@ -3,6 +3,7 @@ import clientAxios from '../../../config/clientAxios'
 
 function GrammageCaliberModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
+    type: '',
     name: ''
   })
 
@@ -48,7 +49,7 @@ function GrammageCaliberModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
                 name="type"
                 id="type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="Tipo"
                 value={isEditingInfo.type}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, type: e.target.value })
@@ -93,7 +94,7 @@ function GrammageCaliberModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
                 htmlFor="type"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre Grammaje Calibre
+                Tipo Gramaje
               </label>
               <input
                 type="text"

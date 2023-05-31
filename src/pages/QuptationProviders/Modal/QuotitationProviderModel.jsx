@@ -4,11 +4,9 @@ import clientAxios from '../../../config/clientAxios'
 function QuotationProvidersModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     quotationDate: '',
-    quotationFile:'',
-    fullValue:0,
-    providerId:1,
-
-
+    quotationFile: '',
+    fullValue: 0,
+    providerId: 1
   })
 
   const handleSubmitCreate = async e => {

@@ -60,7 +60,7 @@ const Warehause = () => {
                Registrar bodega
               </button>
               <Modal
-                title={'categoria de insumo'}
+                title={'bodega'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}

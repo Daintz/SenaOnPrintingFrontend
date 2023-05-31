@@ -9,13 +9,13 @@ const Machine = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
     name: '',
-    statedAt : true,
+    statedAt: true,
     minimumHeight: '',
     minimumWidth: '',
     maximumHeight: '',
-    maximumWidth:'',
-    costByUnit:'',
-    costByHour :'',
+    maximumWidth: '',
+    costByUnit: '',
+    costByHour: ''
   })
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const Machine = () => {
                 <MachineModal />
               </Modal>
               <Modal
-                title={'Machine'}
+                title={'Maquina'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
@@ -98,7 +98,7 @@ const Machine = () => {
                       Ancho Minimo
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Altura Msxima
+                      Altura Maximo
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Ancho Maximo
@@ -132,13 +132,13 @@ const Machine = () => {
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {Machine.maximumHeight}
+                          {Machine.minimumHeight}
                         </th>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                          {Machine.maximumWidth}
+                          {Machine.minimumWidth}
                         </th>
                         <th
                           scope="row"
@@ -163,9 +163,6 @@ const Machine = () => {
                         >
                           {Machine.costByHour}
                         </th>
-                     
-                     
-                     
                         <td className="px-6 py-4">
                           {Machine.statedAt
                             ? (

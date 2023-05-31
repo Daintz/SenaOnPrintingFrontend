@@ -9,10 +9,10 @@ const UnitMesure = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingInfo, setIsEditingInfo] = useState({
     name: '',
-    statedAt : true,
-    abbreviation:'',
-    type:'',
-    conversionFactor:'',
+    statedAt: true,
+    abbreviation: '',
+    type: '',
+    conversionFactor: ''
   })
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const UnitMesure = () => {
                 <UnitMesureModal />
               </Modal>
               <Modal
-                title={'Machine'}
+                title={'Unidades de medida'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}
@@ -134,9 +134,7 @@ const UnitMesure = () => {
                         >
                           {Unit.conversionFactor}
                         </th>
-                       
-                    
-                     
+
                         <td className="px-6 py-4">
                           {Unit.statedAt
                             ? (
@@ -200,7 +198,6 @@ const UnitMesure = () => {
                               changeStatusUnitMesure(Unit.id)
                             }}
                           >
-                      
                           </button>
                         </td>
                       </tr>

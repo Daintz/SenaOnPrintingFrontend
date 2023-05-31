@@ -3,9 +3,9 @@ import clientAxios from '../../../config/clientAxios'
 
 function QuotationClientModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
-    userId: 4,
-    client_id: 1,
-    typeServiceId: 1,
+    userId: 0,
+    clientId: 0,
+    typeServiceId: 0,
     orderDate: '',
     deliverDate: '',
     quotationStatus: true,
@@ -86,7 +86,7 @@ function QuotationClientModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Editar insumo
+              Editar Cotizacion
             </button>
           </form>
         </>
@@ -134,11 +134,71 @@ function QuotationClientModal ({ isEditingInfo, isEditing, setIsEditingInfo, get
                 required
               />
             </div>
+            <div>
+              <label
+                htmlFor="userId"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Usuario ID
+              </label>
+              <input
+                type="number"
+                name="userId"
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Instrucciones"
+                value={dataForm.userId}
+                onChange={e =>
+                  setDataForm({ ...dataForm, userId: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="clientId"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Cliente ID
+              </label>
+              <input
+                type="number"
+                name="clientId"
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Instrucciones"
+                value={dataForm.clientId}
+                onChange={e =>
+                  setDataForm({ ...dataForm, clientId: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="typeServiceId"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Tipo De Servicio Id
+              </label>
+              <input
+                type="number"
+                name="typeServiceId"
+                id="typeServiceId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Instrucciones"
+                value={dataForm.typeServiceId}
+                onChange={e =>
+                  setDataForm({ ...dataForm, typeServiceId: e.target.value })
+                }
+                required
+              />
+            </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Crear insumo
+              Crear Cotizacion
             </button>
           </form>
         </>

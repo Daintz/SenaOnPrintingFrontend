@@ -11,7 +11,7 @@ const QuotationProviders = () => {
     quotationDate: '',
     quotationFile: '',
     fullValue: 0,
-    providerId: 0,
+    providerId: 0
 
   })
 
@@ -65,13 +65,13 @@ const QuotationProviders = () => {
                 type="button"
                 onClick={() => handleIsOpen('creating')}
               >
-                Crear un pictograma
+                Crear una cotización
               </button>
               <Modal>
                 <QuotationProvidersModal/>
               </Modal>
               <Modal
-                title={'Cotixaxión proveedores'}
+                title={'Cotización proveedores'}
                 isOpen={isOpen}
                 isEditing={isEditing}
                 handleIsOpen={handleIsOpen}

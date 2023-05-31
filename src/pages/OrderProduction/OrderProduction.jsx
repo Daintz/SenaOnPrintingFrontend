@@ -72,10 +72,10 @@ const OrderProduction = () => {
                                 type="button"
                                 onClick={() => handleIsOpen('creating')}
                             >
-                                Crear order de producción
+                                Crear orden de producción
                             </button>
                             <Modal
-                                title={'order de producción'}
+                                title={'orden de producción'}
                                 isOpen={isOpen}
                                 isEditing={isEditing}
                                 handleIsOpen={handleIsOpen}

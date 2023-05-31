@@ -5,13 +5,13 @@ import Machine from '../Machines'
 function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     name: '',
-    statedAt : true,
+    statedAt: true,
     minimumHeight: '',
     minimumWidth: '',
     maximumHeight: '',
-    maximumWidth:'',
-    costByUnit:'',
-    costByHour :'',
+    maximumWidth: '',
+    costByUnit: '',
+    costByHour: ''
 
   })
 
@@ -74,15 +74,14 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 name="minimumHeight"
                 id="minimumHeight"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="altura min"
                 value={isEditingInfo.minimumHeight}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, minimumHeight: e.target.value })
                 }
                 required
               />
-            </div> 
-            
+            </div>
               <div>
               <label
                 htmlFor="minimumWidth"
@@ -94,7 +93,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 name="minimumWidth"
                 id="minimumWidth"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="ancho min"
                 value={isEditingInfo.minimumWidth}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, minimumWidth: e.target.value })
@@ -112,7 +111,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 name="maximumHeight"
                 id="maximumHeight"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="altura max"
                 value={isEditingInfo.maximumHeight}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, maximumHeight: e.target.value })
@@ -130,7 +129,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 name="maximumWidth"
                 id="maximumWidth"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="ancho max"
                 value={isEditingInfo.maximumWidth}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, maximumWidth: e.target.value })
@@ -155,7 +154,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 }
                 required
               />
-            </div>   
+            </div>
             <div>
               <label
                 htmlFor="costByHour"
@@ -163,11 +162,11 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
               >
                Costo por Hora             </label>
               <input
-                type="text"
+                type="number"
                 name="costByHour"
                 id="costByHour"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="costo por h"
                 value={isEditingInfo.costByHour}
                 onChange={e =>
                   setIsEditingInfo({ ...isEditingInfo, costByHour: e.target.value })
@@ -175,7 +174,6 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 required
               />
             </div>
-           
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -196,7 +194,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 Nombre de la  Maquina
               </label>
               <input
-                type="text"
+                type="number"
                 name="name"
                 id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -217,39 +215,38 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                Altura Minima
               </label>
               <input
-                type="text"
+                type="number"
                 name="minimumHeight"
                 id="minimumHeight"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="altura minima"
                 value={dataForm.minimumHeight}
                 onChange={e =>
                   setDataForm({ ...dataForm, minimumHeight: e.target.value })
                 }
                 required
               />
-            </div> 
-            
+            </div>
             <div>
               <label
                 htmlFor="minimumWidth"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-               Ancho Minima
+               Ancho Minimo
               </label>
               <input
-                type="text"
+                type="number"
                 name="minimumWidth"
                 id="minimumWidth"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Nombre"
+                placeholder="ancho minimo"
                 value={dataForm.minimumWidth}
                 onChange={e =>
                   setDataForm({ ...dataForm, minimumWidth: e.target.value })
                 }
                 required
               />
-            </div> 
+            </div>
 
              <div>
               <label
@@ -296,7 +293,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
          Costo por unidad
               </label>
               <input
-                type="text"
+                type="number"
                 name="costByUnit"
                 id="costByUnit"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -315,7 +312,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 costo por Hora
               </label>
               <input
-                type="text"
+                type="number"
                 name="costByHour"
                 id="costByHour"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -326,8 +323,7 @@ function MachineModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsO
                 }
                 required
               />
-            </div>  
-           
+            </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

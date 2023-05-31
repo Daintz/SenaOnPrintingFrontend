@@ -5,10 +5,10 @@ import UnitMesure from '../UnitMesure'
 function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({
     name: '',
-    statedAt : true,
-    abbreviation:'',
-    type:'',
-    conversionFactor:'',
+    statedAt: true,
+    abbreviation: '',
+    type: '',
+    conversionFactor: '',
 
   })
 
@@ -78,8 +78,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 }
                 required
               />
-            </div> 
-            
+            </div>
               <div>
               <label
                 htmlFor="type"
@@ -116,8 +115,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 }
                 required
               />
-            </div>   
-           
+            </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -135,7 +133,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Nombre 
+                Nombre
               </label>
               <input
                 type="text"
@@ -170,8 +168,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 }
                 required
               />
-            </div> 
-            
+            </div>
             <div>
               <label
                 htmlFor="type"
@@ -180,7 +177,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                Tipo
               </label>
               <input
-                type="text"
+                type="number"
                 name="type"
                 id="type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -191,8 +188,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 }
                 required
               />
-            </div> 
-
+            </div>
              <div>
               <label
                 htmlFor="conversionFactor"
@@ -201,7 +197,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                Factor
               </label>
               <input
-                type="text"
+                type="number"
                 name="conversionFactor"
                 id="conversionFactor"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -212,8 +208,7 @@ function UnitMesureModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, set
                 }
                 required
               />
-            </div>  
-           
+            </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
