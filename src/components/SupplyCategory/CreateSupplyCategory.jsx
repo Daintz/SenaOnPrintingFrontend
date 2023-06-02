@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { usePostSupplyCategoryMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openModal } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch } from 'react-redux'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 function CreateSupplyCategory () {
   const dispatch = useDispatch()
@@ -14,8 +16,8 @@ function CreateSupplyCategory () {
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error: {error.message}</div>
+    if (isLoading) return <Spinner />
+    if (error) return <Error type={error.status} message={error.error} />
 
     await createSupplyCategory(dataForm)
 

@@ -1,6 +1,8 @@
 import { useDeleteSupplyCategoryByIdMutation } from '../../context/Api/Common'
 import { changeAction } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch } from 'react-redux'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 function ChangeStateSupplyCategory ({ supplyCategory }) {
   const dispatch = useDispatch()
@@ -9,8 +11,8 @@ function ChangeStateSupplyCategory ({ supplyCategory }) {
 
   const handleSubmit = async () => {
     await deleteSupplyCategory(supplyCategory.id)
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error: {error.message}</div>
+    if (isLoading) return <Spinner />
+    if (error) return <Error type={error.status} message={error.error} />
 
     dispatch(changeAction())
   }

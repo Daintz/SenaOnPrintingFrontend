@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { usePutSupplyCategoryByIdMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openEditing, openModal } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 function UpdateSupplyCategory () {
   const dispatch = useDispatch()
@@ -20,8 +22,8 @@ function UpdateSupplyCategory () {
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error: {error.message}</div>
+    if (isLoading) return <Spinner />
+    if (error) return <Error type={error.status} message={error.error} />
     await updateSupplyCategory(dataForm)
 
     dispatch(changeAction())

@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetAllSupplyCategoryQuery } from '../../context/Api/Common'
-import { useEffect } from 'react'
 import ChangeStateSupplyCategory from './ChangeStateSupplyCategory'
 import { CreateButtomSupplyCategory } from './CreateSupplyCategory'
 import { UpdateButtomSupplyCategory } from './UpdateSupplyCategory'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 const ListSupplyCategory = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -16,8 +18,8 @@ const ListSupplyCategory = () => {
   }, [isAction])
   // ?
 
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
 
   const columns = [
     { key: 'name', name: 'Nombre' },

@@ -1,10 +1,11 @@
-## <small>0.0.21 (2023-05-28)</small>
+## <small>0.0.23 (2023-06-02)</small>
 
 * feat: :sparkles: add delete in supplyCategory ([2d648df](https://github.com/Daintz/SenaOnPrintingFrontend/commit/2d648df))
 * feat: :sparkles: add edit in supplyCategory ([130d26d](https://github.com/Daintz/SenaOnPrintingFrontend/commit/130d26d))
 * feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
 * feat: :sparkles: add product section ([784c872](https://github.com/Daintz/SenaOnPrintingFrontend/commit/784c872))
 * feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))
+* feat: :sparkles: add redux toolkit and redux RTK ([ed87e90](https://github.com/Daintz/SenaOnPrintingFrontend/commit/ed87e90))
 * feat: :sparkles: adding table rendering in dasboard ([63691f2](https://github.com/Daintz/SenaOnPrintingFrontend/commit/63691f2))
 * chore: :construction: in-process api consumption ([bfabba9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/bfabba9))
 * chore: :construction: update page information ([f189063](https://github.com/Daintz/SenaOnPrintingFrontend/commit/f189063))
