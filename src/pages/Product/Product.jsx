@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Modal from '../../components/Modal/Modal'
-import clientAxios from '../../config/clientAxios'
+import clientAxios from '../../config/Axios/clientAxios'
 import ProductModal from './Modal/ProductModal'
 
 const Product = () => {

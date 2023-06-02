@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import clientAxios from '../../config/clientAxios'
+import clientAxios from '../../config/Axios/clientAxios'
 import Modal from '../../components/Modal/Modal'
 import SupplyModal from './Modal/SupplyModal'
 

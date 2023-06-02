@@ -3,12 +3,12 @@ import {
   createRoutesFromElements,
   Route
 } from 'react-router-dom'
-import Dashboard from '../pages/Dashboard/Dashboard'
-import App from '../App'
-import Supply from '../pages/Supply/Supply'
-import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
-import DashboardLayout from '../layout/Dashboard/DashboardLayout'
-import Product from '../pages/Product/Product'
+import Dashboard from '../../pages/Dashboard/Dashboard'
+import App from '../../App'
+import Supply from '../../pages/Supply/Supply'
+import SupplyCategory from '../../pages/SupplyCategory/SupplyCategory'
+import DashboardLayout from '../../layout/Dashboard/DashboardLayout'
+import Product from '../../pages/Product/Product'
 
 const router = createBrowserRouter(
   createRoutesFromElements(

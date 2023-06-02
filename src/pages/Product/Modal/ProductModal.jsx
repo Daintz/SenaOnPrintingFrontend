@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import clientAxios from '../../../config/clientAxios'
+import clientAxios from '../../../config/Axios/clientAxios'
 
 function ProductModal ({ isEditingInfo, isEditing, setIsEditingInfo, get, setIsOpen }) {
   const [dataForm, setDataForm] = useState({

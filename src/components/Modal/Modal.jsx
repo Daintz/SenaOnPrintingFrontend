@@ -1,4 +1,15 @@
-function Modal ({ title, isOpen, isEditing, handleIsOpen, children }) {
+import { useSelector, useDispatch } from 'react-redux'
+import { closeEditing, closeModal } from '../../context/Slices/Modal/ModalSlice'
+
+function Modal ({ children }) {
+  const dispatch = useDispatch()
+  const { isOpen, title } = useSelector((state) => state.modal)
+
+  const handleClose = () => {
+    dispatch(closeModal())
+    dispatch(closeEditing())
+  }
+
   return (
     <>
       {isOpen && (
@@ -12,11 +23,11 @@ function Modal ({ title, isOpen, isEditing, handleIsOpen, children }) {
               <div className="relative bg-white rounded-lg shadow">
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                   <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl">
-                    {isEditing ? `Editar ${title}` : `Crear ${title}`}
+                    {title}
                   </h3>
                   <button
                     type="button"
-                    onClick={handleIsOpen}
+                    onClick={handleClose}
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
                     <svg
