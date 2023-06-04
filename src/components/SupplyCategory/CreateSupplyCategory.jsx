@@ -1,13 +1,19 @@
 import { useState } from 'react'
-import { usePostSupplyCategoryMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openModal } from '../../context/Slices/Modal/ModalSlice'
+import { ToastContainer, toast } from 'react-toastify'
+import {
+  changeAction,
+  closeModal,
+  openModal
+} from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
+import { usePostSupplyCategoryMutation } from '../../context/Api/Common'
 
 function CreateSupplyCategory () {
   const dispatch = useDispatch()
-  const [createSupplyCategory, { error, isLoading }] = usePostSupplyCategoryMutation()
+  const [createSupplyCategory, { error, isLoading }] =
+    usePostSupplyCategoryMutation()
   const [dataForm, setDataForm] = useState({
     name: '',
     description: ''
@@ -23,20 +29,32 @@ function CreateSupplyCategory () {
 
     dispatch(changeAction())
     dispatch(closeModal())
+
+    return <CreateMessageSupplyCategory />
   }
 
   const inputs = [
-    { key: 0, name: 'name', title: 'Nombre categoria insumo', type: 'text', placeholder: 'Nombre' },
-    { key: 1, name: 'description', title: 'Descripción categoria insumo', type: 'text', placeholder: 'Descripción' }
+    {
+      key: 0,
+      name: 'name',
+      title: 'Nombre categoria insumo',
+      type: 'text',
+      placeholder: 'Nombre'
+    },
+    {
+      key: 1,
+      name: 'description',
+      title: 'Descripción categoria insumo',
+      type: 'text',
+      placeholder: 'Descripción'
+    }
   ]
 
   return (
     <form className="space-y-6" onSubmit={e => handleSubmit(e)}>
-      {inputs.map((input) => (
+      {inputs.map(input => (
         <div key={input.key}>
-          <label
-            htmlFor={input.name}
-          >{input.title}</label>
+          <label htmlFor={input.name}>{input.title}</label>
           <input
             type={input.type}
             name={input.name}
@@ -44,10 +62,13 @@ function CreateSupplyCategory () {
             placeholder={input.placeholder}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             value={dataForm[input.name]}
-            onChange={e => setDataForm({ ...dataForm, [input.name]: e.target.value })}
+            onChange={e =>
+              setDataForm({ ...dataForm, [input.name]: e.target.value })
+            }
             required
           />
-        </div>))}
+        </div>
+      ))}
       <button
         type="submit"
         className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -68,12 +89,24 @@ export function CreateButtomSupplyCategory () {
 
   return (
     <button
-        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5"
-        type="button"
-        onClick={() => handleOpen()}
-      >
-        Crear categoria insumo
+      className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-5"
+      type="button"
+      onClick={() => handleOpen()}
+    >
+      Crear categoria insumo
     </button>
+  )
+}
+
+export function CreateMessageSupplyCategory () {
+  const notify = () => toast('Categoria de insumo registrada exitosamente!')
+  return (
+    <div>
+      <button onClick={notify}>
+        Categoria de insumo registrada exitosamente!
+      </button>
+      <ToastContainer />
+    </div>
   )
 }
 

@@ -15,7 +15,7 @@ const commonEndpointsApi = (entityName, entityUrl) => {
       }),
       post: builder.mutation({
         query: data => ({
-          url: 'supplyCategory',
+          url: `${entityUrl}`,
           method: 'POST',
           body: data
         })
@@ -54,7 +54,7 @@ export const {
 export const {
   useGetAllQuery: useGetAllProductsQuery,
   useGetByIdQuery: useGetProductByIdQuery,
-  usePostMutation: useCreateProductMutation,
+  usePostMutation: usePostProductMutation,
   usePutByIdMutation: usePutProductByIdMutation,
   useDeleteByIdMutation: useDeleteProductByIdMutation
 } = productApi
