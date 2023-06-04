@@ -1,5 +1,13 @@
-## <small>0.0.24 (2023-06-02)</small>
+## <small>0.0.25 (2023-06-04)</small>
 
+* feat: :sparkles: add delete in supplyCategory ([2d648df](https://github.com/Daintz/SenaOnPrintingFrontend/commit/2d648df))
+* feat: :sparkles: add edit in supplyCategory ([130d26d](https://github.com/Daintz/SenaOnPrintingFrontend/commit/130d26d))
+* feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
+* feat: :sparkles: add product module, add dependencies for forms ([6d04da4](https://github.com/Daintz/SenaOnPrintingFrontend/commit/6d04da4))
+* feat: :sparkles: add product section ([784c872](https://github.com/Daintz/SenaOnPrintingFrontend/commit/784c872))
+* feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))
+* feat: :sparkles: add redux toolkit and redux RTK ([ed87e90](https://github.com/Daintz/SenaOnPrintingFrontend/commit/ed87e90))
+* feat: :sparkles: adding table rendering in dasboard ([63691f2](https://github.com/Daintz/SenaOnPrintingFrontend/commit/63691f2))
 * chore: :construction: in-process api consumption ([bfabba9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/bfabba9))
 * chore: :construction: update page information ([f189063](https://github.com/Daintz/SenaOnPrintingFrontend/commit/f189063))
 * chore: :construction: update UI ([017cd0b](https://github.com/Daintz/SenaOnPrintingFrontend/commit/017cd0b))
@@ -9,13 +17,6 @@
 * chore: :tada: project structure ([328a6b4](https://github.com/Daintz/SenaOnPrintingFrontend/commit/328a6b4))
 * chore: :technologist: improve code ([9d69238](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9d69238))
 * chore: :wrench: add hook ([d5f865e](https://github.com/Daintz/SenaOnPrintingFrontend/commit/d5f865e))
-* feat: :sparkles: add delete in supplyCategory ([2d648df](https://github.com/Daintz/SenaOnPrintingFrontend/commit/2d648df))
-* feat: :sparkles: add edit in supplyCategory ([130d26d](https://github.com/Daintz/SenaOnPrintingFrontend/commit/130d26d))
-* feat: :sparkles: add method post and get ([87a8369](https://github.com/Daintz/SenaOnPrintingFrontend/commit/87a8369))
-* feat: :sparkles: add product section ([784c872](https://github.com/Daintz/SenaOnPrintingFrontend/commit/784c872))
-* feat: :sparkles: add react router dom ([7b5bfa0](https://github.com/Daintz/SenaOnPrintingFrontend/commit/7b5bfa0))
-* feat: :sparkles: add redux toolkit and redux RTK ([ed87e90](https://github.com/Daintz/SenaOnPrintingFrontend/commit/ed87e90))
-* feat: :sparkles: adding table rendering in dasboard ([63691f2](https://github.com/Daintz/SenaOnPrintingFrontend/commit/63691f2))
 * build: :construction: add dashboard ([32edbb3](https://github.com/Daintz/SenaOnPrintingFrontend/commit/32edbb3))
 * build: :construction: add menu supply and add reusable modal ([9004ca9](https://github.com/Daintz/SenaOnPrintingFrontend/commit/9004ca9))
 * build: :hammer: separate config react router dom in other folder ([4045acb](https://github.com/Daintz/SenaOnPrintingFrontend/commit/4045acb))
