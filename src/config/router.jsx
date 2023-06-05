@@ -33,7 +33,6 @@ import SupplyPictogrmas from '../pages/SupplyPictogrmas/SupplyPictogrmas'
 import QuotationProviders from '../pages/QuptationProviders/QuotitationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
