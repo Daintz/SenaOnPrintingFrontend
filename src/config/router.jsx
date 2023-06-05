@@ -4,7 +4,6 @@ import {
   Route
 } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard/Dashboard'
-import App from '../App'
 import Provider from '../pages/Provider/Provider'
 import Warehausetype from '../pages/Warehausetype/Warehausetype'
 import Warehause from '../pages/Warehause/Warehause'
