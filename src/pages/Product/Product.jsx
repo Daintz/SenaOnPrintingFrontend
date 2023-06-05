@@ -9,21 +9,16 @@ const Product = () => {
   const { isEditing } = useSelector((state) => state.modal)
 
   return (
-    <>
-      <div className="p-4">
-        <div className="p-4 border-gray-200 border-dashed rounded-lg">
-          <div className="flex items-center justify-center rounded">
-            <div className="relative overflow-x-auto">
-              <ListProduct />
-              {/* Esta logica del modal esta acá para poder ser reutilizable */}
-              <NewModal>
-                {isEditing ? <UpdateProduct /> : <CreateProduct />}
-              </NewModal>
-            </div>
-          </div>
-        </div>
+    <div className="p-4 border-gray-200 border-dashed">
+      <div className="overflow-x-auto">
+        <ListProduct />
+        {/* Esta logica del modal esta acá para poder ser reutilizable */}
+        <NewModal>
+          {isEditing ? <UpdateProduct /> : <CreateProduct />}
+        </NewModal>
       </div>
-    </>
+    </div>
+
   )
 }
 
