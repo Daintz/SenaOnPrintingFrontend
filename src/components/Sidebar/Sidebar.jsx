@@ -9,11 +9,11 @@ function Sidebar () {
       aria-label="Sidebar"
     >
       <div className="h-full px-3 py-10 bg-white">
-        <ul className="space-y-3 font-semibold">
+        <ul className="space-y-2 font-semibold">
           <li>
             <Link
               to={'/dashboard'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
@@ -31,7 +31,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >
@@ -64,7 +64,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/roles'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -82,7 +82,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/tipos_documentos'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -100,7 +100,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/usuarios'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -120,7 +120,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
               aria-controls="dropdown-example2"
               data-collapse-toggle="dropdown-example2"
             >
@@ -202,7 +202,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
               aria-controls="dropdown-example3"
               data-collapse-toggle="dropdown-example3"
             >
@@ -280,7 +280,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyCategory'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -298,7 +298,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supply'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -316,7 +316,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyDetails'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -336,7 +336,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
               aria-controls="dropdown-example4"
               data-collapse-toggle="dropdown-example4"
             >
@@ -418,7 +418,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
               aria-controls="dropdown-example5"
               data-collapse-toggle="dropdown-example5"
             >
@@ -479,7 +479,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationClient'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -498,7 +498,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationclientDetail'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
                 >
                   <svg
                     aria-hidden="true"
@@ -518,7 +518,7 @@ function Sidebar () {
           <li>
             <Link
               to={'/product'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
@@ -536,7 +536,7 @@ function Sidebar () {
           <li>
             <Link
               to={'/Finish'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
@@ -680,7 +680,7 @@ function Sidebar () {
           <li>
             <Link
               to={'/product'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
@@ -698,7 +698,7 @@ function Sidebar () {
           <li>
             <Link
               to={'/supply'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
@@ -716,7 +716,7 @@ function Sidebar () {
           <li>
             <Link
               to={'/supplyCategory'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-gray-100"
+              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
             >
               <svg
                 aria-hidden="true"
