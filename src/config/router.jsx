@@ -39,17 +39,17 @@ const router = createBrowserRouter(
     <>
 
       <Route path="provider"
-            element={<DashboardLayout>
-              <Provider/>
-            </DashboardLayout>}/>
+        element={<DashboardLayout>
+          <Provider />
+        </DashboardLayout>} />
       <Route path="warehausetype"
-            element={<DashboardLayout>
-              <Warehausetype/>
-            </DashboardLayout>}/>
+        element={<DashboardLayout>
+          <Warehausetype />
+        </DashboardLayout>} />
       <Route path="warehause"
-            element={<DashboardLayout>
-              <Warehause/>
-            </DashboardLayout>}/>
+        element={<DashboardLayout>
+          <Warehause />
+        </DashboardLayout>} />
       <Route path="/" element={<Login />} />
       <Route
         path="dashboard"
@@ -59,7 +59,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-    
+
       <Route
         path="supply"
         element={
@@ -79,12 +79,12 @@ const router = createBrowserRouter(
 
       <Route path="Machine"
         element={<DashboardLayout>
-          <Machine/>
-      </DashboardLayout>}/>
+          <Machine />
+        </DashboardLayout>} />
       <Route path="Finish"
         element={<DashboardLayout>
-        <Finish/>
-        </DashboardLayout>}/>
+          <Finish />
+        </DashboardLayout>} />
       <Route
         path="roles"
         element={
@@ -97,7 +97,7 @@ const router = createBrowserRouter(
         path="tipos_documentos"
         element={
           <DashboardLayout>
-            <TypeDocument/>
+            <TypeDocument />
           </DashboardLayout>
         }
       />
@@ -114,9 +114,9 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <QuotationClientDetail />
-            </DashboardLayout>
+          </DashboardLayout>
         }
-        />
+      />
       <Route
         path="usuarios"
         element={
@@ -125,7 +125,7 @@ const router = createBrowserRouter(
           </DashboardLayout>
         }
       />
-<Route
+      <Route
         path="UnitMesure"
         element={
           <DashboardLayout>
@@ -138,7 +138,7 @@ const router = createBrowserRouter(
         path="clients"
         element={
           <DashboardLayout>
-            <Client/>
+            <Client />
           </DashboardLayout>
         }
       />
@@ -154,7 +154,7 @@ const router = createBrowserRouter(
         path="paper_cut"
         element={
           <DashboardLayout>
-            <PaperCut/>
+            <PaperCut />
           </DashboardLayout>
         }
       />
@@ -162,7 +162,7 @@ const router = createBrowserRouter(
         path="substrate"
         element={
           <DashboardLayout>
-            <Substrate/>
+            <Substrate />
           </DashboardLayout>
         }
       />
@@ -170,7 +170,7 @@ const router = createBrowserRouter(
         path="Lineature"
         element={
           <DashboardLayout>
-            <Lineature/>
+            <Lineature />
           </DashboardLayout>
         }
       />
@@ -178,7 +178,7 @@ const router = createBrowserRouter(
         path="impositionPlanch"
         element={
           <DashboardLayout>
-            <ImpositionPlanch/>
+            <ImpositionPlanch />
           </DashboardLayout>
         }
       />
@@ -186,16 +186,16 @@ const router = createBrowserRouter(
         path="OrderProduction"
         element={
           <DashboardLayout>
-            <OrderProduction/>
+            <OrderProduction />
           </DashboardLayout>
         }
       />
 
-       <Route
+      <Route
         path="typeServices"
         element={
           <DashboardLayout>
-            <TypeServices/>
+            <TypeServices />
           </DashboardLayout>
         }
       />
@@ -203,7 +203,7 @@ const router = createBrowserRouter(
         path="supplyPictograms"
         element={
           <DashboardLayout>
-            <SupplyPictogrmas/>
+            <SupplyPictogrmas />
           </DashboardLayout>
         }
       />
@@ -211,16 +211,41 @@ const router = createBrowserRouter(
         path="quotitationProviders"
         element={
           <DashboardLayout>
-            <QuotationProviders/>
+            <QuotationProviders />
           </DashboardLayout>
         }
       />
-          
+
       <Route
         path="supplyDetails"
         element={
           <DashboardLayout>
-          <SupplyDetails />
+            <SupplyDetails />
+          </DashboardLayout>
+        }
+      />
+
+      <Route
+        path="product"
+        element={
+          <DashboardLayout>
+            <Product />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="supply"
+        element={
+          <DashboardLayout>
+            <Supply />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="supplyCategory"
+        element={
+          <DashboardLayout>
+            <SupplyCategory />
           </DashboardLayout>
         }
       />
