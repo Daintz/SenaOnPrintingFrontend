@@ -11,7 +11,6 @@ import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
 import Finish from '../pages/Finish/Finish'
 import SupplyCategory from '../pages/SupplyCategory/SupplyCategory'
-import DashboardLayout from '../layout/Dashboard/DashboardLayout'
 import UnitMesure from '../pages/UnitMesure/UnitMesure'
 import Product from '../pages/Product/Product'
 import QuotationClient from '../pages/QuotationClient/QuotationClient'
@@ -31,6 +30,7 @@ import TypeServices from '../pages/TypeServices/TypeServices'
 import SupplyPictogrmas from '../pages/SupplyPictogrmas/SupplyPictogrmas'
 import QuotationProviders from '../pages/QuptationProviders/QuotitationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
+import DashboardLayout from '../layout/DashboardLayout'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
