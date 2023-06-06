@@ -1,33 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { BsGear, BsNewspaper } from 'react-icons/bs'
 
 function Sidebar () {
+  const location = useLocation()
+  const path = location.pathname
+
+  console.log(path)
   return (
     <aside
       id="logo-sidebar"
-      className="fixed top-0 left-0 z-40 w-72 mdm:w-60 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 drop-shadow-xl overflow-y-auto"
+      className="fixed top-0 left-0 z-40 w-72 mdm:w-60 lgm:w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 drop-shadow-xl overflow-y-auto"
       aria-label="Sidebar"
     >
       <div className="h-full px-3 py-10 bg-white">
         <ul className="space-y-2 font-semibold">
-          <li>
-            <Link
-              to={'/dashboard'}
-              className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
-            >
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-              </svg>
-              <span className="ml-3">Dashboard</span>
-            </Link>
-          </li>
           <li>
             <button
               type="button"
@@ -64,7 +50,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/roles'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/roles' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Roles</span>
@@ -73,7 +59,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/tipos_documentos'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/tipos_documentos' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Tipo de Documentos</span>
@@ -82,7 +68,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/usuarios'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/usuarios' ? 'bg-green-500' : null}`}
                 >
                   <span className="ml-3">Usuarios</span>
                 </Link>
@@ -136,7 +122,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/warehausetype"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehausetype' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Tipo de Bodega</span>
@@ -145,7 +131,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/warehause"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehause' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Bodega</span>
@@ -198,7 +184,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/UnitMesure"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/UnitMesure' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Unidades de Medida</span>
@@ -207,7 +193,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/supplyPictograms"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Pictogramas</span>
@@ -216,7 +202,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyCategory'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyCategory' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Categoria de Insumos</span>
@@ -225,7 +211,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supply'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supply' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Insumos</span>
@@ -234,7 +220,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyDetails'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyDetails' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Loteo de Insumos</span>
@@ -287,7 +273,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/provider"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/provider' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Proveedor</span>
@@ -296,7 +282,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/quotitationProviders"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotitationProviders' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">
@@ -351,7 +337,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/typeServices"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/typeServices' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Tipo de servicio</span>
@@ -360,7 +346,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/Machine"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Machine' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Maquinas</span>
@@ -369,7 +355,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/Finish'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Finish' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Acabados</span>
@@ -378,7 +364,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/product'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/roproductles' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Productos</span>
@@ -387,7 +373,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/clients"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/clients' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Clientes</span>
@@ -396,7 +382,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationClient'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationClient' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Cotizacion Cliente</span>
@@ -406,7 +392,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationclientDetail'}
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationclientDetail' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Cotizacion Cliente Detalles</span>
@@ -450,7 +436,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/Lineature"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Lineature' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Lineatura</span>
@@ -459,7 +445,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/impositionPlanch"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Imposición plancha</span>
@@ -468,7 +454,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/paper_cut"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/paper_cut' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Corte Papel</span>
@@ -477,7 +463,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/grammage_caliber"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/grammage_caliber' ? 'bg-green-500' : null}`}
                 >
                   <span className="ml-3 text-base">Gramaje & Calibre</span>
                 </Link>
@@ -485,7 +471,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/OrderProduction"
-                  className="flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/OrderProduction' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3 text-base">Orden de producción</span>
