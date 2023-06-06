@@ -6,6 +6,10 @@ module.exports = {
     screens: {
       lgm: { max: "1023px" },
       ...defaultTheme.screens,
+      mdm: { max: "877px" },
+      ...defaultTheme.screens,
+      clm: { max: "540px" },
+      ...defaultTheme.screens,
     },
   },
   plugins: [],

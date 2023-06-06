@@ -38,11 +38,11 @@ const ListSupplyCategory = () => {
     : []
 
   return (
-    <div className="relative bg-white py-10 px-20 shadow-2xl">
+    <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <CreateButtomSupplyCategory />
       <div className="relative overflow-x-auto shadow-sm border">
       <table className="w-full text-sm text-left text-gray-500">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-200">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-300">
           <tr>
             {columns.map((column) => (
               <th scope="col" className='px-6 py-3' key={column.key}>
@@ -57,7 +57,7 @@ const ListSupplyCategory = () => {
             <tr className="bg-white border-b" key={supplyCategory.id}>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                className="px-6 py-4 font-medium clm:font-normal text-gray-900 whitespace-nowrap"
               >
                 {supplyCategory.name}
               </th>
