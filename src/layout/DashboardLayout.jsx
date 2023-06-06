@@ -7,7 +7,7 @@ const DashboardLayout = ({ children }) => {
       <Navbar />
       <Sidebar />
       <div className="p-4 sm:ml-72">
-        <div className="py-24 px-16">
+        <div className="py-24 px-8 mdm:px-0">
           {children}
         </div>
       </div>
