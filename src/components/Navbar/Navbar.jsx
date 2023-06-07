@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 function Navbar () {
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start">
@@ -28,10 +28,10 @@ function Navbar () {
                 ></path>
               </svg>
             </button>
-            <Link to={'/dashboard'} className="flex ml-2 md:mr-24">
+            <Link to={'/dashboard'} className="flex md:mr-24">
               <img
                 src="https://agenciapublicadeempleo.sena.edu.co/imgLayout/logos/Logosimbolo-SENA-PRINCIPAL.png"
-                className="h-8 mr-3"
+                className="h-10 mr-3"
                 alt="SENA Logo"
               />
               <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">

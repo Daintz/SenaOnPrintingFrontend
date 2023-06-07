@@ -1,25 +1,18 @@
-import PropTypes from 'prop-types'
+import Navbar from '../components/Navbar/Navbar'
 import Sidebar from '../components/Sidebar/Sidebar'
 
 const DashboardLayout = ({ children }) => {
   return (
-    <div className="dashboard-layout">
+    <>
+      <Navbar />
       <Sidebar />
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-          <div className="flex items-center justify-center rounded">
-            <div className="relative overflow-x-auto">
-              {children}
-            </div>
-          </div>
+      <div className="mt-16 sidebarMD:ml-60">
+        <div className="py-10 sidebarMD:pl-[10%] sidebarMD:pr-[6%] 2xl:pr-[8%]">
+          {children}
         </div>
       </div>
-    </div>
+    </>
   )
-}
-
-DashboardLayout.propTypes = {
-  children: PropTypes.node
 }
 
 export default DashboardLayout

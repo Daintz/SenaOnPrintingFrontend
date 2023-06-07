@@ -43,6 +43,10 @@ export const supplyCategoryApi = commonEndpointsApi(
 )
 export const productApi = commonEndpointsApi('Product', 'product')
 
+export const roleApi = commonEndpointsApi('Role', 'role')
+
+export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,
@@ -58,3 +62,19 @@ export const {
   usePutByIdMutation: usePutProductByIdMutation,
   useDeleteByIdMutation: useDeleteProductByIdMutation
 } = productApi
+
+export const {
+  useGetAllQuery: useGetAllRolesQuery,
+  useGetByIdQuery: useGetRoleByIdQuery,
+  usePostMutation: usePostRoleMutation,
+  usePutByIdMutation: usePutRoleByIdMutation,
+  useDeleteByIdMutation: useDeleteRoleByIdMutation
+} = roleApi
+
+export const {
+  useGetAllQuery: useGetAllTypeDocumentsQuery,
+  useGetByIdQuery: useGetTypeDocumentByIdQuery,
+  usePostMutation: usePostTypeDocumentMutation,
+  usePutByIdMutation: usePutTypeDocumentByIdMutation,
+  useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
+} = typeDocumentApi
