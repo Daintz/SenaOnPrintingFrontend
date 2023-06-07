@@ -5,11 +5,14 @@ module.exports = {
   theme: {
     screens: {
       lgm: { max: "1023px" },
-      ...defaultTheme.screens,
       mdm: { max: "877px" },
-      ...defaultTheme.screens,
       clm: { max: "540px" },
-      ...defaultTheme.screens,
+      '1md': { max: "480px" },
+      '2md': { max: "768px" },
+      '3md': { max: "1024px" },
+      '4md': { max: "1536px" },
+      'sidebarMD': { min: "640px" },
+      ...defaultTheme.screens
     },
   },
   plugins: [],

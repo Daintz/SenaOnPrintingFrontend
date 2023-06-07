@@ -31,7 +31,7 @@ function Navbar () {
             <Link to={'/dashboard'} className="flex md:mr-24">
               <img
                 src="https://agenciapublicadeempleo.sena.edu.co/imgLayout/logos/Logosimbolo-SENA-PRINCIPAL.png"
-                className="h-12 mr-3"
+                className="h-10 mr-3"
                 alt="SENA Logo"
               />
               <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">
