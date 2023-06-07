@@ -9,7 +9,7 @@ function Sidebar () {
   return (
     <aside
       id="logo-sidebar"
-      className="fixed top-0 left-0 z-40 w-72 mdm:w-60 lgm:w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 drop-shadow-xl overflow-y-auto"
+      className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 drop-shadow-xl overflow-y-auto"
       aria-label="Sidebar"
     >
       <div className="h-full px-3 py-10 bg-white">

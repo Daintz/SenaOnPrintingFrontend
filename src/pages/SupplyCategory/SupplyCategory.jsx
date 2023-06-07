@@ -9,14 +9,12 @@ const SupplyCategory = () => {
   const { isEditing } = useSelector((state) => state.modal)
 
   return (
-    <div className="p-4 border-gray-200 border-dashed">
-      <div className="overflow-x-auto">
-        <ListSupplyCategory />
-        {/* Esta logica del modal esta acá para poder ser reutilizable */}
-        <NewModal>
-          {isEditing ? <UpdateSupplyCategory /> : <CreateSupplyCategory />}
-        </NewModal>
-      </div>
+    <div className="border-gray-200 border-dashed overflow-x-auto">
+      <ListSupplyCategory />
+      {/* Esta logica del modal esta acá para poder ser reutilizable */}
+      <NewModal>
+        {isEditing ? <UpdateSupplyCategory /> : <CreateSupplyCategory />}
+      </NewModal>
     </div>
   )
 }
