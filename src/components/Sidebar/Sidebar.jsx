@@ -5,7 +5,6 @@ function Sidebar () {
   const location = useLocation()
   const path = location.pathname
 
-  console.log(path)
   return (
     <aside
       id="logo-sidebar"

@@ -1,5 +1,4 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { ToastContainer, toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { usePostProductMutation } from '../../context/Api/Common'
@@ -9,7 +8,7 @@ import {
   openModal
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
-import Error from '../Error/Error'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   typeProduct: Yup.string().required('Campo requerido'),
@@ -23,14 +22,14 @@ function CreateProduct () {
 
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
-    if (error) return <Error type={error.status} message={error.error} />
 
     await createProduct(values)
 
-    if (isLoading) return <CreateMessageProduct />
-
     dispatch(changeAction())
-    dispatch(closeModal())
+    if (!error) {
+      dispatch(closeModal())
+    }
+    toast.success('Producto creado con exito')
   }
 
   const inputs = [
@@ -114,16 +113,6 @@ export function CreateButtomProduct () {
     >
       Crear producto
     </button>
-  )
-}
-
-export function CreateMessageProduct () {
-  const notify = () => toast('Producto registrado exitosamente!')
-  return (
-    <div>
-      <button onClick={notify}>Producto registrado exitosamente!</button>
-      <ToastContainer />
-    </div>
   )
 }
 
