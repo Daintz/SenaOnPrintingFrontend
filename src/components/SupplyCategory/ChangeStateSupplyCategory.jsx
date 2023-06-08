@@ -3,6 +3,7 @@ import { changeAction } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
+import { toast } from 'react-toastify'
 
 function ChangeStateSupplyCategory ({ supplyCategory }) {
   const dispatch = useDispatch()
@@ -15,6 +16,7 @@ function ChangeStateSupplyCategory ({ supplyCategory }) {
     if (error) return <Error type={error.status} message={error.error} />
 
     dispatch(changeAction())
+    toast.success('Categoria insumo cambio de estado con exito')
   }
 
   return (

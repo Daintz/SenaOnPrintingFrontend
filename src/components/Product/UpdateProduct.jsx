@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   typeProduct: Yup.string().required('Campo requerido'),
@@ -24,6 +25,7 @@ function updateProduct () {
 
     dispatch(changeAction())
     dispatch(closeModal())
+    toast.success('Producto actualizado con exito')
   }
 
   const inputs = [
