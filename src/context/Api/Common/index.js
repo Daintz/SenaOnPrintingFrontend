@@ -49,6 +49,8 @@ export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument'
 
 export const lineatureApi = commonEndpointsApi('Lineature', 'lineature')
 
+export const impositionPlanchApi = commonEndpointsApi('ImpositionPlanch', 'impositionPlanch')
+
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -89,3 +91,11 @@ export const {
   usePutByIdMutation: usePutLineatureByIdMutation,
   useDeleteByIdMutation: useDeleteLineatureByIdMutation
 } = lineatureApi
+
+export const {
+  useGetAllQuery: useGetAllImpositionPlanchsQuery,
+  useGetByIdQuery: useGetImpositionPlanchByIdQuery,
+  usePostMutation: usePostImpositionPlanchMutation,
+  usePutByIdMutation: usePutImpositionPlanchByIdMutation,
+  useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
+} = impositionPlanchApi
