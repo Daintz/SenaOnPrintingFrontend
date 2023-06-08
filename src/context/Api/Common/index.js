@@ -47,6 +47,9 @@ export const roleApi = commonEndpointsApi('Role', 'role')
 
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
 
+export const lineatureApi = commonEndpointsApi('Lineature', 'lineature')
+
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,
@@ -78,3 +81,11 @@ export const {
   usePutByIdMutation: usePutTypeDocumentByIdMutation,
   useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
 } = typeDocumentApi
+
+export const {
+  useGetAllQuery: useGetAllLineaturesQuery,
+  useGetByIdQuery: useGetLineatureByIdQuery,
+  usePostMutation: usePostLineatureMutation,
+  usePutByIdMutation: usePutLineatureByIdMutation,
+  useDeleteByIdMutation: useDeleteLineatureByIdMutation
+} = lineatureApi
