@@ -18,11 +18,11 @@ const ListProduct = () => {
   // ?
 
   const columns = useMemo(() => [
-    { Header: 'Name', accessor: 'name' },
-    { Header: 'Type Product', accessor: 'typeProduct' },
-    { Header: 'Characteristics', accessor: 'characteristics' },
+    { Header: 'Nombre', accessor: 'name' },
+    { Header: 'Tipo producto', accessor: 'typeProduct' },
+    { Header: 'Caracteristicas', accessor: 'characteristics' },
     {
-      Header: 'Stated At',
+      Header: 'Estado',
       accessor: 'statedAt',
       Cell: ({ value }) => (value
         ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
@@ -109,7 +109,7 @@ const ListProduct = () => {
                     </th>
                     ))}
                     <th scope="col" key={5} className='px-6 py-3'>
-                        Actions
+                        Acciones
                     </th>
                   </tr>
               ))}
