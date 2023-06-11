@@ -5,7 +5,8 @@ import { usePostProductMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
-  openModal
+  openModal,
+  setAction
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
@@ -102,6 +103,7 @@ export function CreateButtomProduct () {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(openModal({ title: 'Crear producto' }))
+    dispatch(setAction({ action: 'creating' }))
   }
   // ?
 

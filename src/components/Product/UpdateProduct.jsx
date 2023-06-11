@@ -1,5 +1,5 @@
 import { usePutProductByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
@@ -81,6 +81,7 @@ export function UpdateButtomProduct ({ product }) {
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?

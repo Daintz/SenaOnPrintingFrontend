@@ -5,6 +5,7 @@ import { useGetAllProductsQuery } from '../../context/Api/Common'
 import { UpdateButtomProduct } from './UpdateProduct'
 import ChangeStateProduct from './ChangeStateProduct'
 import { CreateButtomProduct } from './CreateProduct'
+import { DetailsButtomProduct } from './DetailsProduct'
 
 const ListProduct = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -64,7 +65,7 @@ const ListProduct = () => {
   return (
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
-      <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
@@ -129,7 +130,8 @@ const ListProduct = () => {
                     {row.cells.map((cell, index) => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
-                    <td className="px-6 py-4 grid grid-cols-2  place-content-center" key={5}>
+                    <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
+                      <DetailsButtomProduct />
                       <UpdateButtomProduct
                         product={row.original}
                       />
