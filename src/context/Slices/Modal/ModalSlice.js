@@ -5,6 +5,7 @@ const initialState = {
   isEditing: false,
   isAction: false,
   editingData: {},
+  detailsData: {},
   title: '',
   action: ''
 }
@@ -34,6 +35,9 @@ const modalSlice = createSlice({
     },
     setAction: (state, action) => {
       state.action = action.payload.action
+    },
+    setDetailsData: (state, action) => {
+      state.detailsData = action.payload.detailsData
     }
   }
 })
@@ -44,6 +48,7 @@ export const {
   openEditing,
   closeEditing,
   changeAction,
-  setAction
+  setAction,
+  setDetailsData
 } = modalSlice.actions
 export default modalSlice.reducer
