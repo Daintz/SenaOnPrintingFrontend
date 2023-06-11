@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { useTable, usePagination } from 'react-table'
+import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllProductsQuery } from '../../context/Api/Common'
 import { UpdateButtomProduct } from './UpdateProduct'
 import ChangeStateProduct from './ChangeStateProduct'
@@ -46,14 +46,16 @@ const ListProduct = () => {
     canNextPage,
     canPreviousPage,
     state,
+    setGlobalFilter,
     prepareRow
   } = useTable({
     data,
     columns
   },
+  useGlobalFilter,
   usePagination)
 
-  const { pageIndex } = state
+  const { pageIndex, globalFilter } = state
 
   if (!dataApi) {
     return <div>Loading...</div>
@@ -89,7 +91,8 @@ const ListProduct = () => {
                   id="simple-search"
                   className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                   placeholder="Search"
-                  required
+                  value={globalFilter || ''}
+                  onChange={e => setGlobalFilter(e.target.value)}
                 />
               </div>
             </form>
