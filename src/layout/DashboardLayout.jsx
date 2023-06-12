@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify'
 import Navbar from '../components/Navbar/Navbar'
 import Sidebar from '../components/Sidebar/Sidebar'
 
@@ -11,6 +12,7 @@ const DashboardLayout = ({ children }) => {
           {children}
         </div>
       </div>
+      <ToastContainer />
     </>
   )
 }

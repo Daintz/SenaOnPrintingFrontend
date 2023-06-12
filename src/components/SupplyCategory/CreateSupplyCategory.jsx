@@ -1,4 +1,4 @@
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import {
   changeAction,
   closeModal,
@@ -28,6 +28,7 @@ function CreateSupplyCategory () {
 
     dispatch(changeAction())
     dispatch(closeModal())
+    toast.success('Categoria insumo creado con exito')
   }
 
   const inputs = [
@@ -116,18 +117,6 @@ export function CreateButtomSupplyCategory () {
       </svg>
       Crear categoria insumo
     </button>
-  )
-}
-
-export function CreateMessageSupplyCategory () {
-  const notify = () => toast('Categoria de insumo registrada exitosamente!')
-  return (
-    <div>
-      <button onClick={notify}>
-        Categoria de insumo registrada exitosamente!
-      </button>
-      <ToastContainer />
-    </div>
   )
 }
 
