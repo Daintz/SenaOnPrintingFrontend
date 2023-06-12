@@ -6,7 +6,8 @@ import {
   changeAction,
   closeModal,
   openModal,
-  setAction
+  setAction,
+  setWidth
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
@@ -102,6 +103,7 @@ export function CreateButtomProduct () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
+    dispatch(setWidth({ width: '1500px' }))
     dispatch(openModal({ title: 'Crear producto' }))
     dispatch(setAction({ action: 'creating' }))
   }

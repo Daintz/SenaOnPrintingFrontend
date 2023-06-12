@@ -5,6 +5,7 @@ import UpdateProduct from '../../components/Product/UpdateProduct'
 import CreateProduct from '../../components/Product/CreateProduct'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 import DetailsProduct from '../../components/Product/DetailsProduct'
+import ChangeStateProduct from '../../components/Product/ChangeStateProduct'
 
 const Product = () => {
   // ? Esta linea de codigo me trae el estado 'isEditing' de src\context\Slices\Modal\ModalSlice.js que esto seria los estados del componente modal
@@ -21,6 +22,7 @@ const Product = () => {
           {action === 'editing' ? <UpdateProduct /> : undefined}
           {action === 'creating' ? <CreateProduct /> : undefined}
           {action === 'details' ? <DetailsProduct /> : undefined}
+          {action === 'changing' ? <ChangeStateProduct /> : undefined}
         </NewModal>
       </div>
     </div>
