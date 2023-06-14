@@ -47,6 +47,9 @@ export const roleApi = commonEndpointsApi('Role', 'role')
 
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
 
+export const quotationClientApi = commonEndpointsApi('QuotationClient','quotationClient')
+export const quotationclientDetailApi = commonEndpointsApi('QuotationClientDetail','quotationclientDetail')
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,
@@ -78,3 +81,19 @@ export const {
   usePutByIdMutation: usePutTypeDocumentByIdMutation,
   useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
 } = typeDocumentApi
+
+export const {
+  useGetAllQuery: useGetAllQuotationClientsQuery,
+  useGetByIdQuery: useGetQuotationClientByIdQuery,
+  usePostMutation: usePostQuotationClientMutation,
+  usePutByIdMutation: usePutQuotationClientByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation
+} = quotationClientApi
+export const {
+  useGetAllQuery: useGetAllQuotationClientDetailsQuery,
+  useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
+  usePostMutation: usePostQuotationClientDetailMutation,
+  usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
+} = quotationclientDetailApi
+
