@@ -1,15 +1,15 @@
-import { ToastContainer, toast } from 'react-toastify'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
+import * as Yup from 'yup'
+import { usePostLineatureMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
-  openModal
+  openModal,
+  setAction
 } from '../../context/Slices/Modal/ModalSlice'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
-import Error from '../Error/Error'
-import { usePostLineatureMutation } from '../../context/Api/Common'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   lineature: Yup.string().required('Campo requerido'),
@@ -22,12 +22,14 @@ function CreateLineature () {
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
-    if (error) return <Error type={error.status} message={error.error} />
 
     await createLineature(values)
 
     dispatch(changeAction())
-    dispatch(closeModal())
+    if (!error) {
+      dispatch(closeModal())
+    }
+    toast.success('Lineatura creada con exito')
   }
 
   const inputs = [
@@ -92,6 +94,8 @@ export function CreateButtomLineature () {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(openModal({ title: 'Crear lineatura' }))
+    dispatch(setAction({ action: 'creating' }))
+
   }
   // ?
 
@@ -116,18 +120,6 @@ export function CreateButtomLineature () {
       </svg>
       Crear lineatura
     </button>
-  )
-}
-
-export function CreateMessageLineature () {
-  const notify = () => toast('Lineatura registrada exitosamente!')
-  return (
-    <div>
-      <button onClick={notify}>
-        Lineatura registrada exitosamente!
-      </button>
-      <ToastContainer />
-    </div>
   )
 }
 

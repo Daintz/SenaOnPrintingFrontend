@@ -1,10 +1,11 @@
 import { usePutImpositionPlanchByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -23,6 +24,8 @@ function UpdateImpositionPlanch () {
 
     dispatch(changeAction())
     dispatch(closeModal())
+    toast.success('Imposición plancha actualizada con exito')
+
   }
 
   const inputs = [

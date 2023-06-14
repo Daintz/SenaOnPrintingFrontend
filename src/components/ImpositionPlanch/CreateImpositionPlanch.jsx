@@ -1,51 +1,37 @@
-import { ToastContainer, toast } from 'react-toastify'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
+import * as Yup from 'yup'
+import { usePostImpositionPlanchMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
-  openModal
+  openModal,
+  setAction
 } from '../../context/Slices/Modal/ModalSlice'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
-import Error from '../Error/Error'
-import { usePostImpositionPlanchMutation } from '../../context/Api/Common'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
   scheme: Yup.string().required('Campo requerido')
 })
 
-function CreateImpositionPlanch () {
+function CreateImpositionPlanch() {
   const dispatch = useDispatch()
   const [createImpositionPlanch, { error, isLoading }] = usePostImpositionPlanchMutation()
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
-    if (error) return <Error type={error.status} message={error.error} />
 
     await createImpositionPlanch(values)
 
     dispatch(changeAction())
-    dispatch(closeModal())
+    if (!error) {
+      dispatch(closeModal())
+    }
+    toast.success('Imposición plancha creada con exito')
   }
 
-  const inputs = [
-    {
-      key: 0,
-      name: 'name',
-      title: 'Nombre imposición',
-      type: 'text',
-      placeholder: 'Giro pinza'
-    },
-    {
-      key: 1,
-      name: 'scheme',
-      title: 'Esquema',
-      type: 'text',
-      placeholder: 'Esquema'
-    }
-  ]
 
   return (
     <Formik
@@ -54,44 +40,75 @@ function CreateImpositionPlanch () {
         scheme: ''
       }}
       onSubmit={(values) => {
-        handleSubmit(values)
+        var file = values.scheme; 
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          var imageData = reader.result;
+          const limpia = imageData.split(',')
+          values.scheme=limpia[1]
+          handleSubmit(values)
+        }
+
       }}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-        {inputs.map(input => (
-          <div key={input.key}>
-            <label htmlFor={input.name}>{input.title}</label>
-            <Field
-              type={input.type}
-              name={input.name}
-              id={input.name}
-              placeholder={input.placeholder}
+      {({ setFieldValue }) => (
+        <Form className="space-y-6">
+          <label
+            htmlFor="name"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Nombre imposición
+          </label>
+          <Field
+            type="text"
+            name="name"
+            id="name"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="Giro pinza"
+
+
+          />
+
+          <div>
+
+            <label
+              htmlFor="scheme"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Esquema
+            </label>
+            <input
+              type="file"
+              name="scheme"
+              id="scheme"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name={input.name}
-              component="div"
-              className="text-red-500"
+
+              placeholder="Descripción"
+              onChange={(event) => setFieldValue("scheme", event.target.files[0])}
             />
           </div>
-        ))}
-        <button
-          type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          Crear imposición
-        </button>
-      </Form>
+
+          <button
+            type="submit"
+            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Crear imposición
+          </button>
+        </Form>
+      )}
     </Formik>
   )
 }
 
-export function CreateButtomImpositionPlanch () {
+export function CreateButtomImpositionPlanch() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(openModal({ title: 'Crear imposición' }))
+    dispatch(setAction({ action: 'creating' }))
+
   }
   // ?
 
@@ -116,18 +133,6 @@ export function CreateButtomImpositionPlanch () {
       </svg>
       Crear imposición
     </button>
-  )
-}
-
-export function CreateMessageImpositionPlanch () {
-  const notify = () => toast('Imposición registrada exitosamente!')
-  return (
-    <div>
-      <button onClick={notify}>
-        Imposición registrada exitosamente!
-      </button>
-      <ToastContainer />
-    </div>
   )
 }
 
