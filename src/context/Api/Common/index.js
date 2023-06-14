@@ -47,8 +47,14 @@ export const roleApi = commonEndpointsApi('Role', 'role')
 
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
 
+
+export const lineatureApi = commonEndpointsApi('Lineature', 'lineature')
+
+export const impositionPlanchApi = commonEndpointsApi('ImpositionPlanch', 'impositionPlanch')
+
 export const quotationClientApi = commonEndpointsApi('QuotationClient','quotationClient')
 export const quotationclientDetailApi = commonEndpointsApi('QuotationClientDetail','quotationclientDetail')
+
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -83,6 +89,22 @@ export const {
 } = typeDocumentApi
 
 export const {
+
+  useGetAllQuery: useGetAllLineaturesQuery,
+  useGetByIdQuery: useGetLineatureByIdQuery,
+  usePostMutation: usePostLineatureMutation,
+  usePutByIdMutation: usePutLineatureByIdMutation,
+  useDeleteByIdMutation: useDeleteLineatureByIdMutation
+} = lineatureApi
+
+export const {
+  useGetAllQuery: useGetAllImpositionPlanchsQuery,
+  useGetByIdQuery: useGetImpositionPlanchByIdQuery,
+  usePostMutation: usePostImpositionPlanchMutation,
+  usePutByIdMutation: usePutImpositionPlanchByIdMutation,
+  useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
+} = impositionPlanchApi
+
   useGetAllQuery: useGetAllQuotationClientsQuery,
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,
@@ -96,4 +118,5 @@ export const {
   usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
   useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
 } = quotationclientDetailApi
+
 
