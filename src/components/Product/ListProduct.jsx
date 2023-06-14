@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllProductsQuery } from '../../context/Api/Common'
 import { UpdateButtomProduct } from './UpdateProduct'
-import ChangeStateProduct from './ChangeStateProduct'
+import { ChangeStateButtonProduct } from './ChangeStateProduct'
 import { CreateButtomProduct } from './CreateProduct'
 import { DetailsButtomProduct } from './DetailsProduct'
 
@@ -137,7 +137,7 @@ const ListProduct = () => {
                       <UpdateButtomProduct
                         product={row.original}
                       />
-                      <ChangeStateProduct
+                      <ChangeStateButtonProduct
                         product={row.original}
                       />
                     </td>

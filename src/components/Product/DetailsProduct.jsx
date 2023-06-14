@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { openModal, setAction, setDetailsData } from '../../context/Slices/Modal/ModalSlice'
+import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsProduct () {
@@ -28,6 +28,7 @@ export function DetailsButtomProduct ({ product }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
+    dispatch(setWidth({ width: '500px' }))
     dispatch(openModal({ title: 'Detalles categoria de insumos' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: product }))
