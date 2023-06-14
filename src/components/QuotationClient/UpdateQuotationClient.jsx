@@ -1,4 +1,4 @@
-import { usePutProductByIdMutation } from '../../context/Api/Common'
+import { usePutQuotationClientByIdMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
@@ -8,39 +8,79 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  typeProduct: Yup.string().required('Campo requerido'),
-  name: Yup.string().required('Campo requerido'),
-  characteristics: Yup.string().required('Campo requerido')
-})
+    orderDate: Yup.string().required('Campo requerido'),
+    deliverDate: Yup.string().required('Campo requerido'),
+    userId: Yup.string().required('Campo requerido'),
+    clientId: Yup.string().required('Campo requerido'),
+    typeServiceId: Yup.string().required('Campo requerido'),
+}) 
 
-function updateProduct () {
+function updateQuotationClient () {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
-  const [updateProduct, { error, isLoading }] = usePutProductByIdMutation()
+  const [updateQuotationClient, { error, isLoading }] = usePutQuotationClientByIdMutation()
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    await updateProduct(values)
+    await updateQuotationClient(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Producto actualizado con exito')
+    toast.success('Cotizacion actualizado con exito')
   }
 
   const inputs = [
-    { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre' },
-    { key: 1, name: 'characteristics', title: 'Caracteristicas', type: 'text', placeholder: 'Caracteristicas' },
-    { key: 2, name: 'typeProduct', title: 'Tipo producto', type: 'text', placeholder: 'Tipo producto' }
+    {
+      key: 0,
+      name: 'orderDate',
+      title: 'Fecha de orden',
+      type: 'text',
+      placeholder: 'Fecha de orden'
+    },
+    {
+      key: 1,
+      name: 'deliverDate',
+      title: 'Fecha de entrega',
+      type: 'text',
+      placeholder: 'Fecha de entrega'
+    },
+    {
+      key: 2,
+      name: 'userId',
+      title: 'Usuario Id',
+      type: 'number',
+      placeholder: 'Usuario Id'
+    },
+  
+    {
+      key: 3,
+      name: 'clientId',
+      title: 'Cliente Id',
+      type: 'number',
+      placeholder: 'Cliente Id'
+    },
+  
+    {
+      key: 4,
+      name: 'typeServiceId',
+      title: 'Tipo de servicio Id',
+      type: 'number',
+      placeholder: 'Tipo de servicio Id'
+    }
   ]
+
 
   return (
     <Formik
       initialValues={{
         id: editingData.id,
-        typeProduct: editingData.typeProduct,
-        name: editingData.name,
-        characteristics: editingData.characteristics
+        orderDate: editingData.orderDate,
+        deliverDate: editingData.deliverDate,
+        userId: editingData.userId,
+        clientId: editingData.clientId,
+        typeServiceId: editingData.typeServiceId
+       
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -69,19 +109,19 @@ function updateProduct () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear producto
+            Crear Cotizacion
           </button>
         </Form>
     </Formik>
   )
 }
 
-export function UpdateButtomProduct ({ product }) {
+export function UpdateButtomQuotationClient ({ quotationclient }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(openModal({ title: 'Editar Cotizacion Cliente' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
@@ -89,7 +129,7 @@ export function UpdateButtomProduct ({ product }) {
 
   return (
     <button type="button" onClick={() => {
-      handleEdit(product)
+      handleEdit(quotationclient)
     }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -109,4 +149,4 @@ export function UpdateButtomProduct ({ product }) {
   )
 }
 
-export default updateProduct
+export default updateQuotationClient

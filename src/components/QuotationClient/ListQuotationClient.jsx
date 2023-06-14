@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllProductsQuery } from '../../context/Api/Common'
-import { UpdateButtomProduct } from './UpdateProduct'
-import { ChangeStateButtonProduct } from './ChangeStateProduct'
-import { CreateButtomProduct } from './CreateProduct'
-import { DetailsButtomProduct } from './DetailsProduct'
+import { useGetAllQuotationClientsQuery } from '../../context/Api/Common'
+import { UpdateButtomQuotationClient } from './UpdateQuotationClient'
+import { ChangeStateButtonQuotationClient } from './ChangeStateQuotationClient'
+import { CreateButtomQuotationClient } from './CreateQuotationClient'
+import { DetailsButtomQuotationClient } from './DetailsQuotationClient'
 
-const ListProduct = () => {
+const ListQuotationClient = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllProductsQuery()
+  const { data: dataApi, refetch } = useGetAllQuotationClientsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -19,9 +19,11 @@ const ListProduct = () => {
   // ?
 
   const columns = useMemo(() => [
-    { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Tipo producto', accessor: 'typeProduct' },
-    { Header: 'Caracteristicas', accessor: 'characteristics' },
+    { Header: 'Fecha de orden', accessor: 'orderDate' },
+    { Header: 'Fecha de entrega', accessor: 'deliverDate' },
+    { Header: 'Usuario Id', accessor: 'userId' },
+    { Header: 'Cliente Id', accessor: 'clientId' },
+    { Header: 'Tipo de servicio Id', accessor: 'typeServiceId' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -99,7 +101,7 @@ const ListProduct = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <CreateButtomProduct />
+            <CreateButtomQuotationClient />
           </div>
         </div>
       <div className="overflow-x-auto rounded-xl border border-gray-400">
@@ -131,14 +133,14 @@ const ListProduct = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomProduct
-                        product={row.original}
+                      <DetailsButtomQuotationClient
+                        quotationclient={row.original}
                       />
-                      <UpdateButtomProduct
-                        product={row.original}
+                      <UpdateButtomQuotationClient
+                        quotationclient={row.original}
                       />
-                      <ChangeStateButtonProduct
-                        product={row.original}
+                      <ChangeStateButtonQuotationClient
+                        quotationclient={row.original}
                       />
                     </td>
                   </tr>
@@ -213,4 +215,4 @@ const ListProduct = () => {
   )
 }
 
-export default ListProduct
+export default ListQuotationClient

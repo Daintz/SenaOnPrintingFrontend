@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { usePostProductMutation } from '../../context/Api/Common'
+import { usePostQuotationClientMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -13,57 +13,77 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  typeProduct: Yup.string().required('Campo requerido'),
-  name: Yup.string().required('Campo requerido'),
-  characteristics: Yup.string().required('Campo requerido')
+    orderDate: Yup.string().required('Campo requerido'),
+    deliverDate: Yup.string().required('Campo requerido'),
+    userId: Yup.string().required('Campo requerido'),
+    clientId: Yup.string().required('Campo requerido'),
+    typeServiceId: Yup.string().required('Campo requerido'),
 })
 
-function CreateProduct () {
+function CreateQuotationClient () {
   const dispatch = useDispatch()
-  const [createProduct, { error, isLoading }] = usePostProductMutation()
+  const [createQuotationClient, { error, isLoading }] = usePostQuotationClientMutation()
 
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    await createProduct(values)
+    await createQuotationClient(values)
 
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Producto creado con exito')
+    toast.success('Cotizacion creada con exito')
   }
 
   const inputs = [
     {
       key: 0,
-      name: 'name',
-      title: 'Nombre',
-      type: 'text',
-      placeholder: 'Nombre del producto'
+      name: 'orderDate',
+      title: 'Fecha de orden',
+      type: 'date',
+      placeholder: 'Fecha de orden'
     },
     {
       key: 1,
-      name: 'typeProduct',
-      title: 'Tipo',
-      type: 'text',
-      placeholder: 'Tipo de producto'
+      name: 'deliverDate',
+      title: 'Fecha de entrega',
+      type: 'date',
+      placeholder: 'Fecha de entrega'
     },
     {
       key: 2,
-      name: 'characteristics',
-      title: 'Caracteristicas',
-      type: 'text',
-      placeholder: 'Caracteristicas del producto'
+      name: 'userId',
+      title: 'Usuario Id',
+      type: 'number',
+      placeholder: 'Usuario Id'
+    },
+  
+    {
+      key: 3,
+      name: 'clientId',
+      title: 'Cliente Id',
+      type: 'number',
+      placeholder: 'Cliente Id'
+    },
+  
+    {
+      key: 4,
+      name: 'typeServiceId',
+      title: 'Tipo de servicio Id',
+      type: 'number',
+      placeholder: 'Tipo de servicio Id'
     }
   ]
 
   return (
     <Formik
       initialValues={{
-        typeProduct: '',
-        name: '',
-        characteristics: ''
+        orderDate: '',
+        deliverDate: '',
+        userId: '',
+        clientId: '',
+        typeServiceId: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -92,19 +112,19 @@ function CreateProduct () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear producto
+            Crear Cotizacion
           </button>
         </Form>
     </Formik>
   )
 }
 
-export function CreateButtomProduct () {
+export function CreateButtomQuotationClient () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Crear producto' }))
+    dispatch(openModal({ title: 'Crear Cotizacion Cliente' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?
@@ -128,9 +148,9 @@ export function CreateButtomProduct () {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear producto
+      Crear Cotizacion
     </button>
   )
 }
 
-export default CreateProduct
+export default CreateQuotationClient

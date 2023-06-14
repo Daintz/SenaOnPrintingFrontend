@@ -1,24 +1,24 @@
-import { useDeleteProductByIdMutation } from '../../context/Api/Common'
+import { useDeleteQuotationClientByIdMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openModal, setAction, setChangeStatusData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
 
-function ChangeStateProduct ({ product }) {
+function ChangeStateQuotationClient ({ quotationclient }) {
   const dispatch = useDispatch()
-  const [deleteProduct, { error, isLoading }] =
-  useDeleteProductByIdMutation()
+  const [deleteQuotationClient, { error, isLoading }] =
+  useDeleteQuotationClientByIdMutation()
   const { changeStatusData } = useSelector((state) => state.modal)
 
   const handleSubmit = async () => {
-    await deleteProduct(changeStatusData.id)
+    await deleteQuotationClient(changeStatusData.id)
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Producto cambio de estado con exito')
+    toast.success('Cotizacion cambia de estado con exito')
   }
 
   const handle = async () => {
@@ -28,7 +28,7 @@ function ChangeStateProduct ({ product }) {
   return (
     <>
       <h1 className="text-4xl text-center font-bold">¿Estas seguro?</h1>
-      <p className="text-lg">¿Estas seguro de <b>cambiar de estado</b> esta categoria de insumo?</p>
+      <p className="text-lg">¿Estas seguro de <b>cambiar de estado</b> esta cotizacion?</p>
       <div className="px-6 py-4 grid grid-cols-2  place-content-center" >
         <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Cambiar de estado</button>
         <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
@@ -37,13 +37,13 @@ function ChangeStateProduct ({ product }) {
   )
 }
 
-export function ChangeStateButtonProduct ({ product }) {
+export function ChangeStateButtonQuotationClient ({ quotationclient }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
     dispatch(setWidth({ width: '800px' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
-    dispatch(setChangeStatusData({ changeStatusData: product }))
+    dispatch(setChangeStatusData({ changeStatusData: quotationclient }))
   }
 
   return (
@@ -66,4 +66,4 @@ export function ChangeStateButtonProduct ({ product }) {
   )
 }
 
-export default ChangeStateProduct
+export default ChangeStateQuotationClient
