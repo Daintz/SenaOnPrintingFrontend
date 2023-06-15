@@ -104,7 +104,7 @@ export const {
   usePutByIdMutation: usePutImpositionPlanchByIdMutation,
   useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
 } = impositionPlanchApi
-
+export const {
   useGetAllQuery: useGetAllQuotationClientsQuery,
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,

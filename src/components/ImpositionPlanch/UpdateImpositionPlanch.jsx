@@ -1,5 +1,5 @@
 import { usePutImpositionPlanchByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal, setAction } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
   scheme: Yup.string().required('Campo requerido')
 })
 
-function UpdateImpositionPlanch () {
+function updateImpositionPlanch () {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
   const [updateImpositionPlanch, { error, isLoading }] = usePutImpositionPlanchByIdMutation()
@@ -25,13 +25,8 @@ function UpdateImpositionPlanch () {
     dispatch(changeAction())
     dispatch(closeModal())
     toast.success('Imposición plancha actualizada con exito')
-
   }
 
-  const inputs = [
-    { key: 0, name: 'name', title: 'Nombre imposición', type: 'text', placeholder: 'Giro pinza' },
-    { key: 1, name: 'scheme', title: 'Descripción categoria insumo', type: 'text', placeholder: 'Descripción' }
-  ]
 
   return (
     <Formik
@@ -41,28 +36,53 @@ function UpdateImpositionPlanch () {
         scheme: editingData.scheme
       }}
       onSubmit={(values) => {
-        handleSubmit(values)
+        var file = values.scheme;
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          var imageData = reader.result;
+          const limpia = imageData.split(',')
+          values.scheme = limpia[1]
+          handleSubmit(values)
+        }
+
       }}
       validationSchema={validationSchema}
     >
+        {({ setFieldValue }) => (
         <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          ))}
+          <label
+            htmlFor="name"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Nombre imposición
+          </label>
+          <Field
+            type="text" 
+            name="name"
+            id="name"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="Giro pinza"
+            
+          />
+          <div>
+            <label
+              htmlFor="scheme"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Esquema
+            </label>
+            <input
+              type="file"
+              name="scheme"
+              id="scheme"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+
+              placeholder="Descripción"
+              onChange={(event) => setFieldValue("scheme", event.target.files[0])}
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -70,6 +90,7 @@ function UpdateImpositionPlanch () {
             Editar imposición
           </button>
         </Form>
+      )}
     </Formik>
   )
 }
@@ -78,7 +99,9 @@ export function UpdateButtomImpositionPlanch ({ impositionPlanch }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(openModal({ title: 'Editar imposición' }))
+    dispatch(setWidth({ width: '1500px' }))
+    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?
@@ -105,4 +128,4 @@ export function UpdateButtomImpositionPlanch ({ impositionPlanch }) {
   )
 }
 
-export default UpdateImpositionPlanch
+export default updateImpositionPlanch

@@ -1,5 +1,5 @@
 import { usePutLineatureByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal, setAction } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
   typePoint: Yup.string().required('Campo requerido')
 })
 
-function UpdateLineature () {
+function updateLineature () {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
   const [updateLineature, { error, isLoading }] = usePutLineatureByIdMutation()
@@ -25,12 +25,11 @@ function UpdateLineature () {
     dispatch(changeAction())
     dispatch(closeModal())
     toast.success('Lineatura actualizada con exito')
-
   }
 
   const inputs = [
-    { key: 0, name: 'lineature', title: 'Nombre categoria insumo', type: 'text', placeholder: 'Nombre' },
-    { key: 1, name: 'typePoint', title: 'Descripción categoria insumo', type: 'text', placeholder: 'Descripción' }
+    { key: 0, name: 'lineature', title: 'Lineatura', type: 'text', placeholder: 'Nombre' },
+    { key: 1, name: 'typePoint', title: 'Tipo de punto', type: 'text', placeholder: 'Caracteristicas' }
   ]
 
   return (
@@ -78,7 +77,9 @@ export function UpdateButtomLineature ({ lineature }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(openModal({ title: 'Editar lineatura' }))
+    dispatch(setWidth({ width: '1500px' }))
+    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?
@@ -105,4 +106,4 @@ export function UpdateButtomLineature ({ lineature }) {
   )
 }
 
-export default UpdateLineature
+export default updateLineature

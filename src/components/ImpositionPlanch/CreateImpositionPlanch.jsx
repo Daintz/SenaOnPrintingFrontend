@@ -6,7 +6,8 @@ import {
   changeAction,
   closeModal,
   openModal,
-  setAction
+  setAction,
+  setWidth
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
@@ -40,13 +41,13 @@ function CreateImpositionPlanch() {
         scheme: ''
       }}
       onSubmit={(values) => {
-        var file = values.scheme; 
+        var file = values.scheme;
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
           var imageData = reader.result;
           const limpia = imageData.split(',')
-          values.scheme=limpia[1]
+          values.scheme = limpia[1]
           handleSubmit(values)
         }
 
@@ -62,17 +63,13 @@ function CreateImpositionPlanch() {
             Nombre imposición
           </label>
           <Field
-            type="text"
+            type="text" 
             name="name"
             id="name"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
             placeholder="Giro pinza"
-
-
           />
-
           <div>
-
             <label
               htmlFor="scheme"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -106,9 +103,9 @@ export function CreateButtomImpositionPlanch() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(openModal({ title: 'Crear imposición' }))
+    dispatch(setWidth({ width: '1500px' }))
+    dispatch(openModal({ title: 'Crear imposició plancha' }))
     dispatch(setAction({ action: 'creating' }))
-
   }
   // ?
 
