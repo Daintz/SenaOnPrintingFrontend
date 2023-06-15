@@ -469,6 +469,14 @@ function Sidebar () {
               </li>
               <li>
                 <Link
+                  to="/substrate"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/grammage_caliber' ? 'bg-green-500' : null}`}
+                >
+                  <span className="ml-3 text-base">Sustratos</span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/OrderProduction"
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/OrderProduction' ? 'bg-green-500' : null}`}
                 >

@@ -52,9 +52,16 @@ export const lineatureApi = commonEndpointsApi('Lineature', 'lineature')
 
 export const impositionPlanchApi = commonEndpointsApi('ImpositionPlanch', 'impositionPlanch')
 
-export const quotationClientApi = commonEndpointsApi('QuotationClient','quotationClient')
-export const quotationclientDetailApi = commonEndpointsApi('QuotationClientDetail','quotationclientDetail')
+export const quotationClientApi = commonEndpointsApi('QuotationClient', 'quotationClient')
+export const quotationclientDetailApi = commonEndpointsApi('QuotationClientDetail', 'quotationclientDetail')
 
+export const clientApi = commonEndpointsApi('Client', 'client')
+
+export const grammageCaliberApi = commonEndpointsApi('GrammageCaliber', 'grammageCaliber')
+
+export const paperCutsApi = commonEndpointsApi('PaperCuts', 'paperCuts')
+
+export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -105,6 +112,7 @@ export const {
   useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
 } = impositionPlanchApi
 
+export const {
   useGetAllQuery: useGetAllQuotationClientsQuery,
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,
@@ -119,4 +127,34 @@ export const {
   useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
 } = quotationclientDetailApi
 
+export const {
+  useGetAllQuery: useGetAllClientsQuery,
+  useGetByIdQuery: useGetClientByIdQuery,
+  usePostMutation: usePostClientMutation,
+  usePutByIdMutation: usePutClientByIdMutation,
+  useDeleteByIdMutation: useDeleteClientByIdMutation
+} = clientApi
 
+export const {
+  useGetAllQuery: useGetAllGrammageCalibersQuery,
+  useGetByIdQuery: useGetGrammageCaliberByIdQuery,
+  usePostMutation: usePostGrammageCaliberMutation,
+  usePutByIdMutation: usePutGrammageCaliberByIdMutation,
+  useDeleteByIdMutation: useDeleteGrammageCaliberByIdMutation
+} = grammageCaliberApi
+
+export const {
+  useGetAllQuery: useGetAllPaperCutsQuery,
+  useGetByIdQuery: useGetPaperCutsByIdQuery,
+  usePostMutation: usePostPaperCutsMutation,
+  usePutByIdMutation: usePutPaperCutsByIdMutation,
+  useDeleteByIdMutation: useDeletePaperCutsByIdMutation
+} = paperCutsApi
+
+export const {
+  useGetAllQuery: useGetAllSubstratesQuery,
+  useGetByIdQuery: useGetSubstratesByIdQuery,
+  usePostMutation: usePostSubstratesMutation,
+  usePutByIdMutation: usePutSubstratesByIdMutation,
+  useDeleteByIdMutation: useDeleteSubstratesByIdMutation
+} = substratesApi
