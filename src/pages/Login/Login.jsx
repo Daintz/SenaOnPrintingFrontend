@@ -31,9 +31,12 @@ const Login = () => {
   return (
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
-                <h1 className="text-3xl font-semibold text-center text-blue-700">
+              <div className="flex flex-col items-center justify-center">
+                <img src="https://oficinavirtualderadicacion.sena.edu.co/oficinavirtual/Resources/logoSenaNaranja.png" alt="Logo" className="mb-2 w-20 h-20" />
+                <h1 className="text-3xl font-semibold text-center text-green-700">
                   Inicio de Sesion
                 </h1>
+              </div>
                 <form onSubmit={handleLogin} className="mt-6">
                     <div className="mb-2">
                         <label
@@ -44,7 +47,7 @@ const Login = () => {
                         </label>
                         <input
                             type="email"
-                            className="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -59,14 +62,14 @@ const Login = () => {
                         </label>
                         <input
                             type="password"
-                            className="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mt-6">
-                        <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-700 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                        <button className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Iniciar Sesion
                         </button>
                     </div>
