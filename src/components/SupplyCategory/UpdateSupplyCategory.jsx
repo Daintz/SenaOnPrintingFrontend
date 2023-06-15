@@ -1,5 +1,5 @@
 import { usePutSupplyCategoryByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
@@ -73,11 +73,13 @@ function UpdateSupplyCategory () {
   )
 }
 
-export function UpdateButtomSupplyCategory ({ supplyCategory }) {
+export function UpdateButtonSupplyCategory ({ supplyCategory }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
+    dispatch(setWidth({ width: '1500px' }))
     dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?
