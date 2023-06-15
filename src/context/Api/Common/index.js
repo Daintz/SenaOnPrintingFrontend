@@ -47,6 +47,10 @@ export const roleApi = commonEndpointsApi('Role', 'role')
 
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
 
+export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
+export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
+export const ProviderApi = commonEndpointsApi('Provider', 'provider')
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,
@@ -78,3 +82,28 @@ export const {
   usePutByIdMutation: usePutTypeDocumentByIdMutation,
   useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
 } = typeDocumentApi
+
+export const {
+  useGetAllQuery: useGetAllWarehauseTypesQuery,
+  useGetByIdQuery: useGetWarehauseTypeByIdQuery,
+  usePostMutation: usePostWarehauseTypeMutation,
+  usePutByIdMutation: usePutWarehauseTypeByIdMutation,
+  useDeleteByIdMutation: useDeleteWarehauseTypeByIdMutation
+} = WarehauseTypeApi
+
+export const {
+  useGetAllQuery: useGetAllWarehausesQuery,
+  useGetByIdQuery: useGetWarehauseByIdQuery,
+  usePostMutation: usePostWarehauseMutation,
+  usePutByIdMutation: usePutWarehauseByIdMutation,
+  useDeleteByIdMutation: useDeleteWarehauseByIdMutation
+} = WarehauseApi
+
+
+export const {
+  useGetAllQuery: useGetAllProvidersQuery,
+  useGetByIdQuery: useGetProviderByIdQuery,
+  usePostMutation: usePostProviderMutation,
+  usePutByIdMutation: usePutProviderByIdMutation,
+  useDeleteByIdMutation: useDeleteProviderByIdMutation
+} = ProviderApi
