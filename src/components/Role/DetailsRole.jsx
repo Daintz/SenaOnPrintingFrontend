@@ -2,14 +2,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { BsClipboard2 } from 'react-icons/bs'
 
-function DetailsProduct () {
+function DetailsRole () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { typeProduct, name, characteristics, statedAt } = detailsData
+  const { name, description, statedAt } = detailsData
   return (
     <>
-      <p><b>Tipo de producto:</b> {typeProduct}</p>
       <p><b>Nombre:</b> {name}</p>
-      <p><b>Caracteristicas:</b> {characteristics}</p>
+      <p><b>Descripción:</b> {description}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt
@@ -24,14 +23,14 @@ function DetailsProduct () {
   )
 }
 
-export function DetailsButtonProduct ({ product }) {
+export function DetailsButtonRole ({ role }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '500px' }))
-    dispatch(openModal({ title: 'Detalles producto' }))
+    dispatch(openModal({ title: 'Detalles Rol' }))
     dispatch(setAction({ action: 'details' }))
-    dispatch(setDetailsData({ detailsData: product }))
+    dispatch(setDetailsData({ detailsData: role }))
   }
   // ?
 
@@ -44,4 +43,4 @@ export function DetailsButtonProduct ({ product }) {
   )
 }
 
-export default DetailsProduct
+export default DetailsRole

@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllSupplyCategoryQuery } from '../../context/Api/Common'
-import { UpdateButtonSupplyCategory } from './UpdateSupplyCategory'
-import { ChangeStateButtonSupplyCategory } from './ChangeStateSupplyCategory'
-import { CreateButtonSupplyCategory } from './CreateSupplyCategory'
-import { DetailsButtonSupplyCategory } from './DetailsSupplyCategory'
+import { useGetAllUsersQuery } from '../../context/Api/Common'
+import { DetailsButtonUser } from './DetailsUser'
+import { ChangeStateButtonUser } from './ChangeStateUser'
+import { CreateButtomUser } from './CreateUser'
+import { UpdateButtomUser } from './UpdateUser'
 
-const ListSupplyCategory = () => {
+const ListUser = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllSupplyCategoryQuery()
+  const { data: dataApi, refetch } = useGetAllUsersQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -18,9 +18,15 @@ const ListSupplyCategory = () => {
   }, [isAction])
   // ?
 
+  console.log(dataApi)
+
   const columns = useMemo(() => [
-    { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Descripción', accessor: 'description' },
+    {Header: 'Numero de Documento', accesor: 'documentNumber'},
+    {Header: 'Tipo de Documento', accesor: 'typeDocumentId'},
+    {Header: 'Nombres', accesor: 'names'},
+    {Header: 'Apellidos', accesor: 'surnames'},
+    {Header: 'Correo Electronico', accesor: 'email'},
+    {Header: 'Rol', accesor: 'roleId'},
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -58,7 +64,7 @@ const ListSupplyCategory = () => {
   const { pageIndex, globalFilter } = state
 
   if (!dataApi) {
-    return <div>Loading...</div>
+    return <div>Cargando...</div>
   }
 
   return (
@@ -68,7 +74,7 @@ const ListSupplyCategory = () => {
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
-                Search
+                Buscar
               </label>
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -90,7 +96,7 @@ const ListSupplyCategory = () => {
                   type="text"
                   id="simple-search"
                   className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-                  placeholder="Search"
+                  placeholder="Buscar..."
                   value={globalFilter || ''}
                   onChange={e => setGlobalFilter(e.target.value)}
                 />
@@ -98,7 +104,7 @@ const ListSupplyCategory = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <CreateButtonSupplyCategory />
+            <CreateButtomUser />
           </div>
         </div>
       <div className="overflow-x-auto rounded-xl border border-gray-400">
@@ -127,17 +133,18 @@ const ListSupplyCategory = () => {
                     className="border-b border-gray-500"
                   >
                     {row.cells.map((cell, index) => {
+                      console.log(cell)
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtonSupplyCategory
-                        supplyCategory={row.original}
+                      <DetailsButtonUser
+                        user={row.original}
                       />
-                      <UpdateButtonSupplyCategory
-                        supplyCategory={row.original}
+                      <UpdateButtomUser
+                        user={row.original}
                       />
-                      <ChangeStateButtonSupplyCategory
-                        supplyCategory={row.original}
+                      <ChangeStateButtonUser
+                        user={row.original}
                       />
                     </td>
                   </tr>
@@ -212,4 +219,4 @@ const ListSupplyCategory = () => {
   )
 }
 
-export default ListSupplyCategory
+export default ListUser

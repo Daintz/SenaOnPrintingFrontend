@@ -1,4 +1,7 @@
-import { toast } from 'react-toastify'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
+import * as Yup from 'yup'
+import { usePostPaperCutsMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -6,56 +9,43 @@ import {
   setAction,
   setWidth
 } from '../../context/Slices/Modal/ModalSlice'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
-import { usePostRoleMutation } from '../../context/Api/Common'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido')
 })
 
-function CreateRole () {
+function CreatePaperCuts () {
   const dispatch = useDispatch()
-  const [createRole, { error, isLoading }] = usePostRoleMutation()
+  const [createPaperCuts, { error, isLoading }] = usePostPaperCutsMutation()
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
-    //if (error) return <Error type={error.status} message={error.error} />
 
-    await createRole(values)
+    await createPaperCuts(values)
 
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Rol creado con exito')
+    toast.success('corte de papel creado con exito')
   }
 
   const inputs = [
     {
       key: 0,
       name: 'name',
-      title: 'Nombre',
+      title: 'Nombre Corte papel',
       type: 'text',
-      placeholder: 'Nombre del Rol'
-    },
-    {
-      key: 1,
-      name: 'description',
-      title: 'Descripción',
-      type: 'text',
-      placeholder: 'Descripción del Rol'
+      placeholder: 'Nombre'
     }
   ]
 
   return (
     <Formik
       initialValues={{
-        name: '',
-        description: ''
+        name: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -84,19 +74,19 @@ function CreateRole () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Rol
+            Crear corte de papel
           </button>
         </Form>
     </Formik>
   )
 }
 
-export function CreateButtomRole () {
+export function CreateButtonPaperCuts () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Crear Rol' }))
+    dispatch(openModal({ title: 'Crear corte de papel' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?
@@ -120,9 +110,9 @@ export function CreateButtomRole () {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear Rol
+      Crear corte de papel
     </button>
   )
 }
 
-export default CreateRole
+export default CreatePaperCuts

@@ -1,4 +1,4 @@
-import { usePutRoleByIdMutation } from '../../context/Api/Common'
+import { usePutClientByIdMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
@@ -9,27 +9,71 @@ import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  phone: Yup.string().required('Campo requerido'),
+  email: Yup.string().required('Campo requerido'),
+  center: Yup.string().required('Campo requerido'),
+  area: Yup.string().required('Campo requerido'),
+  regional: Yup.string().required('Campo requerido')
 })
 
-function UpdateRole () {
+function updateClient () {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
-  const [updateRole, { error, isLoading }] = usePutRoleByIdMutation()
+  const [updateClient, { error, isLoading }] = usePutClientByIdMutation()
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    await updateRole(values)
+    await updateClient(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Rol actualizado con exito')
+    toast.success('Cliente actualizado con exito')
   }
 
   const inputs = [
-    { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre del Rol' },
-    { key: 1, name: 'description', title: 'Descripción', type: 'text', placeholder: 'Descripción del Rol' }
+    {
+      key: 0,
+      name: 'name',
+      title: 'Nombre cliente',
+      type: 'text',
+      placeholder: 'Nombre'
+    },
+    {
+      key: 1,
+      name: 'phone',
+      title: 'Telefono cliente',
+      type: 'text',
+      placeholder: 'Telefono'
+    },
+    {
+      key: 2,
+      name: 'email',
+      title: 'Correo cliente',
+      type: 'text',
+      placeholder: 'Correo'
+    },
+    {
+      key: 3,
+      name: 'center',
+      title: 'Centro cliente',
+      type: 'text',
+      placeholder: 'Centro'
+    },
+    {
+      key: 4,
+      name: 'area',
+      title: 'Area cliente',
+      type: 'text',
+      placeholder: 'Area'
+    },
+    {
+      key: 5,
+      name: 'regional',
+      title: 'Regional cliente',
+      type: 'text',
+      placeholder: 'Regional'
+    }
   ]
 
   return (
@@ -37,7 +81,11 @@ function UpdateRole () {
       initialValues={{
         id: editingData.id,
         name: editingData.name,
-        description: editingData.description
+        phone: editingData.phone,
+        email: editingData.email,
+        center: editingData.center,
+        area: editingData.area,
+        regional: editingData.regional
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -66,19 +114,19 @@ function UpdateRole () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Actualizar Rol
+            Actualizar cliente
           </button>
         </Form>
     </Formik>
   )
 }
 
-export function UpdateButtomRole ({ role }) {
+export function UpdateButtonClient ({ client }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Editar Rol' }))
+    dispatch(openModal({ title: 'Editar cliente' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
@@ -86,7 +134,7 @@ export function UpdateButtomRole ({ role }) {
 
   return (
     <button type="button" onClick={() => {
-      handleEdit(role)
+      handleEdit(client)
     }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -106,4 +154,4 @@ export function UpdateButtomRole ({ role }) {
   )
 }
 
-export default UpdateRole
+export default updateClient

@@ -99,7 +99,7 @@ function CreateProduct () {
   )
 }
 
-export function CreateButtomProduct () {
+export function CreateButtonProduct () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {

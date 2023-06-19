@@ -5,7 +5,7 @@ import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
 
-function ChangeStateProduct ({ product }) {
+function ChangeStateProduct () {
   const dispatch = useDispatch()
   const [deleteProduct, { error, isLoading }] =
   useDeleteProductByIdMutation()
