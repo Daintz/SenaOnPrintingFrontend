@@ -11,6 +11,7 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -20,11 +21,15 @@ const validationSchema = Yup.object().shape({
 function CreateImpositionPlanch() {
   const dispatch = useDispatch()
   const [createImpositionPlanch, { error, isLoading }] = usePostImpositionPlanchMutation()
-
+  const [previewImage, setPreviewImage] = useState(null);
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
-    await createImpositionPlanch(values)
+    const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('schemeInfo', values.scheme);
+
+      await createImpositionPlanch(formData);
 
     dispatch(changeAction())
     if (!error) {
@@ -32,7 +37,16 @@ function CreateImpositionPlanch() {
     }
     toast.success('Imposición plancha creada con exito')
   }
-
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Formik
@@ -41,16 +55,8 @@ function CreateImpositionPlanch() {
         scheme: ''
       }}
       onSubmit={(values) => {
-        var file = values.scheme;
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          var imageData = reader.result;
-          const limpia = imageData.split(',')
-          values.scheme = limpia[1]
-          handleSubmit(values)
-        }
-
+        console.log(values)
+        handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
@@ -58,7 +64,7 @@ function CreateImpositionPlanch() {
         <Form className="space-y-6">
           <label
             htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
           >
             Nombre imposición
           </label>
@@ -72,18 +78,20 @@ function CreateImpositionPlanch() {
           <div>
             <label
               htmlFor="scheme"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
             >
               Esquema
             </label>
+            {previewImage && <img src={previewImage} alt="Preview" width={100} height={100} />}
             <input
               type="file"
               name="scheme"
               id="scheme"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-
               placeholder="Descripción"
-              onChange={(event) => setFieldValue("scheme", event.target.files[0])}
+              onChange={event => {
+                setFieldValue("scheme", event.target.files[0]);
+                handleFileChange(event);
+              }}
             />
           </div>
 
