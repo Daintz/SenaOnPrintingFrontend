@@ -1,35 +1,67 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllImpositionPlanchsQuery } from '../../context/Api/Common'
-import { UpdateButtomImpositionPlanch } from './UpdateImpositionPlanch'
-import { ChangeStateButtonImpositionPlanch } from './ChangeStateImpositionPlanch'
-import { CreateButtomImpositionPlanch } from './CreateImpositionPlanch'
+import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
+import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
+import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
+import { CreateButtomOrderProduction } from './CreateOrderProduction'
+import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
 
-const ListImpositionPlanch = () => {
+
+const ListOrderProduction = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllImpositionPlanchsQuery()
+  const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
   useEffect(() => {
     refetch()
   }, [isAction])
+  // ?
 
   const columns = useMemo(() => [
-    { Header: 'Imposición plancha', accessor: 'name' },
-    { Header: 'Esquema', accessor: 'scheme' },
+
+    { Header: 'Cotización cliente', accessor: 'quotationClientDetailId' },
+    { Header: 'Recepción material', accessor: 'materialReception' },
+    { Header: 'Programa', accessor: 'program' },
+    { Header: 'Versión programa', accessor: 'programVersion' },
+    { Header: 'Observaciones', accessor: 'observations' },
     {
-      Header: 'Estado',
-      accessor: 'statedAt',
-      Cell: ({ value }) => (value
-        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-          Activo
-        </span>
-        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-          Inactivo
-        </span>)
-    }
+        Header: 'Proceso',
+        accessor: 'orderStatus',
+        Cell: ({ value }) => {
+          if (value) {
+            return (
+              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                Preimpresión
+              </span>
+            );
+          } else if (value == 3){
+            return (
+              <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                Impresión
+              </span>
+            );
+          }
+          else {
+            return (
+              <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                Postimpresión
+              </span>
+            );
+          }
+        }
+      },{
+        Header: 'Estado',
+        accessor: 'statedAt',
+        Cell: ({ value }) => (value
+          ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+            Activo
+          </span>
+          : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+            Inactivo
+          </span>)
+      }
   ], [])
 
   const data = useMemo(() => (dataApi || []), [dataApi])
@@ -96,7 +128,7 @@ const ListImpositionPlanch = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <CreateButtomImpositionPlanch />
+            <CreateButtomOrderProduction />
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
@@ -124,29 +156,19 @@ const ListImpositionPlanch = () => {
                     key={row.original.id}
                     className="border-b border-gray-500"
                   >
-                    <td {...row.cells[0].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[0].value === 'function'
-                        ? row.cells[0].value(row.cells[0])
-                        : row.cells[0].render('Cell')}
-                    </td>
-                    <td {...row.cells[1].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[1].value === 'function'
-                        ? row.cells[1].value(row.cells[1])
-                        : row.cells[1].column.id === 'scheme'
-                          ? <img src={row.cells[1].value} width={100} height={100}/>
-                          : row.cells[1].render('Cell')}
-                    </td>
-                    <td {...row.cells[2].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[2].value === 'function'
-                        ? row.cells[2].value(row.cells[2])
-                        : row.cells[2].render('Cell')}
-                    </td>
+                    {row.cells.map((cell, index) => {
+                      console.log(cell)
+                      return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
+                    })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <UpdateButtomImpositionPlanch
-                        impositionPlanch={row.original}
+                      <DetailsButtonOrderProduction
+                        orderProduction={row.original}
                       />
-                      <ChangeStateButtonImpositionPlanch
-                        impositionPlanch={row.original}
+                      <UpdateButtomOrderProduction
+                        orderProduction={row.original}
+                      />
+                      <ChangeStateButtonOrderProduction
+                        orderProduction={row.original}
                       />
                     </td>
                   </tr>
@@ -221,4 +243,4 @@ const ListImpositionPlanch = () => {
   )
 }
 
-export default ListImpositionPlanch
+export default ListOrderProduction

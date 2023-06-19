@@ -8,8 +8,10 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  lineature: Yup.string().required('Campo requerido'),
+  lineature: Yup.string().required('Campo requerido')
+  .matches(/^(?=.*[0-9])(?=.*lpi)[0-9lpi\s]+$/, 'Solo se permiten números + "lpi"'),
   typePoint: Yup.string().required('Campo requerido')
+  .matches(/^[\d.]+$/, 'Solo se permite . y números')
 })
 
 function updateLineature () {
