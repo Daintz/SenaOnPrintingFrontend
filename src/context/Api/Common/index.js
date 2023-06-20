@@ -47,6 +47,13 @@ export const roleApi = commonEndpointsApi('Role', 'role')
 
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'typeDocument')
 
+export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
+
+export const quotationProviders =commonEndpointsApi('QuotationProviders', 'quotationProviders')
+
+export const supplyPictograms =commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,
@@ -78,3 +85,27 @@ export const {
   usePutByIdMutation: usePutTypeDocumentByIdMutation,
   useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
 } = typeDocumentApi
+
+export const {
+  useGetAllQuery: useGetAllTypeServicesQuery,
+  useGetByIdQuery: useGetTypeServicesByIdQuery,
+  usePostMutation: usePostTypeServicesMutation,
+  usePutByIdMutation: usePutTypeServicesByIdMutation,
+  useDeleteByIdMutation: useDeleteTypeServicesByIdMutation
+} = typeServices
+
+export const {
+  useGetAllQuery: useGetAllQuotationProvidersQuery,
+  useGetByIdQuery: useGetQuotationProvidersByIdQuery,
+  usePostMutation: usePostQuotationProvidersMutation,
+  usePutByIdMutation: usePutQuotationProvidersByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationProvidersByIdMutation
+} = quotationProviders
+
+export const {
+  useGetAllQuery: useGetAllSupplyPictogramsQuery,
+  useGetByIdQuery: useGetSupplyPictogramsByIdQuery,
+  usePostMutation: usePostSupplyPictogramsMutation,
+  usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
+} = supplyPictograms

@@ -1,42 +1,43 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllProductsQuery } from '../../context/Api/Common'
-import { UpdateButtomProduct } from './UpdateProduct'
-import { ChangeStateButtonProduct } from './ChangeStateProduct'
-import { CreateButtomProduct } from './CreateProduct'
-import { DetailsButtomProduct } from './DetailsProduct'
+import { useGetAllSupplyPictogramsQuery } from '../../context/Api/Common'
+import { UpdateButtomSupplyPictograms } from '../SupplyPictograms/UpdateSupplyPictogrmas'
+import { ChangeStateButtonSupplyPictograms } from '../SupplyPictograms/ChangeStatedSupplyPictograms'
+import { CreateButtomSupplyPictograms } from '../SupplyPictograms/CreateSupplyPictograms'
+import { DetailsButtomSupplyPictograms } from '../SupplyPictograms/DetailsSypplyPictograms'
 
-const ListProduct = () => {
+const ListSupplyPictograms = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllProductsQuery()
+  const { data: dataApi, refetch } = useGetAllSupplyPictogramsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
-  const { isAction } = useSelector((state) => state.modal)
+  const { isAction } = useSelector(state => state.modal)
   useEffect(() => {
     refetch()
   }, [isAction])
   // ?
 
 
-  const columns = useMemo(() => [
+
+  const columns = useMemo(()=>[
+    { Header: 'Codigo', accessor: 'code' },
     { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Tipo producto', accessor: 'typeProduct' },
-    { Header: 'Caracteristicas', accessor: 'characteristics' },
-    {
-      Header: 'Estado',
-      accessor: 'statedAt',
-      Cell: ({ value }) => (value
-        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>)
-    }
+    {Header: 'Descripcion', accessor: 'description'},
+    {Header: 'Documento', accessor: 'pictogrmasFile'},
+    {Header: 'Estado',
+    accessor: 'statedAt',
+    Cell: ({ value }) => (value
+      ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+          Activo
+        </span>
+      : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+          Inactivo
+        </span>)
+  },
   ], [])
 
-  const data = useMemo(() => (dataApi || []), [dataApi])
+  const data = useMemo(()=>(dataApi || []),[dataApi])
 
   const {
     getTableProps,
@@ -66,7 +67,7 @@ const ListProduct = () => {
   return (
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
-      <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
+        <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
@@ -100,13 +101,13 @@ const ListProduct = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <CreateButtomProduct />
+            <CreateButtomSupplyPictograms />
           </div>
         </div>
-      <div className="overflow-x-auto rounded-xl border border-gray-400">
-          <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+        <div className="overflow-x-auto rounded-xl border border-gray-400">
+          <table className="w-full text-sm text-left text-gray-500"{...getTableProps()}>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              {headerGroups.map(headerGroup => (
+            {headerGroups.map(headerGroup => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column, index) => (
                       <th scope="col" className='px-6 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
@@ -132,14 +133,14 @@ const ListProduct = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomProduct
-                        product={row.original}
+                      <DetailsButtomSupplyPictograms
+                        supplyPictogrmas={row.original}
                       />
-                      <UpdateButtomProduct
-                        product={row.original}
+                      <UpdateButtomSupplyPictograms
+                        supplyPictogrmas={row.original}
                       />
-                      <ChangeStateButtonProduct
-                        product={row.original}
+                      <ChangeStateButtonSupplyPictograms
+                        supplyPictogrmas={row.original}
                       />
                     </td>
                   </tr>
@@ -214,4 +215,4 @@ const ListProduct = () => {
   )
 }
 
-export default ListProduct
+export default ListSupplyPictograms
