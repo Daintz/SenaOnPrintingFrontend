@@ -11,14 +11,34 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import clientAxios from '../../config/clientAxios'
+
+async function checkEmailExistence(email) {
+  try {
+    const response = await clientAxios.get('/Client')
+    const clients = response.data
+
+    // Verificar si el correo electrónico ya existe en los clientes
+    const emailExists = clients.some(client => client.email === email)
+
+    return { exists: emailExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del correo electrónico:', error)
+    // Manejar el error adecuadamente en tu aplicación
+    return { exists: false }
+  }
+}
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  phone: Yup.string().required('Campo requerido'),
-  email: Yup.string().required('Campo requerido'),
-  center: Yup.string().required('Campo requerido'),
-  area: Yup.string().required('Campo requerido'),
-  regional: Yup.string().required('Campo requerido')
+  name: Yup.string().min(3, 'El nombre debe tener como minimo 3 letras').required('Campo requerido'),
+  phone: Yup.string().max(10, 'Telefono no puede tener mas de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  email: Yup.string().required('Campo requerido').email('El email debe ser valido example@email.com').test('unique-email', 'El correo ya está en uso', async function (value) {
+    const response = await checkEmailExistence(value)
+    return !response.exists // Devuelve false si el correo ya existe
+  }),
+  center: Yup.string().min(3, 'el centro debe tener como minimo 3 letras').max(70, 'el centro debe tener como maximo 70 letras').required('Campo requerido'),
+  area: Yup.string().min(3, 'el area debe tener como minimo 3 letras').max(70, 'El area debe tener como maximo 70 letras').required('Campo requerido'),
+  regional: Yup.string().min(3, 'La regional debe tener como minimo 3 letras').max(70, 'La regional debe tener como maximo 70 letras').required('Campo requerido')
 })
 
 function CreateClient () {

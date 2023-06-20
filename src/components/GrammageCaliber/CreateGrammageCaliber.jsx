@@ -11,10 +11,26 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import clientAxios from '../../config/clientAxios'
 
+async function checkNameExistence (name) {
+  try {
+    const response = await clientAxios.get('/GrammageCaliber')
+    const grammage = response.data
+    const nameExists = grammage.some(grammage => grammage.name === name)
+
+    return { exists: nameExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del nombre:', error)
+    return { exists: false }
+  }
+}
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  type: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido').max(15, 'El gramaje y/o calibre no puede tener más de 15 letras/digitos').test('unique-name', 'El Gramaje y/o calibre ya está en uso', async function (value) {
+    const response = await checkNameExistence(value)
+    return !response.exists // Devuelve false si el nombre ya existe
+  }),
+  type: Yup.string().required('Campo requerido').min(5, 'El tipo no puede tener menos de 5 letras').max(10, 'El tipo no puede tener más de 10 letras/digitos')
 })
 
 function CreateGrammageCaliber () {
@@ -37,16 +53,16 @@ function CreateGrammageCaliber () {
     {
       key: 0,
       name: 'type',
-      title: 'Tipo de Grammaje',
+      title: 'Tipo',
       type: 'text',
-      placeholder: 'Nombre'
+      placeholder: 'Tipo'
     },
     {
       key: 1,
       name: 'name',
-      title: 'Nombre Grammaje',
+      title: 'Grammaje',
       type: 'text',
-      placeholder: 'Nombre'
+      placeholder: 'Grammaje'
     }
   ]
 

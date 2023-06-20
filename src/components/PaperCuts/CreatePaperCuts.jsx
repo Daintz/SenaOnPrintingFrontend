@@ -11,16 +11,33 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import clientAxios from '../../config/clientAxios'
+
+async function checkNameExistence (name) {
+  try {
+    const response = await clientAxios.get('/PaperCuts')
+    const grammage = response.data
+    const nameExists = grammage.some(grammage => grammage.name === name)
+
+    return { exists: nameExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del nombre:', error)
+    return { exists: false }
+  }
+}
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido').min(3, 'El corte de papel debe tener menos de 3 letras/digitos').max(15, 'El corte de papel no puede tener más de 15 letras/digitos').test('unique-name', 'El corte de papel ya está en uso', async function (value) {
+    const response = await checkNameExistence(value)
+    return !response.exists // Devuelve false si el nombre ya existe
+  })
 })
 
 function CreatePaperCuts () {
   const dispatch = useDispatch()
   const [createPaperCuts, { error, isLoading }] = usePostPaperCutsMutation()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values) => { 
     if (isLoading) return <Spinner />
 
     await createPaperCuts(values)
@@ -36,7 +53,7 @@ function CreatePaperCuts () {
     {
       key: 0,
       name: 'name',
-      title: 'Nombre Corte papel',
+      title: 'Corte papel',
       type: 'text',
       placeholder: 'Nombre'
     }
