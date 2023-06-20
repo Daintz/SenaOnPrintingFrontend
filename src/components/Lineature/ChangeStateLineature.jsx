@@ -1,6 +1,6 @@
 import { useDeleteLineatureByIdMutation } from '../../context/Api/Common'
-import { changeAction } from '../../context/Slices/Modal/ModalSlice'
-import { useDispatch } from 'react-redux'
+import { changeAction, closeModal, openModal, setAction, setChangeStatusData, setWidth } from '../../context/Slices/Modal/ModalSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
@@ -8,19 +8,46 @@ import { toast } from 'react-toastify'
 function ChangeStateLineature ({ lineature }) {
   const dispatch = useDispatch()
   const [deleteLineature, { error, isLoading }] =
-    useDeleteLineatureByIdMutation()
+  useDeleteLineatureByIdMutation()
+  const { changeStatusData } = useSelector((state) => state.modal)
 
   const handleSubmit = async () => {
-    await deleteLineature(lineature.id)
+    await deleteLineature(changeStatusData.id)
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
 
     dispatch(changeAction())
-    toast.success('Lineatura cambio de estado con exito')
+    dispatch(closeModal())
+    toast.success('Producto cambio de estado con exito')
+  }
+
+  const handle = async () => {
+    dispatch(closeModal())
   }
 
   return (
-    <button type="button" onClick={ handleSubmit }>
+    <>
+      <h1 className="text-4xl text-center font-bold">¿Estas seguro?</h1>
+      <p className="text-lg">¿Estas seguro de <b>cambiar de estado</b> esta lineatura?</p>
+      <div className="px-6 py-4 grid grid-cols-2  place-content-center" >
+        <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Cambiar de estado</button>
+        <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
+      </div>
+    </>
+  )
+}
+
+export function ChangeStateButtonLineature ({ lineature }) {
+  const dispatch = useDispatch()
+  const handleOpen = async () => {
+    dispatch(setWidth({ width: '800px' }))
+    dispatch(openModal({ title: 'Cambiar de estado' }))
+    dispatch(setAction({ action: 'changing' }))
+    dispatch(setChangeStatusData({ changeStatusData: lineature }))
+  }
+
+  return (
+    <button type="button" onClick={ handleOpen }>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

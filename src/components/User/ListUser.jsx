@@ -21,12 +21,12 @@ const ListUser = () => {
   console.log(dataApi)
 
   const columns = useMemo(() => [
-    {Header: 'Numero de Documento', accesor: 'documentNumber'},
-    {Header: 'Tipo de Documento', accesor: 'typeDocumentId'},
-    {Header: 'Nombres', accesor: 'names'},
-    {Header: 'Apellidos', accesor: 'surnames'},
-    {Header: 'Correo Electronico', accesor: 'email'},
-    {Header: 'Rol', accesor: 'roleId'},
+    {Header: 'Numero de Documento', accessor: 'documentNumber'},
+    {Header: 'Tipo de Documento', accessor: 'typeDocumentId'},
+    {Header: 'Nombres', accessor: 'names'},
+    {Header: 'Apellidos', accessor: 'surnames'},
+    {Header: 'Correo Electronico', accessor: 'email'},
+    {Header: 'Rol', accessor: 'roleId'},
     {
       Header: 'Estado',
       accessor: 'statedAt',
