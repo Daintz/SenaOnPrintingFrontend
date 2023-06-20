@@ -76,12 +76,12 @@ function updateProduct () {
   )
 }
 
-export function UpdateButtomProduct ({ product }) {
+export function UpdateButtonProduct ({ product }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(openModal({ title: 'Editar producto' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
