@@ -19,6 +19,8 @@ import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword'
+import ForgotPasswordEmail from '../pages/ForgotPassword/ForgotPasswordEmail'
 import Client from '../pages/Clients/Clients'
 import Substrate from '../pages/Substrate/Substrate'
 import PaperCut from '../pages/PaperCut/PaperCut'
@@ -49,6 +51,8 @@ const router = createBrowserRouter(
           <Warehause />
         </DashboardLayout>} />
       <Route path="/" element={<Login />} />
+      <Route path="/olvide_contraseña" element={<ForgotPasswordEmail />} />
+      <Route path="/restaurar_contraseña" element={<ForgotPassword />} />
       <Route
         path="dashboard"
         element={
