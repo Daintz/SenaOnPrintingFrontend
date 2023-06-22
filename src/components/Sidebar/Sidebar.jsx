@@ -120,15 +120,6 @@ function Sidebar () {
             <ul id="dropdown-example2" className="hidden py-2 space-y-2">
               <li>
                 <Link
-                  to="/warehausetype"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehausetype' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Tipo de Bodega</span>
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/warehause"
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehause' ? 'bg-green-500' : null}`}
                 >
