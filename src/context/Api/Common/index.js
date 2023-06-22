@@ -72,6 +72,11 @@ export const quotationProviders =commonEndpointsApi('QuotationProviders', 'quota
 
 export const supplyPictograms =commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 
+export const finishApi = commonEndpointsApi('Finish', 'finish')
+
+export const MachineApi = commonEndpointsApi('Machine', 'machine')
+
+export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -208,3 +213,27 @@ export const {
   usePutByIdMutation: usePutOrderProductionByIdMutation,
   useDeleteByIdMutation: useDeleteOrderProductionByIdMutation
 } = orderProductionApi
+
+export const {
+  useGetAllQuery: useGetAllFinishQuery,
+  useGetByIdQuery: useGetFinishByIdQuery,
+  usePostMutation: usePostFinishMutation,
+  usePutByIdMutation: usePutFinishByIdMutation,
+  useDeleteByIdMutation: useDeleteFinishByIdMutation
+} = finishApi
+
+export const {
+  useGetAllQuery: useGetAllMachineQuery,
+  useGetByIdQuery: useGetMachineByIdQuery,
+  usePostMutation: usePostMachineMutation,
+  usePutByIdMutation: usePutMachineByIdMutation,
+  useDeleteByIdMutation: useDeleteMachineByIdMutation
+} = MachineApi
+
+export const {
+  useGetAllQuery: useGetAllUnitUnitMesureQuery,
+  useGetByIdQuery: useGetUnitUnitMesureByIdQuery,
+  usePostMutation: usePostUnitUnitMesureMutation,
+  usePutByIdMutation: usePutUnitMesureByIdMutation,
+  useDeleteByIdMutation: useDeleteUnitMesureByIdMutation
+} = UnitMesureApi
