@@ -1,8 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { finishApi,  } from '../Api/Common'
-import { supplyCategoryApi,  } from '../Api/Common'
-import modalReducer from '../Slices/Modal/ModalSlice'
+import { supplyCategoryApi } from '../Api/Common'
 
+import modalReducer from '../Slices/Modal/ModalSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,12 +9,5 @@ export const store = configureStore({
     modal: modalReducer
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(supplyCategoryApi.middleware),
-
-  reducer: {
-      [finishApi.reducerPath]: finishApi.reducer,
-      modal: modalReducer
-    },
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(finishApi.middleware)
+    getDefaultMiddleware().concat(supplyCategoryApi.middleware)
 })
