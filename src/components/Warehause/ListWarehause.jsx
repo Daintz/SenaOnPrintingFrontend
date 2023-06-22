@@ -1,39 +1,50 @@
-import { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllWarehausesQuery } from '../../context/Api/Common'
-import { UpdateButtomWarehause } from './UpdateWarehause'
-import { ChangeStateButtonWarehause } from './ChangeStateWarehause'
-import { CreateButtomWarehause } from './CreateWarehause'
-import { DetailsButtomWarehause } from './DetailsWarehause'
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useTable, usePagination, useGlobalFilter } from 'react-table';
+import { useGetAllWarehausesQuery, useGetWarehauseTypeByIdQuery } from '../../context/Api/Common';
+
+import { UpdateButtomWarehause } from './UpdateWarehause';
+import { ChangeStateButtonWarehause } from './ChangeStateWarehause';
+import { CreateButtomWarehause } from './CreateWarehause';
+import { DetailsButtomWarehause } from './DetailsWarehause';
 
 const ListWarehause = () => {
-  // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllWarehausesQuery()
+  const { data: dataApi, refetch } = useGetAllWarehausesQuery();
 
-  // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
-  const { isAction } = useSelector((state) => state.modal)
+  const { isAction } = useSelector((state) => state.modal);
   useEffect(() => {
-    refetch()
-  }, [isAction])
-  // ?
+    refetch();
+  }, [isAction]);
 
-  const columns = useMemo(() => [
-    { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Tipo de bodega', accessor: 'warehouseTypeId' },
-    { Header: 'Ubicacion', accessor: 'ubication' },
-    {
-      Header: 'Estado',
-      accessor: 'statedAt',
-      Cell: ({ value }) => (value
-        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>)
-    }
-  ], [])
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Nombre',
+        accessor: 'warehouseTypeId',
+        Cell: ({ value }) => {
+          const warehausetypeData = useGetWarehauseTypeByIdQuery(value);
+          return <span>{warehausetypeData.isLoading ? 'Cargando...' : warehausetypeData.data.name}</span>;
+        }
+      },
+      { Header: 'Ubicacion', accessor: 'ubication' },
+      {
+        Header: 'Estado',
+        accessor: 'statedAt',
+        Cell: ({ value }) => (
+          value ? (
+            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              Activo
+            </span>
+          ) : (
+            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+              Inactivo
+            </span>
+          )
+        )
+      }
+    ],
+    []
+  );
 
   const data = useMemo(() => (dataApi || []), [dataApi])
 

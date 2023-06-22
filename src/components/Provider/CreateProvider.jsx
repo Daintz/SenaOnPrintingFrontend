@@ -1,40 +1,80 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
-import { usePostProviderMutation } from '../../context/Api/Common'
-import {
-  changeAction,
-  closeModal,
-  openModal,
-  setAction,
-  setWidth
-} from '../../context/Slices/Modal/ModalSlice'
-import Spinner from '../Spinner/Spinner'
-import { toast } from 'react-toastify'
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import { usePostProviderMutation } from '../../context/Api/Common';
+import { changeAction, closeModal, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice';
+import Spinner from '../Spinner/Spinner';
+import { toast } from 'react-toastify';
+
+async function checkNITExistence(NIT) {
+  try {
+    const response = await clientAxios.get('/Provider');
+    const Providers = response.data;
+
+    // Verificar si el NIT ya existe en los proveedores
+    const NITExists = Providers.some(provider => provider.nitCompany === NIT);
+
+    return { exists: NITExists };
+  } catch (error) {
+    console.error('Error al verificar la existencia del NIT de la empresa:', error);
+    // Manejar el error adecuadamente en tu aplicación
+    return { exists: false };
+  }
+}
+
+async function checkEmailExistence(email) {
+  try {
+    const response = await clientAxios.get('/Provider');
+    const Providers = response.data;
+
+    // Verificar si el correo electrónico ya existe en los proveedores
+    const emailExists = Providers.some(provider => provider.email === email);
+
+    return { exists: emailExists };
+  } catch (error) {
+    console.error('Error al verificar la existencia del correo electrónico:', error);
+    // Manejar el error adecuadamente en tu aplicación
+    return { exists: false };
+  }
+}
 
 const validationSchema = Yup.object().shape({
-  nitCompany: Yup.string().required('Campo requerido'),
+  nitCompany: Yup.string()
+    .required('Campo requerido')
+    .test('unique-NIT', 'El NIT ya se encuentra registrado', async function (value) {
+      const response = await checkNITExistence(value);
+      return !response.exists; // Devuelve false si el NIT ya existe
+    }),
   nameCompany: Yup.string().required('Campo requerido'),
-  email: Yup.string().required('Campo requerido'),
+  email: Yup.string()
+    .required('Campo requerido')
+    .test('unique-email', 'El correo ya se encuentra registrado', async function (value) {
+      const response = await checkEmailExistence(value);
+      return !response.exists; // Devuelve false si el correo ya existe
+    }),
   phone: Yup.string().required('Campo requerido'),
   companyAddress: Yup.string().required('Campo requerido')
-})
+});
 
-function CreateProvider () {
-  const dispatch = useDispatch()
-  const [createProvider, { error, isLoading }] = usePostProviderMutation()
+function CreateProvider() {
+  const dispatch = useDispatch();
+  const [createProvider, { error, isLoading }] = usePostProviderMutation();
 
-  const handleSubmit = async (values) => {
-    if (isLoading) return <Spinner />
+  const handleSubmit = async (values, { setErrors }) => {
+    if (isLoading) return <Spinner />;
 
-    await createProvider(values)
+    const response = await createProvider(values);
 
-    dispatch(changeAction())
-    if (!error) {
-      dispatch(closeModal())
+    if (response.error) {
+      // Manejar el error adecuadamente en tu aplicación
+      toast.error('Error al registrar el proveedor');
+    } else {
+      dispatch(changeAction());
+      dispatch(closeModal());
+      toast.success('Proveedor registrado con éxito');
     }
-    toast.success('Proveedor Registrado con exito')
-  }
+  };
 
   const inputs = [
     {
@@ -61,49 +101,50 @@ function CreateProvider () {
     {
       key: 3,
       name: 'phone',
-      title: 'Telefono',
+      title: 'Teléfono',
       type: 'text',
-      placeholder: 'Telefono de la empresa'
+      placeholder: 'Teléfono de la empresa'
     },
     {
       key: 4,
       name: 'companyAddress',
-      title: 'Direccion de la empresa',
+      title: 'Dirección de la empresa',
       type: 'text',
-      placeholder: 'Direccion de la empresa'
+      placeholder: 'Dirección de la empresa'
     }
-  ]
+  ];
 
   return (
     <Formik
       initialValues={{
         nitCompany: '',
-        characteristics: '',
-        email:'',
-        phone:'',
-        companyAddress:''
-        
+        nameCompany: '',
+        email: '',
+        phone: '',
+        companyAddress: ''
       }}
-      onSubmit={(values) => {
-        handleSubmit(values)
+      onSubmit={(values, { setErrors }) => {
+        handleSubmit(values, { setErrors });
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
+      <Form className="space-y-6">
+        {inputs.map((input) => (
+          <div key={input.key}>
+            <label htmlFor={input.name}>{input.title}</label>
+            <Field
+              type={input.type}
+              name={input.name}
+              id={input.name}
+              placeholder={input.placeholder}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full"
+
+            />
+            <ErrorMessage
+              name={input.name}
+              component="div"
+              className="text-red-500"
+
               />
             </div>
           ))}

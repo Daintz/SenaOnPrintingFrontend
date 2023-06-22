@@ -6,14 +6,41 @@ import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-
+import { useEffect, useState } from 'react'
+import clientAxios from '../../config/clientAxios'
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
   warehouseTypeId: Yup.string().required('Campo requerido'),
   ubication: Yup.string().required('Campo requerido')
 })
 
+const getWarehausesType = () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/WarehauseType').then(
+      (result) => {
+        const warehausestype = result.data.map((warehausetype) => ({
+          'label': warehausetype.name,
+          'value': warehausetype.id
+        }));
+        resolve(warehausestype);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+};
+
 function updateWarehause () {
+  const [warehauseTypeOptions, setWarehauseTypeOptions] = useState([]);
+  const fetchOptions = () => {
+    getWarehausesType().then((options) => {
+      setWarehauseTypeOptions(options);
+    });
+  };
+
+  useEffect(() => {
+    fetchOptions();
+  }, []);
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
   const [updateWarehause, { error, isLoading }] = usePutWarehauseByIdMutation()
@@ -30,17 +57,11 @@ function updateWarehause () {
 
   const inputs = [
     {
-      key: 0,
-      name: 'name',
-      title: 'Nombre',
-      type: 'text',
-      placeholder: 'Nombre de la bodega'
-    },
-    {
       key: 1,
       name: 'warehouseTypeId',
       title: 'Tipo de bodega',
-      type: 'number',
+      type: 'select',
+      data: warehauseTypeOptions,
       placeholder: 'Tipo de de bodega'
     },
     {
@@ -56,7 +77,6 @@ function updateWarehause () {
     <Formik
       initialValues={{
         id: editingData.id,
-        name: editingData.name,
         warehouseTypeId: editingData.warehouseTypeId,
         ubication: editingData.ubication
       }}
@@ -65,8 +85,25 @@ function updateWarehause () {
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {inputs.map(input => (
+       <Form className="space-y-6">
+        {inputs.map(input => {
+          return input.type == "select" ?
+            <div key={input.key}>
+              <label htmlFor={input.name}>{input.title}</label>
+              <br />
+              <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+                <option value="0">Seleccione {input.title}</option>
+                {input.data.map(option => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name={input.name}
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            :
             <div key={input.key}>
               <label htmlFor={input.name}>{input.title}</label>
               <Field
@@ -82,14 +119,14 @@ function updateWarehause () {
                 className="text-red-500"
               />
             </div>
-          ))}
-          <button
-            type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Editar Bodega
-          </button>
-        </Form>
+        })}
+        <button
+          type="submit"
+          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Actualizar Bodega
+        </button>
+      </Form>
     </Formik>
   )
 }

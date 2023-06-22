@@ -20,7 +20,6 @@ import clientAxios from '../../config/clientAxios'
   ubication: Yup.string().required('Campo requerido')
 }) */
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
   ubication: Yup.string().required('Campo requerido'),
   warehouseTypeId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de boega'),
 })
@@ -66,17 +65,10 @@ function CreateWarehause () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Warehauseo creado con exito')
+    toast.success('Bodega creada con exito')
   }
 
   const inputs = [
-    {
-      key: 0,
-      name: 'name',
-      title: 'Nombre',
-      type: 'text',
-      placeholder: 'Nombre de la bodega'
-    },
     {
       key: 1,
       name: 'warehouseTypeId',
@@ -99,7 +91,6 @@ function CreateWarehause () {
     <Formik
       initialValues={{
         warehouseTypeId: '',
-        name: '',
         ubication: ''
       }}
       onSubmit={(values) => {
@@ -146,7 +137,7 @@ function CreateWarehause () {
           type="submit"
           className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
-          Crear Usuario
+          Registrar Bodega
         </button>
       </Form>
     </Formik>
