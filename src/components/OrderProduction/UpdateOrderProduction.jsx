@@ -1,4 +1,4 @@
-import { usePutImpositionPlanchByIdMutation } from '../../context/Api/Common'
+import { usePutOrderProductionByIdMutation } from '../../context/Api/Common'
 import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
@@ -9,14 +9,14 @@ import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react'
 
 const validationSchema = Yup.object().shape({
-  ImpositionPlanch: Yup.string().required('Campo requerido'),
+  OrderProduction: Yup.string().required('Campo requerido'),
   typePoint: Yup.string().required('Campo requerido')
 })
 
-function updateImpositionPlanch() {
+function updateOrderProduction() {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
-  const [updateImpositionPlanch, { error, isLoading }] = usePutImpositionPlanchByIdMutation()
+  const [updateOrderProduction, { error, isLoading }] = usePutOrderProductionByIdMutation()
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
@@ -24,7 +24,7 @@ function updateImpositionPlanch() {
     if (selectedImage) {
       values.schemeInfo = selectedImage;
     }
-    await updateImpositionPlanch(values)
+    await updateOrderProduction(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
@@ -96,7 +96,7 @@ function updateImpositionPlanch() {
   )
 }
 
-export function UpdateButtomImpositionPlanch({ impositionPlanch }) {
+export function UpdateButtomOrderProduction({ orderProduction }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
@@ -109,7 +109,7 @@ export function UpdateButtomImpositionPlanch({ impositionPlanch }) {
 
   return (
     <button type="button" onClick={() => {
-      handleEdit(impositionPlanch)
+      handleEdit(orderProduction)
     }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -129,4 +129,4 @@ export function UpdateButtomImpositionPlanch({ impositionPlanch }) {
   )
 }
 
-export default updateImpositionPlanch
+export default updateOrderProduction

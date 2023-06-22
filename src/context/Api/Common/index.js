@@ -64,6 +64,7 @@ export const grammageCaliberApi = commonEndpointsApi('GrammageCaliber', 'grammag
 export const paperCutsApi = commonEndpointsApi('PaperCuts', 'paperCuts')
 
 export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
+export const orderProductionApi = commonEndpointsApi('OrderProduction', 'orderProduction')
 
 export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
 
@@ -199,3 +200,11 @@ export const {
   usePutByIdMutation: usePutSubstratesByIdMutation,
   useDeleteByIdMutation: useDeleteSubstratesByIdMutation
 } = substratesApi
+
+export const {
+  useGetAllQuery: useGetAllOrderProductionsQuery,
+  useGetByIdQuery: useGetOrderProductionByIdQuery,
+  usePostMutation: usePostOrderProductionMutation,
+  usePutByIdMutation: usePutOrderProductionByIdMutation,
+  useDeleteByIdMutation: useDeleteOrderProductionByIdMutation
+} = orderProductionApi
