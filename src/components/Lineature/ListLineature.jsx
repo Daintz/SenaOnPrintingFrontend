@@ -19,7 +19,6 @@ const ListLineature = () => {
 
   const columns = useMemo(() => [
     { Header: 'Lineatura', accessor: 'lineature' },
-    { Header: 'Tipo de punto', accessor: 'typePoint' },
     {
       Header: 'Estado',
       accessor: 'statedAt',

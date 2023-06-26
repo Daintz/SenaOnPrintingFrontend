@@ -2,11 +2,11 @@ import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
+import { useGetAllQuotationClientDetailsQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
 import { CreateButtomOrderProduction } from './CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
-
 
 const ListOrderProduction = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
