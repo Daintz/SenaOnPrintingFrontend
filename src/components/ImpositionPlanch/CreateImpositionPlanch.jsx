@@ -11,90 +11,64 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  scheme: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido')
 })
 
 function CreateImpositionPlanch() {
   const dispatch = useDispatch()
   const [createImpositionPlanch, { error, isLoading }] = usePostImpositionPlanchMutation()
-  const [previewImage, setPreviewImage] = useState(null);
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
-    const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('schemeInfo', values.scheme);
-
-      await createImpositionPlanch(formData);
+      await createImpositionPlanch(values);
 
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Imposición plancha creada con exito')
+    toast.success('Imposición plancha creada con exito', {
+      autoClose: 1000
+    })
   }
-  const handleFileChange = event => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const inputs = [
+    {
+      key: 0,
+      name: 'name',
+      title: 'Imposición',
+      type: 'text',
+      placeholder: 'giro pinza'
     }
-  };
-
+  ]
   return (
     <Formik
       initialValues={{
-        name: '',
-        scheme: ''
+        name: ''
       }}
       onSubmit={(values) => {
-        console.log(values)
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-      {({ setFieldValue }) => (
         <Form className="space-y-6">
-          <label
-            htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-          >
-            Nombre imposición
-          </label>
-          <Field
-            type="text" 
-            name="name"
-            id="name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            placeholder="Giro pinza"
-          />
-          <div>
-            <label
-              htmlFor="scheme"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Esquema
-            </label>
-            {previewImage && <img src={previewImage} alt="Preview" width={100} height={100} />}
-            <input
-              type="file"
-              name="scheme"
-              id="scheme"
-              placeholder="Descripción"
-              onChange={event => {
-                setFieldValue("scheme", event.target.files[0]);
-                handleFileChange(event);
-              }}
-            />
-          </div>
-
+          {inputs.map(input => (
+            <div key={input.key}>
+              <label htmlFor={input.name}>{input.title}</label>
+              <Field
+                type={input.type}
+                name={input.name}
+                id={input.name}
+                placeholder={input.placeholder}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              />
+              <ErrorMessage
+                name={input.name}
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+          ))}
           <button
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -102,7 +76,6 @@ function CreateImpositionPlanch() {
             Crear imposición
           </button>
         </Form>
-      )}
     </Formik>
   )
 }
@@ -112,7 +85,7 @@ export function CreateButtomImpositionPlanch() {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Crear imposició plancha' }))
+    dispatch(openModal({ title: 'Crear imposición plancha' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?

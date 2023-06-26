@@ -18,7 +18,9 @@ function ChangeStateOrderProduction ({ orderProduction }) {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Orden de producción cambio de estado con exito')
+    toast.success('Orden de producción cambio de estado con exito', {
+      autoClose: 1000
+    })
   }
 
   const handle = async () => {

@@ -18,7 +18,9 @@ function ChangeStateImpositionPlanch ({ impositionPlanch }) {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Imposición plancha cambio de estado con exito')
+    toast.success('Imposición plancha cambio de estado con exito', {
+      autoClose: 1000
+    })
   }
 
   const handle = async () => {
