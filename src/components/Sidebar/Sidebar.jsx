@@ -387,6 +387,15 @@ function Sidebar () {
                   <span className="ml-3">Cotizacion Cliente</span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to={'/quotation'}
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationClient' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3">Cotizacion</span>
+                </Link>
+              </li>
 
               <li>
                 <Link

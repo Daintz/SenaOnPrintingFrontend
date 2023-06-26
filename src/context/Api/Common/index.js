@@ -65,6 +65,7 @@ export const paperCutsApi = commonEndpointsApi('PaperCuts', 'paperCuts')
 
 export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
 
+
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
   useGetByIdQuery: useGetSupplyCategoryByIdQuery,

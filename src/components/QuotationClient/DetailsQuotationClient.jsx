@@ -4,7 +4,7 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsQuotationClient () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { orderDate, deliverDate, userId, clientId, typeServiceId, statedAt } = detailsData
+  const { orderDate, deliverDate, userId, clientId, typeServiceId, quotationStatus, statedAt } = detailsData
   return (
     <>
       <p><b>Fecha de orden:</b> {orderDate}</p>
@@ -12,6 +12,10 @@ function DetailsQuotationClient () {
       <p><b>Usuario Id:</b> {userId}</p>
       <p><b>Cliente Id:</b> {clientId}</p>
       <p><b>Tipo de servicio Id:</b> {typeServiceId}</p>
+      <p>
+      <b>Estado cotización:</b> {quotationStatus === 1 ? 'En proceso' : quotationStatus === 2 ? 'Aprobado' : quotationStatus === 3 ? 'Estado 3' : 'No aprobado'}
+
+      </p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt

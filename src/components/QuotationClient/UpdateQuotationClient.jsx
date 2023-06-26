@@ -10,7 +10,6 @@ import { toast } from 'react-toastify'
 const validationSchema = Yup.object().shape({
     orderDate: Yup.string().required('Campo requerido'),
     deliverDate: Yup.string().required('Campo requerido'),
-    userId: Yup.string().required('Campo requerido'),
     clientId: Yup.string().required('Campo requerido'),
     typeServiceId: Yup.string().required('Campo requerido'),
 }) 
@@ -46,14 +45,6 @@ function updateQuotationClient () {
       placeholder: 'Fecha de entrega'
     },
     {
-      key: 2,
-      name: 'userId',
-      title: 'Usuario Id',
-      type: 'number',
-      placeholder: 'Usuario Id'
-    },
-  
-    {
       key: 3,
       name: 'clientId',
       title: 'Cliente Id',
@@ -77,7 +68,6 @@ function updateQuotationClient () {
         id: editingData.id,
         orderDate: editingData.orderDate,
         deliverDate: editingData.deliverDate,
-        userId: editingData.userId,
         clientId: editingData.clientId,
         typeServiceId: editingData.typeServiceId
        
@@ -109,7 +99,7 @@ function updateQuotationClient () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Cotizacion
+            Actualizar Cotizacion
           </button>
         </Form>
     </Formik>
