@@ -10,6 +10,7 @@ import { DetailsButtomWarehause } from './DetailsWarehause';
 
 const ListWarehause = () => {
   const { data: dataApi, refetch } = useGetAllWarehausesQuery();
+ 
 
   const { isAction } = useSelector((state) => state.modal);
   useEffect(() => {
@@ -21,10 +22,6 @@ const ListWarehause = () => {
       {
         Header: 'Nombre',
         accessor: 'warehouseTypeId',
-        Cell: ({ value }) => {
-          const warehausetypeData = useGetWarehauseTypeByIdQuery(value);
-          return <span>{warehausetypeData.isLoading ? 'Cargando...' : warehausetypeData.data.name}</span>;
-        }
       },
       { Header: 'Ubicacion', accessor: 'ubication' },
       {
