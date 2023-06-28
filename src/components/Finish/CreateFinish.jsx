@@ -30,7 +30,10 @@ function Createfinish () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Acabado creado con exito')
+    toast.success('Acabado creado con exito',{
+      autoClose:1000
+
+    })
   }
 
   const inputs = [
@@ -59,7 +62,7 @@ function Createfinish () {
     >
         <Form className="space-y-6">
           {inputs.map(input => (
-            <div key={input.key}>
+            <div key={input.key} className='flex linea-horizontal mb-2'>
               <label htmlFor={input.name}>{input.title}</label>
               <Field
                 type={input.type}
@@ -90,7 +93,7 @@ export function CreateButtomFinish () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: '-[1500px]' }))
     dispatch(openModal({ title: 'Crear Acabado' }))
     dispatch(setAction({ action: 'creating' }))
   }

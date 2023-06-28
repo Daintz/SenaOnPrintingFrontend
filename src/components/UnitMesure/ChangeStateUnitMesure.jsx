@@ -18,7 +18,10 @@ function ChangeStateunit ({ unitMesure}) {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Maquina cambio de estado con exito')
+    toast.success('Unidad con  cambio de estado con exito',{
+      autoClose:1000
+
+    })
   }
 
   const handle = async () => {
@@ -40,7 +43,7 @@ function ChangeStateunit ({ unitMesure}) {
 export function ChangeStateButtonUnit ({ unitMesure }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
-    dispatch(setWidth({ width: '800px' }))
+    dispatch(setWidth({ width: '-[1500px]' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: unitMesure }))
