@@ -1,7 +1,7 @@
 import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
 import ListSupplyPictograms from '../../components/SupplyPictograms/ListSupplyPictograms'
-import UpdateSupplyPictograms from '../../components/SupplyPictograms/UpdateSupplyPictogrmas'
+import UpdateSupplyPictograms from '../../components/SupplyPictograms/UpdateSupplyPictograms'
 import CreateSupplyPictograms from '../../components/SupplyPictograms/CreateSupplyPictograms'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 import DetailsSupplyPictograms from '../../components/SupplyPictograms/DetailsSypplyPictograms'

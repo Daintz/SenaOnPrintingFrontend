@@ -4,10 +4,11 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsTypeServices () {
   const { detailsData } = useSelector((state) => state.modal)
-  const {name ,statedAt } = detailsData
+  const {name , costo ,statedAt } = detailsData
   return (
     <>
       <p><b>Nombre:</b> {name}</p>
+      <p><b>Costo:</b>{costo}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt

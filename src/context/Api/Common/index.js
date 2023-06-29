@@ -70,7 +70,7 @@ export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
 
 export const quotationProviders =commonEndpointsApi('QuotationProviders', 'quotationProviders')
 
-export const supplyPictograms =commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+export const supplyPictogrmas =commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 
 
 export const {
@@ -127,7 +127,7 @@ export const {
   usePostMutation: usePostSupplyPictogramsMutation,
   usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
   useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
-} = supplyPictograms
+} = supplyPictogrmas
 export const {
   useGetAllQuery: useGetAllUsersQuery,
   useGetByIdQuery: useGetUserByIdQuery,

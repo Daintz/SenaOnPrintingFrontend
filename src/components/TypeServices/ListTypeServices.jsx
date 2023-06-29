@@ -22,6 +22,7 @@ const ListTypeServices = () => {
  
   const columns = useMemo(()=>[
     { Header: 'Nombre', accessor: 'name' },
+    {Header: 'Costo', accessor: 'costo' },
     {Header: 'Estado',
     accessor: 'statedAt',
     Cell: ({ value }) => (value

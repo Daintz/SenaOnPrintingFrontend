@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyPictogramsQuery } from '../../context/Api/Common'
-import { UpdateButtomSupplyPictograms } from '../SupplyPictograms/UpdateSupplyPictogrmas'
+import { UpdateButtomSupplyPictograms } from './UpdateSupplyPictograms'
 import { ChangeStateButtonSupplyPictograms } from '../SupplyPictograms/ChangeStatedSupplyPictograms'
 import { CreateButtomSupplyPictograms } from '../SupplyPictograms/CreateSupplyPictograms'
 import { DetailsButtomSupplyPictograms } from '../SupplyPictograms/DetailsSypplyPictograms'
@@ -24,7 +24,7 @@ const ListSupplyPictograms = () => {
     { Header: 'Codigo', accessor: 'code' },
     { Header: 'Nombre', accessor: 'name' },
     {Header: 'Descripcion', accessor: 'description'},
-    {Header: 'Documento', accessor: 'pictogrmasFile'},
+    {Header: 'Imagen', accessor: 'pictogramFile'},
     {Header: 'Estado',
     accessor: 'statedAt',
     Cell: ({ value }) => (value
@@ -129,18 +129,43 @@ const ListSupplyPictograms = () => {
                     key={row.original.id}
                     className="border-b border-gray-500"
                   >
-                    {row.cells.map((cell, index) => {
-                      return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
-                    })}
+                    <td {...row.cells[0].getCellProps()} className="px-4 py-3">
+                      {typeof row.cells[0].value === 'function'
+                        ? row.cells[0].value(row.cells[0])
+                        : row.cells[0].render('Cell')}
+                    </td>
+                    <td {...row.cells[1].getCellProps()} className="px-4 py-3">
+                      {typeof row.cells[1].value === 'function'
+                        ? row.cells[1].value(row.cells[1])
+                        : row.cells[1].render('Cell')}
+                    </td>
+                    <td {...row.cells[2].getCellProps()} className="px-4 py-3">
+                      {typeof row.cells[2].value === 'function'
+                        ? row.cells[2].value(row.cells[2])
+                        : row.cells[2].column.id === 'pictogramFileInfo'
+                          ? <img src={row.cells[2].value} width={100} height={100}/>
+                          : row.cells[2].render('Cell')}
+                    </td>
+                   
+                    <td {...row.cells[3].getCellProps()} className="px-4 py-3">
+                      {typeof row.cells[3].value === 'function'
+                        ? row.cells[3].value(row.cells[3])
+                        : row.cells[3].render('Cell')}
+                    </td>
+                    <td {...row.cells[4].getCellProps()} className="px-4 py-3">
+                      {typeof row.cells[4].value === 'function'
+                        ? row.cells[4].value(row.cells[4])
+                        : row.cells[4].render('Cell')}
+                    </td>
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <DetailsButtomSupplyPictograms
-                        supplyPictogrmas={row.original}
+                        supplyPictograms={row.original}
                       />
                       <UpdateButtomSupplyPictograms
-                        supplyPictogrmas={row.original}
+                        supplyPictograms={row.original}
                       />
                       <ChangeStateButtonSupplyPictograms
-                        supplyPictogrmas={row.original}
+                        supplyPictograms={row.original}
                       />
                     </td>
                   </tr>

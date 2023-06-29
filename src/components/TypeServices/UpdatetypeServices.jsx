@@ -8,7 +8,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido'),
+  code:Yup.number().required('Campo requerido')
 })
 
 function UpdateTypeServices () {
@@ -23,11 +24,12 @@ function UpdateTypeServices () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Pictograma actualizada con exito')
+    toast.success('Servicio actualizada con exito')
   }
 
   const inputs = [
     {key: 0, name: 'name', title:'Nombre del TIpo de servicio', type: 'text', placeholder: 'nombre'  },
+    {key: 1, name: 'costo', title:'Costo del TIpo de servicio', type: 'number', placeholder: 'costo'  },
 
 
   ]
@@ -37,6 +39,8 @@ function UpdateTypeServices () {
       initialValues={{
         id: editingData.id,
         name: editingData.name,
+        costo: editingData.costo
+
       }}
       onSubmit={(values) => {
         handleSubmit(values)
