@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Provider from '../pages/Provider/Provider'
-import Warehausetype from '../pages/Warehausetype/Warehausetype'
+import WarehauseType from '../pages/Warehausetype/Warehausetype'
 import Warehause from '../pages/Warehause/Warehause'
 import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
@@ -33,6 +33,7 @@ import SupplyPictogrmas from '../pages/SupplyPictograms/SupplyPictograms'
 import QuotationProviders from '../pages/QuotationProviders/QuotationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
+import Quotation from '../pages/Quotation/Quotation'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,12 +45,13 @@ const router = createBrowserRouter(
         </DashboardLayout>} />
       <Route path="warehausetype"
         element={<DashboardLayout>
-          <Warehausetype />
+          <WarehauseType />
         </DashboardLayout>} />
       <Route path="warehause"
         element={<DashboardLayout>
           <Warehause />
         </DashboardLayout>} />
+       
       <Route path="/" element={<Login />} />
       <Route path="/olvide_contraseña" element={<ForgotPasswordEmail />} />
       <Route path="/restaurar_contraseña" element={<ForgotPassword />} />
@@ -108,6 +110,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <QuotationClient />
+          </DashboardLayout>
+        }
+      />
+       <Route
+        path="quotation"
+        element={
+          <DashboardLayout>
+            <Quotation />
           </DashboardLayout>
         }
       />

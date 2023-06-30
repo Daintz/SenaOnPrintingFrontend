@@ -77,7 +77,7 @@ const ForgotPassword = () => {
                             htmlFor="confirmPassword"
                             className="block text-sm font-semibold text-gray-800"
                         >
-                            Contraseña
+                            Confirmar Contraseña
                         </label>
                         <input
                             type="password"

@@ -31,7 +31,9 @@ function CreateProduct () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Producto creado con exito')
+    toast.success('Producto creado con exito', {
+      autoClose: 1000 // Duración de 1 segundos
+    })
   }
 
   const inputs = [
@@ -103,9 +105,9 @@ export function CreateButtonProduct () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Crear producto' }))
+    dispatch(setWidth({ width: 'w-[1500px]' }))
     dispatch(setAction({ action: 'creating' }))
+    dispatch(openModal({ title: 'Crear producto' }))
   }
   // ?
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import { useNavigate, Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -20,9 +20,9 @@ const Login = () => {
       return response.data
     }).then((resp) => {
       //alert(resp.message)
-      toast.success(resp.message)
       if (resp.token.length !== 0) {
         sessionStorage.setItem('session_token', resp.token)
+        toast.success(resp.message)
         usenavigate('/dashboard')
       }
     }).catch((err) => {
@@ -32,7 +32,8 @@ const Login = () => {
   }
 
   return (
-        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+    
+    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
               <div className="flex flex-col items-center justify-center">
                 <img src="https://oficinavirtualderadicacion.sena.edu.co/oficinavirtual/Resources/logoSenaNaranja.png" alt="Logo" className="mb-2 w-20 h-20" />
@@ -85,6 +86,7 @@ const Login = () => {
                 </form>
             </div>
         </div>
+    
   )
 }
 

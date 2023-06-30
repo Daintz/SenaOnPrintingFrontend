@@ -18,7 +18,9 @@ function ChangeStateLineature ({ lineature }) {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Producto cambio de estado con exito')
+    toast.success('Lineatura cambio de estado con exito',{
+      autoClose: 1000
+    })
   }
 
   const handle = async () => {

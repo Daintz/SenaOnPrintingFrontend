@@ -9,9 +9,7 @@ import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   lineature: Yup.string().required('Campo requerido')
-  .matches(/^(?=.*[0-9])(?=.*lpi)[0-9lpi\s]+$/, 'Solo se permiten números + "lpi"'),
-  typePoint: Yup.string().required('Campo requerido')
-  .matches(/^[\d.]+$/, 'Solo se permite . y números')
+  .matches(/^(?=.*[0-9])(?=.*lpi)[0-9lpi\s]+$/, 'Solo se permiten números + "lpi"')
 })
 
 function updateLineature () {
@@ -26,20 +24,20 @@ function updateLineature () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Lineatura actualizada con exito')
+    toast.success('Lineatura actualizada con exito', {
+      autoClose: 1000
+    })
   }
 
   const inputs = [
     { key: 0, name: 'lineature', title: 'Lineatura', type: 'text', placeholder: 'Nombre' },
-    { key: 1, name: 'typePoint', title: 'Tipo de punto', type: 'text', placeholder: 'Caracteristicas' }
   ]
 
   return (
     <Formik
       initialValues={{
         id: editingData.id,
-        lineature: editingData.lineature,
-        typePoint: editingData.typePoint
+        lineature: editingData.lineature
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -79,8 +77,8 @@ export function UpdateButtomLineature ({ lineature }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setWidth({ width: 'w-[300px]' }))
+    dispatch(openModal({ title: 'Editar lineatura' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }

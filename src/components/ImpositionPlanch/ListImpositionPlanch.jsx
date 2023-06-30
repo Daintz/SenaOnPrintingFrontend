@@ -18,7 +18,6 @@ const ListImpositionPlanch = () => {
 
   const columns = useMemo(() => [
     { Header: 'Imposición plancha', accessor: 'name' },
-    { Header: 'Esquema', accessor: 'scheme' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -124,23 +123,9 @@ const ListImpositionPlanch = () => {
                     key={row.original.id}
                     className="border-b border-gray-500"
                   >
-                    <td {...row.cells[0].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[0].value === 'function'
-                        ? row.cells[0].value(row.cells[0])
-                        : row.cells[0].render('Cell')}
-                    </td>
-                    <td {...row.cells[1].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[1].value === 'function'
-                        ? row.cells[1].value(row.cells[1])
-                        : row.cells[1].column.id === 'scheme'
-                          ? <img src={row.cells[1].value} width={100} height={100}/>
-                          : row.cells[1].render('Cell')}
-                    </td>
-                    <td {...row.cells[2].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[2].value === 'function'
-                        ? row.cells[2].value(row.cells[2])
-                        : row.cells[2].render('Cell')}
-                    </td>
+                    {row.cells.map((cell, index) => {
+                      return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
+                    })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <UpdateButtomImpositionPlanch
                         impositionPlanch={row.original}

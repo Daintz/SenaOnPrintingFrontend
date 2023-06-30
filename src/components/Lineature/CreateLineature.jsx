@@ -15,8 +15,6 @@ import { toast } from 'react-toastify'
 const validationSchema = Yup.object().shape({
   lineature: Yup.string().required('Campo requerido')
   .matches(/^(?=.*[0-9])(?=.*lpi)[0-9lpi\s]+$/, 'Solo se permiten números + "lpi"'),
-  typePoint: Yup.string().required('Campo requerido')
-  .matches(/^[\d.]+$/, 'Solo se permite . y números')
 })
 
 function CreateLineature () {
@@ -32,7 +30,9 @@ function CreateLineature () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Lineatura creada con exito')
+    toast.success('Lineatura creada con exito',{
+      autoClose:1000
+    })
   }
 
   const inputs = [
@@ -42,21 +42,13 @@ function CreateLineature () {
       title: 'Lineatura',
       type: 'text',
       placeholder: 'Nombre de lineatura'
-    },
-    {
-      key: 1,
-      name: 'typePoint',
-      title: 'Tipo de punto',
-      type: 'text',
-      placeholder: '5.5'
     }
   ]
 
   return (
     <Formik
       initialValues={{
-        lineature: '',
-        typePoint: ''
+        lineature: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -96,7 +88,7 @@ export function CreateButtomLineature () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: 'w-[300px]' }))
     dispatch(openModal({ title: 'Crear lineatura' }))
     dispatch(setAction({ action: 'creating' }))
   }

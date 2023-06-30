@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import { useNavigate, Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 
 const ForgotPasswordEmail = () => {
   const [email, setEmail] = useState('')
@@ -15,19 +15,28 @@ const ForgotPasswordEmail = () => {
   const handleEmailSend = async (e) => {
     e.preventDefault()
 
-    await clientAxios.post('/auth/forgot_password', { email }).then((response) => {
-      return response.data
-    }).then((resp) => {
-      //alert(resp.message)
-      toast.success(resp.message)
-      usenavigate('/')
-    }).catch((err) => {
-      toast.error(err.response.data.message)
-      //alert(err.response.data.message)
+    const emailVerify = new Promise((resolve, reject) => {
+      clientAxios.post('/auth/forgot_password', { email })
+        .then((response) => {
+          resolve(response.data);
+          //usenavigate('/')
+        })
+        .catch((err) => {
+          reject(err.response.data.message);
+        });
     })
+
+    toast.promise(emailVerify,
+      {
+        pending: 'Verificando Correo...',
+        success: 'Correo Enviado Exitosamente!',
+        error: 'El Correo No se Encuentra Registrado'
+      }
+    )
   }
 
   return (
+    <>
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
               <div className="flex flex-col items-center justify-center">
@@ -66,6 +75,8 @@ const ForgotPasswordEmail = () => {
                 </form>
             </div>
         </div>
+        <ToastContainer />
+        </>
   )
 }
 

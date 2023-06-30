@@ -24,7 +24,9 @@ function UpdateSupplyCategory () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Categoria insumo actualizado con exito')
+    toast.success('Categoria insumo actualizado con exito', {
+      autoClose: 1000 // Duración de 1 segundos
+    })
   }
 
   const inputs = [
@@ -77,7 +79,7 @@ export function UpdateButtonSupplyCategory ({ supplyCategory }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: 'w-[1500px]' }))
     dispatch(openModal({ title: 'Editar categoria de insumos' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))

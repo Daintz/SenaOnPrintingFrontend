@@ -18,7 +18,6 @@ const ListProduct = () => {
   }, [isAction])
   // ?
 
-
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
     { Header: 'Tipo producto', accessor: 'typeProduct' },
