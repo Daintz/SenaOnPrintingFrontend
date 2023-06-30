@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllUsersQuery } from '../../context/Api/Common'
@@ -6,6 +6,7 @@ import { DetailsButtonUser } from './DetailsUser'
 import { ChangeStateButtonUser } from './ChangeStateUser'
 import { CreateButtomUser } from './CreateUser'
 import { UpdateButtomUser } from './UpdateUser'
+import clientAxios from '../../config/clientAxios'
 
 const getTypeDocuments = () => {
   return new Promise((resolve, reject) => {
@@ -70,7 +71,8 @@ const ListUser = () => {
 
   const columns = useMemo(() => [
     {Header: 'Numero de Documento', accessor: 'documentNumber'},
-    {Header: 'Tipo de Documento', accessor: 'typeDocumentId'},
+    {Header: 'Tipo de Documento', accessor: 'typeDocumentId',
+      Cell: ({value}) => (typeDocumentOptions.filter(type_document => type_document.value == value)[0].label)},
     {Header: 'Nombres', accessor: 'names'},
     {Header: 'Apellidos', accessor: 'surnames'},
     {Header: 'Correo Electronico', accessor: 'email'},
