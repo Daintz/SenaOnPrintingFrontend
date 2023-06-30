@@ -7,13 +7,61 @@ import { ChangeStateButtonUser } from './ChangeStateUser'
 import { CreateButtomUser } from './CreateUser'
 import { UpdateButtomUser } from './UpdateUser'
 
+const getTypeDocuments = () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/type_document').then(
+      (result) => {
+        const typeDocuments = result.data.map((type_document) => ({
+          'label': type_document.name,
+          'value': type_document.id
+        }));
+        resolve(typeDocuments);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+};
+
+const getRoles = async () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/role').then(
+      (result) => {
+        const roles = result.data.map((role) => ({
+          'label': role.name,
+          'value': role.id
+        }));
+        resolve(roles);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+}
+
 const ListUser = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllUsersQuery()
 
+  const [typeDocumentOptions, setTypeDocumentOptions] = useState([]);
+  const [roleOptions, setRoleOptions] = useState([]);
+
+  const fetchOptions = () => {
+    getTypeDocuments().then((options) => {
+      setTypeDocumentOptions(options);
+    });
+    getRoles().then((options) => {
+      setRoleOptions(options);
+    });
+  };
+
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
+
   useEffect(() => {
+    fetchOptions()
     refetch()
   }, [isAction])
   // ?
