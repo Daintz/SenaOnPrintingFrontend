@@ -6,7 +6,6 @@ import { useGetAllPaperCutsQuery } from '../../context/Api/Common'
 import { UpdateButtonPaperCuts } from './UpdatePaperCuts'
 import { ChangeStateButtonPaperCuts } from './ChangeStatePaperCuts'
 import { CreateButtonPaperCuts } from './CreatePaperCuts'
-import { DetailsButtonPaperCuts } from './DetailsPaperCuts'
 
 const ListPaperCuts = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -130,9 +129,6 @@ const ListPaperCuts = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtonPaperCuts
-                        paperCuts={row.original}
-                      />
                       <UpdateButtonPaperCuts
                         paperCuts={row.original}
                       />

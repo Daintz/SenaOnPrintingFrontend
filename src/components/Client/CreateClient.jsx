@@ -13,7 +13,7 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import clientAxios from '../../config/clientAxios'
 
-async function checkEmailExistence(email) {
+async function checkEmailExistence (email) {
   try {
     const response = await clientAxios.get('/Client')
     const clients = response.data
@@ -54,53 +54,10 @@ function CreateClient () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Cliente creado con exito')
+    toast.success('Cliente creado con exito', {
+      autoClose: 1000
+    })
   }
-
-  const inputs = [
-    {
-      key: 0,
-      name: 'name',
-      title: 'Nombre cliente',
-      type: 'text',
-      placeholder: 'Nombre'
-    },
-    {
-      key: 1,
-      name: 'phone',
-      title: 'Telefono cliente',
-      type: 'text',
-      placeholder: 'Telefono'
-    },
-    {
-      key: 2,
-      name: 'email',
-      title: 'Correo cliente',
-      type: 'text',
-      placeholder: 'Correo'
-    },
-    {
-      key: 3,
-      name: 'center',
-      title: 'Centro cliente',
-      type: 'text',
-      placeholder: 'Centro'
-    },
-    {
-      key: 4,
-      name: 'area',
-      title: 'Area cliente',
-      type: 'text',
-      placeholder: 'Area'
-    },
-    {
-      key: 5,
-      name: 'regional',
-      title: 'Regional cliente',
-      type: 'text',
-      placeholder: 'Regional'
-    }
-  ]
 
   return (
     <Formik
@@ -118,23 +75,123 @@ function CreateClient () {
       validationSchema={validationSchema}
     >
         <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          ))}
+        <div className="flex gap-5 mb-3">
+  <div className="w-1/2">
+    <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Nombre
+    </label>
+    <Field
+      type="text"
+      name="name"
+      id="name"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Nombre"
+    />
+    <ErrorMessage
+      name="name"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+  <div className="w-1/2">
+    <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Teléfono
+    </label>
+    <Field
+      type="text"
+      name="phone"
+      id="phone"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Teléfono"
+    />
+    <ErrorMessage
+      name="phone"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+</div>
+
+<div className="flex gap-5 mb-3">
+  <div className="w-full">
+    <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Correo
+    </label>
+    <Field
+      type="text"
+      name="email"
+      id="email"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Correo"
+    />
+    <ErrorMessage
+      name="email"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+</div>
+
+<div className="flex gap-5 mb-3">
+  <div className="w-full">
+    <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Centro
+    </label>
+    <Field
+      type="text"
+      name="center"
+      id="center"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Centro"
+    />
+    <ErrorMessage
+      name="center"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+</div>
+
+<div className="flex gap-5 mb-3">
+  <div className="w-full">
+    <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Área
+    </label>
+    <Field
+      type="text"
+      name="area"
+      id="area"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Área"
+    />
+    <ErrorMessage
+      name="area"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+</div>
+
+<div className="flex gap-5 mb-3">
+  <div className="w-full">
+    <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Regional
+    </label>
+    <Field
+      type="text"
+      name="regional"
+      id="regional"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      placeholder="Regional"
+    />
+    <ErrorMessage
+      name="regional"
+      component="div"
+      className="text-red-500"
+    />
+  </div>
+</div>
+
           <button
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
