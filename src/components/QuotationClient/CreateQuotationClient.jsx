@@ -1,4 +1,7 @@
-import { toast } from 'react-toastify'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
+import * as Yup from 'yup'
+import { usePostQuotationClientMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -6,107 +9,20 @@ import {
   setAction,
   setWidth
 } from '../../context/Slices/Modal/ModalSlice'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
-import { usePostQuotationClientMutation } from '../../context/Api/Common'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import clientAxios from '../../config/clientAxios'
-
-const quotationStatusOptions = [
-  { value: 1, label: 'En proceso' },
-  { value: 2, label: 'Aprobado' },
-  { value: 3, label: 'No aprobado' }
-]
+import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  orderDate: Yup.date().required('Campo requerido').test('valid-deliver-date', 'La fecha de entrega debe ser igual a la fecha actual', function (value) {
-    const currentDate = new Date()
-    const selectedDate = new Date(value)
-    // Compara si la fecha de entrega es igual a la fecha actual
-    return selectedDate.toDateString() === currentDate.toDateString()
-  }),
-  deliverDate: Yup.date().default(() => new Date()).required('Campo requerido').test('valid-date', 'La fecha debe ser posterior o igual a la fecha actual', function (value) {
-    const currentDate = new Date()
-    const selectedDate = new Date(value)
-    // Compara si la fecha seleccionada es mayor o igual a la fecha actual y si es del mismo día
-    return selectedDate >= currentDate || selectedDate.toDateString() === currentDate.toDateString()
-  }),
-  userId: Yup.number().required('Campo requerido'),
-  clientId: Yup.number().required('Campo requerido'),
-  typeServiceId: Yup.number().required('Campo requerido'),
-  quotationStatus: Yup.string().required('Campo requerido'),
+    orderDate: Yup.string().required('Campo requerido'),
+    deliverDate: Yup.string().required('Campo requerido'),
+    userId: Yup.string().required('Campo requerido'),
+    clientId: Yup.string().required('Campo requerido'),
+    typeServiceId: Yup.string().required('Campo requerido'),
 })
 
-const getClient = () => {
-  return new Promise((resolve, reject) => {
-    clientAxios.get('/Client').then(
-      (result) => {
-        const clients = result.data.map((client) => ({
-          'label': client.name,
-          'value': client.id
-        }))
-        resolve(clients)
-      },
-      (error) => {
-        reject(error)
-      }
-    );
-  });
-};
-const getUser = () => {
-  return new Promise((resolve, reject) => {
-    clientAxios.get('/user').then(
-      (result) => {
-        const User = result.data.map((user) => ({
-          'label': user.names,
-          'value': user.id
-        }))
-        resolve(User)
-      },
-      (error) => {
-        reject(error)
-      }
-    );
-  });
-};
-const getTypeService = () => {
-  return new Promise((resolve, reject) => {
-    clientAxios.get('/TypeServices').then(
-      (result) => {
-        const TypeService = result.data.map((typeServices) => ({
-          'label': typeServices.name,
-          'value': typeServices.id
-        }))
-        resolve(TypeService)
-      },
-      (error) => {
-        reject(error)
-      }
-    )
-  })
-}
-
 function CreateQuotationClient () {
-  const [clientsOptions, setClientsOptions] = useState([])
-  const [userOptions, setUserOptions] = useState([])
-  const [typeServiceOptions, setTypeServiceOptions] = useState([])
-
-  const fetchOptions = () => {
-    getClient().then((options) => {
-      setClientsOptions(options)
-    })
-    getUser().then((options) => {
-      setUserOptions(options)
-    })
-    getTypeService().then((options) => {
-      setTypeServiceOptions(options)
-    })
-  }
-
-  useEffect(() => {
-     const [createQuotationClient, { error, isLoading }] = usePostQuotationClientMutation()
+  const dispatch = useDispatch()
+  const [createQuotationClient, { error, isLoading }] = usePostQuotationClientMutation()
 
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
@@ -120,9 +36,6 @@ function CreateQuotationClient () {
     toast.success('Cotizacion creada con exito')
   }
 
- fetchOptions()
-  }, [])
-  const dispatch = useDispatch()
   const inputs = [
     {
       key: 0,
@@ -142,38 +55,29 @@ function CreateQuotationClient () {
       key: 2,
       name: 'userId',
       title: 'Usuario Id',
-      type: 'select',
-      data: userOptions,
+      type: 'number',
       placeholder: 'Usuario Id'
     },
+  
     {
       key: 3,
       name: 'clientId',
       title: 'Cliente Id',
-      type: 'select',
-      data: clientsOptions,
+      type: 'number',
       placeholder: 'Cliente Id'
     },
+  
     {
       key: 4,
       name: 'typeServiceId',
       title: 'Tipo de servicio Id',
-      type: 'select',
-      data: typeServiceOptions,
-      placeholder: 'Tipo de servicio Id'
-    },
-    {
-      key: 5,
-      name: 'quotationStatus',
-      title: 'Cotización',
-      type: 'select',
-      data: quotationStatusOptions,
+      type: 'number',
       placeholder: 'Tipo de servicio Id'
     }
   ]
 
   return (
-    <Formik
+   <Formik
       initialValues={{
         orderDate: '',
         deliverDate: '',

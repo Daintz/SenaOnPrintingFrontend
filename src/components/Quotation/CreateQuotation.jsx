@@ -14,15 +14,19 @@ import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 
-const quotationStatusOptions = [
-  { value: 1, label: 'En proceso' },
-  { value: 2, label: 'Aprobado' },
-  { value: 3, label: 'No aprobado' }
-]
-
 const validationSchema = Yup.object().shape({
-  orderDate: Yup.string().required('Campo requerido'),
-  deliverDate: Yup.string().required('Campo requerido'),
+  orderDate: Yup.date().required('Campo requerido').test('valid-deliver-date', 'La fecha de entrega debe ser igual a la fecha actual', function (value) {
+    const currentDate = new Date()
+    const selectedDate = new Date(value)
+    // Compara si la fecha de entrega es igual a la fecha actual
+    return selectedDate.toDateString() === currentDate.toDateString()
+  }),
+  deliverDate: Yup.date().default(() => new Date()).required('Campo requerido').test('valid-date', 'La fecha debe ser posterior o igual a la fecha actual', function (value) {
+    const currentDate = new Date()
+    const selectedDate = new Date(value)
+    // Compara si la fecha seleccionada es mayor o igual a la fecha actual y si es del mismo día
+    return selectedDate >= currentDate || selectedDate.toDateString() === currentDate.toDateString()
+  }),
   quotationStatus: Yup.string().required('Campo requerido'),
   userId: Yup.string().required('Campo requerido'),
   clientId: Yup.string().required('Campo requerido'),
@@ -87,10 +91,46 @@ const getTypeService = () => {
   })
 }
 
-function CreateQuotation () {
+const getQuotationClient = () => {
+  return new Promise((resolve, reject)=> {
+    clientAxios.get('/QuotationClient').then(
+      (result)=> {
+        const QuotationClient = result.data.map((quotationClient) => ({
+          'label':quotationClient.id,
+          'value': quotationClient.id 
+        }))
+        resolve(QuotationClient)
+      },
+      (error)=> {
+        reject(error)
+      }
+    )
+  })
+}
+
+const getProduct = () => {
+  return new Promise((resolve, reject)=> {
+    clientAxios.get('/Product').then(
+      (result)=> {
+        const Product = result.data.map((product)=> ({
+          'label': product.name,
+          'value': product.id
+        }))
+        resolve(Product)
+      },
+      (error)=> {
+        reject(error)
+      }
+    )
+  })
+}
+
+function CreateQuotation() {
   const [clientsOptions, setClientsOptions] = useState([])
   const [userOptions, setUserOptions] = useState([])
   const [typeServiceOptions, setTypeServiceOptions] = useState([])
+  const [quotationclientOptions, setQuotationclientOptions] = useState([])
+  const [productOptions, setProductOptions] = useState([])
 
   const fetchOptions = () => {
     getClient().then((options) => {
@@ -102,7 +142,14 @@ function CreateQuotation () {
     getTypeService().then((options) => {
       setTypeServiceOptions(options)
     })
+    getQuotationClient().then((options) => {
+      setQuotationclientOptions(options)
+    })
+    getProduct().then((options) => {
+      setProductOptions(options)
+    })
   }
+ 
 
   useEffect(() => {
     fetchOptions()
@@ -129,151 +176,22 @@ function CreateQuotation () {
     if (!clientError && !detailError) {
       dispatch(closeModal())
     }
-    toast.success('Cotización creada con éxito',  {
+    toast.success('Cotización creada con éxito', {
       autoClose: 100
     })
   }
-  const handleAddDetail = () => {
-    setQuotationDetails((prevDetails) => [
-      ...prevDetails,
-      {
-        // Propiedades del detalle de cotización
-      }
-    ])
-  }
-  const clientInputs = [
-    {
-      key: 0,
-      name: 'orderDate',
-      title: 'Fecha de orden',
-      type: 'date',
-      placeholder: 'Fecha de orden'
-    },
-    {
-      key: 1,
-      name: 'deliverDate',
-      title: 'Fecha de entrega',
-      type: 'date',
-      placeholder: 'Fecha de entrega'
-    },
-    {
-      key: 2,
-      name: 'userId',
-      title: 'Usuario Id',
-      type: 'select',
-      data: userOptions,
-      placeholder: 'Usuario Id'
-    },
-    {
-      key: 3,
-      name: 'clientId',
-      title: 'Cliente Id',
-      type: 'select',
-      data: clientsOptions,
-      placeholder: 'Cliente Id'
-    },
-    {
-      key: 4,
-      name: 'typeServiceId',
-      title: 'Tipo de servicio Id',
-      type: 'select',
-      data: typeServiceOptions,
-      placeholder: 'Tipo de servicio Id'
-    },
-    {
-      key: 5,
-      name: 'quotationStatus',
-      title: 'Cotización',
-      type: 'select',
-      data: quotationStatusOptions,
-      placeholder: 'Tipo de servicio Id'
-    }
-
-  ]
-  const detailInputs = [
-    {
-      key: 6,
-      name: 'technicalSpecifications',
-      title: 'Especificaciones tecnicas',
-      type: 'text',
-      placeholder: 'Especificaciones tecnicas'
-    },
-    {
-      key: 7,
-      name: 'productHeight',
-      title: 'Altura del producto',
-      type: 'number',
-      placeholder: 'Altura del producto'
-    },
-    {
-      key: 8,
-      name: 'productWidth',
-      title: 'Ancho del producto',
-      type: 'number',
-      placeholder: 'Ancho del producto'
-    },
-    {
-      key: 9,
-      name: 'numberOfPages',
-      title: 'Numero de paginas',
-      type: 'number',
-      placeholder: 'Numero de paginas'
-    },
-    {
-      key: 10,
-      name: 'inkQuantity',
-      title: 'Cantidad de tinta',
-      type: 'number',
-      placeholder: 'Cantidad de tinta'
-    },
-    {
-      key: 11,
-      name: 'productQuantity',
-      title: 'Cantidad de producto',
-      type: 'number',
-      placeholder: 'Cantidad de producto'
-    },
-    {
-      key: 12,
-      name: 'unitValue',
-      title: 'Valor unico',
-      type: 'number',
-      placeholder: 'Valor unico'
-    },
-    {
-      key: 13,
-      name: 'fullValue',
-      title: 'Valor total',
-      type: 'number',
-      placeholder: 'Valor total'
-    },
-    {
-      key: 14,
-      name: 'quotationClientId',
-      title: 'Cotizacion Cliente Id',
-      type: 'number',
-      placeholder: 'Cotizacion Cliente Id'
-    },
-    {
-      key: 15,
-      name: 'productId',
-      title: 'Producto Id',
-      type: 'number',
-      placeholder: 'Producto Id'
-    }
-  ]
   return (
     <Formik
       initialValues={{
-        orderDate: '',  
+        orderDate: '',
         deliverDate: '',
-        quotationStatus: 0,
-        userId: 0,
-        clientId: 0,
-        typeServiceId: 0,
+        quotationStatus: '',
+        userId: '',
+        clientId: '',
+        typeServiceId: '',
         quotationClientId: '',
         productId: '',
-        technicalSpecifications: '',
+        technicalSpecifications: 0,
         productHeight: '',
         productWidth: '',
         numberOfPages: '',
@@ -284,90 +202,443 @@ function CreateQuotation () {
       }}
       onSubmit={(values) => {
         handleSubmit(values)
+       // const result = values.unitValue * values.productQuantity;
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {clientInputs.map(input => {
-            return input.type == "select" ?
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <br />
-              <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
-                <option value="0">Seleccione {input.title}</option>
-                {input.data.map(option => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
+      {({ setFieldValue }) => (
+        <Form>
+          <div className="flex linea-horizontal mb-2">
+            <div className="w-1/2">
+            <b>Codigo: </b>
+            </div>
+          </div>
+          <hr className="mb-4" />
+          <div className="flex gap-5 grid-cols-5 mb-3">
+            <div className="w-2/4">
+              <label htmlFor="orderDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Fecha de Incio <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="date"
+                name="orderDate"
+                id="orderDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Drive"
+              />
+               <ErrorMessage
+                name="orderDate"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-2/4">
+              <label htmlFor="deliverDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Fecha de Entrega <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="date"
+                name="deliverDate"
+                id="deliverDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Libreta"
+              />
+               <ErrorMessage
+                name="deliverDate"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+            <div className="w-1/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Usuario <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                as="select"
+                name="userId"
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                {userOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
               </Field>
               <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>:
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-})}
-          <title>COTIZACION DETALLE</title>
-       <button
-  type="button"
-  onClick={handleAddDetail}
-  className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
->
-  Agregar detalle de cotización
-</button>
-{quotationDetails.map((detail, index) => (
-  <div key={index}>
-    {detailInputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-    ))}
-    
-  </div>
-))}
+                name="userId"
 
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="clientId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Cliente <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                as="select"
+                name="clientId"
+                id="clientId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                  {clientsOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+              </Field>
+              <ErrorMessage
+                name="clientId"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="typeServiceId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Tipo de Servicio <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="typeServiceId"
+                id="typeServiceId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                   {typeServiceOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+          ))}
+              </Field>
+              <ErrorMessage
+                name="typeServiceId"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Maquina <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="campo2"
+                id=""
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                // ? aqui van los campos del select
+              </Field>
+            </div>
+          </div>
+          <div>
+          <br></br>
+          <p><b className='text-black-700 text-justify'>COTIZACION DETALLES</b></p>
+          <br></br>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+              type="text"
+                as="select"
+                name="productId"
+                id="productId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                {productOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+            {option.label}
+            </option>
+             ))}
+              </Field>
+              <ErrorMessage
+                name="productId"
+                component="div"
+                className="text-red-500"
+              />
+              </div>
+          <div className="w-2/4">
+              <label htmlFor="technicalSpecifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Especificaciones tecnicas  <b className="text-red-700">*</b>
+              </label>
+              <textarea
+                type="text"
+                name="technicalSpecifications"
+                id="technicalSpecifications"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                rows="6" cols="40"
+                placeholder="El producto contara..."
+              />
+               <ErrorMessage
+                name="technicalSpecifications"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            
+
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+            <div className="w-1/4">
+              <label htmlFor="productHeight" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Altura del producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productHeight"
+                id="productHeight"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="productHeight"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="productWidth" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Ancho del producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productWidth"
+                id="productWidth"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+       <ErrorMessage
+                name="productWidth"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="numberOfPages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Numero de paginas <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="numberOfPages"
+                id="numberOfPages"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="numberOfPages"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="inkQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Cantidad de tinta <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="inkQuantity"
+                id="inkQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="inkQuantity"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="productQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Cantidad de producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productQuantity"
+                id="productQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+              <ErrorMessage
+              name="productQuantity"
+              component="div"
+              className="text-red-500"
+              />
+            </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="unitValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Valor unico <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="unitValue"
+                id="unitValue"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="unitValue"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-2/4">
+              <label htmlFor="fullValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Valor total <b className="text-red-700">*</b>
+              </label>
+              <Field
+               type="number"
+               name="fullValue"
+               id="fullValue"
+               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+               placeholder="1.0.5"
+              />
+              <ErrorMessage
+              name="fullValue"
+              component="div"
+              className="text-red-500"
+              />
+            </div>
+          </div>
+
+
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Cotizacion CLiente <b className="text-red-700">*</b>
+              </label>
+              <Field
+              type="number"
+                as="select"
+                name="quotationClientId"
+                id="quotationClientId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                 {quotationclientOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+            {option.label}
+            </option>
+            ))}
+              </Field>
+              <ErrorMessage
+                name="quotationClientId"
+       
+                component="div"
+                className="text-red-500"
+              />
+              </div>
+          <div className="w-2/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Acabados <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="userId"
+                data= {userOptions}
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                // ? aqui van los campos del select
+              </Field>
+              </div>
+          <div className="w-2/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Sustratos <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="userId"
+                data= {userOptions}
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                // ? aqui van los campos del select
+              </Field>
+              </div>
+          <div className="w-2/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Gramaje <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="userId"
+                data= {userOptions}
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                // ? aqui van los campos del select
+              </Field>
+              </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-1/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Estado de la Cotizacion <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="select"
+                name="quotationStatus"
+                id="quotationStatus"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                <option value={0}>Seleccione</option>
+                <option value={1}>En proceso</option>
+                <option value={2}>Aprobado</option>
+                <option value={3}>No Aprobado</option>
+              </Field>
+              <ErrorMessage
+                name="quotationStatus"
+       
+                component="div"
+                className="text-red-500"
+              />
+              </div>
+          </div>
+            <center>
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="col-span-3 w-50% text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Cotizacion
+            Crear orden de producción
           </button>
+          </center>
         </Form>
+      )}
     </Formik>
   )
 }
-
-export function CreateButtomQuotation () {
+export function CreateButtomQuotation() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: 'w-1500px' }))
     dispatch(openModal({ title: 'Crear Cotizacion Cliente' }))
     dispatch(setAction({ action: 'creating' }))
   }
@@ -379,7 +650,7 @@ export function CreateButtomQuotation () {
       type="button"
       onClick={() => handleOpen()}
     >
-    <svg
+      <svg
         className="h-3.5 w-3.5 mr-2"
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -396,5 +667,4 @@ export function CreateButtomQuotation () {
     </button>
   )
 }
-
 export default CreateQuotation
