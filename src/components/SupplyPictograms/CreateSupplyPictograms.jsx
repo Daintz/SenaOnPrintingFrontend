@@ -11,68 +11,50 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
+import { data } from 'autoprefixer'
 
 
 const validationSchema = Yup.object().shape({
   code: Yup.string().required('Campo requerido'),
   name: Yup.string().required('Campo requerido'),
   description: Yup.string().required('Campo requerido'),
-  pictogrmFile:Yup.string().required('Campo requerido')
+  pictogramFile:Yup.string().required('Campo requerido')
 })
 
 function CreateSupplyPictograms () {
   const dispatch = useDispatch()
   const [createSupplyPictograms, { error, isLoading }] = usePostSupplyPictogramsMutation()
-
+  const [previewImage, setPreviewImage] = useState(null);
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    if (error) return <Error type={error.status} message={error.error} />
-
-    await createSupplyPictograms(values)
-
+    const formData = new FormData();
+      formData.append('code', values.code);
+      formData.append('name', values.name);
+      formData.append('description', values.description);
+      formData.append('pictogramFileInfo', values.pictogramFile);
+      for(var num of formData.entries()){
+        console.log(num)
+      }
+    await createSupplyPictograms(formData);
     dispatch(changeAction())
     if(!error){
       dispatch(closeModal())
     }
 
-    toast.success('Cotización a clientes creada con exito')
+    toast.success('Pictograma creado con exito', {autoClose: 1000})
   }
-
-  const inputs = [
-    {
-      key: 0,
-      name: 'code',
-      title:'codigo',
-      type:'text',
-      placeholder:'Codigo del pictograma'
-
-    },
-    {
-      key: 1,
-      name: 'name',
-      title:'Nombre',
-      type:'text',
-      placeholder:'Nombre del pictograma'
-
-    },
-    {
-      key: 2,
-      name: 'description',
-      title:'Descripcion',
-      type:'text',
-      placeholder:'Descripcion del pictograma'
-
-    },
-    {
-      key: 3,
-      name: 'pictogrmFile',
-      title:'Documento',
-      type:'text',
-      placeholder:'Documento del pictograma'
-
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  ]
+  };
 
   return (
     <Formik
@@ -80,32 +62,76 @@ function CreateSupplyPictograms () {
       code: '',
       name:'',
       description:'',
-      pictogrmFile:0
+      pictogramFile:''
 
       }}
       onSubmit={(values) => {
+        console.log(values)
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-        {inputs.map(input => (
-          <div key={input.key}>
-            <label htmlFor={input.name}>{input.title}</label>
-            <Field
-              type={input.type}
-              name={input.name}
-              id={input.name}
-              placeholder={input.placeholder}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      {({setFieldValue})=>(
+        <Form className="space-y-6">
+        <label
+          htmlFor="code"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+        >
+          Codigo
+        </label>
+        <Field
+          type="text"
+          name="code"
+          id="code"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          placeholder="Codigo del pictograma"
+        />
+        <label
+          htmlFor="name"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+        >
+          Nombre
+        </label>
+        <Field
+          type="text"
+          name="name"
+          id="name"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          placeholder="Nombre del pictograma"
+        />
+         <label
+          htmlFor="description"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+        >
+          Descripción
+        </label>
+        <Field
+          type="text"
+          name="description"
+          id="description"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          placeholder="Descripción del pictograma"
+        />
+        <div>
+        <label
+              htmlFor="pictogramFile"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            >
+              Imagen del pictograma
+            </label>
+            {previewImage && <img src={previewImage} alt="Preview" width={100} height={100} />}
+            <input
+              type="file"
+              name="pictogramFile"
+              id="pictogramFile"
+              placeholder="Descripción"
+              onChange={event => {
+                setFieldValue("pictogramFile", event.target.files[0]);
+                handleFileChange(event);
+              }}
             />
-            <ErrorMessage
-              name={input.name}
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-        ))}
+        </div>
+
         <button
           type="submit"
           className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -113,6 +139,7 @@ function CreateSupplyPictograms () {
           Crear Pictograma
         </button>
       </Form>
+      )}
     </Formik>
   )
 }

@@ -1,7 +1,6 @@
 import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
 import ListSupplyPictograms from '../../components/SupplyPictograms/ListSupplyPictograms'
-import UpdateSupplyPictograms from '../../components/SupplyPictograms/UpdateSupplyPictogrmas'
 import CreateSupplyPictograms from '../../components/SupplyPictograms/CreateSupplyPictograms'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 import DetailsSupplyPictograms from '../../components/SupplyPictograms/DetailsSypplyPictograms'
@@ -19,7 +18,6 @@ const SupplyPictograms = () => {
         </ErrorBoundary>
         {/* Esta logica del modal esta acá para poder ser reutilizable */}
         <NewModal>
-          {action === 'editing' ? <UpdateSupplyPictograms /> : undefined}
           {action === 'creating' ? <CreateSupplyPictograms /> : undefined}
           {action === 'details' ? <DetailsSupplyPictograms /> : undefined}
           {action === 'changing' ? <ChangeStateSupplyPictograms /> : undefined}
