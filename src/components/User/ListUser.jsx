@@ -8,7 +8,7 @@ import { CreateButtomUser } from './CreateUser'
 import { UpdateButtomUser } from './UpdateUser'
 import clientAxios from '../../config/clientAxios'
 
-const getTypeDocuments = () => {
+const getTypeDocuments = async () => {
   return new Promise((resolve, reject) => {
     clientAxios.get('/type_document').then(
       (result) => {
@@ -71,8 +71,7 @@ const ListUser = () => {
 
   const columns = useMemo(() => [
     {Header: 'Numero de Documento', accessor: 'documentNumber'},
-    {Header: 'Tipo de Documento', accessor: 'typeDocumentId',
-      Cell: ({value}) => (typeDocumentOptions.filter(type_document => type_document.value == value)[0].label)},
+    {Header: 'Tipo de Documento', accessor: 'typeDocumentId'},
     {Header: 'Nombres', accessor: 'names'},
     {Header: 'Apellidos', accessor: 'surnames'},
     {Header: 'Correo Electronico', accessor: 'email'},

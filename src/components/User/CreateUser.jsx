@@ -6,13 +6,13 @@ import {
   setAction,
   setWidth
 } from '../../context/Slices/Modal/ModalSlice'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react' // Importar useState para mostrar los nombres
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import { usePostUserMutation } from '../../context/Api/Common'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import clientAxios from '../../config/clientAxios'
+import clientAxios from '../../config/clientAxios' // Importar clientAxios para poder hacer la consulta
 
 const validationSchema = Yup.object().shape({
   names: Yup.string().required('Campo requerido'),
