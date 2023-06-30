@@ -77,21 +77,40 @@ function CreateQuotationClient () {
   ]
 
   return (
-    <Formik
+   <Formik
       initialValues={{
         orderDate: '',
         deliverDate: '',
+        quotationStatus: 0,
         userId: '',
         clientId: '',
-        typeServiceId: ''
+        typeServiceId: '',
+
       }}
       onSubmit={(values) => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {inputs.map(input => (
+       <Form className="space-y-6">
+        {inputs.map(input => {
+          return input.type == "select" ?
+            <div key={input.key}>
+              <label htmlFor={input.name}>{input.title}</label>
+              <br />
+              <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+                <option value="0">Seleccione {input.title}</option>
+                {input.data.map(option => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name={input.name}
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            :
             <div key={input.key}>
               <label htmlFor={input.name}>{input.title}</label>
               <Field
@@ -107,14 +126,17 @@ function CreateQuotationClient () {
                 className="text-red-500"
               />
             </div>
-          ))}
-          <button
-            type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Crear Cotizacion
-          </button>
-        </Form>
+        })
+
+        }
+
+        <button
+          type="submit"
+          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Crear Cotizacion
+        </button>
+      </Form>
     </Formik>
   )
 }

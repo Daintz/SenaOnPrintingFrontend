@@ -84,6 +84,7 @@ export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 
+
 export const {
     useGetAllQuery: useGetAllSupplyCategoryQuery,
     useGetByIdQuery: useGetSupplyCategoryByIdQuery,
