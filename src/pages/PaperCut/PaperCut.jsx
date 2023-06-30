@@ -4,7 +4,6 @@ import ListPaperCuts from '../../components/PaperCuts/ListPaperCuts'
 import UpdatePaperCuts from '../../components/PaperCuts/UpdatePaperCuts'
 import CreatePaperCuts from '../../components/PaperCuts/CreatePaperCuts'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
-import DetailsPaperCuts from '../../components/PaperCuts/DetailsPaperCuts'
 import ChangeStatePaperCuts from '../../components/PaperCuts/ChangeStatePaperCuts'
 
 const PaperCuts = () => {
@@ -21,7 +20,6 @@ const PaperCuts = () => {
         <NewModal>
           {action === 'editing' ? <UpdatePaperCuts /> : undefined}
           {action === 'creating' ? <CreatePaperCuts /> : undefined}
-          {action === 'details' ? <DetailsPaperCuts /> : undefined}
           {action === 'changing' ? <ChangeStatePaperCuts /> : undefined}
         </NewModal>
       </div>
