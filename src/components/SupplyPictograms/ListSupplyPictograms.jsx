@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyPictogramsQuery } from '../../context/Api/Common'
-import { UpdateButtomSupplyPictograms } from './UpdateSupplyPictograms'
 import { ChangeStateButtonSupplyPictograms } from '../SupplyPictograms/ChangeStatedSupplyPictograms'
 import { CreateButtomSupplyPictograms } from '../SupplyPictograms/CreateSupplyPictograms'
 import { DetailsButtomSupplyPictograms } from '../SupplyPictograms/DetailsSypplyPictograms'
@@ -161,9 +160,8 @@ const ListSupplyPictograms = () => {
                       <DetailsButtomSupplyPictograms
                         supplyPictograms={row.original}
                       />
-                      <UpdateButtomSupplyPictograms
-                        supplyPictograms={row.original}
-                      />
+    
+                      
                       <ChangeStateButtonSupplyPictograms
                         supplyPictograms={row.original}
                       />

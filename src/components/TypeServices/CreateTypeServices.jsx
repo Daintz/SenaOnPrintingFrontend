@@ -46,22 +46,12 @@ function CreateTypeServices () {
       placeholder:'Nombre del tipo de servicio'
 
     },
-    {
-      key: 1,
-      name: 'costo',
-      title:'Costo',
-      type:'number',
-      placeholder:'Costo del tipo de servicio'
-
-    },
-
   ]
 
   return (
     <Formik
       initialValues={{
-      name: '',
-      costo:'',
+      name: ''
 
       }}
       onSubmit={(values) => {

@@ -37,15 +37,13 @@ function CreateSupplyPictograms () {
       for(var num of formData.entries()){
         console.log(num)
       }
-      await createSupplyPictograms(formData);
-    
+    await createSupplyPictograms(formData);
     dispatch(changeAction())
-    
     if(!error){
       dispatch(closeModal())
     }
 
-    toast.success('Pictograma creado con exito')
+    toast.success('Pictograma creado con exito', {autoClose: 1000})
   }
   const handleFileChange = event => {
     const file = event.target.files[0];
@@ -68,8 +66,8 @@ function CreateSupplyPictograms () {
 
       }}
       onSubmit={(values) => {
+        console.log(values)
         handleSubmit(values)
-        
       }}
       validationSchema={validationSchema}
     >
