@@ -27,7 +27,10 @@ function UpdateUnit () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Maquina actualizado con exito')
+    toast.success('Unidad  actualizado con exito',{
+      autoClose:1000
+
+    })
   }
 
   const inputs = [
@@ -79,7 +82,7 @@ function UpdateUnit () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-        crear Maquina
+       Actualizar unidad 
           </button>
         </Form>
     </Formik>
@@ -90,7 +93,7 @@ export function UpdateButtomUnit ({ unitMesure }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: '-[1500px]' }))
     dispatch(openModal({ title: 'Editar Unidad' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: unitMesure }))

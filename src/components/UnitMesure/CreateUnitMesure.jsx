@@ -16,7 +16,6 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
   abbreviation: Yup.string().required('Campo requerido'),
   type: Yup.number().required('Campo requerido'),
-  baseId: Yup.number(),
   conversionFactor: Yup.number().required('Campo requerido'),
  
 })
@@ -34,7 +33,10 @@ function CreateUnit () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Unidad creado con exito')
+    toast.success('Unidad creado con exito',{
+      autoClose:1000
+
+    })
   }
 
   const inputs = [
@@ -61,7 +63,7 @@ function CreateUnit () {
     },
 
     {
-      key: 4,
+      key: 3,
       name: 'conversionFactor',
       title: 'Conversacion factor',
       type: 'number',
@@ -77,7 +79,6 @@ function CreateUnit () {
         name:'',
         abbreviation: '',
         type: '',
-        baseId: '',
         conversionFactor: '',
 
         
@@ -109,7 +110,7 @@ function CreateUnit () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Maquinas
+            Crear Unidad
           </button>
         </Form>
     </Formik>
@@ -120,8 +121,8 @@ export function CreateButtomUnit () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Crear Unit' }))
+    dispatch(setWidth({ width: '-[1500px]' }))
+    dispatch(openModal({ title: 'Crear Unidad' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?

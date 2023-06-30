@@ -104,6 +104,7 @@ console.log(dataApi)
       // validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
+        
         <Form>
           <div className="flex linea-horizontal mb-2 grid-cols-4">
           {dataApi.map((data, index) => (
