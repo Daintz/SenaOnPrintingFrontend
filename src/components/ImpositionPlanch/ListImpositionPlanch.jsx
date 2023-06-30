@@ -2,25 +2,22 @@ import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllImpositionPlanchsQuery } from '../../context/Api/Common'
-import ChangeStateImpositionPlanch from './ChangeStateImpositionPlanch'
-import { CreateButtomImpositionPlanch } from './CreateImpositionPlanch'
 import { UpdateButtomImpositionPlanch } from './UpdateImpositionPlanch'
-
+import { ChangeStateButtonImpositionPlanch } from './ChangeStateImpositionPlanch'
+import { CreateButtomImpositionPlanch } from './CreateImpositionPlanch'
 
 const ListImpositionPlanch = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllImpositionPlanchsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
-  const { isAction } = useSelector(state => state.modal)
+  const { isAction } = useSelector((state) => state.modal)
   useEffect(() => {
     refetch()
   }, [isAction])
-  // ?
 
   const columns = useMemo(() => [
-    { Header: 'Nombre imposición', accessor: 'name' },
-    { Header: 'Esquema imposición', accessor: 'scheme' },
+    { Header: 'Imposición plancha', accessor: 'name' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -90,7 +87,7 @@ const ListImpositionPlanch = () => {
                   type="text"
                   id="simple-search"
                   className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-                  placeholder="Buscar"
+                  placeholder="Search"
                   value={globalFilter || ''}
                   onChange={e => setGlobalFilter(e.target.value)}
                 />
@@ -133,7 +130,7 @@ const ListImpositionPlanch = () => {
                       <UpdateButtomImpositionPlanch
                         impositionPlanch={row.original}
                       />
-                      <ChangeStateImpositionPlanch
+                      <ChangeStateButtonImpositionPlanch
                         impositionPlanch={row.original}
                       />
                     </td>

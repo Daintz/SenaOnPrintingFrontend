@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -18,18 +19,21 @@ const Login = () => {
     await clientAxios.post('/auth/login', { email, password }).then((response) => {
       return response.data
     }).then((resp) => {
-      alert(resp.message)
+      //alert(resp.message)
       if (resp.token.length !== 0) {
         sessionStorage.setItem('session_token', resp.token)
+        toast.success(resp.message)
         usenavigate('/dashboard')
       }
     }).catch((err) => {
-      alert(err.response.data.message)
+      toast.error(err.response.data.message)
+      //alert(err.response.data.message)
     })
   }
 
   return (
-        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+    <>
+    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
               <div className="flex flex-col items-center justify-center">
                 <img src="https://oficinavirtualderadicacion.sena.edu.co/oficinavirtual/Resources/logoSenaNaranja.png" alt="Logo" className="mb-2 w-20 h-20" />
@@ -68,6 +72,12 @@ const Login = () => {
                             required
                         />
                     </div>
+                    <Link
+                      className='mt-6 mb-6'
+                      to={"/olvide_contraseña"}
+                    >
+                      <a className='text-blue'>Olvide mi Contraseña</a>
+                    </Link>
                     <div className="mt-6">
                         <button className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Iniciar Sesion
@@ -76,6 +86,8 @@ const Login = () => {
                 </form>
             </div>
         </div>
+        <ToastContainer />
+    </>
   )
 }
 

@@ -20,8 +20,8 @@ const ListGrammageCaliber = () => {
   // ?
 
   const columns = useMemo(() => [
-    { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Tipo gramaje', accessor: 'type' },
+    { Header: 'Grammaje y/o Calibre', accessor: 'name' },
+    { Header: 'Tipo', accessor: 'type' },
     {
       Header: 'Estado',
       accessor: 'statedAt',

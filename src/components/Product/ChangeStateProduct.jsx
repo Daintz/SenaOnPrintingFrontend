@@ -18,7 +18,9 @@ function ChangeStateProduct () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Producto cambio de estado con exito')
+    toast.success('Producto cambio de estado con exito', {
+      autoClose: 1000 // Duración de 1 segundos
+    })
   }
 
   const handle = async () => {
@@ -40,7 +42,7 @@ function ChangeStateProduct () {
 export function ChangeStateButtonProduct ({ product }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
-    dispatch(setWidth({ width: '800px' }))
+    dispatch(setWidth({ width: 'w-[1500px]' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: product }))

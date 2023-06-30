@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Provider from '../pages/Provider/Provider'
-import Warehausetype from '../pages/Warehausetype/Warehausetype'
+import WarehauseType from '../pages/Warehausetype/Warehausetype'
 import Warehause from '../pages/Warehause/Warehause'
 import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
@@ -19,6 +19,8 @@ import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
 import Login from '../pages/Login/Login'
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword'
+import ForgotPasswordEmail from '../pages/ForgotPassword/ForgotPasswordEmail'
 import Client from '../pages/Clients/Clients'
 import Substrate from '../pages/Substrate/Substrate'
 import PaperCut from '../pages/PaperCut/PaperCut'
@@ -27,8 +29,8 @@ import Lineature from '../pages/Lineature/Lineature'
 import ImpositionPlanch from '../pages/ImpositionPlanch/ImpositionPlanch'
 import OrderProduction from '../pages/OrderProduction/OrderProduction'
 import TypeServices from '../pages/TypeServices/TypeServices'
-import SupplyPictogrmas from '../pages/SupplyPictogrmas/SupplyPictogrmas'
-import QuotationProviders from '../pages/QuptationProviders/QuotitationProviders'
+import SupplyPictogrmas from '../pages/SupplyPictograms/SupplyPictograms'
+import QuotationProviders from '../pages/QuotationProviders/QuotationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
 import Quotation from '../pages/Quotation/Quotation'
@@ -43,13 +45,16 @@ const router = createBrowserRouter(
         </DashboardLayout>} />
       <Route path="warehausetype"
         element={<DashboardLayout>
-          <Warehausetype />
+          <WarehauseType />
         </DashboardLayout>} />
       <Route path="warehause"
         element={<DashboardLayout>
           <Warehause />
         </DashboardLayout>} />
+       
       <Route path="/" element={<Login />} />
+      <Route path="/olvide_contraseña" element={<ForgotPasswordEmail />} />
+      <Route path="/restaurar_contraseña" element={<ForgotPassword />} />
       <Route
         path="dashboard"
         element={

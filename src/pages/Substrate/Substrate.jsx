@@ -4,7 +4,6 @@ import ListSubstrates from '../../components/Substrates/ListSubstrates'
 import UpdateSubstrates from '../../components/Substrates/UpdateSubstrates'
 import CreateSubstrates from '../../components/Substrates/CreateSubstrates'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
-import DetailsSubstrates from '../../components/Substrates/DetailsSubstrates'
 import ChangeStateSubstrates from '../../components/Substrates/ChangeStateSubstrates'
 
 const Substrates = () => {
@@ -21,7 +20,6 @@ const Substrates = () => {
         <NewModal>
           {action === 'editing' ? <UpdateSubstrates /> : undefined}
           {action === 'creating' ? <CreateSubstrates /> : undefined}
-          {action === 'details' ? <DetailsSubstrates /> : undefined}
           {action === 'changing' ? <ChangeStateSubstrates /> : undefined}
         </NewModal>
       </div>

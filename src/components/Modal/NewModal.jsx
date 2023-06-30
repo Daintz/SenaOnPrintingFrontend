@@ -19,7 +19,7 @@ function NewModal ({ children }) {
             aria-hidden="true"
             className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto bg-gray-700 bg-opacity-70"
           >
-            <div className={`relative w-[${width}]`}>
+            <div className={`relative ${width}`}>
               <div className="relative bg-white rounded-lg shadow-2xl0">
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                   <h3 className="text-xl font-semibold text-gray-900 lg:text-2xl">

@@ -12,8 +12,25 @@ import {
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 
+import clientAxios from '../../config/clientAxios'
+
+async function checkNameExistence (name) {
+  try {
+    const response = await clientAxios.get('/Substrates')
+    const substrates = response.data
+    const nameExists = substrates.some(substrates => substrates.name === name)
+
+    return { exists: nameExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del nombre:', error)
+    return { exists: false }
+  }
+}
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido').min(3, 'El sustrato debe tener menos de 3 letras/digitos').max(30, 'El sustrato no puede tener más de 30 letras/digitos').test('unique-name', 'El sustrato ya está en uso', async function (value) {
+    const response = await checkNameExistence(value)
+    return !response.exists // Devuelve false si el nombre ya existe
+  })
 })
 
 function CreateSubstrates () {

@@ -10,11 +10,11 @@ import { toast } from 'react-toastify'
 import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
+  names: Yup.string().required('Campo requerido'),
   surnames: Yup.string().required('Campo requerido'),
   typeDocumentId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de documento'),
-  documentNumber: Yup.number().min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido'),
-  phone: Yup.number().min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido'),
+  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   address: Yup.string().required('Campo requerido'),
   email: Yup.string().email().required('Campo requerido'),
   roleId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un rol'),
@@ -166,7 +166,7 @@ export function UpdateButtomUser ({ user }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: 'w-[1000]' }))
     dispatch(openModal({ title: 'Editar Usuario' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))

@@ -1,18 +1,18 @@
 import { usePutImpositionPlanchByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal, setAction } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
+import { useState, useEffect } from 'react'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  scheme: Yup.string().required('Campo requerido')
 })
 
-function UpdateImpositionPlanch () {
+function updateImpositionPlanch() {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
   const [updateImpositionPlanch, { error, isLoading }] = usePutImpositionPlanchByIdMutation()
@@ -20,28 +20,26 @@ function UpdateImpositionPlanch () {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
+
     await updateImpositionPlanch(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Imposición plancha actualizada con exito')
-
+    toast.success('Imposición plancha actualizada con exito', {
+      autoClose: 1000
+    })
   }
-
   const inputs = [
-    { key: 0, name: 'name', title: 'Nombre imposición', type: 'text', placeholder: 'Giro pinza' },
-    { key: 1, name: 'scheme', title: 'Descripción categoria insumo', type: 'text', placeholder: 'Descripción' }
+    { key: 0, name: 'name', title: 'Imposición', type: 'text'},
   ]
-
   return (
     <Formik
       initialValues={{
         id: editingData.id,
-        name: editingData.name,
-        scheme: editingData.scheme
+        name: editingData.name
       }}
-      onSubmit={(values) => {
-        handleSubmit(values)
+      onSubmit={(values, { setSubmitting }) => {
+        handleSubmit(values, setSubmitting);
       }}
       validationSchema={validationSchema}
     >
@@ -74,11 +72,13 @@ function UpdateImpositionPlanch () {
   )
 }
 
-export function UpdateButtomImpositionPlanch ({ impositionPlanch }) {
+export function UpdateButtomImpositionPlanch({ impositionPlanch }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(openModal({ title: 'Editar imposición' }))
+    dispatch(setWidth({ width: '1500px' }))
+    dispatch(openModal({ title: 'Editar categoria de insumos' }))
+    dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?
@@ -105,4 +105,4 @@ export function UpdateButtomImpositionPlanch ({ impositionPlanch }) {
   )
 }
 
-export default UpdateImpositionPlanch
+export default updateImpositionPlanch

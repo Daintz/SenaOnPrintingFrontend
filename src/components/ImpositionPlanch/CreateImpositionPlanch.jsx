@@ -6,90 +6,69 @@ import {
   changeAction,
   closeModal,
   openModal,
-  setAction
+  setAction,
+  setWidth
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  scheme: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido')
 })
 
 function CreateImpositionPlanch() {
   const dispatch = useDispatch()
   const [createImpositionPlanch, { error, isLoading }] = usePostImpositionPlanchMutation()
-
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
-    await createImpositionPlanch(values)
+      await createImpositionPlanch(values);
 
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Imposición plancha creada con exito')
+    toast.success('Imposición plancha creada con exito', {
+      autoClose: 1000
+    })
   }
-
-
+  const inputs = [
+    {
+      key: 0,
+      name: 'name',
+      title: 'Imposición',
+      type: 'text',
+      placeholder: 'giro pinza'
+    }
+  ]
   return (
     <Formik
       initialValues={{
-        name: '',
-        scheme: ''
+        name: ''
       }}
       onSubmit={(values) => {
-        var file = values.scheme; 
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          var imageData = reader.result;
-          const limpia = imageData.split(',')
-          values.scheme=limpia[1]
-          handleSubmit(values)
-        }
-
+        handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-      {({ setFieldValue }) => (
         <Form className="space-y-6">
-          <label
-            htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Nombre imposición
-          </label>
-          <Field
-            type="text"
-            name="name"
-            id="name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            placeholder="Giro pinza"
-
-
-          />
-
-          <div>
-
-            <label
-              htmlFor="scheme"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Esquema
-            </label>
-            <input
-              type="file"
-              name="scheme"
-              id="scheme"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-
-              placeholder="Descripción"
-              onChange={(event) => setFieldValue("scheme", event.target.files[0])}
-            />
-          </div>
-
+          {inputs.map(input => (
+            <div key={input.key}>
+              <label htmlFor={input.name}>{input.title}</label>
+              <Field
+                type={input.type}
+                name={input.name}
+                id={input.name}
+                placeholder={input.placeholder}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              />
+              <ErrorMessage
+                name={input.name}
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+          ))}
           <button
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -97,7 +76,6 @@ function CreateImpositionPlanch() {
             Crear imposición
           </button>
         </Form>
-      )}
     </Formik>
   )
 }
@@ -106,9 +84,9 @@ export function CreateButtomImpositionPlanch() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(openModal({ title: 'Crear imposición' }))
+    dispatch(setWidth({ width: '1500px' }))
+    dispatch(openModal({ title: 'Crear imposición plancha' }))
     dispatch(setAction({ action: 'creating' }))
-
   }
   // ?
 
