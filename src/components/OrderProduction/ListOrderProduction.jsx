@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
+import { useGetAllOrderProductionsQuery,  useGetAllQuotationClientsQuery} from '../../context/Api/Common'
 import { useGetAllQuotationClientDetailsQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
@@ -20,17 +20,22 @@ const ListOrderProduction = () => {
   // ?
 
   const columns = useMemo(() => [
-
-    { Header: 'Cotización cliente', accessor: 'quotationClientDetailId' },
-    { Header: 'Recepción material', accessor: 'materialReception' },
-    { Header: 'Programa', accessor: 'program' },
-    { Header: 'Versión programa', accessor: 'programVersion' },
-    { Header: 'Observaciones', accessor: 'observations' },
+    { Header: 'Cotización', accessor: 'quotationClientDetailId' },
+    { Header: 'Fecha de orden', accessor: 'orderDate' },
+    { Header: 'Fecha de entrega', accessor: 'deliverDate' },
+    { Header: 'Cliente', accessor: 'name' },
+    { Header: 'Producto', accessor: 'product' },
     {
         Header: 'Proceso',
         accessor: 'orderStatus',
         Cell: ({ value }) => {
           if (value) {
+            return (
+              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                Revisar
+              </span>
+            );
+          } else if (value == 2){
             return (
               <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                 Preimpresión
@@ -127,9 +132,7 @@ const ListOrderProduction = () => {
               </div>
             </form>
           </div>
-          <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <CreateButtomOrderProduction />
-          </div>
+      
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
           <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
@@ -157,17 +160,19 @@ const ListOrderProduction = () => {
                     className="border-b border-gray-500"
                   >
                     {row.cells.map((cell, index) => {
-                      console.log(cell)
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <DetailsButtonOrderProduction
                         orderProduction={row.original}
                       />
-                      <UpdateButtomOrderProduction
+                      {/* <UpdateButtomOrderProduction
+                        orderProduction={row.original}
+                      /> */}
+                      <ChangeStateButtonOrderProduction
                         orderProduction={row.original}
                       />
-                      <ChangeStateButtonOrderProduction
+                      <CreateButtomOrderProduction
                         orderProduction={row.original}
                       />
                     </td>
@@ -240,6 +245,7 @@ const ListOrderProduction = () => {
         </div>
       </div>
     </div>
+    
   )
 }
 

@@ -4,16 +4,13 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsOrderProduction () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { quotationClientDetailId, userId, materialReception, programVersion, indented, colorProfile, specialInk, inkCode, idPaperCut, image, observations, statedAt, orderStatus, program} = detailsData
+  const { name, materialReception, programVersion, colorProfile, specialInk, inkCode, idPaperCut, image, observations, statedAt, orderStatus, program, scheme} = detailsData
   return (
     <>
-
-      <p><b>Cotización:</b> {quotationClientDetailId}</p>
-      <p><b>Usuario:</b> {userId}</p>
+      <p><b>Cotización:</b> {name}</p>
       <p><b>Recepción del material:</b> {materialReception}</p>
       <p><b>Programa:</b> {program}</p>
       <p><b>Versión programa:</b> {programVersion}</p>
-      <p><b>Identado:</b> {indented}</p>
       <p><b>Pefil de color:</b> {colorProfile}</p>
       <p><b>Tinta especial:</b> {specialInk}</p>
       <p><b>Código de tinta:</b> {inkCode}</p>
@@ -21,6 +18,7 @@ function DetailsOrderProduction () {
       <p><b>Imagen:</b> {image}</p>
       <p><b>Onservaciones:</b> {observations}</p>
       <p><b>Estado de orden:</b> {orderStatus}</p>
+      <p><b>Esquema:</b> {scheme}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt
