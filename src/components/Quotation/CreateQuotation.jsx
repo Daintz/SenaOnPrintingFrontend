@@ -208,7 +208,8 @@ function CreateQuotation() {
     >
       {({ setFieldValue }) => (
         <Form>
-          <div className="flex linea-horizontal mb-2">
+          <div className="flex linea-horizontal mb-2
+          ">
             <div className="w-1/2">
             <b>Codigo: </b>
             </div>
