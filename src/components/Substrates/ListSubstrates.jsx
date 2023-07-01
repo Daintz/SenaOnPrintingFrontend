@@ -6,7 +6,7 @@ import { useGetAllSubstratesQuery } from '../../context/Api/Common'
 import { UpdateButtonSubstrates } from './UpdateSubstrates'
 import { ChangeStateButtonSubstrates } from './ChangeStateSubstrates'
 import { CreateButtonSubstrates } from './CreateSubstrates'
-import { DetailsButtonSubstrates } from './DetailsSubstrates'
+
 
 const ListSubstrates = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -130,9 +130,6 @@ const ListSubstrates = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtonSubstrates
-                        substrates={row.original}
-                      />
                       <UpdateButtonSubstrates
                         substrates={row.original}
                       />

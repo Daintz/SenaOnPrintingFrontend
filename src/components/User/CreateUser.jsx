@@ -6,56 +6,23 @@ import {
   setAction,
   setWidth
 } from '../../context/Slices/Modal/ModalSlice'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react' // Importar useState para mostrar los nombres
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import { usePostUserMutation } from '../../context/Api/Common'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import clientAxios from '../../config/clientAxios'
-
-async function checkEmailExistence (email) {
-  try {
-    const response = await clientAxios.get('/user')
-    const users = response.data
-    const emailExists = users.some(user => user.email === email)
-
-    return { exists: emailExists }
-  } catch (error) {
-    console.error('Error al verificar la existencia del correo:', error)
-    return { exists: false }
-  }
-}
-
-async function checkDocumentExistence (document) {
-  try {
-    const response = await clientAxios.get('/user')
-    const users = response.data
-    const documentExists = users.some(user => user.documentNumber === document)
-
-    return { exists: documentExists }
-  } catch (error) {
-    console.error('Error al verificar la existencia del numero de documento:', error)
-    return { exists: false }
-  }
-}
-
+import clientAxios from '../../config/clientAxios' // Importar clientAxios para poder hacer la consulta
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
+  names: Yup.string().required('Campo requerido'),
   surnames: Yup.string().required('Campo requerido'),
-  typeDocumentId: Yup.number().required('Campo requerido').lessThan(0, 'Debe elegir un tipo de documento'),
-  documentNumber: Yup.number().min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').test('unique-document', 'El documento ya está en uso', async function (value) {
-    const response = await checkDocumentExistence(value)
-    return !response.exists // Devuelve false si el nombre ya existe
-  }),
-  phone: Yup.number().min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido'),
+  typeDocumentId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de documento'),
+  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   address: Yup.string().required('Campo requerido'),
-  email: Yup.string().email("El correo no tiene el formato adecuado").required('Campo requerido').test('unique-email', 'El correo ya está en uso', async function (value) {
-    const response = await checkEmailExistence(value)
-    return !response.exists // Devuelve false si el nombre ya existe
-  }),
-  roleId: Yup.number().required('Campo requerido').lessThan(0, 'Debe elegir un rol'),
+  email: Yup.string().email().required('Campo requerido'),
+  roleId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un rol'),
   passwordDigest: Yup.string().min(6, 'Contraseña debe ser de al menos 6 caracteres').max(12, 'Contraseña no puede tener mas de 12 caracteres').required('Campo requerido')
 })
 
@@ -129,7 +96,7 @@ function CreateUser() {
   const inputs = [
     {
       key: 0,
-      name: 'name',
+      name: 'names',
       title: 'Nombres',
       type: 'text',
       placeholder: 'Nombres del Usuario'
@@ -153,14 +120,14 @@ function CreateUser() {
       key: 3,
       name: 'documentNumber',
       title: 'Numero de Documento',
-      type: 'number',
+      type: 'text',
       placeholder: 'Numero de Documento del Usuario'
     },
     {
       key: 4,
       name: 'phone',
       title: 'Telefono',
-      type: 'number',
+      type: 'text',
       placeholder: 'Telefono del Usuario'
     },
     {
@@ -197,11 +164,11 @@ function CreateUser() {
   return (
     <Formik
       initialValues={{
-        name: '',
+        names: '',
         surnames: '',
         typeDocumentId: 0,
-        documentNumber: 0,
-        phone: 0,
+        documentNumber: '',
+        phone: '',
         address: '',
         email: '',
         roleId: 0,
@@ -214,40 +181,151 @@ function CreateUser() {
       validationSchema={validationSchema}
     >
       <Form className="space-y-6">
-        {inputs.map(input => {
-          return input.type == "select" ?
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <br />
-              <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
-                <option value="0">Seleccione {input.title}</option>
-                {input.data.map(option => (
-                  <option value={option.value}>{option.label}</option>
-                ))}
-              </Field>
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            :
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
+        <div className='flex mb-2'>
+          <div key='0' className='w-1/2 mr-2'>
+            <label htmlFor="names">Nombres</label>
+            <Field
+                type="text"
+                name="names"
+                id="names"
+                placeholder="Nombres del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-        })}
+            />
+            <ErrorMessage
+              name="names"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+          <div key='1' className='w-1/2 ml-2'>
+            <label htmlFor="names">Apellidos</label>
+            <Field
+                type="text"
+                name="surnames"
+                id="surnames"
+                placeholder="Apellidos del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="surnames"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        </div>
+        <div className='flex mb-2'>
+          <div key='2'>
+            <label htmlFor="typeDocumentId">Tipo de Documento</label>
+            <br />
+            <Field name="typeDocumentId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+              <option value="0">Seleccione Tipo de Documento</option>
+              {typeDocumentOptions.map(option => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="typeDocumentId"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+          <div key='3' className='w-1/2 ml-2'>
+            <label htmlFor="documentNumber">Numero de Documento</label>
+            <Field
+                type="text"
+                name="documentNumber"
+                id="documentNumber"
+                placeholder="Numero de Documento del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="documentNumber"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        </div>
+        <div className='flex mb-2'>
+          <div key='4' className='w-1/2 mr-2'>
+            <label htmlFor="phone">Telefono</label>
+            <Field
+                type="text"
+                name="phone"
+                id="phone"
+                placeholder="Telefono del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="phone"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+          <div key='5' className='w-1/2 ml-2'>
+            <label htmlFor="address">Dirección</label>
+            <Field
+                type="text"
+                name="address"
+                id="address"
+                placeholder="Dirección del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="address"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        </div>
+        <div className='flex mb-2'>
+          <div key='6' className='w-1/2 mr-2'>
+            <label htmlFor="email">Correo Electronico</label>
+            <Field
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Correo Electronico del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+          <div key='7' className='w-1/2 ml-2'>
+            <label htmlFor="roleId">Rol</label>
+            <br />
+            <Field name="roleId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+              <option value="0">Seleccione Rol</option>
+              {roleOptions.map(option => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="roleId"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        </div>
+        <div className='flex mb-2'>
+          <div key='8' className='w-1/2'>
+            <label htmlFor="passwordDigest">Contraseña</label>
+            <Field
+                type="password"
+                name="passwordDigest"
+                id="passwordDigest"
+                placeholder="Contraseña del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            />
+            <ErrorMessage
+              name="passwordDigest"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        </div>
         <button
           type="submit"
           className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -263,7 +341,7 @@ export function CreateButtomUser() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: 'w-[2500]' }))
     dispatch(openModal({ title: 'Crear Usuario' }))
     dispatch(setAction({ action: 'creating' }))
   }

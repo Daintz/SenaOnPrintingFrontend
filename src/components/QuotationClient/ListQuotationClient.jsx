@@ -19,6 +19,7 @@ const ListQuotationClient = () => {
   // ?
 
   const columns = useMemo(() => [
+    { Header: 'Codigo', accessor: 'id' },
     { Header: 'Fecha de orden', accessor: 'orderDate' },
     { Header: 'Fecha de entrega', accessor: 'deliverDate' },
     { Header: 'Usuario Id', accessor: 'userId' },

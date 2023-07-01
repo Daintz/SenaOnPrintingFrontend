@@ -78,11 +78,16 @@ export const MachineApi = commonEndpointsApi('Machine', 'machine')
 
 export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
 
+
+export const supplyPictogrmas =commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+=======
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
 
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
+
+
 
 export const {
     useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -133,12 +138,21 @@ export const {
 } = quotationProviders
 
 export const {
+
+  useGetAllQuery: useGetAllSupplyPictogramsQuery,
+  useGetByIdQuery: useGetSupplyPictogramsByIdQuery,
+  usePostMutation: usePostSupplyPictogramsMutation,
+  usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
+} = supplyPictogrmas
+
     useGetAllQuery: useGetAllSupplyPictogramsQuery,
     useGetByIdQuery: useGetSupplyPictogramsByIdQuery,
     usePostMutation: usePostSupplyPictogramsMutation,
     usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
     useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
 } = supplyPictograms
+
 export const {
     useGetAllQuery: useGetAllUsersQuery,
     useGetByIdQuery: useGetUserByIdQuery,

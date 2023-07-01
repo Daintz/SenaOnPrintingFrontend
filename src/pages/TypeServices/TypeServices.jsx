@@ -4,7 +4,6 @@ import ListTypeServices from '../../components/TypeServices/ListTypeServices'
 import UpdateTypeServices from '../../components/TypeServices/UpdatetypeServices'
 import CreateTypeServices from '../../components/TypeServices/CreateTypeServices'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
-import DetailsTypeServices from '../../components/TypeServices/DetailsTypeServices'
 import ChangeStateTypeServices from '../../components/TypeServices/ChangeStateTypeServices'
 
 const TypeServices = () => {
@@ -20,8 +19,7 @@ const TypeServices = () => {
         {/* Esta logica del modal esta acá para poder ser reutilizable */}
         <NewModal>
           {action === 'editing' ? <UpdateTypeServices /> : undefined}
-          {action === 'creating' ? <CreateTypeServices /> : undefined}
-          {action === 'details' ? <DetailsTypeServices /> : undefined}
+          {action === 'creating' ? <CreateTypeServices /> : undefined}  
           {action === 'changing' ? <ChangeStateTypeServices /> : undefined}
         </NewModal>
       </div>

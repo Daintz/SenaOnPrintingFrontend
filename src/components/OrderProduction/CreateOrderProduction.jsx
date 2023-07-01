@@ -12,6 +12,9 @@ import {
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
+import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -23,6 +26,12 @@ const validationSchema = Yup.object().shape({
 })
 
 function CreateOrderProduction() {
+  const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
+  const { isAction } = useSelector((state) => state.modal)
+  useEffect(() => {
+    refetch()
+  }, [isAction])
+console.log(dataApi)
   const dispatch = useDispatch()
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [previewImage, setPreviewImage] = useState(null);
@@ -30,7 +39,21 @@ function CreateOrderProduction() {
     if (isLoading) return <Spinner />
 
     const formData = new FormData();
-    formData.append('name', values.name);
+    formData.append('quotationClientDetailId', values.quotationClientDetailId);
+    formData.append('userId', values.userId);
+    formData.append('materialReception', values.materialReception);
+    formData.append('programVersion', values.programVersion);
+    formData.append('indented', values.indented);
+    formData.append('colorProfile', values.colorProfile);
+    formData.append('specialInk', values.specialInk);
+    formData.append('inkCode', values.inkCode);
+    formData.append('idPaperCut', values.idPaperCut);
+    formData.append('imageInfo', values.image);
+    formData.append('observations', values.observations);
+    formData.append('statedAt', true);
+    formData.append('orderStatus', 2);
+    formData.append('program', values.program);
+    formData.append('typePoint', values.typePoint);
     formData.append('schemeInfo', values.scheme);
 
     await createOrderProduction(formData);
@@ -57,63 +80,83 @@ function CreateOrderProduction() {
   return (
     <Formik
       initialValues={{
-        name: '',
+        quotationClientDetailId: 1,
+        userId: 1,
+        materialReception: '',
+        programVersion: '',
+        indented: '',
+        colorProfile: '',
+        specialInk: '',
+        inkCode: '',
+        idPaperCut: 1,
+        image: '',
+        observations: '',
+        statedAt: true,
+        orderStatus: 1,
+        program: '',
+        typePoint: '',
         scheme: ''
       }}
       onSubmit={(values) => {
         console.log(values)
         handleSubmit(values)
       }}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
+        
         <Form>
-          <div className="flex linea-horizontal mb-2">
-            <div className="w-1/2">
-              <p><b>Usuario:</b> Juan Lopez</p>
-              <p><b>Teléfono:</b> 3145457301</p>
-              <p><b>Datos contacto:</b> juan@gmail.com</p>
+          <div className="flex linea-horizontal mb-2 grid-cols-4">
+          {dataApi.map((data, index) => (
+            <div key={index} className="flex linea-horizontal mb-2">
+              <div className="w-1/2">
+                <p><b>Usuario:</b> {data.name}</p>
+                <p><b>Teléfono:</b> {data.telefono}</p>
+                <p><b>Datos contacto:</b> {data.datosContacto}</p>
+              </div>
+              <div className="w-1/2">
+                <p><b>Código:</b> {data.codigo}</p>
+                <p><b>Fecha orden:</b> {data.orderDate}</p>
+                <p><b>Fecha entrega:</b> {data.deliverDate}</p>
+              </div>
             </div>
-            <div className="w-1/2">
-              <p><b>Código:</b> 001</p>
-              <p><b>Fecha orden:</b> 05/06/2022</p>
-              <p><b>Fecha entrega:</b> 05/07/2022</p>
-            </div>
-          </div>
+          ))}
+        </div>
+          
           <hr className="mb-4" />
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Recepción material
               </label>
               <Field
                 type="text"
-                name="campo1"
-                id="campo1"
+                name="materialReception"
+                id="materialReception"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Drive"
               />
             </div>
             <div className="w-2/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Pieza gráfica
+              <label htmlFor="quotationClientDetailId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Detalle cotización
               </label>
               <Field
                 type="text"
-                name="campo1"
-                id="campo1"
+                name="quotationClientDetailId"
+                id="quotationClientDetailId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
               />
             </div>
             <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cantidad piezas
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Usuario
               </label>
               <Field
                 type="text"
-                name="campo2"
-                id="campo2"
+                name="userId"
+                id="userId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="20"
               />
@@ -121,7 +164,7 @@ function CreateOrderProduction() {
           </div>
 
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
+            {/* <div className="w-1/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 N° de páginas
               </label>
@@ -156,27 +199,27 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="15"
               />
-            </div>
+            </div> */}
             <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Sangrados
+              <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Identado
               </label>
               <Field
                 type="text"
-                name="campo3"
-                id="campo3"
+                name="indented"
+                id="indented"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="5"
               />
             </div>
             <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Perfil de color
               </label>
               <Field
                 type="text"
-                name="campo3"
-                id="campo3"
+                name="colorProfile"
+                id="colorProfile"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="CMYK"
               />
@@ -185,30 +228,30 @@ function CreateOrderProduction() {
 
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="program" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Programa
               </label>
               <Field
                 type="text"
-                name="campo1"
-                id="campo1"
+                name="program"
+                id="program"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Adobe"
               />
             </div>
             <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="programVersion" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Versión del programa
               </label>
               <Field
                 type="text"
-                name="campo2"
-                id="campo2"
+                name="programVersion"
+                id="programVersion"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
             </div>
-            <div className="w-1/4">
+            {/* <div className="w-1/4">
               <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cantidad tintas
               </label>
@@ -219,34 +262,34 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="4X1"
               />
-            </div>
+            </div> */}
             <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="specialInk" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Tinta especial
               </label>
               <Field
                 type="text"
-                name="campo3"
-                id="campo3"
+                name="specialInk"
+                id="specialInk"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="..."
               />
             </div>
             <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Código
+              <label htmlFor="inkCode" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Código de tinta
               </label>
               <Field
                 type="text"
-                name="campo3"
-                id="campo3"
+                name="inkCode"
+                id="inkCode"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="#10054"
               />
             </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
+            {/* <div className="w-1/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Acabados
               </label>
@@ -257,8 +300,8 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Adobe"
               />
-            </div>
-            <div className="w-1/4">
+            </div> */}
+            {/* <div className="w-1/4">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Sustratos
               </label>
@@ -269,8 +312,8 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-            </div>
-            <div className="w-1/4">
+            </div> */}
+            {/* <div className="w-1/4">
           <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
             Lineatura
           </label>
@@ -284,8 +327,8 @@ function CreateOrderProduction() {
             <option value="12 lpi">12 lpi</option>
             <option value="50 lpi">50 lpi</option>
           </Field>
-        </div>
-            <div className="w-1/4">
+        </div> */}
+            {/* <div className="w-1/4">
               <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Gramaje/ calibre
               </label>
@@ -296,8 +339,8 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="..."
               />
-            </div>
-            <div className="w-1/4">
+            </div> */}
+            {/* <div className="w-1/4">
           <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
             Imposición
           </label>
@@ -311,20 +354,20 @@ function CreateOrderProduction() {
             <option value="Giro pinza">Giro pinza</option>
             <option value="Doble punto">Doble punto</option>
           </Field>
-        </div>
+        </div> */}
         
           </div>
 
 
           <div className="flex gap-5 grid-cols-5 mb-3">
           <div className="w-1/4">
-          <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+          <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
             Tipo de punto
           </label>
           <Field
             as="select"
-            name="campo3"
-            id="campo3"
+            name="typePoint"
+            id="typePoint"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           >
             <option value="0">Selecciona</option>
@@ -332,7 +375,7 @@ function CreateOrderProduction() {
             <option value="Doble punto">Punto eliptico</option>
           </Field>
         </div>
-            <div className="w-1/4">
+            {/* <div className="w-1/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Sistema de impresión
               </label>
@@ -343,20 +386,20 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="4X1*"
               />
-            </div>
+            </div> */}
             <div className="w-2/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="idPaperCut" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Corte de papel
               </label>
               <Field
-                type="text"
-                name="campo1"
-                id="campo1"
+                type="number"
+                name="idPaperCut"
+                id="idPaperCut"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
               />
             </div>
-            <div className="w-1/4">
+            {/* <div className="w-1/4">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Maquinas
               </label>
@@ -367,41 +410,51 @@ function CreateOrderProduction() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="20"
               />
-            </div>
+            </div> */}
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Esquema
               </label>
-              <Field
+              <input
                 type="file"
-                name="campo1"
-                id="campo1"
+                name="scheme"
+                id="scheme"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="4X1*"
+                onChange={event => {
+                  setFieldValue("scheme", event.target.files[0]);
+                  handleFileChange(event);
+                }}
+  
               />
             </div>
             <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Imagen
               </label>
-              <Field
+              <input
                 type="file"
-                name="campo1"
-                id="campo1"
+                name="image"
+                id="image"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
+                onChange={event => {
+                  setFieldValue("image", event.target.files[0]);
+                  handleFileChange(event);
+                }}
+  
               />
             </div>
             <div className="w-2/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              <label htmlFor="observations" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Observaciones
               </label>
-              <textarea
+              <Field
                 type="text"
-                name="campo2"
-                id="campo2"
+                name="observations"
+                id="observations"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="20"
               />
@@ -409,17 +462,18 @@ function CreateOrderProduction() {
           </div>
           <button
             type="submit"
-            className="col-span-3 w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Crear orden de producción
           </button>
+
         </Form>
       )}
     </Formik>
   )
 }
 
-export function CreateButtomOrderProduction() {
+export function CreateButtomOrderProduction({ data }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
@@ -431,16 +485,16 @@ export function CreateButtomOrderProduction() {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
       <svg
-        className="h-3.5 w-3.5 mr-2"
-        fill="currentColor"
-        viewBox="0 0 20 20"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-6 h-6"
         xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
       >
         <path
           clipRule="evenodd"
@@ -448,7 +502,6 @@ export function CreateButtomOrderProduction() {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear imposición
     </button>
   )
 }

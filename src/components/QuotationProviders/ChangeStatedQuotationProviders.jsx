@@ -1,5 +1,5 @@
 import { useDeleteQuotationProvidersByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openModal, setAction, setChangeStatusData,setWidth } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction, closeEditing, closeModal, openModal, setAction, setChangeStatusData,setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'

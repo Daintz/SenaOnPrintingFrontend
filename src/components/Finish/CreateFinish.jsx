@@ -30,7 +30,10 @@ function Createfinish () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Acabado creado con exito')
+    toast.success('Acabado creado con exito',{
+      autoClose:1000
+
+    })
   }
 
   const inputs = [
@@ -57,7 +60,7 @@ function Createfinish () {
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
+           <Form className="space-y-6">
           {inputs.map(input => (
             <div key={input.key}>
               <label htmlFor={input.name}>{input.title}</label>
@@ -79,7 +82,7 @@ function Createfinish () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Acabado
+        Actualizar Acabado
           </button>
         </Form>
     </Formik>
@@ -90,7 +93,7 @@ export function CreateButtomFinish () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
+    dispatch(setWidth({ width: '-[1500px]' }))
     dispatch(openModal({ title: 'Crear Acabado' }))
     dispatch(setAction({ action: 'creating' }))
   }
