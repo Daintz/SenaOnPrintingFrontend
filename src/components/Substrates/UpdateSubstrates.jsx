@@ -23,6 +23,7 @@ async function checkNameExistence (name) {
 }
 
 const validationSchema = Yup.object().shape({
+  cost: Yup.number().required('Campo requerido'),
   name: Yup.string()
     .required('Campo requerido')
     .max(30, 'El sustrato no puede tener más de 15 letras/dígitos').min(3, 'El sustrato debe tener menos de 3 letras/digitos')
@@ -72,6 +73,13 @@ function UpdateSubstrates() {
       title: 'sustrato',
       type: 'text',
       placeholder: 'sustrato'
+    },
+    {
+      key: 1,
+      name: 'cost',
+      title: 'Precio Sustrato',
+      type: 'text',
+      placeholder: 'Precio'
     }
   ]
 
@@ -81,6 +89,7 @@ function UpdateSubstrates() {
       initialValues={{
         id: editingData.id,
         name: editingData.name,
+        cost: editingData.cost,
         initialName: editingData.name
       }}
       onSubmit={(values) => {

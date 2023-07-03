@@ -21,6 +21,7 @@ const ListSubstrates = () => {
 
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
+    { Header: 'Precio', accessor: 'cost' },
     {
       Header: 'Estado',
       accessor: 'statedAt',

@@ -23,7 +23,10 @@ const ListSupplyCategory = () => {
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
-
+  useEffect(() => {
+    refetch()
+  }, [isAction])
+  // ?
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
     { Header: 'Descripción', accessor: 'description' },
