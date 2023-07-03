@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { useGetAllQuotationProvidersQuery, usePostQuotationProvidersMutation } from '../../context/Api/Common'
+import { usePostQuotationProvidersMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -18,90 +18,51 @@ const validationSchema = Yup.object().shape({
   quotationDate: Yup.date().required('Campo requerido'),
   quotationFile: Yup.string().required('Campo requerido'),
   fullValue: Yup.number().required('Campo requerido'),
-  providerId:Yup.number().required('Campo requerido')
+  providerId: Yup.number().required('Campo requerido')
 })
 
 function CreateQuotationProviders () {
-  // const { data: dataApi, refetch } = useGetAllQuotationProvidersQuery()
-  // const { isAction } = useSelector((state) => state.modal)
-  // useEffect(() => {
-  //   refetch()
-  // }, [isAction])
-  // console.log(dataApi)
   const dispatch = useDispatch()
   const [createQuotationProviders, { error, isLoading }] = usePostQuotationProvidersMutation()
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null)
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    const formData = new FormData();
-    formData.append('quotationDate', values.quotationDate);
-    formData.append('quotationFileInfo)', values.quotationFile);
-    formData.append('fullValue', values.fullValue);
-    formData.append('providerId', values.providerId);
-    // for(var num of formData.entries()){
-    //   console.log(num)
-    // }
+    const formData = new FormData()
+    formData.append('quotationDate', values.quotationDate)
+    formData.append('quotationFileInfo', values.quotationFile)
+    formData.append('fullValue', values.fullValue)
+    formData.append('providerId', values.providerId)
+    for (const num of formData.entries()) {
+      console.log(num)
+    }
 
     await createQuotationProviders(formData)
     dispatch(changeAction())
-    if(!error){
+    if (!error) {
       dispatch(closeModal())
     }
 
-    toast.success('Cotización a proveedores creada con exito', {autoClose: 1000})
-
+    toast.success('Cotización a proveedores creada con exito', { autoClose: 1000 })
   }
   const handleFileChange = event => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setPreviewImage(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
-  // const inputs = [
-  //   {
-  //     key: 0,
-  //     name: 'quotationDate',
-  //     title:'quotationDate',
-  //     type:'date',
-  //     placeholder:'Fecha de la cotización'
-
-  //   },
-  //   {
-  //     key: 1,
-  //     name: 'quotationFile',
-  //     title:'Cotización',
-  //     type:'string',
-  //     placeholder:'Documento de cotización'
-  //   },
-  //   {
-  //     key: 2,
-  //     name: 'fullValue',
-  //     title:'Valor total',
-  //     type:'number',
-  //     placeholder:'VAlor total de la cotización'
-  //   },
-  //   {
-  //     key: 3,
-  //     name: 'providerId',
-  //     title:'providerId',
-  //     type:'number',
-  //     placeholder:'Id del proveedor'
-  //   }
-
-  // ];
+  }
 
   return (
     <Formik
       initialValues={{
-      quotationDate: '',
-      quotationFile:'',
-      fullValue:1,
-      providerId:1
+        quotationDate: '',
+        quotationFile: '',
+        fullValue: '',
+        providerId: ''
 
       }}
       onSubmit={(values) => {
@@ -110,7 +71,7 @@ function CreateQuotationProviders () {
       }}
       validationSchema={validationSchema}
     >
-      {({setFieldValue})=>(
+      {({ setFieldValue }) => (
   <Form className="space-y-6">
 
   <label
@@ -126,6 +87,11 @@ function CreateQuotationProviders () {
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
         placeholder="Fecha de la cotización"
         />
+        <ErrorMessage
+      name="quotationDate"
+      component="div"
+      className="text-red-500"
+    />
         <div>
         <label
               htmlFor="quotationFile"
@@ -140,10 +106,15 @@ function CreateQuotationProviders () {
               id="quotationFile"
               placeholder="Cotización"
               onChange={event => {
-                setFieldValue("quotationFile", event.target.files[0]);
-                handleFileChange(event);
+                setFieldValue('quotationFile', event.target.files[0])
+                handleFileChange(event)
               }}
             />
+            <ErrorMessage
+      name="quotationFile"
+      component="div"
+      className="text-red-500"
+    />
         </div>
 
         <label
@@ -159,6 +130,11 @@ function CreateQuotationProviders () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Valor de la cotización"
         />
+        <ErrorMessage
+      name="fullValue"
+      component="div"
+      className="text-red-500"
+    />
         <label
           htmlFor="providerId"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -172,6 +148,11 @@ function CreateQuotationProviders () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="id del proveedor"
         />
+        <ErrorMessage
+      name="providerId"
+      component="div"
+      className="text-red-500"
+    />
         <button
           type="submit"
           className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -179,10 +160,10 @@ function CreateQuotationProviders () {
           Crear Cotización a proveedores
         </button>
       </Form>
-  )}
+      )}
     </Formik>
   )
- }
+}
 
 export function CreateButtomQuotationProviders () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli

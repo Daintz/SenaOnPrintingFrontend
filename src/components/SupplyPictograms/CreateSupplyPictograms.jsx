@@ -14,55 +14,54 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { data } from 'autoprefixer'
 
-
 const validationSchema = Yup.object().shape({
   code: Yup.string().required('Campo requerido'),
   name: Yup.string().required('Campo requerido'),
   description: Yup.string().required('Campo requerido'),
-  pictogramFile:Yup.string().required('Campo requerido')
+  pictogramFile: Yup.string().required('Campo requerido')
 })
 
 function CreateSupplyPictograms () {
   const dispatch = useDispatch()
   const [createSupplyPictograms, { error, isLoading }] = usePostSupplyPictogramsMutation()
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null)
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    const formData = new FormData();
-      formData.append('code', values.code);
-      formData.append('name', values.name);
-      formData.append('description', values.description);
-      formData.append('pictogramFileInfo', values.pictogramFile);
-      for(var num of formData.entries()){
-        console.log(num)
-      }
-    await createSupplyPictograms(formData);
+    const formData = new FormData()
+    formData.append('code', values.code)
+    formData.append('name', values.name)
+    formData.append('description', values.description)
+    formData.append('pictogramFileInfo', values.pictogramFile)
+    for (const num of formData.entries()) {
+      console.log(num)
+    }
+    await createSupplyPictograms(formData)
     dispatch(changeAction())
-    if(!error){
+    if (!error) {
       dispatch(closeModal())
     }
 
-    toast.success('Pictograma creado con exito', {autoClose: 1000})
+    toast.success('Pictograma creado con exito', { autoClose: 1000 })
   }
   const handleFileChange = event => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setPreviewImage(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   return (
     <Formik
       initialValues={{
-      code: '',
-      name:'',
-      description:'',
-      pictogramFile:''
+        code: '',
+        name: '',
+        description: '',
+        pictogramFile: ''
 
       }}
       onSubmit={(values) => {
@@ -71,7 +70,7 @@ function CreateSupplyPictograms () {
       }}
       validationSchema={validationSchema}
     >
-      {({setFieldValue})=>(
+      {({ setFieldValue }) => (
         <Form className="space-y-6">
         <label
           htmlFor="code"
@@ -126,8 +125,8 @@ function CreateSupplyPictograms () {
               id="pictogramFile"
               placeholder="Descripción"
               onChange={event => {
-                setFieldValue("pictogramFile", event.target.files[0]);
-                handleFileChange(event);
+                setFieldValue('pictogramFile', event.target.files[0])
+                handleFileChange(event)
               }}
             />
         </div>
