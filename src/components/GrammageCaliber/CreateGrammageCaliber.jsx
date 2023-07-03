@@ -26,7 +26,7 @@ async function checkNameExistence (name) {
   }
 }
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido').max(15, 'El gramaje y/o calibre no puede tener más de 15 letras/digitos').test('unique-name', 'El Gramaje y/o calibre ya está en uso', async function (value) {
+  name: Yup.string().required('Campo requerido').max(5, 'El gramaje y/o calibre no puede tener más de 5 digitos').test('unique-name', 'El Gramaje y/o calibre ya está en uso', async function (value) {
     const response = await checkNameExistence(value)
     return !response.exists // Devuelve false si el nombre ya existe
   }),
@@ -39,14 +39,18 @@ function CreateGrammageCaliber () {
 
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
-
+    // Actualizar el valor del campo "name" según el tipo seleccionado
+    if (values.type === 'Gramaje') {
+      values.name = values.name + ' gr'
+    } else if (values.type === 'Calibre') {
+      values.name = values.name + ' mm'
+    }
     await createGrammageCaliber(values)
-
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Gramaje y/o calibre creado con exito')
+    toast.success('Gramaje y/o calibre creado con éxito')
   }
 
   const inputs = [
@@ -54,15 +58,16 @@ function CreateGrammageCaliber () {
       key: 0,
       name: 'type',
       title: 'Tipo',
-      type: 'text',
+      type: 'select',
+      options: ['Gramaje', 'Calibre'],
       placeholder: 'Tipo'
     },
     {
       key: 1,
       name: 'name',
-      title: 'Grammaje',
+      title: 'Grammaje y/o calibre',
       type: 'text',
-      placeholder: 'Grammaje'
+      placeholder: 'Grammaje y/o calibre'
     }
   ]
 
@@ -78,30 +83,45 @@ function CreateGrammageCaliber () {
       validationSchema={validationSchema}
     >
         <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+  {inputs.map(input => (
+    <div key={input.key}>
+      <label htmlFor={input.name}>{input.title}</label>
+      {input.type === 'select'
+        ? (
+        <Field
+          as="select"
+          name={input.name}
+          id={input.name}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+        >
+          {input.options.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
-          <button
-            type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Crear gramaje y/o calibre
-          </button>
-        </Form>
+        </Field>)
+        : (
+        <Field
+          type={input.type}
+          name={input.name}
+          id={input.name}
+          placeholder={input.placeholder}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+        />)}
+      <ErrorMessage
+        name={input.name}
+        component="div"
+        className="text-red-500"
+      />
+    </div>
+  ))}
+  <button
+    type="submit"
+    className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+  >
+    Crear gramaje y/o calibre
+  </button>
+</Form>
     </Formik>
   )
 }

@@ -101,9 +101,45 @@ function Sidebar () {
               <li>
                 <Link
                   to="/substrate"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/grammage_caliber' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/substrate' ? 'bg-green-500' : null}`}
                 >
                   <span className="ml-3 text-base">Sustratos</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/Lineature"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Lineature' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Lineatura</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/unitMesure"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/unitMesure' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Unidades de Medida</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/supplyPictograms"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Pictogramas</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/impositionPlanch"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Imposición plancha</span>
                 </Link>
               </li>
             </ul>
@@ -205,24 +241,6 @@ function Sidebar () {
               ></svg>
             </button>
             <ul id="dropdown-example3" className="hidden py-2 space-y-2">
-              <li>
-                <Link
-                  to="/unitMesure"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/UnitMesure' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Unidades de Medida</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/supplyPictograms"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Pictogramas</span>
-                </Link>
-              </li>
               <li>
                 <Link
                   to={'/supplyCategory'}
@@ -415,7 +433,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotation'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationClient' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotation' ? 'bg-green-500' : null}`}
                 >
 
                   <span className="ml-3">Cotizacion</span>
@@ -466,24 +484,6 @@ function Sidebar () {
               ></svg>
             </button>
             <ul id="dropdown-example6" className="hidden py-2 space-y-2">
-              <li>
-                <Link
-                  to="/Lineature"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Lineature' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Lineatura</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/impositionPlanch"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Imposición plancha</span>
-                </Link>
-              </li>
               <li>
                 <Link
                   to="/OrderProduction"

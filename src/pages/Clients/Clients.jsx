@@ -20,7 +20,7 @@ const Client = () => {
         {/* Esta logica del modal esta acá para poder ser reutilizable */}
         <NewModal>
           {action === 'editing' ? <UpdateClient /> : undefined}
-          {action === 'creating' ? <CreateClient /> : undefined}
+          {action === 'creating' ? <CreateClient /> : undefined} 
           {action === 'details' ? <DetailsClient /> : undefined}
           {action === 'changing' ? <ChangeStateClient /> : undefined}
         </NewModal>
