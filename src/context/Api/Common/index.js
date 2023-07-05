@@ -1,76 +1,44 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const commonEndpointsApi = (entityName, entityUrl) => {
-    return createApi({
-        reducerPath: 'commonApi',
-        baseQuery: fetchBaseQuery({
-            baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
-        }),
-        endpoints: builder => ({
-            getAll: builder.query({
-                query: () => `${entityUrl}`
-            }),
-            getById: builder.query({
-                query: id => `${entityUrl}/${id}`
-            }),
-            getAllApproved: builder.query({
-                query: () => `${entityUrl}/Approved`
-            }),
-            post: builder.mutation({
-                query: data => ({
-                    url: `${entityUrl}`,
-                    method: 'POST',
-                    body: data
-                })
-            }),
-            putById: builder.mutation({
-                query: data => ({
-                    url: `${entityUrl}/${data.id}`,
-                    method: 'PUT',
-                    body: data
-                })
-            }),
-            deleteById: builder.mutation({
-                query: id => ({
-                    url: `${entityUrl}/${id}`,
-                    method: 'DELETE'
-                })
-            }),
-            deleteStatus: builder.mutation({
-                query: id => ({
-                    url: `${entityUrl}/ChangeStatus/${id}`,
-                    method: 'DELETE'
-                })
-            })
   return createApi({
     reducerPath: 'commonApi',
     baseQuery: fetchBaseQuery({
       baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
     }),
-    endpoints: builder => ({
+    endpoints: (builder) => ({
       getAll: builder.query({
         query: () => `${entityUrl}`
       }),
       getById: builder.query({
-        query: id => `${entityUrl}/${id}`
+        query: (id) => `${entityUrl}/${id}`
+      }),
+      getAllApproved: builder.query({
+        query: () => `${entityUrl}/Approved`
       }),
       post: builder.mutation({
-        query: data => ({
+        query: (data) => ({
           url: `${entityUrl}`,
           method: 'POST',
           body: data
         })
       }),
       putById: builder.mutation({
-        query: data => ({
+        query: (data) => ({
           url: `${entityUrl}/${data.id}`,
           method: 'PUT',
           body: data
         })
       }),
       deleteById: builder.mutation({
-        query: id => ({
+        query: (id) => ({
           url: `${entityUrl}/${id}`,
+          method: 'DELETE'
+        })
+      }),
+      deleteStatus: builder.mutation({
+        query: (id) => ({
+          url: `${entityUrl}/ChangeStatus/${id}`,
           method: 'DELETE'
         })
       })
@@ -78,53 +46,29 @@ const commonEndpointsApi = (entityName, entityUrl) => {
   })
 }
 
-export const supplyCategoryApi = commonEndpointsApi(
-  'SupplyCategory',
-  'supplyCategory'
-)
+export const supplyCategoryApi = commonEndpointsApi('SupplyCategory', 'supplyCategory')
 export const productApi = commonEndpointsApi('Product', 'product')
-
 export const roleApi = commonEndpointsApi('Role', 'role')
-
 export const typeDocumentApi = commonEndpointsApi('TypeDocument', 'type_document')
-
 export const userApi = commonEndpointsApi('User', 'user')
-
 export const lineatureApi = commonEndpointsApi('Lineature', 'lineature')
-
 export const impositionPlanchApi = commonEndpointsApi('ImpositionPlanch', 'impositionPlanch')
-
 export const quotationClientApi = commonEndpointsApi('QuotationClient', 'quotationClient')
-
 export const quotationclientDetailApi = commonEndpointsApi('QuotationClientDetail', 'quotationclientDetail')
-
 export const clientApi = commonEndpointsApi('Client', 'client')
-
 export const grammageCaliberApi = commonEndpointsApi('GrammageCaliber', 'grammageCaliber')
-
 export const paperCutsApi = commonEndpointsApi('PaperCuts', 'paperCuts')
-
 export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
 export const orderProductionApi = commonEndpointsApi('OrderProduction', 'orderProduction')
-
 export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
-
 export const quotationProviders = commonEndpointsApi('QuotationProviders', 'quotationProviders')
-
 export const supplyPictograms = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
-
 export const finishApi = commonEndpointsApi('Finish', 'finish')
-
 export const MachineApi = commonEndpointsApi('Machine', 'machine')
-
 export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
-
 export const supplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
-
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
-
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
-
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 
 export const {
@@ -218,12 +162,12 @@ export const {
 } = quotationClientApi
 
 export const {
-    useGetAllQuery: useGetAllQuotationClientDetailsQuery,
-    useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
-    useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
-    usePostMutation: usePostQuotationClientDetailMutation,
-    usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
-    useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
+  useGetAllQuery: useGetAllQuotationClientDetailsQuery,
+  useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
+  useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
+  usePostMutation: usePostQuotationClientDetailMutation,
+  usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
 } = quotationclientDetailApi
 
 export const {
@@ -259,12 +203,12 @@ export const {
 } = substratesApi
 
 export const {
-    useGetAllQuery: useGetAllOrderProductionsQuery,
-    useGetByIdQuery: useGetOrderProductionByIdQuery,
-    usePostMutation: usePostOrderProductionMutation,
-    usePutByIdMutation: usePutOrderProductionByIdMutation,
-    useDeleteByIdMutation: useDeleteOrderProductionByIdMutation,
-    useDeleteStatusMutation: useDeleteOrderProductionStatusMutation
+  useGetAllQuery: useGetAllOrderProductionsQuery,
+  useGetByIdQuery: useGetOrderProductionByIdQuery,
+  usePostMutation: usePostOrderProductionMutation,
+  usePutByIdMutation: usePutOrderProductionByIdMutation,
+  useDeleteByIdMutation: useDeleteOrderProductionByIdMutation,
+  useDeleteStatusMutation: useDeleteOrderProductionStatusMutation
 } = orderProductionApi
 
 export const {
