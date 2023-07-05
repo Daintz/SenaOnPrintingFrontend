@@ -21,6 +21,7 @@ const Listfinish = () => {
 
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
+    { Header: 'Costo', accessor: 'cost' },
 
     {
       Header: 'Estado',

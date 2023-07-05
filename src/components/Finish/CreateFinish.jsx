@@ -14,6 +14,7 @@ import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
+  cost: Yup.number('El campo es numerico').required('Campo requerido'),
 
 })
 
@@ -45,6 +46,13 @@ function Createfinish () {
       placeholder: 'Nombre del producto'
     },
   
+    {
+      key: 1,
+      name: 'cost',
+      title: 'Costo',
+      type: 'Number',
+      placeholder: 'Costo del producto'
+    },
   ]
 
   return (
@@ -52,6 +60,7 @@ function Createfinish () {
       initialValues={{
    
         name: '',
+        cost: '',
    
         
       }}
@@ -82,7 +91,7 @@ function Createfinish () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-        Actualizar Acabado
+        Crear Acabado
           </button>
         </Form>
     </Formik>
