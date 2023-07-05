@@ -1,6 +1,47 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const commonEndpointsApi = (entityName, entityUrl) => {
+    return createApi({
+        reducerPath: 'commonApi',
+        baseQuery: fetchBaseQuery({
+            baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
+        }),
+        endpoints: builder => ({
+            getAll: builder.query({
+                query: () => `${entityUrl}`
+            }),
+            getById: builder.query({
+                query: id => `${entityUrl}/${id}`
+            }),
+            getAllApproved: builder.query({
+                query: () => `${entityUrl}/Approved`
+            }),
+            post: builder.mutation({
+                query: data => ({
+                    url: `${entityUrl}`,
+                    method: 'POST',
+                    body: data
+                })
+            }),
+            putById: builder.mutation({
+                query: data => ({
+                    url: `${entityUrl}/${data.id}`,
+                    method: 'PUT',
+                    body: data
+                })
+            }),
+            deleteById: builder.mutation({
+                query: id => ({
+                    url: `${entityUrl}/${id}`,
+                    method: 'DELETE'
+                })
+            }),
+            deleteStatus: builder.mutation({
+                query: id => ({
+                    url: `${entityUrl}/ChangeStatus/${id}`,
+                    method: 'DELETE'
+                })
+            })
   return createApi({
     reducerPath: 'commonApi',
     baseQuery: fetchBaseQuery({
@@ -177,11 +218,12 @@ export const {
 } = quotationClientApi
 
 export const {
-  useGetAllQuery: useGetAllQuotationClientDetailsQuery,
-  useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
-  usePostMutation: usePostQuotationClientDetailMutation,
-  usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
-  useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
+    useGetAllQuery: useGetAllQuotationClientDetailsQuery,
+    useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
+    useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
+    usePostMutation: usePostQuotationClientDetailMutation,
+    usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
+    useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
 } = quotationclientDetailApi
 
 export const {
@@ -217,11 +259,12 @@ export const {
 } = substratesApi
 
 export const {
-  useGetAllQuery: useGetAllOrderProductionsQuery,
-  useGetByIdQuery: useGetOrderProductionByIdQuery,
-  usePostMutation: usePostOrderProductionMutation,
-  usePutByIdMutation: usePutOrderProductionByIdMutation,
-  useDeleteByIdMutation: useDeleteOrderProductionByIdMutation
+    useGetAllQuery: useGetAllOrderProductionsQuery,
+    useGetByIdQuery: useGetOrderProductionByIdQuery,
+    usePostMutation: usePostOrderProductionMutation,
+    usePutByIdMutation: usePutOrderProductionByIdMutation,
+    useDeleteByIdMutation: useDeleteOrderProductionByIdMutation,
+    useDeleteStatusMutation: useDeleteOrderProductionStatusMutation
 } = orderProductionApi
 
 export const {

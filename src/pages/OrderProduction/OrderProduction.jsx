@@ -6,6 +6,7 @@ import CreateOrderProduction from '../../components/OrderProduction/CreateOrderP
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 import DetailsOrderProduction from '../../components/OrderProduction/DetailsOrderProduction'
 import ChangeStateOrderProduction from '../../components/OrderProduction/ChangeStateOrderProduction'
+import ChangeStatusOrderProduction from '../../components/OrderProduction/ChangeStatusOrderProduction'
 
 const OrderProduction = () => {
   // ? Esta linea de codigo me trae el estado 'isEditing' de src\context\Slices\Modal\ModalSlice.js que esto seria los estados del componente modal
@@ -23,6 +24,7 @@ const OrderProduction = () => {
           {action === 'creating' ? <CreateOrderProduction /> : undefined}
           {action === 'details' ? <DetailsOrderProduction /> : undefined}
           {action === 'changing' ? <ChangeStateOrderProduction /> : undefined}
+          {action === 'changingStatus' ? <ChangeStatusOrderProduction /> : undefined}
         </NewModal>
       </div>
     </div>

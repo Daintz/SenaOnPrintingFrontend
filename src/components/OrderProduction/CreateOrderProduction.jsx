@@ -1,13 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { usePostOrderProductionMutation } from '../../context/Api/Common'
+import { useGetAllPaperCutsQuery, usePostOrderProductionMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
   openModal,
   setAction,
-  setWidth
+  setWidth,
+  setDetailsData
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
@@ -15,6 +16,7 @@ import { useState } from 'react'
 import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -26,20 +28,32 @@ const validationSchema = Yup.object().shape({
 })
 
 function CreateOrderProduction() {
-  const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
-  const { isAction } = useSelector((state) => state.modal)
-  useEffect(() => {
-    refetch()
-  }, [isAction])
-console.log(dataApi)
+
+  // const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
+  // const { isAction 
+  // } = useSelector((state) => state.modal)
+  // useEffect(() => {
+  //   refetch()
+  // }, [isAction])
+  const paperCutsQuery = useGetAllPaperCutsQuery();
+  const paperCuts = paperCutsQuery.data;
   const dispatch = useDispatch()
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [previewImage, setPreviewImage] = useState(null);
+  const { detailsData } = useSelector((state) => state.modal)
+  const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, productQuantity, productHeight, technicalSpecifications, typeService } = detailsData
+  console.log('quotationClientDetailId:', detailsData.id);
+  // console.log(detailsData)
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
+    // console.log('userId:', values.userId);
+    // console.log('materialReception', values.materialReception);
+    // console.log('programVersion', values.programVersion);
+    // console.log('imageInfo', values.image);
     const formData = new FormData();
-    formData.append('quotationClientDetailId', values.quotationClientDetailId);
+    console.log('quotationClientDetailId:', detailsData.id);
+    formData.append('quotationClientDetailId', detailsData.id);
     formData.append('userId', values.userId);
     formData.append('materialReception', values.materialReception);
     formData.append('programVersion', values.programVersion);
@@ -55,7 +69,7 @@ console.log(dataApi)
     formData.append('program', values.program);
     formData.append('typePoint', values.typePoint);
     formData.append('schemeInfo', values.scheme);
-
+    console.log(formData)
     await createOrderProduction(formData);
 
     dispatch(changeAction())
@@ -80,7 +94,6 @@ console.log(dataApi)
   return (
     <Formik
       initialValues={{
-        quotationClientDetailId: 1,
         userId: 1,
         materialReception: '',
         programVersion: '',
@@ -98,46 +111,46 @@ console.log(dataApi)
         scheme: ''
       }}
       onSubmit={(values) => {
-        console.log(values)
         handleSubmit(values)
       }}
-      // validationSchema={validationSchema}
+    // validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
-        
+
         <Form>
-          <div className="flex linea-horizontal mb-2 grid-cols-4">
-          {dataApi.map((data, index) => (
-            <div key={index} className="flex linea-horizontal mb-2">
-              <div className="w-1/2">
-                <p><b>Usuario:</b> {data.name}</p>
-                <p><b>Teléfono:</b> {data.telefono}</p>
-                <p><b>Datos contacto:</b> {data.datosContacto}</p>
+          <div className="flex gap-5 grid-cols-4 mb-3">
+            {/* {dataApi.map((data, index) => ( */}
+            {/* <div className="flex linea-horizontal mb-2"> */}
+              <div className="w-2/4">
+                <p><b>Cliente:</b> {detailsData.name}</p>
+                <p><b>Teléfono:</b> {detailsData.phoneClient}</p>
+                <p><b>Datos contacto:</b> {detailsData.emailClient}</p>
               </div>
-              <div className="w-1/2">
-                <p><b>Código:</b> {data.codigo}</p>
-                <p><b>Fecha orden:</b> {data.orderDate}</p>
-                <p><b>Fecha entrega:</b> {data.deliverDate}</p>
+              <div className="w-2/4">
+                <p><b>Código:</b> {detailsData.quotationClientId}</p>
+                <p><b>Fecha orden:</b> {detailsData.orderDate}</p>
+                <p><b>Fecha entrega:</b> {detailsData.deliverDate}</p>
               </div>
-            </div>
-          ))}
-        </div>
-          
+            {/* </div> */}
+            {/* ))} */}
+          </div>
+
           <hr className="mb-4" />
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
-              <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Recepción material
-              </label>
-              <Field
-                type="text"
-                name="materialReception"
-                id="materialReception"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="Drive"
-              />
+          <div className="flex gap-5 grid-cols-4 mb-3">
+            <div className="w-2/4">
+              <p><b>Pieza gráfica:</b> {detailsData.productName}</p>
+              <p><b>Ancho:</b> {detailsData.productHeight}</p>
+              <p><b>Alto:</b> {detailsData.productWidth}</p>
+              <p><b>Cantidad de tintas:</b> {detailsData.inkQuantity}</p>
+
             </div>
             <div className="w-2/4">
+            <p><b>Cantidad de piezas:</b> {detailsData.productQuantity}</p>
+              <p><b>N° páginas:</b> {detailsData.numberOfPages}</p>
+              <p><b>Especificaciones técnicas:</b> {detailsData.technicalSpecifications}</p>
+              <p><b>Tipo de servicio:</b> {detailsData.typeService}</p>
+            </div>
+            {/* <div className="w-2/4">
               <label htmlFor="quotationClientDetailId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Detalle cotización
               </label>
@@ -148,19 +161,8 @@ console.log(dataApi)
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
               />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Usuario
-              </label>
-              <Field
-                type="text"
-                name="userId"
-                id="userId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="20"
-              />
-            </div>
+            </div> */}
+            
           </div>
 
           <div className="flex gap-5 grid-cols-5 mb-3">
@@ -200,6 +202,31 @@ console.log(dataApi)
                 placeholder="15"
               />
             </div> */}
+            <div className="w-1/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Usuario
+              </label>
+              <Field
+                type="text"
+                name="userId"
+                id="userId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="20"
+              />
+            </div>
+            <div className="w-1/4">
+              
+              <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Recepción material
+              </label>
+              <Field
+                type="text"
+                name="materialReception"
+                id="materialReception"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Drive"
+              />
+            </div>
             <div className="w-1/4">
               <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Identado
@@ -355,26 +382,26 @@ console.log(dataApi)
             <option value="Doble punto">Doble punto</option>
           </Field>
         </div> */}
-        
+
           </div>
 
 
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-1/4">
-          <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-            Tipo de punto
-          </label>
-          <Field
-            as="select"
-            name="typePoint"
-            id="typePoint"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-          >
-            <option value="0">Selecciona</option>
-            <option value="Giro pinza">Punto redondo</option>
-            <option value="Doble punto">Punto eliptico</option>
-          </Field>
-        </div>
+            <div className="w-1/4">
+              <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Tipo de punto
+              </label>
+              <Field
+                as="select"
+                name="typePoint"
+                id="typePoint"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              >
+                <option value="0">Selecciona</option>
+                <option value="Giro pinza">Punto redondo</option>
+                <option value="Doble punto">Punto eliptico</option>
+              </Field>
+            </div>
             {/* <div className="w-1/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Sistema de impresión
@@ -392,12 +419,18 @@ console.log(dataApi)
                 Corte de papel
               </label>
               <Field
-                type="number"
+                as="select"
                 name="idPaperCut"
                 id="idPaperCut"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="Libreta"
-              />
+              >
+                {/* Opciones del select */}
+                {paperCuts && paperCuts.map(paperCut => (
+                  <option key={paperCut.id} value={paperCut.id}>
+                    {paperCut.name}
+                  </option>
+                ))}
+              </Field>
             </div>
             {/* <div className="w-1/4">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -427,7 +460,7 @@ console.log(dataApi)
                   setFieldValue("scheme", event.target.files[0]);
                   handleFileChange(event);
                 }}
-  
+
               />
             </div>
             <div className="w-1/4">
@@ -444,7 +477,7 @@ console.log(dataApi)
                   setFieldValue("image", event.target.files[0]);
                   handleFileChange(event);
                 }}
-  
+
               />
             </div>
             <div className="w-2/4">
@@ -473,13 +506,15 @@ console.log(dataApi)
   )
 }
 
-export function CreateButtomOrderProduction({ data }) {
+export function CreateButtomOrderProduction({ orderProduction }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
+    console.log(`ID del orderProduction: ${orderProduction}`);
     dispatch(setWidth({ width: 'w-[1000]' }))
     dispatch(openModal({ title: 'Crear orden de producción' }))
     dispatch(setAction({ action: 'creating' }))
+    dispatch(setDetailsData({ detailsData: orderProduction }))
   }
   // ?
 
