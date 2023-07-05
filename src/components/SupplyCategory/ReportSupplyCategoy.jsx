@@ -1,5 +1,4 @@
-import { format } from 'fecha'
-import { setGlobalDateI18n } from 'fecha'
+import { format, setGlobalDateI18n } from 'fecha'
 
 const ReportSupplyCategory = ({ dataApi }) => {
   setGlobalDateI18n({

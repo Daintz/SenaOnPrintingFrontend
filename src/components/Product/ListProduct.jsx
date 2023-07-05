@@ -22,6 +22,7 @@ const ListProduct = () => {
     { Header: 'Nombre', accessor: 'name' },
     { Header: 'Tipo producto', accessor: 'typeProduct' },
     { Header: 'Caracteristicas', accessor: 'characteristics' },
+    { Header: 'Costo', accessor: 'cost' },
     {
       Header: 'Estado',
       accessor: 'statedAt',

@@ -4,12 +4,13 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsProduct () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { typeProduct, name, characteristics, statedAt } = detailsData
+  const { typeProduct, name, characteristics, cost, statedAt } = detailsData
   return (
     <>
       <p><b>Tipo de producto:</b> {typeProduct}</p>
       <p><b>Nombre:</b> {name}</p>
       <p><b>Caracteristicas:</b> {characteristics}</p>
+      <p><b>Costo:</b> {cost}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt
@@ -28,7 +29,7 @@ export function DetailsButtonProduct ({ product }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[500px]' }))
     dispatch(openModal({ title: 'Detalles producto' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: product }))

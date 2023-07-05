@@ -42,7 +42,7 @@ function ChangeStateProduct () {
 export function ChangeStateButtonProduct ({ product }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[400px]' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: product }))

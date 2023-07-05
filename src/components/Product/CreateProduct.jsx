@@ -57,6 +57,13 @@ function CreateProduct () {
       title: 'Caracteristicas',
       type: 'text',
       placeholder: 'Caracteristicas del producto'
+    },
+    {
+      key: 3,
+      name: 'cost',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo del producto'
     }
   ]
 
@@ -65,7 +72,8 @@ function CreateProduct () {
       initialValues={{
         typeProduct: '',
         name: '',
-        characteristics: ''
+        characteristics: '',
+        cost: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -105,7 +113,7 @@ export function CreateButtonProduct () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[500px]' }))
     dispatch(setAction({ action: 'creating' }))
     dispatch(openModal({ title: 'Crear producto' }))
   }
