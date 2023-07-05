@@ -61,7 +61,12 @@ function UpdateGrammageCaliber() {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-
+    // Actualizar el valor del campo "name" según el tipo seleccionado
+    if (values.type === 'Gramaje') {
+      values.name = values.name + ' gr'
+    } else if (values.type === 'Calibre') {
+      values.name = values.name + ' mm'
+    }
     await updateGrammageCaliber(values)
 
     dispatch(changeAction())
@@ -74,15 +79,16 @@ function UpdateGrammageCaliber() {
       key: 0,
       name: 'type',
       title: 'Tipo',
-      type: 'text',
+      type: 'select',
+      options: ['Gramaje', 'Calibre'],
       placeholder: 'Tipo'
     },
     {
       key: 1,
       name: 'name',
-      title: 'Gramaje',
+      title: 'Grammaje y/o calibre',
       type: 'text',
-      placeholder: 'Gramaje'
+      placeholder: 'Grammaje y/o calibre'
     }
   ]
 
@@ -100,31 +106,46 @@ function UpdateGrammageCaliber() {
       }}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-        {inputs.map(input => (
-          <div key={input.key}>
-            <label htmlFor={input.name}>{input.title}</label>
-            <Field
-              type={input.type}
-              name={input.name}
-              id={input.name}
-              placeholder={input.placeholder}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name={input.name}
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-        ))}
-        <button
-          type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+       <Form className="space-y-6">
+  {inputs.map(input => (
+    <div key={input.key}>
+      <label htmlFor={input.name}>{input.title}</label>
+      {input.type === 'select'
+        ? (
+        <Field
+          as="select"
+          name={input.name}
+          id={input.name}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
         >
-          Actualizar gramaje y/o calibre
-        </button>
-      </Form>
+          {input.options.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </Field>)
+        : (
+        <Field
+          type={input.type}
+          name={input.name}
+          id={input.name}
+          placeholder={input.placeholder}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+        />)}
+      <ErrorMessage
+        name={input.name}
+        component="div"
+        className="text-red-500"
+      />
+    </div>
+  ))}
+  <button
+    type="submit"
+    className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+  >
+    Actualizar grammaje y/o calibre
+  </button>
+</Form>
     </Formik>
   )
 }

@@ -1,11 +1,18 @@
-import { usePutQuotationClientDetailByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openEditing, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
+import { usePostQuotationClientDetailMutation } from '../../context/Api/Common'
+import {
+  changeAction,
+  closeModal,
+  openModal,
+  setAction,
+  setWidth
+} from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
-import Error from '../Error/Error'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
+import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
     quotationClientId: Yup.string().required('Campo requerido'),
@@ -20,135 +27,297 @@ const validationSchema = Yup.object().shape({
     fullValue: Yup.string().required('Campo requerido'),
 })
 
-function updateQuotationClientDetail () {
-  const dispatch = useDispatch()
-  const { editingData } = useSelector((state) => state.modal)
-  const [updateQuotationClientDetail, { error, isLoading }] = usePutQuotationClientDetailByIdMutation()
+const getQuotationClient = () => {
+  return new Promise((resolve, reject)=> {
+    clientAxios.get('/QuotationClient').then(
+      (result)=> {
+        const QuotationClient = result.data.map((quotationClient) => ({
+          'label':quotationClient.id,
+          'value': quotationClient.id 
+        }))
+        resolve(QuotationClient)
+      },
+      (error)=> {
+        reject(error)
+      }
+    )
+  })
+}
 
-  const handleSubmit = async values => {
+const getProduct = () => {
+  return new Promise((resolve, reject)=> {
+    clientAxios.get('/Product').then(
+      (result)=> {
+        const Product = result.data.map((product)=> ({
+          'label': product.name,
+          'value': product.id
+        }))
+        resolve(Product)
+      },
+      (error)=> {
+        reject(error)
+      }
+    )
+  })
+}
+
+function updateQuotationClientDetail () {
+
+  const [quotationclientOptions, setQuotationclientOptions] = useState([])
+  const [productOptions, setProductOptions] = useState([])
+
+  const fetchOptions = () => {
+    getQuotationClient().then((options) => {
+      setQuotationclientOptions(options)
+    })
+    getProduct().then((options) => {
+      setProductOptions(options)
+    })
+  }
+  useEffect(() => {
+    fetchOptions()
+  }, [])
+  const dispatch = useDispatch()
+  const [updateQuotationClientDetail, { error, isLoading }] = usePostQuotationClientDetailMutation()
+
+  const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
-    if (error) return <Error type={error.status} message={error.error} />
+
     await updateQuotationClientDetail(values)
 
     dispatch(changeAction())
-    dispatch(closeModal())
-    toast.success('Cotizacion actualizado con exito')
+    if (!error) {
+      dispatch(closeModal())
+    }
+    toast.success('Cotizacion creada con exito')
   }
-
-  const inputs = [
-    {
-      key: 0,
-      name: 'technicalSpecifications',
-      title: 'Especificaciones tecnicas',
-      type: 'text',
-      placeholder: 'Especificaciones tecnicas'
-    },
-    {
-      key: 1,
-      name: 'productHeight',
-      title: 'Altura del producto',
-      type: 'number',
-      placeholder: 'Altura del producto'
-    },
-    {
-      key: 2,
-      name: 'productWidth',
-      title: 'Ancho del producto',
-      type: 'number',
-      placeholder: 'Ancho del producto'
-    },
-  
-    {
-      key: 3,
-      name: 'numberOfPages',
-      title: 'Numero de paginas',
-      type: 'number',
-      placeholder: 'Numero de paginas'
-    },
-  
-    {
-      key: 4,
-      name: 'inkQuantity',
-      title: 'Cantidad de tinta',
-      type: 'number',
-      placeholder: 'Cantidad de tinta'
-    },
-    {
-      key: 5,
-      name: 'productQuantity',
-      title: 'Cantidad de producto',
-      type: 'number',
-      placeholder: 'Cantidad de producto'
-    },
-    {
-      key: 6,
-      name: 'unitValue',
-      title: 'Valor unico',
-      type: 'number',
-      placeholder: 'Valor unico'
-    },
-    {
-      key: 7,
-      name: 'fullValue',
-      title: 'Valor total',
-      type: 'number',
-      placeholder: 'Valor total'
-    },
-    {
-      key: 8,
-      name: 'quotationClientId',
-      title: 'Cotizacion Cliente Id',
-      type: 'number',
-      placeholder: 'Cotizacion Cliente Id'
-    },
-    {
-      key: 9,
-      name: 'productId',
-      title: 'Producto Id',
-      type: 'number',
-      placeholder: 'Producto Id'
-    },
-  ]
 
   return (
     <Formik
       initialValues={{
-        id: editingData.id,
-        quotationClientId: editingData.quotationClientId,
-        productId: editingData.productId,
-        technicalSpecifications: editingData.technicalSpecifications,
-        productHeight: editingData.productHeight,
-        productWidth: editingData.productWidth,
-        numberOfPages: editingData.numberOfPages,
-        inkQuantity: editingData.inkQuantity,
-        productQuantity: editingData.productQuantity,
-        unitValue: editingData.unitValue,
-        fullValue: editingData.fullValue
-       
+    quotationClientId: '',
+    productId: '',
+    technicalSpecifications: '',
+    productHeight: '',
+    productWidth: '',
+    numberOfPages: '',
+    inkQuantity: '',
+    productQuantity: '',
+    unitValue: '',
+    fullValue: '',
       }}
       onSubmit={(values) => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
+        {({ setFieldValue }) => (
+        <Form>
+        <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Producto <b className="text-red-700">*</b>
+              </label>
               <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
+              type="text"
+                as="select"
+                name="productId"
+                id="productId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
+                placeholder="100"
+              >
+                {productOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+            {option.label}
+            </option>
+             ))}
+              </Field>
               <ErrorMessage
-                name={input.name}
+                name="productId"
+                component="div"
+                className="text-red-500"
+              />
+              </div>
+          <div className="w-2/4">
+              <label htmlFor="technicalSpecifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Especificaciones tecnicas  <b className="text-red-700">*</b>
+              </label>
+              <textarea
+                type="text"
+                name="technicalSpecifications"
+                id="technicalSpecifications"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                rows="6" cols="40"
+                placeholder="El producto contara..."
+              />
+               <ErrorMessage
+                name="technicalSpecifications"
+       
                 component="div"
                 className="text-red-500"
               />
             </div>
-          ))}
+            
+
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+            <div className="w-1/4">
+              <label htmlFor="productHeight" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Altura del producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productHeight"
+                id="productHeight"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="productHeight"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="productWidth" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Ancho del producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productWidth"
+                id="productWidth"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+       <ErrorMessage
+                name="productWidth"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="numberOfPages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Numero de paginas <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="numberOfPages"
+                id="numberOfPages"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="numberOfPages"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="inkQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Cantidad de tinta <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="inkQuantity"
+                id="inkQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="inkQuantity"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-1/4">
+              <label htmlFor="productQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Cantidad de producto <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="productQuantity"
+                id="productQuantity"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+              <ErrorMessage
+              name="productQuantity"
+              component="div"
+              className="text-red-500"
+              />
+            </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="unitValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Valor unico <b className="text-red-700">*</b>
+              </label>
+              <Field
+                type="number"
+                name="unitValue"
+                id="unitValue"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
+              />
+               <ErrorMessage
+                name="unitValue"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            <div className="w-2/4">
+              <label htmlFor="fullValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+              Valor total <b className="text-red-700">*</b>
+              </label>
+              <Field
+               type="number"
+               name="fullValue"
+               id="fullValue"
+               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+               placeholder="1.0.5"
+              />
+              <ErrorMessage
+              name="fullValue"
+              component="div"
+              className="text-red-500"
+              />
+            </div>
+          </div>
+
+
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-2/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Cotizacion CLiente <b className="text-red-700">*</b>
+              </label>
+              <Field
+              type="number"
+                as="select"
+                name="quotationClientId"
+                id="quotationClientId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                 {quotationclientOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+            {option.label}
+            </option>
+            ))}
+              </Field>
+              <ErrorMessage
+                name="quotationClientId"
+       
+                component="div"
+                className="text-red-500"
+              />
+              </div>
+          
+          </div>
           <button
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -156,6 +325,7 @@ function updateQuotationClientDetail () {
             Crear Cotizacion
           </button>
         </Form>
+             )}
     </Formik>
   )
 }

@@ -42,13 +42,45 @@ const commonEndpointsApi = (entityName, entityUrl) => {
                     method: 'DELETE'
                 })
             })
+  return createApi({
+    reducerPath: 'commonApi',
+    baseQuery: fetchBaseQuery({
+      baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
+    }),
+    endpoints: builder => ({
+      getAll: builder.query({
+        query: () => `${entityUrl}`
+      }),
+      getById: builder.query({
+        query: id => `${entityUrl}/${id}`
+      }),
+      post: builder.mutation({
+        query: data => ({
+          url: `${entityUrl}`,
+          method: 'POST',
+          body: data
         })
+      }),
+      putById: builder.mutation({
+        query: data => ({
+          url: `${entityUrl}/${data.id}`,
+          method: 'PUT',
+          body: data
+        })
+      }),
+      deleteById: builder.mutation({
+        query: id => ({
+          url: `${entityUrl}/${id}`,
+          method: 'DELETE'
+        })
+      })
     })
+  })
 }
 
 export const supplyCategoryApi = commonEndpointsApi(
-    'SupplyCategory',
-    'supplyCategory'
+  'SupplyCategory',
+  'supplyCategory'
 )
 export const productApi = commonEndpointsApi('Product', 'product')
 
@@ -87,6 +119,8 @@ export const MachineApi = commonEndpointsApi('Machine', 'machine')
 
 export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
 
+export const supplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
 
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
@@ -94,91 +128,93 @@ export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 
 export const {
-    useGetAllQuery: useGetAllSupplyCategoryQuery,
-    useGetByIdQuery: useGetSupplyCategoryByIdQuery,
-    usePostMutation: usePostSupplyCategoryMutation,
-    usePutByIdMutation: usePutSupplyCategoryByIdMutation,
-    useDeleteByIdMutation: useDeleteSupplyCategoryByIdMutation
+  useGetAllQuery: useGetAllSupplyCategoryQuery,
+  useGetByIdQuery: useGetSupplyCategoryByIdQuery,
+  usePostMutation: usePostSupplyCategoryMutation,
+  usePutByIdMutation: usePutSupplyCategoryByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyCategoryByIdMutation
 } = supplyCategoryApi
 
 export const {
-    useGetAllQuery: useGetAllProductsQuery,
-    useGetByIdQuery: useGetProductByIdQuery,
-    usePostMutation: usePostProductMutation,
-    usePutByIdMutation: usePutProductByIdMutation,
-    useDeleteByIdMutation: useDeleteProductByIdMutation
+  useGetAllQuery: useGetAllProductsQuery,
+  useGetByIdQuery: useGetProductByIdQuery,
+  usePostMutation: usePostProductMutation,
+  usePutByIdMutation: usePutProductByIdMutation,
+  useDeleteByIdMutation: useDeleteProductByIdMutation
 } = productApi
 
 export const {
-    useGetAllQuery: useGetAllRolesQuery,
-    useGetByIdQuery: useGetRoleByIdQuery,
-    usePostMutation: usePostRoleMutation,
-    usePutByIdMutation: usePutRoleByIdMutation,
-    useDeleteByIdMutation: useDeleteRoleByIdMutation
+  useGetAllQuery: useGetAllRolesQuery,
+  useGetByIdQuery: useGetRoleByIdQuery,
+  usePostMutation: usePostRoleMutation,
+  usePutByIdMutation: usePutRoleByIdMutation,
+  useDeleteByIdMutation: useDeleteRoleByIdMutation
 } = roleApi
 
 export const {
-    useGetAllQuery: useGetAllTypeDocumentsQuery,
-    useGetByIdQuery: useGetTypeDocumentByIdQuery,
-    usePostMutation: usePostTypeDocumentMutation,
-    usePutByIdMutation: usePutTypeDocumentByIdMutation,
-    useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
+  useGetAllQuery: useGetAllTypeDocumentsQuery,
+  useGetByIdQuery: useGetTypeDocumentByIdQuery,
+  usePostMutation: usePostTypeDocumentMutation,
+  usePutByIdMutation: usePutTypeDocumentByIdMutation,
+  useDeleteByIdMutation: useDeleteTypeDocumentByIdMutation
 } = typeDocumentApi
 
 export const {
-    useGetAllQuery: useGetAllTypeServicesQuery,
-    useGetByIdQuery: useGetTypeServicesByIdQuery,
-    usePostMutation: usePostTypeServicesMutation,
-    usePutByIdMutation: usePutTypeServicesByIdMutation,
-    useDeleteByIdMutation: useDeleteTypeServicesByIdMutation
+  useGetAllQuery: useGetAllTypeServicesQuery,
+  useGetByIdQuery: useGetTypeServicesByIdQuery,
+  usePostMutation: usePostTypeServicesMutation,
+  usePutByIdMutation: usePutTypeServicesByIdMutation,
+  useDeleteByIdMutation: useDeleteTypeServicesByIdMutation
 } = typeServices
 
 export const {
-    useGetAllQuery: useGetAllQuotationProvidersQuery,
-    useGetByIdQuery: useGetQuotationProvidersByIdQuery,
-    usePostMutation: usePostQuotationProvidersMutation,
-    usePutByIdMutation: usePutQuotationProvidersByIdMutation,
-    useDeleteByIdMutation: useDeleteQuotationProvidersByIdMutation
+  useGetAllQuery: useGetAllQuotationProvidersQuery,
+  useGetByIdQuery: useGetQuotationProvidersByIdQuery,
+  usePostMutation: usePostQuotationProvidersMutation,
+  usePutByIdMutation: usePutQuotationProvidersByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationProvidersByIdMutation
 } = quotationProviders
 
 export const {
-    useGetAllQuery: useGetAllSupplyPictogramsQuery,
-    useGetByIdQuery: useGetSupplyPictogramsByIdQuery,
-    usePostMutation: usePostSupplyPictogramsMutation,
-    usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
-    useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
-} = supplyPictograms
+
+  useGetAllQuery: useGetAllSupplyPictogramsQuery,
+  useGetByIdQuery: useGetSupplyPictogramsByIdQuery,
+  usePostMutation: usePostSupplyPictogramsMutation,
+  usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
+} = supplyPictogrmas
+
 export const {
-    useGetAllQuery: useGetAllUsersQuery,
-    useGetByIdQuery: useGetUserByIdQuery,
-    usePostMutation: usePostUserMutation,
-    usePutByIdMutation: usePutUserByIdMutation,
-    useDeleteByIdMutation: useDeleteUserByIdMutation
+  useGetAllQuery: useGetAllUsersQuery,
+  useGetByIdQuery: useGetUserByIdQuery,
+  usePostMutation: usePostUserMutation,
+  usePutByIdMutation: usePutUserByIdMutation,
+  useDeleteByIdMutation: useDeleteUserByIdMutation
 } = userApi
 
 export const {
 
-    useGetAllQuery: useGetAllLineaturesQuery,
-    useGetByIdQuery: useGetLineatureByIdQuery,
-    usePostMutation: usePostLineatureMutation,
-    usePutByIdMutation: usePutLineatureByIdMutation,
-    useDeleteByIdMutation: useDeleteLineatureByIdMutation
+  useGetAllQuery: useGetAllLineaturesQuery,
+  useGetByIdQuery: useGetLineatureByIdQuery,
+  usePostMutation: usePostLineatureMutation,
+  usePutByIdMutation: usePutLineatureByIdMutation,
+  useDeleteByIdMutation: useDeleteLineatureByIdMutation
 } = lineatureApi
 
 export const {
-    useGetAllQuery: useGetAllImpositionPlanchsQuery,
-    useGetByIdQuery: useGetImpositionPlanchByIdQuery,
-    usePostMutation: usePostImpositionPlanchMutation,
-    usePutByIdMutation: usePutImpositionPlanchByIdMutation,
-    useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
+  useGetAllQuery: useGetAllImpositionPlanchsQuery,
+  useGetByIdQuery: useGetImpositionPlanchByIdQuery,
+  usePostMutation: usePostImpositionPlanchMutation,
+  usePutByIdMutation: usePutImpositionPlanchByIdMutation,
+  useDeleteByIdMutation: useDeleteImpositionPlanchByIdMutation
 } = impositionPlanchApi
 
 export const {
-    useGetAllQuery: useGetAllQuotationClientsQuery,
-    useGetByIdQuery: useGetQuotationClientByIdQuery,
-    usePostMutation: usePostQuotationClientMutation,
-    usePutByIdMutation: usePutQuotationClientByIdMutation,
-    useDeleteByIdMutation: useDeleteQuotationClientByIdMutation
+  useGetAllQuery: useGetAllQuotationClientsQuery,
+  useGetByIdQuery: useGetQuotationClientByIdQuery,
+  usePostMutation: usePostQuotationClientMutation,
+  usePutByIdMutation: usePutQuotationClientByIdMutation,
+  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation
 } = quotationClientApi
 
 export const {
@@ -191,35 +227,35 @@ export const {
 } = quotationclientDetailApi
 
 export const {
-    useGetAllQuery: useGetAllClientsQuery,
-    useGetByIdQuery: useGetClientByIdQuery,
-    usePostMutation: usePostClientMutation,
-    usePutByIdMutation: usePutClientByIdMutation,
-    useDeleteByIdMutation: useDeleteClientByIdMutation
+  useGetAllQuery: useGetAllClientsQuery,
+  useGetByIdQuery: useGetClientByIdQuery,
+  usePostMutation: usePostClientMutation,
+  usePutByIdMutation: usePutClientByIdMutation,
+  useDeleteByIdMutation: useDeleteClientByIdMutation
 } = clientApi
 
 export const {
-    useGetAllQuery: useGetAllGrammageCalibersQuery,
-    useGetByIdQuery: useGetGrammageCaliberByIdQuery,
-    usePostMutation: usePostGrammageCaliberMutation,
-    usePutByIdMutation: usePutGrammageCaliberByIdMutation,
-    useDeleteByIdMutation: useDeleteGrammageCaliberByIdMutation
+  useGetAllQuery: useGetAllGrammageCalibersQuery,
+  useGetByIdQuery: useGetGrammageCaliberByIdQuery,
+  usePostMutation: usePostGrammageCaliberMutation,
+  usePutByIdMutation: usePutGrammageCaliberByIdMutation,
+  useDeleteByIdMutation: useDeleteGrammageCaliberByIdMutation
 } = grammageCaliberApi
 
 export const {
-    useGetAllQuery: useGetAllPaperCutsQuery,
-    useGetByIdQuery: useGetPaperCutsByIdQuery,
-    usePostMutation: usePostPaperCutsMutation,
-    usePutByIdMutation: usePutPaperCutsByIdMutation,
-    useDeleteByIdMutation: useDeletePaperCutsByIdMutation
+  useGetAllQuery: useGetAllPaperCutsQuery,
+  useGetByIdQuery: useGetPaperCutsByIdQuery,
+  usePostMutation: usePostPaperCutsMutation,
+  usePutByIdMutation: usePutPaperCutsByIdMutation,
+  useDeleteByIdMutation: useDeletePaperCutsByIdMutation
 } = paperCutsApi
 
 export const {
-    useGetAllQuery: useGetAllSubstratesQuery,
-    useGetByIdQuery: useGetSubstratesByIdQuery,
-    usePostMutation: usePostSubstratesMutation,
-    usePutByIdMutation: usePutSubstratesByIdMutation,
-    useDeleteByIdMutation: useDeleteSubstratesByIdMutation
+  useGetAllQuery: useGetAllSubstratesQuery,
+  useGetByIdQuery: useGetSubstratesByIdQuery,
+  usePostMutation: usePostSubstratesMutation,
+  usePutByIdMutation: usePutSubstratesByIdMutation,
+  useDeleteByIdMutation: useDeleteSubstratesByIdMutation
 } = substratesApi
 
 export const {
@@ -232,50 +268,49 @@ export const {
 } = orderProductionApi
 
 export const {
-    useGetAllQuery: useGetAllFinishQuery,
-    useGetByIdQuery: useGetFinishByIdQuery,
-    usePostMutation: usePostFinishMutation,
-    usePutByIdMutation: usePutFinishByIdMutation,
-    useDeleteByIdMutation: useDeleteFinishByIdMutation
+  useGetAllQuery: useGetAllFinishQuery,
+  useGetByIdQuery: useGetFinishByIdQuery,
+  usePostMutation: usePostFinishMutation,
+  usePutByIdMutation: usePutFinishByIdMutation,
+  useDeleteByIdMutation: useDeleteFinishByIdMutation
 } = finishApi
 
 export const {
-    useGetAllQuery: useGetAllMachineQuery,
-    useGetByIdQuery: useGetMachineByIdQuery,
-    usePostMutation: usePostMachineMutation,
-    usePutByIdMutation: usePutMachineByIdMutation,
-    useDeleteByIdMutation: useDeleteMachineByIdMutation
+  useGetAllQuery: useGetAllMachineQuery,
+  useGetByIdQuery: useGetMachineByIdQuery,
+  usePostMutation: usePostMachineMutation,
+  usePutByIdMutation: usePutMachineByIdMutation,
+  useDeleteByIdMutation: useDeleteMachineByIdMutation
 } = MachineApi
 
 export const {
-    useGetAllQuery: useGetAllUnitUnitMesureQuery,
-    useGetByIdQuery: useGetUnitUnitMesureByIdQuery,
-    usePostMutation: usePostUnitUnitMesureMutation,
-    usePutByIdMutation: usePutUnitMesureByIdMutation,
-    useDeleteByIdMutation: useDeleteUnitMesureByIdMutation
+  useGetAllQuery: useGetAllUnitUnitMesureQuery,
+  useGetByIdQuery: useGetUnitUnitMesureByIdQuery,
+  usePostMutation: usePostUnitUnitMesureMutation,
+  usePutByIdMutation: usePutUnitMesureByIdMutation,
+  useDeleteByIdMutation: useDeleteUnitMesureByIdMutation
 } = UnitMesureApi
 
 export const {
-    useGetAllQuery: useGetAllWarehauseTypesQuery,
-    useGetByIdQuery: useGetWarehauseTypeByIdQuery,
-    usePostMutation: usePostWarehauseTypeMutation,
-    usePutByIdMutation: usePutWarehauseTypeByIdMutation,
-    useDeleteByIdMutation: useDeleteWarehauseTypeByIdMutation
+  useGetAllQuery: useGetAllWarehauseTypesQuery,
+  useGetByIdQuery: useGetWarehauseTypeByIdQuery,
+  usePostMutation: usePostWarehauseTypeMutation,
+  usePutByIdMutation: usePutWarehauseTypeByIdMutation,
+  useDeleteByIdMutation: useDeleteWarehauseTypeByIdMutation
 } = WarehauseTypeApi
 
 export const {
-    useGetAllQuery: useGetAllWarehausesQuery,
-    useGetByIdQuery: useGetWarehauseByIdQuery,
-    usePostMutation: usePostWarehauseMutation,
-    usePutByIdMutation: usePutWarehauseByIdMutation,
-    useDeleteByIdMutation: useDeleteWarehauseByIdMutation
+  useGetAllQuery: useGetAllWarehausesQuery,
+  useGetByIdQuery: useGetWarehauseByIdQuery,
+  usePostMutation: usePostWarehauseMutation,
+  usePutByIdMutation: usePutWarehauseByIdMutation,
+  useDeleteByIdMutation: useDeleteWarehauseByIdMutation
 } = WarehauseApi
 
-
 export const {
-    useGetAllQuery: useGetAllProvidersQuery,
-    useGetByIdQuery: useGetProviderByIdQuery,
-    usePostMutation: usePostProviderMutation,
-    usePutByIdMutation: usePutProviderByIdMutation,
-    useDeleteByIdMutation: useDeleteProviderByIdMutation
+  useGetAllQuery: useGetAllProvidersQuery,
+  useGetByIdQuery: useGetProviderByIdQuery,
+  usePostMutation: usePostProviderMutation,
+  usePutByIdMutation: usePutProviderByIdMutation,
+  useDeleteByIdMutation: useDeleteProviderByIdMutation
 } = ProviderApi

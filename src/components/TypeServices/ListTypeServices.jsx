@@ -5,7 +5,7 @@ import { useGetAllTypeServicesQuery } from '../../context/Api/Common'
 import { UpdateButtomTypeServices } from '../TypeServices/UpdatetypeServices'
 import { ChangeStateButtonTypeServices } from '../TypeServices/ChangeStateTypeServices'
 import { CreateButtomTypeServices } from '../TypeServices/CreateTypeServices'
-import { DetailsButtomTypeServices } from '../TypeServices/DetailsTypeServices'
+
 
 const ListTypeServices = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -18,8 +18,6 @@ const ListTypeServices = () => {
   }, [isAction])
   // ?
 
-
- 
   const columns = useMemo(()=>[
     { Header: 'Nombre', accessor: 'name' },
     {Header: 'Estado',
@@ -130,9 +128,6 @@ const ListTypeServices = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomTypeServices
-                        typeServices={row.original}
-                      />
                       <UpdateButtomTypeServices
                         typeServices={row.original}
                       />
