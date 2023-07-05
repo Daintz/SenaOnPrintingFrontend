@@ -418,7 +418,6 @@ function Sidebar () {
                   to={'/quotationclientDetail'}
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationclientDetail' ? 'bg-green-500' : null}`}
                 >
-
                   <span className="ml-3">Cotizacion Cliente Detalles</span>
                 </Link>
               </li>
@@ -480,7 +479,6 @@ function Sidebar () {
                   to="/OrderProduction"
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/OrderProduction' ? 'bg-green-500' : null}`}
                 >
-
                   <span className="ml-3 text-base">Orden de producción</span>
                 </Link>
               </li>

@@ -13,6 +13,9 @@ const commonEndpointsApi = (entityName, entityUrl) => {
             getById: builder.query({
                 query: id => `${entityUrl}/${id}`
             }),
+            getAllApproved: builder.query({
+                query: () => `${entityUrl}/Approved`
+            }),
             post: builder.mutation({
                 query: data => ({
                     url: `${entityUrl}`,
@@ -30,6 +33,12 @@ const commonEndpointsApi = (entityName, entityUrl) => {
             deleteById: builder.mutation({
                 query: id => ({
                     url: `${entityUrl}/${id}`,
+                    method: 'DELETE'
+                })
+            }),
+            deleteStatus: builder.mutation({
+                query: id => ({
+                    url: `${entityUrl}/ChangeStatus/${id}`,
                     method: 'DELETE'
                 })
             })
@@ -175,6 +184,7 @@ export const {
 export const {
     useGetAllQuery: useGetAllQuotationClientDetailsQuery,
     useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
+    useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
     usePostMutation: usePostQuotationClientDetailMutation,
     usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
     useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
@@ -217,7 +227,8 @@ export const {
     useGetByIdQuery: useGetOrderProductionByIdQuery,
     usePostMutation: usePostOrderProductionMutation,
     usePutByIdMutation: usePutOrderProductionByIdMutation,
-    useDeleteByIdMutation: useDeleteOrderProductionByIdMutation
+    useDeleteByIdMutation: useDeleteOrderProductionByIdMutation,
+    useDeleteStatusMutation: useDeleteOrderProductionStatusMutation
 } = orderProductionApi
 
 export const {

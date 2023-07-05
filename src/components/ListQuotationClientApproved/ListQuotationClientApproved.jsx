@@ -1,19 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllOrderProductionsQuery,  useGetAllQuotationClientsQuery} from '../../context/Api/Common'
 import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
-import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
-import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
-import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction'
-import { CreateButtomOrderProduction } from './CreateOrderProduction'
-import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
+import { UpdateButtomOrderProduction } from '../../components/OrderProduction/UpdateOrderProduction'
+import { ChangeStateButtonOrderProduction } from '../../components/OrderProduction/ChangeStateOrderProduction'
+import { CreateButtomOrderProduction } from '../../components/OrderProduction/CreateOrderProduction'
+import { DetailsButtonOrderProduction } from '../../components/OrderProduction/DetailsOrderProduction'
 
-
-const ListOrderProduction = () => {
-  const [selectedOption, setSelectedOption] = useState('orderProduction'); // Estado para almacenar la opción seleccionada
+const ListQuotationClientApproved = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
+  const { data: dataApi, refetch } = useGetAllQuotationClientDetailApprovedQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -23,52 +19,12 @@ const ListOrderProduction = () => {
   // ?
 
   const columns = useMemo(() => [
-    { Header: 'Cotización', accessor: 'quotationClientDetailId' },
+    { Header: 'Cotización detalle', accessor: 'id' },
+    { Header: 'Cotización', accessor: 'quotationClientId' },
+    { Header: 'Fecha de orden', accessor: 'orderDate' },
     { Header: 'Fecha de entrega', accessor: 'deliverDate' },
     { Header: 'Cliente', accessor: 'name' },
-    { Header: 'Producto', accessor: 'product' },
-    {
-        Header: 'Proceso',
-        accessor: 'orderStatus',
-        Cell: ({ value }) => {
-          if (value == 2){
-            return (
-              <span className="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300">
-                Preimpresión
-              </span>
-            );
-          } else if (value == 3){
-            return (
-              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-                Impresión
-              </span>
-            );
-          }else if (value == 4){
-            return (
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                Postimpresión
-              </span>
-            );
-          }
-          else {
-            return (
-              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                Terminado
-              </span>
-            );
-          }
-        }
-      },{
-        Header: 'Estado',
-        accessor: 'statedAt',
-        Cell: ({ value }) => (value
-          ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-          : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>)
-      }
+    { Header: 'Producto', accessor: 'productName' },
   ], [])
 
   const data = useMemo(() => (dataApi || []), [dataApi])
@@ -135,7 +91,7 @@ const ListOrderProduction = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/planOP" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</a>
+            <a href="/orderProduction" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</a>
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
@@ -167,21 +123,10 @@ const ListOrderProduction = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtonOrderProduction
+                      
+                      <CreateButtomOrderProduction
                         orderProduction={row.original}
                       />
-                      {/* <UpdateButtomOrderProduction
-                        orderProduction={row.original}
-                      /> */}
-                      <ChangeStateButtonOrderProduction
-                        orderProduction={row.original}
-                      />
-                      <ChangeStatusButtonOrderProduction
-                        orderProduction={row.original}
-                      />
-                      {/* <CreateButtomOrderProduction
-                        orderProduction={row.original}
-                      /> */}
                     </td>
                   </tr>
                 )
@@ -256,4 +201,4 @@ const ListOrderProduction = () => {
   )
 }
 
-export default ListOrderProduction
+export default ListQuotationClientApproved

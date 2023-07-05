@@ -33,6 +33,7 @@ import SupplyPictogrmas from '../pages/SupplyPictograms/SupplyPictograms'
 import QuotationProviders from '../pages/QuotationProviders/QuotationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
+import QuotationClientApproved from '../pages/ListQuotationClientApproved/QuotationClientApproved'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -249,6 +250,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <SupplyCategory />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="planOP"
+        element={
+          <DashboardLayout>
+            <QuotationClientApproved />
           </DashboardLayout>
         }
       />
