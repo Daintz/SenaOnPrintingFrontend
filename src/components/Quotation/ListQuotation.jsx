@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import {
@@ -9,8 +9,18 @@ import { CreateButtomQuotation } from './CreateQuotation';
 import { UpdateButtomQuotation } from './UpdateQuotation';
 import { DetailsButtomQuotation } from './DetailsQuotation';
 import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
+import { useReactToPrint } from 'react-to-print'
+import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import Reportquotation from './ReportQuotation';
 
 const ListQuotation = () => {
+{/*   const tablePDF = useRef()
+
+  const generatePDF = useReactToPrint({
+    content: () => tablePDF.current,
+    documentTitle: 'Informe de clientes'
+  }) */}
+
   const { data: dataApi, refetch: refetch1 } = useGetAllQuotationClientsQuery();
   const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery();
 
@@ -25,13 +35,9 @@ const ListQuotation = () => {
     () => [
       { Header: 'Codigo', accessor: 'id' },
       { Header: 'Fecha de orden', accessor: 'orderDate' },
-      { Header: 'Fecha de entrega', accessor: 'deliverDate' },
-      { Header: 'Usuario Id', accessor: 'userId' },
+      { Header: 'Fecha de Entrega', accessor: 'deliverDate' },
       { Header: 'Cliente Id', accessor: 'clientId' },
       { Header: 'Tipo de servicio Id', accessor: 'typeServiceId' },
-      { Header: 'Cantidad de Productos', accessor: 'productQuantity' },
-      { Header: 'Valor Unico', accessor: 'unitValue' },
-      { Header: 'Valor Total', accessor: 'fullValue' },
       {
         Header: 'Estado Cotizacion',
         accessor: 'quotationStatus',
@@ -48,7 +54,6 @@ const ListQuotation = () => {
           return <div>{statusText}</div>;
         }
       }
-      
     ],
     []
   );
@@ -93,6 +98,22 @@ const ListQuotation = () => {
 
 
   return (
+    <>
+    {/* <div className='hidden'>
+      <div ref={tablePDF}>
+        <Reportquotation dataApi={dataApi}/>
+      </div>
+    </div>
+    <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
+    <button
+      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      onClick={ generatePDF }
+      type="button"
+    >
+      <BsFillFileEarmarkBreakFill />
+      Crear un informe
+    </button>
+    </div> */}
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
@@ -240,6 +261,7 @@ const ListQuotation = () => {
           </nav>
         </div>
       </div>
+      </>
   )
 }
 

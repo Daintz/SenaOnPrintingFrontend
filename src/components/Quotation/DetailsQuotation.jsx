@@ -5,25 +5,18 @@ import { BsClipboard2 } from 'react-icons/bs'
 function DetailsQuotation() {
   const { detailsData } = useSelector((state) => state.modal)
   const { orderDate, deliverDate, userId, clientId, typeServiceId, quotationStatus, quotationClientId, productId, technicalSpecifications, productHeight, productWidth, numberOfPages, inkQuantity, productQuantity, unitValue, fullValue, statedAt } = detailsData
+  console.log(detailsData)
   return (
     <>
-      <p><b>Fecha de orden:</b> {orderDate}</p>
+    <div className="flex gap-5 grid-cols-4 mb-3">
+    <div className="w-2/4">
+    <p><b>Fecha Inicial:</b> {orderDate}</p>
       <p><b>Fecha de entrega:</b> {deliverDate}</p>
-      <p><b>Usuario Id:</b> {userId}</p>
-      <p><b>Cliente Id:</b> {clientId}</p>
-      <p><b>Tipo de servicio Id:</b> {typeServiceId}</p>
-      <p><b>Especificaciones Tecniacas:</b> {technicalSpecifications}</p>
-      <p><b>Altura Producto:</b> {productHeight}</p>
-      <p><b>Anchura Producto:</b> {productWidth}</p>
-      <p><b>Numero de Paginas:</b> {numberOfPages}</p>
-      <p><b>Cantidad de Tintas:</b> {inkQuantity}</p>
-      <p><b>Cantidad de Producto:</b> {productQuantity}</p>
-      <p><b>Valor Unico:</b> {unitValue}</p>
-      <p><b>Valor Total:</b> {fullValue}</p>
-      <p><b>Cotizacion Cliente ID:</b> {quotationClientId}</p>
-      <p><b>Producto ID:</b> {productId}</p>
+      <p><b>Usuario:</b> {userId}</p>
+      <p><b>Cliente:</b> {clientId}</p>
+      <p><b>Tipo de servicio:</b> {typeServiceId}</p>
       <p>
-        <b>Estado cotización:</b> {quotationStatus === 1 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+        <b>Estado de la cotización:</b> {quotationStatus === 1 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
             En Proceso
           </span> : quotationStatus === 2 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
             Aprobado
@@ -31,16 +24,15 @@ function DetailsQuotation() {
             No Aprobado
           </span> : 'No aprobado'}
       </p>
-      <p>
-        <b>Estado:</b> {' '}
-        {statedAt
-          ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-          : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>}
-      </p>
+
+    </div>
+    <div className="w-2/4">
+    <p><b>Producto:</b> {productId}</p>
+    <p><b>Observaciones:</b> {technicalSpecifications}</p>
+    <p><b>Altura producto:</b> {productHeight}</p>
+      <p><b>producto Ancho:</b> {productWidth}</p>
+    </div>
+    </div>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage, useFormikContext  } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { usePostQuotationClientMutation, usePostQuotationClientDetailMutation } from '../../context/Api/Common'
@@ -33,7 +33,6 @@ const validationSchema = Yup.object().shape({
   typeServiceId: Yup.string().required('Campo requerido'),
   quotationClientId: Yup.string().required('Campo requerido'),
   productId: Yup.string().required('Campo requerido'),
-  technicalSpecifications: Yup.string().required('Campo requerido'),
   productHeight: Yup.string().required('Campo requerido'),
   productWidth: Yup.string().required('Campo requerido'),
   numberOfPages: Yup.string().required('Campo requerido'),
@@ -92,16 +91,16 @@ const getTypeService = () => {
 }
 
 const getQuotationClient = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/QuotationClient').then(
-      (result)=> {
+      (result) => {
         const QuotationClient = result.data.map((quotationClient) => ({
-          'label':quotationClient.id,
-          'value': quotationClient.id 
+          'label': quotationClient.id,
+          'value': quotationClient.id
         }))
         resolve(QuotationClient)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
@@ -109,21 +108,22 @@ const getQuotationClient = () => {
 }
 
 const getProduct = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/Product').then(
-      (result)=> {
-        const Product = result.data.map((product)=> ({
+      (result) => {
+        const Product = result.data.map((product) => ({
           'label': product.name,
           'value': product.id
         }))
         resolve(Product)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
   })
 }
+
 
 function CreateQuotation() {
   const [clientsOptions, setClientsOptions] = useState([])
@@ -149,7 +149,7 @@ function CreateQuotation() {
       setProductOptions(options)
     })
   }
- 
+
 
   useEffect(() => {
     fetchOptions()
@@ -158,6 +158,9 @@ function CreateQuotation() {
   const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
   const [createQuotationClientDetail, { error: detailError, isLoading: detailIsLoading }] = usePostQuotationClientDetailMutation()
   const [quotationDetails, setQuotationDetails] = useState([])
+
+ 
+
   const handleSubmit = async (values) => {
     console.log(values)
     if (clientIsLoading || detailIsLoading) return <Spinner />
@@ -180,6 +183,7 @@ function CreateQuotation() {
       autoClose: 100
     })
   }
+
   return (
     <Formik
       initialValues={{
@@ -191,7 +195,7 @@ function CreateQuotation() {
         typeServiceId: '',
         quotationClientId: '',
         productId: '',
-        technicalSpecifications: 0,
+        technicalSpecifications: '',
         productHeight: '',
         productWidth: '',
         numberOfPages: '',
@@ -202,7 +206,15 @@ function CreateQuotation() {
       }}
       onSubmit={(values) => {
         handleSubmit(values)
-       // const result = values.unitValue * values.productQuantity;
+        // const result = values.unitValue * values.productQuantity;
+       /*  const { values } = useFormikContext(); // Obtiene los valores del formulario
+        const selectedProductId = values.productId; // Obtiene el valor seleccionado de productId
+      
+        const findCostByProductId = (productId) => {
+          const selectedProduct = productOptions.find((option) => option.value === productId);
+          return selectedProduct ? selectedProduct.cost : 0
+        }
+        const cost = findCostByProductId(selectedProductId) */
       }}
       validationSchema={validationSchema}
     >
@@ -211,7 +223,7 @@ function CreateQuotation() {
           <div className="flex linea-horizontal mb-2
           ">
             <div className="w-1/2">
-            <b>Codigo: </b>
+              <b>Codigo: </b>
             </div>
           </div>
           <hr className="mb-4" />
@@ -227,9 +239,9 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Drive"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="orderDate"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -245,9 +257,9 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="deliverDate"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -266,11 +278,12 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                 <option value={0}>Seleccione</option>
                 {userOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="userId"
@@ -291,15 +304,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                  {clientsOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+                 <option value={0}>Seleccione</option>
+                {clientsOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="clientId"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -315,15 +329,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                   {typeServiceOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-          ))}
+                 <option value={0}>Seleccione</option>
+                {typeServiceOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="typeServiceId"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -344,61 +359,61 @@ function CreateQuotation() {
             </div>
           </div>
           <div>
-          <br></br>
-          <p><b className='text-black-700 text-justify'>COTIZACION DETALLES</b></p>
-          <br></br>
+            <br></br>
+            <p><b className='text-black-700 text-justify'>COTIZACION DETALLES</b></p>
+            <br></br>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+            <div className="w-2/4">
               <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Producto <b className="text-red-700">*</b>
               </label>
               <Field
-              type="text"
+                type="text"
                 as="select"
                 name="productId"
                 id="productId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                 <option value={0}>Seleccione</option>
                 {productOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-            {option.label}
-            </option>
-             ))}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="productId"
                 component="div"
                 className="text-red-500"
               />
-              </div>
-          <div className="w-2/4">
+            </div>
+            <div className="w-2/4">
               <label htmlFor="technicalSpecifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Especificaciones tecnicas  <b className="text-red-700">*</b>
+                Especificaciones técnicas <b className="text-red-700">*</b>
               </label>
-              <textarea
-                type="text"
+              <Field
+                as="textarea"
                 name="technicalSpecifications"
                 id="technicalSpecifications"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                rows="6" cols="40"
-                placeholder="El producto contara..."
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 resize-y"
+                rows="6"
+                placeholder="El producto contará..."
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="technicalSpecifications"
-       
                 component="div"
                 className="text-red-500"
               />
             </div>
-            
+
 
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
               <label htmlFor="productHeight" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Altura del producto <b className="text-red-700">*</b>
+                Altura del producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -407,16 +422,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="productHeight"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="productWidth" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Ancho del producto <b className="text-red-700">*</b>
+                Ancho del producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -425,16 +440,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-       <ErrorMessage
+              <ErrorMessage
                 name="productWidth"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="numberOfPages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Numero de paginas <b className="text-red-700">*</b>
+                Numero de paginas <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -443,16 +458,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="numberOfPages"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="inkQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Cantidad de tinta <b className="text-red-700">*</b>
+                Cantidad de tinta <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -461,16 +476,16 @@ function CreateQuotation() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="inkQuantity"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="productQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Cantidad de producto <b className="text-red-700">*</b>
+                Cantidad de producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -480,127 +495,129 @@ function CreateQuotation() {
                 placeholder="1.0.5"
               />
               <ErrorMessage
-              name="productQuantity"
-              component="div"
-              className="text-red-500"
+                name="productQuantity"
+                component="div"
+                className="text-red-500"
               />
             </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+            <div className="w-2/4">
               <label htmlFor="unitValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Valor unico <b className="text-red-700">*</b>
+                Valor unico <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
                 name="unitValue"
                 id="unitValue"
+                
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="unitValue"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-2/4">
               <label htmlFor="fullValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Valor total <b className="text-red-700">*</b>
+                Valor total <b className="text-red-700">*</b>
               </label>
               <Field
-               type="number"
-               name="fullValue"
-               id="fullValue"
-               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-               placeholder="1.0.5"
+                type="number"
+                name="fullValue"
+                id="fullValue"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
               />
               <ErrorMessage
-              name="fullValue"
-              component="div"
-              className="text-red-500"
+                name="fullValue"
+                component="div"
+                className="text-red-500"
               />
             </div>
           </div>
 
 
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+            <div className="w-2/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cotizacion CLiente <b className="text-red-700">*</b>
               </label>
               <Field
-              type="number"
+                type="number"
                 as="select"
                 name="quotationClientId"
                 id="quotationClientId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                 {quotationclientOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-            {option.label}
-            </option>
-            ))}
+                 <option value={0}>Seleccione</option>
+                {quotationclientOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="quotationClientId"
-       
+
                 component="div"
                 className="text-red-500"
               />
-              </div>
-          <div className="w-2/4">
+            </div>
+            <div className="w-2/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Acabados <b className="text-red-700">*</b>
               </label>
               <Field
                 as="select"
                 name="userId"
-                data= {userOptions}
+                data={userOptions}
                 id="userId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
                 // ? aqui van los campos del select
               </Field>
-              </div>
-          <div className="w-2/4">
+            </div>
+            <div className="w-2/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Sustratos <b className="text-red-700">*</b>
               </label>
               <Field
                 as="select"
                 name="userId"
-                data= {userOptions}
+                data={userOptions}
                 id="userId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
                 // ? aqui van los campos del select
               </Field>
-              </div>
-          <div className="w-2/4">
+            </div>
+            <div className="w-2/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Gramaje <b className="text-red-700">*</b>
+                Gramaje <b className="text-red-700">*</b>
               </label>
               <Field
                 as="select"
                 name="userId"
-                data= {userOptions}
+                data={userOptions}
                 id="userId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
                 // ? aqui van los campos del select
               </Field>
-              </div>
+            </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-1/4">
+            <div className="w-1/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Estado de la Cotizacion <b className="text-red-700">*</b>
+                Estado de la Cotizacion <b className="text-red-700">*</b>
               </label>
               <Field
                 as="select"
@@ -611,24 +628,22 @@ function CreateQuotation() {
               >
                 <option value={0}>Seleccione</option>
                 <option value={1}>En proceso</option>
-                <option value={2}>Aprobado</option>
-                <option value={3}>No Aprobado</option>
               </Field>
               <ErrorMessage
                 name="quotationStatus"
-       
+
                 component="div"
                 className="text-red-500"
               />
-              </div>
+            </div>
           </div>
-            <center>
-          <button
-            type="submit"
-            className="col-span-3 w-50% text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Crear orden de producción
-          </button>
+          <center>
+            <button
+              type="submit"
+              className="col-span-3 w-50% text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Crear orden de producción
+            </button>
           </center>
         </Form>
       )}

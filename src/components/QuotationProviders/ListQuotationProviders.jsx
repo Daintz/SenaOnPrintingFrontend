@@ -164,9 +164,7 @@ const ListQuotationProviders = () => {
                       <DetailsButtomQuotationProviders
                         quotationProviders={row.original}
                       />
-                      <UpdateButtomQuotationProviders
-                        quotationProviders={row.original}
-                      />
+                 
                       <ChangeStateButtonQuotationProviders
                         quotationProviders={row.original}
                       />

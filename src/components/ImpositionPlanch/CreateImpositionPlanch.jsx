@@ -22,7 +22,7 @@ function CreateImpositionPlanch() {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
-      await createImpositionPlanch(values);
+    await createImpositionPlanch(values);
 
     dispatch(changeAction())
     if (!error) {
@@ -66,44 +66,9 @@ function CreateImpositionPlanch() {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
             placeholder="Giro pinza"
           />
-          <div>
-            <label
-              htmlFor="scheme"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Esquema
-            </label>
-            {previewImage && <img src={previewImage} alt="Preview" width={100} height={100} />}
-            <input
-              type="file"
-              name="scheme"
-              id="scheme"
-              placeholder="Descripción"
-              onChange={event => {
-                setFieldValue("scheme", event.target.files[0]);
-                handleFileChange(event);
-              }}
-            />
-          </div>
+          
 
-
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
-              <Field
-                type={input.type}
-                name={input.name}
-                id={input.name}
-                placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          ))}
+          
 
           <button
             type="submit"
