@@ -28,9 +28,6 @@ const validationSchema = Yup.object().shape({
     return selectedDate >= currentDate || selectedDate.toDateString() === currentDate.toDateString()
   }),
   quotationStatus: Yup.string().required('Campo requerido'),
-  userId: Yup.string().required('Campo requerido'),
-  clientId: Yup.string().required('Campo requerido'),
-  typeServiceId: Yup.string().required('Campo requerido'),
 })
 
 const getClient = () => {
@@ -192,6 +189,7 @@ function CreateQuotationClient () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                  <option value={0}>Seleccione</option>
                 {userOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -217,6 +215,7 @@ function CreateQuotationClient () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                  <option value={0}>Seleccione</option>
                   {clientsOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -241,6 +240,7 @@ function CreateQuotationClient () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                  <option value={0}>Seleccione</option>
                    {typeServiceOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -268,8 +268,7 @@ function CreateQuotationClient () {
               >
                 <option value={0}>Seleccione</option>
                 <option value={1}>En proceso</option>
-                <option value={2}>Aprobado</option>
-                <option value={3}>No Aprobado</option>
+
               </Field>
               <ErrorMessage
                 name="quotationStatus"

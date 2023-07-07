@@ -160,7 +160,8 @@ export const {
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,
   usePutByIdMutation: usePutQuotationClientByIdMutation,
-  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation
+  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation,
+  useDeleteStatusMutation: useDeleteQuotationStatusMutation
 } = quotationClientApi
 
 export const {
