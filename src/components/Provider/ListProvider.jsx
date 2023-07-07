@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo,useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllProvidersQuery } from '../../context/Api/Common'
@@ -6,8 +6,18 @@ import { UpdateButtomProvider } from './UpdateProvider.jsx'
 import { ChangeStateButtonProvider } from './ChangeStateProvider'
 import { CreateButtomProvider } from './CreateProvider'
 import { DetailsButtomProvider } from './DetailsProvider'
+import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { useReactToPrint } from 'react-to-print'
+import Reportproviders from './ReportProvideers'
 
 const ListProvider = () => {
+  const tablePDF = useRef()
+
+  const generatePDF = useReactToPrint({
+    content: () => tablePDF.current,
+    documentTitle: 'Informe de Proveedores'
+  })
+
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllProvidersQuery()
 
@@ -65,6 +75,22 @@ const ListProvider = () => {
   }
 
   return (
+    <>
+    <div className='hidden'>
+      <div ref={tablePDF}>
+        <Reportproviders dataApi={dataApi}/>
+      </div>
+    </div>
+    <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
+    <button
+      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      onClick={ generatePDF }
+      type="button"
+    >
+      <BsFillFileEarmarkBreakFill />
+      Crear un informe
+    </button>
+    </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
@@ -134,13 +160,13 @@ const ListProvider = () => {
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <DetailsButtomProvider
-                        provider={row.original}
+                        supplyCategory={row.original}
                       />
                       <UpdateButtomProvider
-                        provider={row.original}
+                        supplyCategory={row.original}
                       />
                       <ChangeStateButtonProvider
-                        provider={row.original}
+                        supplyCategory={row.original}
                       />
                     </td>
                   </tr>
@@ -212,6 +238,7 @@ const ListProvider = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
