@@ -30,11 +30,16 @@ function CreateSupply () {
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    // if (values.type === '1') {
-    //   values.name = values.name + ' Peligro'
-    // } else if (values.type === '2') {
-    //   values.name = values.name + ' Atención'
-    // }
+    if (values.sortingWord === 1) {
+      values.name = values.name + ' Peligro'
+    } else if (values.sortingWord === 2) {
+      values.name = values.name + ' Atención'
+    }
+    if (values.supplyType === 1) {
+      values.name = values.name + ' Devolutivo'
+    } else if (values.supplyType === 2) {
+      values.name = values.name + ' Consumible'
+    }
 
     await createsupply(values)
 
@@ -93,7 +98,7 @@ function CreateSupply () {
               />
          
             </div>
-            <div className="w-1/2">
+            <div className="w-2/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
               Indicadores de peligro
               </label>
@@ -102,6 +107,7 @@ function CreateSupply () {
                 name="dangerIndicators"
                 id="dangerIndicators"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                rows="6" cols="40"
                 placeholder="Indicadores de peligro"
               />
                   <ErrorMessage
@@ -154,17 +160,39 @@ function CreateSupply () {
               />
                
             </div>
-            <div className="w-1/8">
+          <div className="w-1/4">
+          <label htmlFor="supplyType" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+          Tipo insumo
+          </label>
+          <Field
+            as="select"
+            name="supplyType"
+            id="supplyType"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          >
+            <option value={1}>Devolutivo</option>
+            <option value={2}>Consumible</option>
+          </Field>
+          <ErrorMessage
+            name="supplyType"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
+            {/* <div className="w-1/8">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Tipo insumo
               </label>
               <Field
-                type="number"
+                as="select"
                 name="supplyType"
                 id="supplyType"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Tipo insumo"
               />
+                  <option value={1}>Devolutivo</option>
+                  <option value={2}>Consumible</option>
+                  
                     <ErrorMessage
                 name="supplyType"
        
@@ -172,29 +200,26 @@ function CreateSupply () {
                 className="text-red-500"
               />
                
-            </div>
-            <div className="w-1/8">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Tipo peligrosidad
-              </label>
-              <Field
-                type="number"
-                name="sortingWord"
-                id="sortingWord"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="Tipo peligrosidad"
-              />
-                    <ErrorMessage
-                name="sortingWord"
-       
-                component="div"
-                className="text-red-500"
-              />
-              {/* <option value="0">Selecciona</option>
-                <option value="Peligroso"></option>
-                <option value="Atención">2</option> */}
-               
-            </div>
+            </div> */}
+          <div className="w-1/4">
+          <label htmlFor="sortingWord" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+            Tipo de peligrosidad
+          </label>
+          <Field
+            as="select"
+            name="sortingWord"
+            id="sortingWord"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          >
+            <option value={1}>Peligro</option>
+            <option value={2}>Atención</option>
+          </Field>
+          <ErrorMessage
+            name="sortingWord"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
             <div className="w-1/8">
               <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cantidad
@@ -241,6 +266,7 @@ function CreateSupply () {
           >
             Crear Insumo
           </button>
+          <button type="submit">Registrar</button>
         </Form>
       
     </Formik>
