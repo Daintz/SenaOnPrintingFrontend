@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { BsGear, BsNewspaper } from 'react-icons/bs'
 
-function Sidebar () {
+function Sidebar() {
   const location = useLocation()
   const path = location.pathname
 
@@ -17,12 +17,94 @@ function Sidebar () {
             <button
               type="button"
               className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
-              aria-controls="dropdown-example"
-              data-collapse-toggle="dropdown-example"
+              aria-controls="dropdown-example0"
+              data-collapse-toggle="dropdown-example0"
             >
               <BsGear className="w-[1.5rem] h-[1.5rem]" />
               <span className="flex-1 ml-3 text-left whitespace-nowrap">
                 Configuracion
+              </span>
+              <svg
+                className="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              ></svg>
+            </button>
+            <ul id="dropdown-example0" className="hidden py-2 space-y-2">
+              <li>
+                <Link
+                  to={'/Finish'}
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Finish' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3">Acabados</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={'/product'}
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/product' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3">Productos</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/supplyPictograms"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Pictogramas</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/Machine"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Machine' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Maquinas</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/impositionPlanch"
+                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
+                >
+
+                  <span className="ml-3 text-base">Imposición plancha</span>
+                </Link>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              aria-controls="dropdown-example"
+              data-collapse-toggle="dropdown-example"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
+                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
+              </svg>
+              <span className="flex-1 ml-3 text-left whitespace-nowrap">
+                Usuarios
               </span>
               <svg
                 className="w-6 h-6"
@@ -57,89 +139,10 @@ function Sidebar () {
               </li>
               <li>
                 <Link
-                  to={'/tipos_documentos'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/tipos_documentos' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3">Tipo de Documentos</span>
-                </Link>
-              </li>
-              <li>
-                <Link
                   to={'/usuarios'}
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/usuarios' ? 'bg-green-500' : null}`}
                 >
                   <span className="ml-3">Usuarios</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/warehausetype"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehausetype' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Tipo de Bodega</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/paper_cut"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/paper_cut' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Corte Papel</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/grammage_caliber"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/grammage_caliber' ? 'bg-green-500' : null}`}
-                >
-                  <span className="ml-3 text-base">Gramaje & Calibre</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/substrate"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/substrate' ? 'bg-green-500' : null}`}
-                >
-                  <span className="ml-3 text-base">Sustratos</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/Lineature"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Lineature' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Lineatura</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/unitMesure"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/unitMesure' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Unidades de Medida</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/supplyPictograms"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Pictogramas</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/impositionPlanch"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Imposición plancha</span>
                 </Link>
               </li>
             </ul>
@@ -265,7 +268,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyDetails' ? 'bg-green-500' : null}`}
                 >
 
-                  <span className="ml-3">Loteo de Insumos</span>
+                  <span className="ml-3">Compra de Insumos</span>
                 </Link>
               </li>
             </ul>
@@ -376,7 +379,7 @@ function Sidebar () {
               ></svg>
             </button>
             <ul id="dropdown-example5" className="hidden py-2 space-y-2">
-              <li>
+              {/* <li>
                 <Link
                   to="/typeServices"
                   className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/typeServices' ? 'bg-green-500' : null}`}
@@ -384,34 +387,7 @@ function Sidebar () {
 
                   <span className="ml-3 text-base">Tipo de servicio</span>
                 </Link>
-              </li>
-              <li>
-                <Link
-                  to="/Machine"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Machine' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3 text-base">Maquinas</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={'/Finish'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Finish' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3">Acabados</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={'/product'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/product' ? 'bg-green-500' : null}`}
-                >
-
-                  <span className="ml-3">Productos</span>
-                </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to="/clients"
