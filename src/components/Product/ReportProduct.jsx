@@ -13,8 +13,8 @@ const ReportProduct = ({ dataApi }) => {
     { key: 'name', name: 'Nombre' },
     { key: 'characteristics', name: 'Caracteristicas' },
     { key: 'typeProduct', name: 'Tipo de producto' },
-    { key: 'statedAt', name: 'Estado' },
-    { key: 'actions', name: 'Acciones' }
+    { key: 'cost', name: 'Costo' },
+    { key: 'statedAt', name: 'Estado' }
   ]
 
   console.log(dataApi)
