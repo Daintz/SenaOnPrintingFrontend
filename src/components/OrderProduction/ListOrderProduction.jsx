@@ -6,7 +6,7 @@ import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/C
 import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
 import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction'
-import { CreateButtomOrderProduction } from './CreateOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
 
 

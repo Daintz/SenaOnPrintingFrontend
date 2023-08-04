@@ -4,7 +4,7 @@ import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from '../../components/OrderProduction/UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from '../../components/OrderProduction/ChangeStateOrderProduction'
-import { CreateButtomOrderProduction } from '../../components/OrderProduction/CreateOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from '../../components/OrderProduction/DetailsOrderProduction'
 
 const ListQuotationClientApproved = () => {
