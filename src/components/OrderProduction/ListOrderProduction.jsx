@@ -6,7 +6,7 @@ import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/C
 import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
 import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction'
-import { CreateButtomOrderProduction } from './CreateOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
 
 
@@ -33,26 +33,26 @@ const ListOrderProduction = () => {
         Cell: ({ value }) => {
           if (value == 2){
             return (
-              <span className="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300">
+              <span className="text-orange-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
                 Preimpresión
               </span>
             );
           } else if (value == 3){
             return (
-              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+              <span className="text-yellow-800 text-base mr-2 px-2.5 py-0.5 rounded-fulltext-decoration-line: underline font-bold">
                 Impresión
               </span>
             );
           }else if (value == 4){
             return (
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+              <span className="text-blue-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
                 Postimpresión
               </span>
             );
           }
           else {
             return (
-              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span className="text-custom-blue text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
                 Terminado
               </span>
             );
@@ -135,7 +135,7 @@ const ListOrderProduction = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/planOP" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</a>
+            <a href="/planOP" className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</a>
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">

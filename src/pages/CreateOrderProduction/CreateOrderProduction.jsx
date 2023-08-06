@@ -1,11 +1,9 @@
 import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
-import ListLineature from '../../components/Lineature/ListLineature'
-import ErrorBoundary from '../../components/Error/ErrorBoundary'
 import CreateOrderProduction from '../../components/CreateOrderProduction/CreateOrderProduction'
-import ListQuotationClientApproved from '../../components/ListQuotationClientApproved/ListQuotationClientApproved'
+import ErrorBoundary from '../../components/Error/ErrorBoundary'
 
-const QuotationClientApproved = () => {
+const ViewOrderProduction = () => {
   // ? Esta linea de codigo me trae el estado 'isEditing' de src\context\Slices\Modal\ModalSlice.js que esto seria los estados del componente modal
   const { action } = useSelector((state) => state.modal)
 
@@ -13,9 +11,8 @@ const QuotationClientApproved = () => {
     <div className="border-gray-200 border-dashed">
       <div className="overflow-x-auto">
         <ErrorBoundary>
-          <ListQuotationClientApproved />
+          <CreateOrderProduction />
         </ErrorBoundary>
-        {/* Esta logica del modal esta acá para poder ser reutilizable */}
         
       </div>
     </div>
@@ -23,5 +20,4 @@ const QuotationClientApproved = () => {
   )
 }
 
-export default QuotationClientApproved 
-
+export default ViewOrderProduction

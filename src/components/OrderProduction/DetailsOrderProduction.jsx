@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { BsClipboard2 } from 'react-icons/bs'
+import ReactToPrint from 'react-to-print'
 
 function DetailsOrderProduction () {
   
@@ -53,9 +54,10 @@ export function DetailsButtonOrderProduction ({ orderProduction }) {
   // ?
 
   return (
-      <button type="button" onClick={() => {
+      <button type="button" data-tip="Detalles" onClick={() => {
         handleOpen()
-      }}>
+      }}
+      >
         <BsClipboard2 className="h-5 w-5 mr-2" />
       </button>
   )
