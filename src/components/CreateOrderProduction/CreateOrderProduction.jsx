@@ -279,7 +279,7 @@ function CreateOrderProduction() {
                   </div>
                   <div className="w-1/4">
                     <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Identado
+                      Sangrados
                     </label>
                     <Field
                       type="text"

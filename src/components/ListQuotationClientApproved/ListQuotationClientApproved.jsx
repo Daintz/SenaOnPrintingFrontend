@@ -91,7 +91,7 @@ const ListQuotationClientApproved = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/orderProduction" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</a>
+            <a href="/orderProduction" className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</a>
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">

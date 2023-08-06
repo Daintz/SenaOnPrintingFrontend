@@ -26,6 +26,7 @@
     "react-table": "^7.8.0",
     "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.3",
+    "react-tooltip": "^5.20.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {
