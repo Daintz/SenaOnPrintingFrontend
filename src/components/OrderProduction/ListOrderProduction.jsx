@@ -8,6 +8,7 @@ import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
 import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction'
 import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
+import { Link } from 'react-router-dom'
 
 
 const ListOrderProduction = () => {
@@ -135,7 +136,7 @@ const ListOrderProduction = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/planOP" className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</a>
+            <Link to={'/planOP'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</Link>
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
