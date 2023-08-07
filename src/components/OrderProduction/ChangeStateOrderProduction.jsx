@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
+import { Tooltip } from 'react-tippy'
 
 function ChangeStateOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
@@ -50,6 +51,8 @@ export function ChangeStateButtonOrderProduction ({ orderProduction }) {
 
   return (
     <button type="button" onClick={ handleOpen }>
+      <Tooltip title="Cambiar estado" position="bottom"
+      animation="fade">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -64,6 +67,7 @@ export function ChangeStateButtonOrderProduction ({ orderProduction }) {
           d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
+      </Tooltip>
     </button>
   )
 }

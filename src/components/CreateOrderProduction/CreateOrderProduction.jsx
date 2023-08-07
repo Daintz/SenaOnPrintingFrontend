@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { BsCheckCircle } from 'react-icons/bs'
-
+import { Tooltip } from 'react-tippy'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -579,7 +579,9 @@ export function CreateButtomOrderProduction({ orderProduction }) {
     <button
       type="button"
       onClick={() => handleOpen()}
-    ><Link to="/createOP">
+    ><Tooltip title="Crear OP" position="bottom"
+    animation="fade">
+      <Link to="/createOP">
         <svg
           fill="none"
           viewBox="0 0 24 24"
@@ -595,6 +597,7 @@ export function CreateButtomOrderProduction({ orderProduction }) {
           />
         </svg>
       </Link>
+      </Tooltip>
     </button>
   )
 }
