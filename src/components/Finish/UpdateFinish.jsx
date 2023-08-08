@@ -32,6 +32,7 @@ function Updatefinish () {
 
   const inputs = [
     { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre' },
+    { key: 0, cost: 'cost', title: 'Costo', type: 'number', placeholder: 'Costo' },
    
   ]
 
@@ -40,6 +41,7 @@ function Updatefinish () {
       initialValues={{
         id: editingData.id,
         name: editingData.name,
+        cost: editingData.cost,
        
       }}
       onSubmit={(values) => {

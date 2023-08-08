@@ -8,7 +8,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido'),
 })
 
 function UpdateTypeServices () {
@@ -23,20 +23,20 @@ function UpdateTypeServices () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Pictograma actualizada con exito')
+    toast.success('Servicio actualizada con exito')
   }
 
   const inputs = [
-    {key: 0, name: 'name', title:'Nombre del TIpo de servicio', type: 'text', placeholder: 'nombre'  },
-
-
+    {key: 0, name: 'name', title:'Nombre del Tipo de servicio', type: 'text', placeholder: 'nombre'  }
   ]
 
   return (
     <Formik
+    enableReinitialize
       initialValues={{
         id: editingData.id,
         name: editingData.name,
+
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -65,14 +65,14 @@ function UpdateTypeServices () {
             type="submit"
             className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear Pictograma
+            Actualizar Tipo de servicio
           </button>
         </Form>
     </Formik>
   )
 }
 
-export function UpdateButtomTypeServices ({ TypeServices }) {
+export function UpdateButtomTypeServices ({ typeServices }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
@@ -85,7 +85,7 @@ export function UpdateButtomTypeServices ({ TypeServices }) {
 
   return (
     <button type="button" onClick={() => {
-      handleEdit(TypeServices)
+      handleEdit(typeServices)
     }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"

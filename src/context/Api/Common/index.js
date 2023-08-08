@@ -259,3 +259,19 @@ export const {
   usePutByIdMutation: usePutProviderByIdMutation,
   useDeleteByIdMutation: useDeleteProviderByIdMutation
 } = ProviderApi
+
+export const {
+  useGetAllQuery: useGetAllSupplyQuery,
+  useGetByIdQuery: useGetSupplyByIdQuery,
+  usePostMutation: usePostSupplyMutation,
+  usePutByIdMutation: usePutSupplyByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyByIdMutation
+} = SupplyApi
+
+export const {
+  useGetAllQuery: useGetAllSupplyDetailsQuery,
+  useGetByIdQuery: useGetSupplyDetailsByIdQuery,
+  usePostMutation: usePostSupplyDetailsMutation,
+  usePutByIdMutation: usePutSupplyDetailsByIdMutation,
+  useDeleteByIdMutation: useDeleteSupplyDetailsByIdMutation
+} = SupplyDetailsApi

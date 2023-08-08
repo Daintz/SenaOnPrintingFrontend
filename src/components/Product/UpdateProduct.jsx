@@ -33,7 +33,14 @@ function updateProduct () {
   const inputs = [
     { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre' },
     { key: 1, name: 'characteristics', title: 'Caracteristicas', type: 'text', placeholder: 'Caracteristicas' },
-    { key: 2, name: 'typeProduct', title: 'Tipo producto', type: 'text', placeholder: 'Tipo producto' }
+    { key: 2, name: 'typeProduct', title: 'Tipo producto', type: 'text', placeholder: 'Tipo producto' },
+    {
+      key: 3,
+      name: 'cost',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo del producto'
+    }
   ]
 
   return (
@@ -42,7 +49,8 @@ function updateProduct () {
         id: editingData.id,
         typeProduct: editingData.typeProduct,
         name: editingData.name,
-        characteristics: editingData.characteristics
+        characteristics: editingData.characteristics,
+        cost: editingData.cost
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -82,7 +90,7 @@ export function UpdateButtonProduct ({ product }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[500px]' }))
     dispatch(openModal({ title: 'Editar producto' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))

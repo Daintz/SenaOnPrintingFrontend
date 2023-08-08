@@ -4,11 +4,12 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsFinish () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { name, statedAt } = detailsData
+  const { name,cost, statedAt } = detailsData
   return (
     <>
     
       <p><b>Nombre:</b> {name}</p>
+      <p><b>Costo:</b> {cost}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt

@@ -21,6 +21,7 @@ const Listfinish = () => {
 
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
+    { Header: 'Costo', accessor: 'cost' },
 
     {
       Header: 'Estado',
@@ -131,9 +132,7 @@ const Listfinish = () => {
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                        <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomfinish
-                        finish={row.original}
-                      />
+                   
                       <UpdateButtomFinish
                         finish={row.original}
                       />

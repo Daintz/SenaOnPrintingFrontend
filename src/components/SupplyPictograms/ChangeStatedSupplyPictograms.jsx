@@ -1,11 +1,11 @@
 import { useDeleteSupplyPictogramsByIdMutation } from '../../context/Api/Common'
-import { changeAction, closeModal, openModal, setAction, setChangeStatusData,setWidth } from '../../context/Slices/Modal/ModalSlice'
+import { changeAction,closeEditing ,closeModal, openModal, setAction, setChangeStatusData,setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
 
-function ChangeStateSupplyPictograms ({ supplyPictogrmas }) {
+function ChangeStateSupplyPictograms ({ supplyPictograms }) {
   const dispatch = useDispatch()
   const [deleteSupplyPictograms, { error, isLoading }] =
   useDeleteSupplyPictogramsByIdMutation()
@@ -36,13 +36,13 @@ function ChangeStateSupplyPictograms ({ supplyPictogrmas }) {
   )
 }
 
-export function ChangeStateButtonSupplyPictograms ({ supplyPictogrmas }) {
+export function ChangeStateButtonSupplyPictograms ({ supplyPictograms }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
     dispatch(setWidth({ width: '800px' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
-    dispatch(setChangeStatusData({ changeStatusData: supplyPictogrmas }))
+    dispatch(setChangeStatusData({ changeStatusData: supplyPictograms }))
   }
   return (
     <button type="button" onClick={ handleOpen }>

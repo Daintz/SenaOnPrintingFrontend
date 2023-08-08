@@ -2,12 +2,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { BsClipboard2 } from 'react-icons/bs'
 
-function DetailsTypeServices () {
+function DetailsSupply () {
   const { detailsData } = useSelector((state) => state.modal)
-  const {name ,statedAt } = detailsData
+  const { name, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost, statedAt } = detailsData
   return (
     <>
-      <p><b>Nombre:</b> {name}</p>
+    
+    <p><b>Nombre insumo:</b> {name}</p>
+      <p><b>Indicadores de peligro insumo:</b> {dangerIndicators}</p>
+      <p><b>Instrucciones:</b> {useInstructions}</p>
+      <p><b>Consejos:</b> {advices}</p>
+      <p><b>Tipo insumo:</b> {supplyType}</p>
+      <p><b>Tipo peligrosidad:</b> {sortingWord}</p>
+      <p><b>Cantidad:</b> {quantity}</p>
+      <p><b>Costo promedio:</b> {averageCost}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt
@@ -22,14 +30,14 @@ function DetailsTypeServices () {
   )
 }
 
-export function DetailsButtomTypeServices ({ typeServices }) {
+export function DetailsButtomSupply ({ supply }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '500px' }))
-    dispatch(openModal({ title: 'Detalles Tipo de servicio' }))
+    dispatch(openModal({ title: 'Detalles de insumos ' }))
     dispatch(setAction({ action: 'details' }))
-    dispatch(setDetailsData({ detailsData: typeServices }))
+    dispatch(setDetailsData({ detailsData: supply }))
   }
   // ?
 
@@ -42,4 +50,4 @@ export function DetailsButtomTypeServices ({ typeServices }) {
   )
 }
 
-export default DetailsTypeServices
+export default DetailsSupply

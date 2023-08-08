@@ -27,6 +27,7 @@ async function checkNameExistence (name) {
   }
 }
 const validationSchema = Yup.object().shape({
+  cost: Yup.number().required('Campo requerido'),
   name: Yup.string().required('Campo requerido').min(3, 'El sustrato debe tener menos de 3 letras/digitos').max(30, 'El sustrato no puede tener más de 30 letras/digitos').test('unique-name', 'El sustrato ya está en uso', async function (value) {
     const response = await checkNameExistence(value)
     return !response.exists // Devuelve false si el nombre ya existe
@@ -56,13 +57,21 @@ function CreateSubstrates () {
       title: 'Nombre Sustrato',
       type: 'text',
       placeholder: 'Nombre'
+    },
+    {
+      key: 1,
+      name: 'cost',
+      title: 'Precio Sustrato',
+      type: 'text',
+      placeholder: 'Precio'
     }
   ]
 
   return (
     <Formik
       initialValues={{
-        name: ''
+        name: '',
+        cost: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)

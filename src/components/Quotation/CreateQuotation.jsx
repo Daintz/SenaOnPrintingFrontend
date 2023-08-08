@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage, useFormikContext  } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { usePostQuotationClientMutation, usePostQuotationClientDetailMutation } from '../../context/Api/Common'
@@ -91,16 +91,16 @@ const getTypeService = () => {
 }
 
 const getQuotationClient = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/QuotationClient').then(
-      (result)=> {
+      (result) => {
         const QuotationClient = result.data.map((quotationClient) => ({
-          'label':quotationClient.id,
-          'value': quotationClient.id 
+          'label': quotationClient.id,
+          'value': quotationClient.id
         }))
         resolve(QuotationClient)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
@@ -108,21 +108,22 @@ const getQuotationClient = () => {
 }
 
 const getProduct = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/Product').then(
-      (result)=> {
-        const Product = result.data.map((product)=> ({
+      (result) => {
+        const Product = result.data.map((product) => ({
           'label': product.name,
           'value': product.id
         }))
         resolve(Product)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
   })
 }
+
 
 function CreateQuotation() {
   const [clientsOptions, setClientsOptions] = useState([])
@@ -231,7 +232,7 @@ const total = subtotal - discountRate + taxRate;
       setProductOptions(options)
     })
   }
- 
+
 
   useEffect(() => {
     fetchOptions()
@@ -240,6 +241,9 @@ const total = subtotal - discountRate + taxRate;
   const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
   const [createQuotationClientDetail, { error: detailError, isLoading: detailIsLoading }] = usePostQuotationClientDetailMutation()
   const [quotationDetails, setQuotationDetails] = useState([])
+
+ 
+
   const handleSubmit = async (values) => {
     console.log(values)
     if (clientIsLoading || detailIsLoading) return <Spinner />
@@ -262,6 +266,7 @@ const total = subtotal - discountRate + taxRate;
       autoClose: 100
     })
   }
+
   return (
     <Formik
       initialValues={{
@@ -277,7 +282,15 @@ const total = subtotal - discountRate + taxRate;
       }}
       onSubmit={(values) => {
         handleSubmit(values)
-       // const result = values.unitValue * values.productQuantity;
+        // const result = values.unitValue * values.productQuantity;
+       /*  const { values } = useFormikContext(); // Obtiene los valores del formulario
+        const selectedProductId = values.productId; // Obtiene el valor seleccionado de productId
+      
+        const findCostByProductId = (productId) => {
+          const selectedProduct = productOptions.find((option) => option.value === productId);
+          return selectedProduct ? selectedProduct.cost : 0
+        }
+        const cost = findCostByProductId(selectedProductId) */
       }}
       validationSchema={validationSchema}
     >
@@ -288,7 +301,7 @@ const total = subtotal - discountRate + taxRate;
           <div className="flex linea-horizontal mb-2
           ">
             <div className="w-1/2">
-            <b>Codigo: </b>
+              <b>Codigo: </b>
             </div>
           </div>
           <hr className="mb-4" />
@@ -304,9 +317,9 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Drive"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="orderDate"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -322,9 +335,9 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="deliverDate"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -343,11 +356,12 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                 <option value={0}>Seleccione</option>
                 {userOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="userId"
@@ -368,15 +382,16 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                  {clientsOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+                 <option value={0}>Seleccione</option>
+                {clientsOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="clientId"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -392,15 +407,16 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                   {typeServiceOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-          ))}
+                 <option value={0}>Seleccione</option>
+                {typeServiceOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="typeServiceId"
-       
+
                 component="div"
                 className="text-red-500"
               />
@@ -490,9 +506,9 @@ const total = subtotal - discountRate + taxRate;
       </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-1/4">
+            <div className="w-1/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Estado de la Cotizacion <b className="text-red-700">*</b>
+                Estado de la Cotizacion <b className="text-red-700">*</b>
               </label>
               <Field
                 as="select"
@@ -503,16 +519,14 @@ const total = subtotal - discountRate + taxRate;
               >
                 <option value={0}>Seleccione</option>
                 <option value={1}>En proceso</option>
-                <option value={2}>Aprobado</option>
-                <option value={3}>No Aprobado</option>
               </Field>
               <ErrorMessage
                 name="quotationStatus"
-       
+
                 component="div"
                 className="text-red-500"
               />
-              </div>
+            </div>
           </div>
             <center>
           <button

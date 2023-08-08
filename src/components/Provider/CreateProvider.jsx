@@ -6,6 +6,7 @@ import { usePostProviderMutation } from '../../context/Api/Common';
 import { changeAction, closeModal, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice';
 import Spinner from '../Spinner/Spinner';
 import { toast } from 'react-toastify';
+import clientAxios from '../../config/clientAxios'
 
 async function checkNITExistence(NIT) {
   try {

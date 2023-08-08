@@ -1,14 +1,18 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllOrderProductionsQuery,  useGetAllQuotationClientsQuery} from '../../context/Api/Common'
-import { useGetAllQuotationClientDetailsQuery } from '../../context/Api/Common'
+import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from './UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from './ChangeStateOrderProduction'
-import { CreateButtomOrderProduction } from './CreateOrderProduction'
+import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
+import { Link } from 'react-router-dom'
+
 
 const ListOrderProduction = () => {
+  const [selectedOption, setSelectedOption] = useState('orderProduction'); // Estado para almacenar la opción seleccionada
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
 
@@ -21,7 +25,6 @@ const ListOrderProduction = () => {
 
   const columns = useMemo(() => [
     { Header: 'Cotización', accessor: 'quotationClientDetailId' },
-    { Header: 'Fecha de orden', accessor: 'orderDate' },
     { Header: 'Fecha de entrega', accessor: 'deliverDate' },
     { Header: 'Cliente', accessor: 'name' },
     { Header: 'Producto', accessor: 'product' },
@@ -29,29 +32,29 @@ const ListOrderProduction = () => {
         Header: 'Proceso',
         accessor: 'orderStatus',
         Cell: ({ value }) => {
-          if (value) {
+          if (value == 2){
             return (
-              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                Revisar
-              </span>
-            );
-          } else if (value == 2){
-            return (
-              <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span className="text-orange-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
                 Preimpresión
               </span>
             );
           } else if (value == 3){
             return (
-              <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+              <span className="text-yellow-800 text-base mr-2 px-2.5 py-0.5 rounded-fulltext-decoration-line: underline font-bold">
                 Impresión
+              </span>
+            );
+          }else if (value == 4){
+            return (
+              <span className="text-blue-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
+                Postimpresión
               </span>
             );
           }
           else {
             return (
-              <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                Postimpresión
+              <span className="text-custom-blue text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
+                Terminado
               </span>
             );
           }
@@ -132,7 +135,9 @@ const ListOrderProduction = () => {
               </div>
             </form>
           </div>
-      
+          <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+            <Link to={'/planOP'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</Link>
+          </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
           <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
@@ -172,9 +177,12 @@ const ListOrderProduction = () => {
                       <ChangeStateButtonOrderProduction
                         orderProduction={row.original}
                       />
-                      <CreateButtomOrderProduction
+                      <ChangeStatusButtonOrderProduction
                         orderProduction={row.original}
                       />
+                      {/* <CreateButtomOrderProduction
+                        orderProduction={row.original}
+                      /> */}
                     </td>
                   </tr>
                 )
