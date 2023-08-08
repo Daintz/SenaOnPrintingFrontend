@@ -4,12 +4,12 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsQuotation() {
   const { detailsData } = useSelector((state) => state.modal)
-  const { orderDate, deliverDate, userId, clientId, typeServiceId, quotationStatus, quotationClientId, productId, technicalSpecifications, productHeight, productWidth, numberOfPages, inkQuantity, productQuantity, unitValue, fullValue, statedAt } = detailsData
+  const { orderDate, deliverDate, userId, clientId, typeServiceId, quotationStatus} = detailsData
   console.log(detailsData)
   return (
     <>
     <div className="flex gap-5 grid-cols-4 mb-3">
-    <div className="w-2/4">
+    <div className="w-4/4">
     <p><b>Fecha Inicial:</b> {orderDate}</p>
       <p><b>Fecha de entrega:</b> {deliverDate}</p>
       <p><b>Usuario:</b> {userId}</p>
@@ -18,19 +18,12 @@ function DetailsQuotation() {
       <p>
         <b>Estado de la cotización:</b> {quotationStatus === 1 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
             En Proceso
-          </span> : quotationStatus === 2 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+          </span> : quotationStatus === 2 ? <span className="bg-green-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
             Aprobado
-          </span> : quotationStatus === 3 ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+          </span> : quotationStatus === 3 ? <span className="bg-green-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
             No Aprobado
           </span> : 'No aprobado'}
       </p>
-
-    </div>
-    <div className="w-2/4">
-    <p><b>Producto:</b> {productId}</p>
-    <p><b>Observaciones:</b> {technicalSpecifications}</p>
-    <p><b>Altura producto:</b> {productHeight}</p>
-      <p><b>producto Ancho:</b> {productWidth}</p>
     </div>
     </div>
     </>

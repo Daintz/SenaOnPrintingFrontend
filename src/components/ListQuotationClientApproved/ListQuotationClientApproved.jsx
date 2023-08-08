@@ -4,8 +4,9 @@ import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from '../../components/OrderProduction/UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from '../../components/OrderProduction/ChangeStateOrderProduction'
-import { CreateButtomOrderProduction } from '../../components/OrderProduction/CreateOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from '../../components/OrderProduction/DetailsOrderProduction'
+import { Link } from 'react-router-dom'
 
 const ListQuotationClientApproved = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -91,7 +92,7 @@ const ListQuotationClientApproved = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/orderProduction" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</a>
+            <Link to={'/orderProduction'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</Link>
           </div>
         </div>
         <div className="overflow-x-auto rounded-xl border border-gray-400">
