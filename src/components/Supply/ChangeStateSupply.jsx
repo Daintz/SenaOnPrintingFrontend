@@ -18,8 +18,8 @@ function ChangeStateSupply ({ supply }) {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Insumo cambio de estado con exito',{
-    autoClose:1000
+    toast.success('Insumo cambio de estado con exito', {
+      autoClose: 1000
     })
   }
 
@@ -49,7 +49,7 @@ export function ChangeStateButtonSupply ({ supply }) {
   }
 
   return (
-    <button type="button" onClick={ handleOpen }>
+    <button type="button" onClick={ handleOpen } alt="Icono cambiar estado" title="Cambiar estado de la categoria de insumo">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

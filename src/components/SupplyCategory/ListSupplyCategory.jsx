@@ -6,7 +6,7 @@ import { UpdateButtonSupplyCategory } from './UpdateSupplyCategory'
 import { ChangeStateButtonSupplyCategory } from './ChangeStateSupplyCategory'
 import { CreateButtonSupplyCategory } from './CreateSupplyCategory'
 import { DetailsButtonSupplyCategory } from './DetailsSupplyCategory'
-import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { BsFillFileEarmarkPdfFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import ReportSupplyCategory from './ReportSupplyCategoy'
 
@@ -88,7 +88,7 @@ const ListSupplyCategory = () => {
       onClick={ generatePDF }
       type="button"
     >
-      <BsFillFileEarmarkBreakFill />
+      <BsFillFileEarmarkPdfFill className='w-5 h-5'/>
       Crear un informe
     </button>
     </div>

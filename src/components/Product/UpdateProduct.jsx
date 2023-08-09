@@ -66,7 +66,7 @@ function updateProduct () {
                 name={input.name}
                 id={input.name}
                 placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:bordercustom-blue-light block w-full p-2.5"
               />
               <ErrorMessage
                 name={input.name}
@@ -77,7 +77,7 @@ function updateProduct () {
           ))}
           <button
             type="submit"
-            className="w-full text-white bg-custom-blue hover:bg-custom-blue focus:ring-4 focus:outline-none focus:ring-custom-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Crear producto
           </button>
@@ -98,7 +98,7 @@ export function UpdateButtonProduct ({ product }) {
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" alt="Icono editar" title="Editar el producto" onClick={() => {
       handleEdit(product)
     }}>
       <svg

@@ -17,8 +17,6 @@ const ReportProduct = ({ dataApi }) => {
     { key: 'statedAt', name: 'Estado' }
   ]
 
-  console.log(dataApi)
-
   const rows = dataApi
     ? dataApi.map((product) => ({
       id: product.id,
@@ -32,7 +30,6 @@ const ReportProduct = ({ dataApi }) => {
 
   const currentDate = new Date(Date.now())
   const formattedDate = format(currentDate, 'dddd D [de] MMMM [de] YYYY', 'es')
-  console.log(formattedDate)
 
   return (
     <>
