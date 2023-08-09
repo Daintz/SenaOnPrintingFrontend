@@ -70,6 +70,8 @@ export const supplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPi
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
+export const SupplyApi = commonEndpointsApi('Supply', 'Supply')
+export const SupplyDetailsApi = commonEndpointsApi('SupplyDetails', 'SupplyDetails  ')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
