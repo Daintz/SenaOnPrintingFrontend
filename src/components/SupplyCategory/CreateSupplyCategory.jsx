@@ -19,9 +19,10 @@ const validationSchema = Yup.object().shape({
 
 function CreateSupplyCategory () {
   const dispatch = useDispatch()
-  const [createSupplyCategory, { error, isLoading }] = usePostSupplyCategoryMutation()
+  const [createSupplyCategory, { error, isLoading }] =
+    usePostSupplyCategoryMutation()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
     await createSupplyCategory(values)
@@ -47,7 +48,7 @@ function CreateSupplyCategory () {
       key: 1,
       name: 'description',
       title: 'Descripción categoria insumo',
-      type: 'text',
+      type: 'textarea',
       placeholder: 'Descripción'
     }
   ]
@@ -58,36 +59,48 @@ function CreateSupplyCategory () {
         name: '',
         description: ''
       }}
-      onSubmit={(values) => {
+      onSubmit={values => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-        <Form className="space-y-6">
-          {inputs.map(input => (
-            <div key={input.key}>
-              <label htmlFor={input.name}>{input.title}</label>
+      <Form className="space-y-6">
+        {inputs.map(input => (
+          <div key={input.key}>
+            <label htmlFor={input.name}>{input.title}</label>
+            {input.type === 'textarea'
+              ? (
+              <Field
+                as="textarea"
+                name={input.name}
+                id={input.name}
+                placeholder={input.placeholder}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+              />
+                )
+              : (
               <Field
                 type={input.type}
                 name={input.name}
                 id={input.name}
                 placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
               />
-              <ErrorMessage
-                name={input.name}
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          ))}
-          <button
-            type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Crear categoria insumo
-          </button>
-        </Form>
+                )}
+            <ErrorMessage
+              name={input.name}
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+        ))}
+        <button
+          type="submit"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue focus:ring-4 focus:outline-none focus:ring-custom-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Crear categoria insumo
+        </button>
+      </Form>
     </Formik>
   )
 }
@@ -96,7 +109,7 @@ export function CreateButtonSupplyCategory () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[400px]' }))
     dispatch(openModal({ title: 'Crear categoria de insumos' }))
     dispatch(setAction({ action: 'creating' }))
   }
@@ -104,11 +117,11 @@ export function CreateButtonSupplyCategory () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
-    <svg
+      <svg
         className="h-3.5 w-3.5 mr-2"
         fill="currentColor"
         viewBox="0 0 20 20"

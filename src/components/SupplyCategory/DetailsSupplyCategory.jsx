@@ -27,7 +27,7 @@ export function DetailsButtonSupplyCategory ({ supplyCategory }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[400px]' }))
     dispatch(openModal({ title: 'Detalles categoria de insumos' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: supplyCategory }))
