@@ -87,7 +87,7 @@ export function UpdateButtonSupplyCategory ({ supplyCategory }) {
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" alt="Icono editar" title="Editar la categoria de insumo" onClick={() => {
       handleEdit(supplyCategory)
     }}>
       <svg

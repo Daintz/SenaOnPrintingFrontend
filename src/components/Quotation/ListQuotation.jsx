@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useSelector } from 'react-redux';
-import { useTable, usePagination, useGlobalFilter } from 'react-table';
+import { useSelector } from 'react-redux'
+import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import {
   useGetAllQuotationClientsQuery,
   useGetAllQuotationClientDetailsQuery
-} from '../../context/Api/Common';
-import { CreateButtomQuotation } from './CreateQuotation';
-import { UpdateButtomQuotation } from './UpdateQuotation';
-import { DetailsButtomQuotation } from './DetailsQuotation';
-import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
-import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation';
+} from '../../context/Api/Common'
+import { CreateButtomQuotation } from './CreateQuotation'
+import { UpdateButtomQuotation } from './UpdateQuotation'
+import { DetailsButtomQuotation } from './DetailsQuotation'
+import { ChangeStateButtonQuotation } from './ChangeStateQuotation'
+import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation'
 import { useReactToPrint } from 'react-to-print'
 import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
-import Reportquotation from './ReportQuotation';
+import Reportquotation from './ReportQuotation'
 
 const ListQuotation = () => {
   const tablePDF = useRef()
@@ -22,15 +22,15 @@ const ListQuotation = () => {
     documentTitle: 'Informe de clientes'
   })
 
-  const { data: dataApi, refetch: refetch1 } = useGetAllQuotationClientsQuery();
-  const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery();
+  const { data: dataApi, refetch: refetch1 } = useGetAllQuotationClientsQuery()
+  const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery()
 
-  const { isAction } = useSelector((state) => state.modal);
+  const { isAction } = useSelector((state) => state.modal)
 
   useEffect(() => {
-    refetch1();
-    refetch2();
-  }, [isAction]);
+    refetch1()
+    refetch2()
+  }, [isAction])
 
   const columns = useMemo(
     () => [
@@ -44,20 +44,20 @@ const ListQuotation = () => {
         accessor: 'quotationStatus',
         id: 'quotationStatus',
         Cell: ({ value }) => {
-          let statusText = '';
-          let statusColor = '';
-      
+          let statusText = ''
+          let statusColor = ''
+
           if (value === 1) {
-            statusText = 'En proceso';
-            statusColor = 'green';
+            statusText = 'En proceso'
+            statusColor = 'green'
           } else if (value === 2) {
-            statusText = 'Aprobado';
-            statusColor = 'lightblue';
+            statusText = 'Aprobado'
+            statusColor = 'lightblue'
           } else if (value === 3) {
-            statusText = 'No aprobado';
-            statusColor = 'lightcoral';
+            statusText = 'No aprobado'
+            statusColor = 'lightcoral'
           }
-      
+
           return (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <div
@@ -66,28 +66,28 @@ const ListQuotation = () => {
                   height: '12px',
                   borderRadius: '50%',
                   backgroundColor: statusColor,
-                  marginRight: '8px',
+                  marginRight: '8px'
                 }}
               ></div>
               <span>{statusText}</span>
             </div>
-          );
+          )
         }
       }
     ],
     []
-  );
+  )
 
   const data = useMemo(() => {
     if (dataApi && dataApi2) {
       const mergedData = dataApi.map((item, index) => ({
         ...item,
         ...dataApi2[index]
-      }));
-      return mergedData;
+      }))
+      return mergedData
     }
-    return [];
-  }, [dataApi, dataApi2]);
+    return []
+  }, [dataApi, dataApi2])
 
   const {
     getTableProps,
@@ -108,14 +108,13 @@ const ListQuotation = () => {
     },
     useGlobalFilter,
     usePagination
-  );
+  )
 
-  const { pageIndex, globalFilter } = state;
+  const { pageIndex, globalFilter } = state
 
   if (!dataApi && !dataApi2) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
-
 
   return (
     <>
@@ -133,7 +132,7 @@ const ListQuotation = () => {
       <BsFillFileEarmarkBreakFill />
       Crear un informe
     </button>
-    </div> 
+    </div>
       <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
         <div className="bg-white sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
