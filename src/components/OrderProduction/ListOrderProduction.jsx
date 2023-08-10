@@ -32,34 +32,40 @@ const ListOrderProduction = () => {
         Header: 'Proceso',
         accessor: 'orderStatus',
         Cell: ({ value }) => {
-          if (value == 2){
-            return (
-              <span className="text-orange-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
-                Preimpresión
-              </span>
-            );
-          } else if (value == 3){
-            return (
-              <span className="text-yellow-800 text-base mr-2 px-2.5 py-0.5 rounded-fulltext-decoration-line: underline font-bold">
-                Impresión
-              </span>
-            );
-          }else if (value == 4){
-            return (
-              <span className="text-blue-800 text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
-                Postimpresión
-              </span>
-            );
+          let statusText = ''
+          let statusColor = ''
+
+          if (value === 2) {
+            statusText = 'Preimpresion'
+            statusColor = 'orange'
+          } else if (value === 3) {
+            statusText = 'Impresión'
+            statusColor = 'yellow'
+          } else if (value === 4) {
+            statusText = 'Postimpresión'
+            statusColor = 'lightblue'
+          } else{
+            statusText = 'Terminado'
+            statusColor = 'blue'
           }
-          else {
-            return (
-              <span className="text-custom-blue text-base mr-2 px-2.5 py-0.5 rounded-full text-decoration-line: underline font-bold">
-                Terminado
-              </span>
-            );
-          }
+
+          return (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: statusColor,
+                  marginRight: '8px'
+                }}
+              ></div>
+              <span>{statusText}</span>
+            </div>
+          )
         }
-      },{
+      },
+{
         Header: 'Estado',
         accessor: 'statedAt',
         Cell: ({ value }) => (value

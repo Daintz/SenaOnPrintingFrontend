@@ -127,12 +127,14 @@ function CreateOrderProduction() {
       {({ setFieldValue }) => (
 
         <Form>
+    <div className="relative bg-white py-5 px-10 shadow-2xl mdm:py-10 mdm:px-8">
+
           <div>
             <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px', fontWeight: 'bold' }}>Crear orden de producción</h1>
           </div>
           <div>
             {/* Parte superior: Fila completa */}
-            <div className="bg-gray-200 py-4">
+            <div className="py-4">
               <div className="flex gap-5 grid-cols-4 mb-3">
                 {/* {dataApi.map((data, index) => ( */}
                 {/* <div className="flex linea-horizontal mb-2"> */}
@@ -150,13 +152,14 @@ function CreateOrderProduction() {
                 {/* ))} */}
               </div>
             </div>
+            </div>
 
             {/* Parte inferior: Dos columnas */}
             <div className="flex gap-4">
               {/* Columna izquierda */}
               <div className="w-1/5">
                 {/* Contenido de la columna izquierda */}
-                <div className="bg-blue-200 py-4 p-4 rounded-lg mb-2">
+                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2">
                   <div className="flex gap-5 grid-cols-4 mb-3">
                     
                     <div className="w-full">
@@ -168,7 +171,7 @@ function CreateOrderProduction() {
         </div>
                   </div>
                 </div>
-                <div className="bg-blue-200 py-4 p-4 rounded-lg mb-2">
+                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2">
                   <div className="flex gap-5 grid-cols-4 mb-3">
                     {/* {dataApi.map((data, index) => ( */}
                     {/* <div className="flex linea-horizontal mb-2"> */}
@@ -545,7 +548,7 @@ function CreateOrderProduction() {
                 </div>
                 <button
                   type="submit"
-                  className="w-32 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+                  className="w-32 text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
                 >
                   Guardar
                 </button>
@@ -553,9 +556,6 @@ function CreateOrderProduction() {
               </div>
             </div>
           </div>
-
-
-
 
         </Form>
       )}
