@@ -75,7 +75,7 @@ function CreateSupplyCategory () {
                 name={input.name}
                 id={input.name}
                 placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
               />
                 )
               : (
@@ -84,7 +84,7 @@ function CreateSupplyCategory () {
                 name={input.name}
                 id={input.name}
                 placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-ring-custom-blue-light focus:border-ring-custom-blue-light block w-full p-2.5"
               />
                 )}
             <ErrorMessage
@@ -96,7 +96,7 @@ function CreateSupplyCategory () {
         ))}
         <button
           type="submit"
-          className="w-full text-white bg-custom-blue hover:bg-custom-blue focus:ring-4 focus:outline-none focus:ring-custom-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-custom-blue hover:bg-ring-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Crear categoria insumo
         </button>
@@ -117,7 +117,7 @@ export function CreateButtonSupplyCategory () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:ring-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
