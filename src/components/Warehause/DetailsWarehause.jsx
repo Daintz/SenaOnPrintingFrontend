@@ -4,10 +4,10 @@ import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsWarehause () {
   const { detailsData } = useSelector((state) => state.modal)
-  const {warehouseTypeId, ubication, statedAt } = detailsData
+  const {typeServiceId, ubication, statedAt } = detailsData
   return (
     <>
-      <p><b>Tipo de bodega:</b> {warehouseTypeId}</p>
+      <p><b>Tipo de bodega:</b> {typeServiceId}</p>
       <p><b>Ubicacion:</b> {ubication}</p>
       <p>
       <b>Estado:</b> {' '}

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useTable, usePagination, useGlobalFilter } from 'react-table';
-import { useGetAllWarehausesQuery, useGetWarehauseTypeByIdQuery } from '../../context/Api/Common';
+import { useGetAllWarehausesQuery, useGetTypeServicesByIdQuery } from '../../context/Api/Common';
 
 import { UpdateButtomWarehause } from './UpdateWarehause';
 import { ChangeStateButtonWarehause } from './ChangeStateWarehause';
@@ -21,9 +21,9 @@ const ListWarehause = () => {
     () => [
       {
         Header: 'Nombre',
-        accessor: 'warehouseTypeId',
+        accessor: 'typeServiceId',
       },
-      { Header: 'Ubicacion', accessor: 'ubication' },
+      { Header: 'Ubicación', accessor: 'ubication' },
       {
         Header: 'Estado',
         accessor: 'statedAt',

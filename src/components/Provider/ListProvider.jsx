@@ -32,8 +32,8 @@ const ListProvider = () => {
     { Header: 'NIT', accessor: 'nitCompany' },
     { Header: 'EMPRESA', accessor: 'nameCompany' },
     { Header: 'CORREO', accessor: 'email' },
-    { Header: 'TELEFONO', accessor: 'phone' },
-    { Header: 'DIRECCION', accessor: 'companyAddress' },
+    { Header: 'TELÉFONO', accessor: 'phone' },
+    { Header: 'DIRECCIÓN', accessor: 'companyAddress' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -160,13 +160,13 @@ const ListProvider = () => {
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <DetailsButtomProvider
-                        supplyCategory={row.original}
+                        provider={row.original}
                       />
                       <UpdateButtomProvider
-                        supplyCategory={row.original}
+                        provider={row.original}
                       />
                       <ChangeStateButtonProvider
-                        supplyCategory={row.original}
+                        provider={row.original}
                       />
                     </td>
                   </tr>

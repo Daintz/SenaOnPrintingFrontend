@@ -9,19 +9,19 @@ import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 const validationSchema = Yup.object().shape({
-  warehouseTypeId: Yup.string().required('Campo requerido'),
+  warehotypeServiceIduseTypeId: Yup.string().required('Campo requerido'),
   ubication: Yup.string().required('Campo requerido')
 })
 
-const getWarehausesType = () => {
+const getTypeService = () => {
   return new Promise((resolve, reject) => {
-    clientAxios.get('/WarehauseType').then(
+    clientAxios.get('/TypeServices').then(
       (result) => {
-        const warehausestype = result.data.map((warehausetype) => ({
-          'label': warehausetype.name,
-          'value': warehausetype.id
+        const typeService = result.data.map((typeservice) => ({
+          'label': typeservice.name,
+          'value': typeservice.id
         }));
-        resolve(warehausestype);
+        resolve(typeService);
       },
       (error) => {
         reject(error);
@@ -31,10 +31,10 @@ const getWarehausesType = () => {
 };
 
 function updateWarehause () {
-  const [warehauseTypeOptions, setWarehauseTypeOptions] = useState([]);
+  const [typeServiceOptions, settypeServiceOptions] = useState([]);
   const fetchOptions = () => {
-    getWarehausesType().then((options) => {
-      setWarehauseTypeOptions(options);
+    getTypeService().then((options) => {
+      settypeServiceOptions(options);
     });
   };
 
@@ -58,10 +58,10 @@ function updateWarehause () {
   const inputs = [
     {
       key: 1,
-      name: 'warehouseTypeId',
+      name: 'typeServiceId',
       title: 'Tipo de bodega',
       type: 'select',
-      data: warehauseTypeOptions,
+      data: typeServiceOptions,
       placeholder: 'Tipo de de bodega'
     },
     {
@@ -77,7 +77,7 @@ function updateWarehause () {
     <Formik
       initialValues={{
         id: editingData.id,
-        warehouseTypeId: editingData.warehouseTypeId,
+        typeServiceId: editingData.typeServiceId,
         ubication: editingData.ubication
       }}
       onSubmit={(values) => {
