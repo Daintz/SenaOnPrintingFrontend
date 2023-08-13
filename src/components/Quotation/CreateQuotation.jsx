@@ -13,6 +13,9 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
+import InvoiceItem from './InvoiceItem';
+import incrementString from './helpers/incrementString'
+import { uid } from 'uid';
 
 const validationSchema = Yup.object().shape({
   orderDate: Yup.date().required('Campo requerido').test('valid-deliver-date', 'La fecha de entrega debe ser igual a la fecha actual', function (value) {
@@ -33,14 +36,11 @@ const validationSchema = Yup.object().shape({
   typeServiceId: Yup.string().required('Campo requerido'),
   quotationClientId: Yup.string().required('Campo requerido'),
   productId: Yup.string().required('Campo requerido'),
-  productHeight: Yup.string().required('Campo requerido'),
-  productWidth: Yup.string().required('Campo requerido'),
-  numberOfPages: Yup.string().required('Campo requerido'),
-  inkQuantity: Yup.string().required('Campo requerido'),
   productQuantity: Yup.string().required('Campo requerido'),
-  unitValue: Yup.string().required('Campo requerido'),
-  fullValue: Yup.string().required('Campo requerido'),
+ 
 })
+
+
 const getClient = () => {
   return new Promise((resolve, reject) => {
     clientAxios.get('/Client').then(
@@ -131,6 +131,89 @@ function CreateQuotation() {
   const [typeServiceOptions, setTypeServiceOptions] = useState([])
   const [quotationclientOptions, setQuotationclientOptions] = useState([])
   const [productOptions, setProductOptions] = useState([])
+  const [isOpen, setIsOpen] = useState(false);
+  const [discount, setDiscount] = useState('');
+  const [tax, setTax] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState(1);
+  const [cashierName, setCashierName] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [items, setItems] = useState([]);
+
+  const optionsList = [
+    {"value": "", "text": "Seleccione un producto"},
+    {"value": 1, "text": "Producto 1", "price": 25},
+    {"value": 2, "text": "Producto 2", "price": 15},
+    {"value": 3, "text": "Producto 3", "price": 10},
+    {"value": 4, "text": "Producto 4", "price": 50},
+    {"value": 5, "text": "Producto 5", "price": 5},
+    {"value": 6, "text": "Producto 6", "price": 1}
+  ]
+
+const reviewInvoiceHandler = (event) => {
+  event.preventDefault();
+  setIsOpen(true);
+};
+
+const addNextInvoiceHandler = () => {
+  setInvoiceNumber((prevNumber) => incrementString(prevNumber));
+  setItems([
+    {
+      id: uid(6),
+      name: '',
+      qty: 1,
+      price: '1.00',
+    },
+  ]);
+};
+
+const addItemHandler = (event) => {
+  const id = uid(6);
+  const product = event.target[event.target.selectedIndex]
+  console.log()
+  setItems((prevItem) => [
+    {
+      id: id,
+      name: product.text,
+      qty: 1,
+      price: product.getAttribute('price'),
+    },
+    ...prevItem,
+  ]);
+};
+
+const deleteItemHandler = (id) => {
+  setItems((prevItem) => prevItem.filter((item) => item.id !== id));
+};
+
+const edtiItemHandler = (event) => {
+  const editedItem = {
+    id: event.target.id,
+    name: event.target.name,
+    value: event.target.value,
+  };
+
+  const newItems = items.map((items) => {
+    for (const key in items) {
+      if (key === editedItem.name && items.id === editedItem.id) {
+        items[key] = editedItem.value;
+      }
+    }
+    return items;
+  });
+
+  setItems(newItems);
+};
+
+const subtotal = items.reduce((prev, curr) => {
+  if (curr.name.trim().length > 0)
+    return prev + Number(curr.price * Math.floor(curr.qty));
+  else return prev;
+}, 0);
+const taxRate = (tax * subtotal) / 100;
+const discountRate = (discount * subtotal) / 100;
+const total = subtotal - discountRate + taxRate;
+
+
 
   const fetchOptions = () => {
     getClient().then((options) => {
@@ -195,14 +278,7 @@ function CreateQuotation() {
         typeServiceId: '',
         quotationClientId: '',
         productId: '',
-        technicalSpecifications: '',
-        productHeight: '',
-        productWidth: '',
-        numberOfPages: '',
-        inkQuantity: '',
         productQuantity: '',
-        unitValue: '',
-        fullValue: ''
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -219,7 +295,9 @@ function CreateQuotation() {
       validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
-        <Form>
+        <Form
+        onSubmit={reviewInvoiceHandler}
+        >
           <div className="flex linea-horizontal mb-2
           ">
             <div className="w-1/2">
@@ -359,260 +437,73 @@ function CreateQuotation() {
             </div>
           </div>
           <div>
-            <br></br>
-            <p><b className='text-black-700 text-justify'>COTIZACION DETALLES</b></p>
-            <br></br>
+          <br></br>
+          <br></br>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-2/4">
-              <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Producto <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="text"
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6">
+        <label
+          htmlFor="productList"
+          className="col-start-2 row-start-1 text-sm font-bold md:text-base"
+        >
+          Seleccione un producto:
+        </label>
+        <Field
                 as="select"
-                name="productId"
-                id="productId"
+                name="productList"
+                id="productList"
+                onChange={addItemHandler}
+                value="0"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                 <option value={0}>Seleccione</option>
-                {productOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                {optionsList.map(option =>(
+            <option key={option.value} value={option.value} price={option.price} name={option.text}>{option.text}</option>
+          ))}
               </Field>
-              <ErrorMessage
-                name="productId"
-                component="div"
-                className="text-red-500"
+        {/* <button
+          className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
+          type="button"
+          onClick={addItemHandler}
+        >
+          Add Item
+        </button> */}
+        <table className="w-full p-4 text-left">
+          <thead>
+            <tr className="border-b border-gray-900/10 text-sm md:text-base">
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th className="text-center">Precio</th>
+              <th className="text-center">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <InvoiceItem
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                qty={item.qty}
+                price={item.price}
+                onDeleteItem={deleteItemHandler}
               />
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="technicalSpecifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Especificaciones técnicas <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="textarea"
-                name="technicalSpecifications"
-                id="technicalSpecifications"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 resize-y"
-                rows="6"
-                placeholder="El producto contará..."
-              />
-              <ErrorMessage
-                name="technicalSpecifications"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-
+            ))}
+          </tbody>
+        </table>
+        <div className="flex flex-col items-end space-y-2 pt-6">
+          <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
           </div>
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
-              <label htmlFor="productHeight" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Altura del producto <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="productHeight"
-                id="productHeight"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="productHeight"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="productWidth" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Ancho del producto <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="productWidth"
-                id="productWidth"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="productWidth"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="numberOfPages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Numero de paginas <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="numberOfPages"
-                id="numberOfPages"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="numberOfPages"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="inkQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cantidad de tinta <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="inkQuantity"
-                id="inkQuantity"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="inkQuantity"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="productQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cantidad de producto <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="productQuantity"
-                id="productQuantity"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="productQuantity"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+        
+          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
+            <span className="font-bold">Total:</span>
+            <span className="font-bold">
+              ${total % 1 === 0 ? total : total.toFixed(2)}
+            </span>
           </div>
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-2/4">
-              <label htmlFor="unitValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Valor unico <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="unitValue"
-                id="unitValue"
-                
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="unitValue"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="fullValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Valor total <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                name="fullValue"
-                id="fullValue"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-              <ErrorMessage
-                name="fullValue"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          </div>
-
-
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-2/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cotizacion CLiente <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                as="select"
-                name="quotationClientId"
-                id="quotationClientId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                 <option value={0}>Seleccione</option>
-                {quotationclientOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage
-                name="quotationClientId"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Acabados <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="select"
-                name="userId"
-                data={userOptions}
-                id="userId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                // ? aqui van los campos del select
-              </Field>
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Sustratos <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="select"
-                name="userId"
-                data={userOptions}
-                id="userId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                // ? aqui van los campos del select
-              </Field>
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Gramaje <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="select"
-                name="userId"
-                data={userOptions}
-                id="userId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                // ? aqui van los campos del select
-              </Field>
-            </div>
+        </div>
+      </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
@@ -637,13 +528,13 @@ function CreateQuotation() {
               />
             </div>
           </div>
-          <center>
-            <button
-              type="submit"
-              className="col-span-3 w-50% text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Crear orden de producción
-            </button>
+            <center>
+          <button
+            type="submit"
+            className="col-span-3 w-50% text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Crear Cotizacion
+          </button>
           </center>
         </Form>
       )}
@@ -654,7 +545,7 @@ export function CreateButtomQuotation() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-1500px' }))
+    dispatch(setWidth({ width: 'w-[1500px]' }))
     dispatch(openModal({ title: 'Crear Cotizacion Cliente' }))
     dispatch(setAction({ action: 'creating' }))
   }
@@ -683,4 +574,5 @@ export function CreateButtomQuotation() {
     </button>
   )
 }
+
 export default CreateQuotation

@@ -34,6 +34,7 @@ import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
 import QuotationClientApproved from '../pages/ListQuotationClientApproved/QuotationClientApproved'
 import Quotation from '../pages/Quotation/Quotation'
+import ViewOrderProduction from '../pages/CreateOrderProduction/CreateOrderProduction'
 
 
 const router = createBrowserRouter(
@@ -263,6 +264,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <QuotationClientApproved />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="createOP"
+        element={
+          <DashboardLayout>
+            <ViewOrderProduction />
           </DashboardLayout>
         }
       />

@@ -11,12 +11,15 @@ const Reportquotation = ({ dataApi }) => {
 
   const columns = [
     { name: 'Codigo', key: 'id' },
+    { name: 'Fecha de Orden', key: 'orderDate' },
+    { name: 'Fecha de Entrega', key: 'deliverDate' },
     { name: 'Cliente', key: 'clientId' },
     { name: 'Tipo De Servicio', key: 'typeServiceId' },
-    { name: 'Producto', key: 'productId' },
-    { name: 'Cantidad de producto', key: 'productQuantity' },
-    { name: 'Valor Unico', key: 'unitValue' },
-    { name: 'Valor Total', key: 'fullValue' },
+
+    /*  { name: 'Producto', key: 'productId' },
+     { name: 'Cantidad de producto', key: 'productQuantity' },
+     { name: 'Valor Unico', key: 'unitValue' },
+     { name: 'Valor Total', key: 'fullValue' },*/
     { name: 'Estado Cotizacion', key: 'quotationStatus' }
   ]
 
@@ -25,12 +28,10 @@ const Reportquotation = ({ dataApi }) => {
   const rows = dataApi
     ? dataApi.map(quotation => ({
       id: quotation.id,
+      orderDate: quotation.orderDate,
+      deliverDate: quotation.deliverDate,
       clientId: quotation.clientId,
       typeServiceId: quotation.typeServiceId,
-      productId: quotation.productId,
-      productQuantity: quotation.productQuantity,
-      unitValue: quotation.unitValue,
-      fullValue: quotation.fullValue,
       quotationStatus: quotation.quotationStatus
     }))
     : []
@@ -63,25 +64,35 @@ const Reportquotation = ({ dataApi }) => {
           </tr>
         </thead>
         <tbody>
-        {rows.map(quotation => (
-          <tr
-            className="border-b border-gray-500"
-            key={quotation.id}
-          >
-            <th
-              scope="row"
-              className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+          {rows.map(quotation => (
+            <tr
+              className="border-b border-gray-500"
+              key={quotation.id}
             >
-              {quotation.id}
-            </th>
-            <td className="px-4 py-3">{quotation.clientId}</td>
-            <td className="px-4 py-3">{quotation.typeServiceId}</td>
-            <td className="px-4 py-3">{quotation.productId}</td>
-            <td className="px-4 py-3">{quotation.productQuantity}</td>
-            <td className="px-4 py-3">{quotation.unitValue}</td>
-            <td className="px-4 py-3">{quotation.fullValue}</td>
-          </tr>
-        ))}
+              <th
+                scope="row"
+                className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+              >
+                {quotation.id}
+              </th>
+              <td className="px-4 py-3">{quotation.orderDate}</td>
+              <td className="px-4 py-3">{quotation.deliverDate}</td>
+              <td className="px-4 py-3">{quotation.clientId}</td>
+              <td className="px-4 py-3">{quotation.typeServiceId}</td>
+              <td className="px-4 py-3">
+                {quotation.quotationStatus === 1 && (
+                  <span style={{ backgroundColor: 'green', color: 'black', borderRadius: '43%', padding: '10px' }}>En proceso</span>
+                )}
+                {quotation.quotationStatus === 2 && (
+                  <span style={{ backgroundColor: '#6495ED', color: 'black', borderRadius: '43%', padding: '10px' }}>Aprobado</span>
+                )}
+                {quotation.quotationStatus === 3 && (
+                  <span style={{ backgroundColor: '#FF6B6B', color: 'black', borderRadius: '43%', padding: '10px' }}>No Aprobado</span>
+                )}
+              </td>
+
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

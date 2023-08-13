@@ -16,7 +16,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue transition duration-75"
               aria-controls="dropdown-example0"
               data-collapse-toggle="dropdown-example0"
             >
@@ -49,7 +49,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/Finish'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Finish' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/Finish' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Acabados</span>
@@ -58,7 +58,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/product'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/product' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/product' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Productos</span>
@@ -67,7 +67,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/supplyPictograms"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyPictograms' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyPictograms' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Pictogramas</span>
@@ -76,7 +76,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/Machine"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/Machine' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/Machine' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Maquinas</span>
@@ -85,7 +85,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/impositionPlanch"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/impositionPlanch' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/impositionPlanch' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Imposición plancha</span>
@@ -96,7 +96,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >
@@ -131,7 +131,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/roles'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/roles' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/roles' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Roles</span>
@@ -140,7 +140,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/usuarios'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/usuarios' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/usuarios' ? 'bg-custom-blue text-white' : null}`}
                 >
                   <span className="ml-3">Usuarios</span>
                 </Link>
@@ -150,7 +150,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example2"
               data-collapse-toggle="dropdown-example2"
             >
@@ -194,7 +194,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/warehause"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/warehause' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/warehause' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Bodega</span>
@@ -205,7 +205,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example3"
               data-collapse-toggle="dropdown-example3"
             >
@@ -247,7 +247,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyCategory'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyCategory' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyCategory' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Categoria de Insumos</span>
@@ -256,7 +256,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supply'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supply' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supply' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Insumos</span>
@@ -265,7 +265,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/supplyDetails'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/supplyDetails' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyDetails' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Compra de Insumos</span>
@@ -276,7 +276,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example4"
               data-collapse-toggle="dropdown-example4"
             >
@@ -318,7 +318,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/provider"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/provider' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/provider' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Proveedor</span>
@@ -327,7 +327,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/quotitationProviders"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotitationProviders' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotitationProviders' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">
@@ -340,7 +340,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example5"
               data-collapse-toggle="dropdown-example5"
             >
@@ -382,7 +382,7 @@ function Sidebar () {
               {/* <li>
                 <Link
                   to="/typeServices"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/typeServices' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/typeServices' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Tipo de servicio</span>
@@ -391,7 +391,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/clients"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/clients' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/clients' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Clientes</span>
@@ -400,7 +400,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationClient'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationClient' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotationClient' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Cotizacion Cliente</span>
@@ -409,7 +409,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotation'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotation' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotation' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3">Cotizacion</span>
@@ -419,7 +419,7 @@ function Sidebar () {
               <li>
                 <Link
                   to={'/quotationclientDetail'}
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/quotationclientDetail' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotationclientDetail' ? 'bg-custom-blue text-white' : null}`}
                 >
                   <span className="ml-3">Cotizacion Cliente Detalles</span>
                 </Link>
@@ -429,7 +429,7 @@ function Sidebar () {
           <li>
             <button
               type="button"
-              className="flex items-center w-full p-3 text-gray-900 transition duration-75 rounded-lg group hover:bg-green-500"
+              className="flex items-center w-full p-3 text-gray-900 transition duration-75 group hover:text-white rounded-lg hover:bg-custom-blue"
               aria-controls="dropdown-example6"
               data-collapse-toggle="dropdown-example6"
             >
@@ -462,7 +462,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/OrderProduction"
-                  className={`flex items-center p-3 text-gray-900 rounded-lg hover:bg-green-500 ${path === '/OrderProduction' ? 'bg-green-500' : null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/OrderProduction' ? 'bg-custom-blue text-white' : null}`}
                 >
                   <span className="ml-3 text-base">Orden de producción</span>
                 </Link>
