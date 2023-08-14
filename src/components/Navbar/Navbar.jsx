@@ -1,6 +1,32 @@
 import { Link } from 'react-router-dom'
+import {IoIosArrowDown, IoIosArrowUp} from 'react-icons//io'
+import { useState, useRef, useEffect } from 'react';
 
 function Navbar () {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);  // Referencia al elemento del menú
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);  // Cierra el menú si se hace clic fuera de él
+    }
+  };
+
+  useEffect(() => {
+    // Agrega un event listener para detectar clics fuera del componente
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      // Limpia el event listener cuando el componente se desmonta
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -46,8 +72,9 @@ function Navbar () {
               <div>
                 <button
                   type="button"
-                  className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
-                  aria-expanded="false"
+                  className="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300"
+                  aria-expanded={dropdownOpen ? 'true' : 'false'}
+                  onClick={toggleDropdown}
                   data-dropdown-toggle="dropdown-user"
                 >
                   <span className="sr-only">Abrir menu de usuario</span>
@@ -56,12 +83,15 @@ function Navbar () {
                     src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                     alt="user photo"
                   />
+                {dropdownOpen?<IoIosArrowUp className="h-6 w-6 ml-2" />:<IoIosArrowDown className="h-6 w-6 ml-2" />} 
+
                 </button>
               </div>
               <div
-                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow"
-                id="dropdown-user"
-              >
+          ref={dropdownRef}  // Asigna la referencia al elemento del menú
+          className={`z-50 ${dropdownOpen ? 'block' : 'hidden'} my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow`}
+          id="dropdown-user"
+        >
                 <div className="px-4 py-3" role="none">
                   <p
                     className="text-sm text-gray-900 dark:text-white"

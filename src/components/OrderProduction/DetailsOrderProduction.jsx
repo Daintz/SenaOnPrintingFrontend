@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { GrView } from 'react-icons/gr'
-import { Tooltip } from 'react-tippy'
 
 function DetailsOrderProduction () {
   

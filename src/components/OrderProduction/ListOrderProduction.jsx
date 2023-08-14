@@ -9,12 +9,13 @@ import { ChangeStatusButtonOrderProduction } from './ChangeStatusOrderProduction
 import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
 import { Link } from 'react-router-dom'
-
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 const ListOrderProduction = () => {
   const [selectedOption, setSelectedOption] = useState('orderProduction'); // Estado para almacenar la opción seleccionada
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
+  const { data: dataApi, error, isLoading, refetch } = useGetAllOrderProductionsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -100,11 +101,10 @@ const ListOrderProduction = () => {
     useGlobalFilter,
     usePagination)
 
-  const { pageIndex, globalFilter } = state
+    const { pageIndex, globalFilter } = state
 
-  if (!dataApi) {
-    return <div>Loading...</div>
-  }
+    if (isLoading) return <Spinner />
+    if (error) return <Error type={error.status} message={error.error} />
 
   return (
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">

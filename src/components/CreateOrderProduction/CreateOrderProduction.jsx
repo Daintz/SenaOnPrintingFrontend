@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { useGetAllPaperCutsQuery, usePostOrderProductionMutation } from '../../context/Api/Common'
+import { useGetAllPaperCutsQuery, useGetAllImpositionPlanchsQuery, usePostOrderProductionMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -40,8 +40,7 @@ function CreateOrderProduction() {
   // useEffect(() => {
   //   refetch()
   // }, [isAction])
-  const paperCutsQuery = useGetAllPaperCutsQuery();
-  const paperCuts = paperCutsQuery.data;
+
   const dispatch = useDispatch()
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [previewImage, setPreviewImage] = useState(null);
@@ -52,6 +51,12 @@ function CreateOrderProduction() {
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
   // console.log(detailsData)
+  const paperCutsQuery = useGetAllPaperCutsQuery();
+  const paperCuts = paperCutsQuery.data;
+console.log(paperCuts)
+  const impositionPlanchsQuery = useGetAllImpositionPlanchsQuery();
+  const impositionPlanchs = impositionPlanchsQuery.data;
+console.log(impositionPlanchs)
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
@@ -212,7 +217,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="quotationClientDetailId"
                 id="quotationClientDetailId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Libreta"
               />
             </div> */}
@@ -228,7 +233,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo1"
                 id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="100"
               />
             </div>
@@ -240,7 +245,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo2"
                 id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="20.5"
               />
             </div>
@@ -252,7 +257,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo3"
                 id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="15"
               />
             </div> */}
@@ -264,7 +269,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="userId"
                       id="userId"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="20"
                     />
                   </div>
@@ -277,7 +282,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="materialReception"
                       id="materialReception"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="Drive"
                     />
                   </div>
@@ -289,7 +294,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="indented"
                       id="indented"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="5"
                     />
                   </div>
@@ -301,7 +306,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="colorProfile"
                       id="colorProfile"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="CMYK"
                     />
                   </div>
@@ -316,7 +321,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="program"
                       id="program"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="Adobe"
                     />
                   </div>
@@ -328,7 +333,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="programVersion"
                       id="programVersion"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="1.0.5"
                     />
                   </div>
@@ -340,7 +345,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo3"
                 id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="4X1"
               />
             </div> */}
@@ -352,7 +357,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="specialInk"
                       id="specialInk"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="..."
                     />
                   </div>
@@ -364,7 +369,7 @@ function CreateOrderProduction() {
                       type="text"
                       name="inkCode"
                       id="inkCode"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="#10054"
                     />
                   </div>
@@ -378,7 +383,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo1"
                 id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Adobe"
               />
             </div> */}
@@ -390,7 +395,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo2"
                 id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="1.0.5"
               />
             </div> */}
@@ -402,7 +407,7 @@ function CreateOrderProduction() {
             as="select"
             name="campo3"
             id="campo3"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value="0">Selecciona</option>
             <option value="12 lpi">12 lpi</option>
@@ -417,7 +422,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo3"
                 id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="..."
               />
             </div> */}
@@ -429,7 +434,7 @@ function CreateOrderProduction() {
             as="select"
             name="campo3"
             id="campo3"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value="0">Selecciona</option>
             <option value="Giro pinza">Giro pinza</option>
@@ -449,7 +454,7 @@ function CreateOrderProduction() {
                       as="select"
                       name="typePoint"
                       id="typePoint"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       <option value="0">Selecciona</option>
                       <option value="Giro pinza">Punto redondo</option>
@@ -464,7 +469,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo1"
                 id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="4X1*"
               />
             </div> */}
@@ -476,12 +481,30 @@ function CreateOrderProduction() {
                       as="select"
                       name="idPaperCut"
                       id="idPaperCut"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       {/* Opciones del select */}
                       {paperCuts && paperCuts.map(paperCut => (
                         <option key={paperCut.id} value={paperCut.id}>
                           {paperCut.name}
+                        </option>
+                      ))}
+                    </Field>
+                  </div>
+                  <div className="w-2/4">
+                    <label htmlFor="idImpositionPlanch" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Imposición plancha
+                    </label>
+                    <Field
+                      as="select"
+                      name="idImpositionPlanch"
+                      id="idImpositionPlanch"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                    >
+                      {/* Opciones del select */}
+                      {impositionPlanchs && impositionPlanchs.map(impositionPlanch => (
+                        <option key={impositionPlanch.id} value={impositionPlanch.id}>
+                          {impositionPlanch.name}
                         </option>
                       ))}
                     </Field>
@@ -494,7 +517,7 @@ function CreateOrderProduction() {
                 type="text"
                 name="campo2"
                 id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="20"
               />
             </div> */}
@@ -508,7 +531,7 @@ function CreateOrderProduction() {
                       type="file"
                       name="scheme"
                       id="scheme"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="4X1*"
                       onChange={event => {
                         setFieldValue("scheme", event.target.files[0]);
@@ -525,7 +548,7 @@ function CreateOrderProduction() {
                       type="file"
                       name="image"
                       id="image"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="Libreta"
                       onChange={event => {
                         setFieldValue("image", event.target.files[0]);
@@ -539,10 +562,11 @@ function CreateOrderProduction() {
                       Observaciones
                     </label>
                     <Field
+                    as="textarea"
                       type="text"
                       name="observations"
                       id="observations"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="20"
                     />
                   </div>
