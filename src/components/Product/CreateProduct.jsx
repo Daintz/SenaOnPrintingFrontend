@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { useGetAllSupplyQuery, usePostProductMutation } from '../../context/Api/Common'
+import { usePostProductMutation } from '../../context/Api/Common'
 import {
   changeAction,
   closeModal,
@@ -420,14 +420,14 @@ function CreateProduct () {
       {rows.map(row => (
         <div key={row} className="flex">
           {inputs
-            .filter(input => input.row === row) 
+            .filter(input => input.row === row)
             .map((input) => (
               input.typeProductOwner === typeProductSelect || input.typeProductOwner === ''
                 ? (
                     input.type === 'select'
                       ? (
                           <>
-                          <div className="flex-1 mr-4 last:mr-0">
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
                             <label htmlFor={input.name}>{input.title}</label>
                             <Field as='select' name={input.name} id={input.name} value={input.value} onChange={input.action ?? undefined} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5">
                               {input.options.map((option, index) => (
