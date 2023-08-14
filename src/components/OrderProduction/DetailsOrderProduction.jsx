@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
 import { Tooltip } from 'react-tippy'
 
 function DetailsOrderProduction () {
@@ -58,10 +58,8 @@ export function DetailsButtonOrderProduction ({ orderProduction }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}
-      ><Tooltip title="Detalles" position="bottom"
-      animation="fade">
-        <BsClipboard2 className="h-5 w-5 mr-2" />
-        </Tooltip>
+      >
+      <GrView alt="Icono detalles" title="Ver detalles de OP" className="opacity-60 h-5 w-5 mr-2" />
       </button>
       
   )

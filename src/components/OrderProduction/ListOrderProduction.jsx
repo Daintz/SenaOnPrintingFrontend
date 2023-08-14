@@ -91,7 +91,8 @@ const ListOrderProduction = () => {
     canPreviousPage,
     state,
     setGlobalFilter,
-    prepareRow
+    prepareRow,
+    rows
   } = useTable({
     data,
     columns
@@ -161,6 +162,13 @@ const ListOrderProduction = () => {
                 </tr>
               ))}
             </thead>
+            {rows.length === 0
+                    ? (
+                      <>
+                        <p className='text-center text-3xl font-bold ml-[50%] my-10'>No se encontraron registros con esta busqueda.</p>
+                      </>
+                      )
+                    : (<>
             <tbody {...getTableBodyProps()}>
               {page.map(row => {
                 prepareRow(row)
@@ -194,6 +202,8 @@ const ListOrderProduction = () => {
                 )
               })}
             </tbody>
+            </>
+                    )}
           </table>
           <nav
             className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
