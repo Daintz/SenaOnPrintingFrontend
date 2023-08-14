@@ -52,10 +52,7 @@ export function ChangeStatusButtonOrderProduction ({ orderProduction }) {
 
   return (
     <button type="button" onClick={ handleOpen }>
-      <Tooltip title="Cambiar proceso" position="bottom"
-      animation="fade">
-      <BsCheckCircle className="h-5 w-5 mr-2" />
-      </Tooltip>
+      <BsCheckCircle alt="Icono detalles" title="Cambiar proceso OP" className="h-5 w-5 mr-2"  />
     </button>
   )
 }

@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
-import { Tooltip } from 'react-tippy'
+import {AiOutlineMinusCircle} from 'react-icons/ai'
+
 
 function ChangeStateOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
@@ -51,23 +52,7 @@ export function ChangeStateButtonOrderProduction ({ orderProduction }) {
 
   return (
     <button type="button" onClick={ handleOpen }>
-      <Tooltip title="Cambiar estado" position="bottom"
-      animation="fade">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      </Tooltip>
+      <AiOutlineMinusCircle alt="Icono detalles" title="Cambiar estado OP" className="h-6 w-6 mr-2" />
     </button>
   )
 }

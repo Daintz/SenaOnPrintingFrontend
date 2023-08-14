@@ -21,6 +21,7 @@ import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { BsCheckCircle } from 'react-icons/bs'
 import { Tooltip } from 'react-tippy'
+import {HiOutlinePlusSm} from 'react-icons/hi'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -579,25 +580,10 @@ export function CreateButtomOrderProduction({ orderProduction }) {
     <button
       type="button"
       onClick={() => handleOpen()}
-    ><Tooltip title="Crear OP" position="bottom"
-    animation="fade">
+    >
       <Link to="/createOP">
-        <svg
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clipRule="evenodd"
-            fillRule="evenodd"
-            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-          />
-        </svg>
+        <HiOutlinePlusSm alt="Icono detalles" title="Crear OP" className="h-7 w-7 mr-2"/>
       </Link>
-      </Tooltip>
     </button>
   )
 }
