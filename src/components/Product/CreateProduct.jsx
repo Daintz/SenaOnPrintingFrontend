@@ -24,6 +24,7 @@ const validationSchema = Yup.object().shape({
 function CreateProduct () {
   const [dataApi, setDataApi] = useState([])
   const [dataSupplies, setDataSupplies] = useState(false)
+  const [listSupplies, setListSupplies] = useState([])
 
   useEffect(() => {
     get()
@@ -62,6 +63,23 @@ function CreateProduct () {
   }
 
   const addProduct = (cell) => {
+    const existingSupply = listSupplies.find(supply => supply.id === cell.id)
+
+    if (existingSupply) {
+      const updatedSupplies = listSupplies.map(supply =>
+        supply.id === cell.id ? { ...supply, amount: supply.amount + 1 } : supply
+      )
+      setListSupplies(updatedSupplies)
+      console.log('repetido')
+    } else {
+      setListSupplies([...listSupplies, { ...cell, amount: 1 }])
+      console.log('agregado')
+    }
+
+    console.log(listSupplies)
+  }
+
+  const deleteProduct = (cell) => {
     console.log('funciono: ', cell)
   }
 
@@ -499,6 +517,7 @@ function CreateProduct () {
         )
       : (
         <>
+        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos</h2>
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
           <div className="w-full">
             <form className="flex items-center">
@@ -567,7 +586,7 @@ function CreateProduct () {
                                 <button type="button" onClick={() => addProduct(cell.row.original)}>
                                   <AiOutlinePlusCircle alt="Icono agregar producto" title="Agregar producto" className="h-6 w-6 mr-2" />
                                 </button>
-                                <button type="button">
+                                <button type="button" onClick={() => deleteProduct(cell.row.original.id)}>
                                   <AiOutlineCloseCircle alt="Icono eliminar producto" title="Eliminar producto" className="h-6 w-6 mr-2" />
                                 </button>
                               </td>
@@ -642,6 +661,9 @@ function CreateProduct () {
           </ul>
         </nav>
         </div>
+
+        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h2>
+
         <button
           onClick={handleDataSupplies}
           className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"

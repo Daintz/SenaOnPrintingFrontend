@@ -126,7 +126,7 @@ function UpdateUser () {
                 name="names"
                 id="names"
                 placeholder="Nombres del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="names"
@@ -141,7 +141,7 @@ function UpdateUser () {
                 name="surnames"
                 id="surnames"
                 placeholder="Apellidos del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="surnames"
@@ -154,7 +154,7 @@ function UpdateUser () {
           <div key='2'>
             <label htmlFor="typeDocumentId">Tipo de Documento</label>
             <br />
-            <Field name="typeDocumentId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="typeDocumentId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione Tipo de Documento</option>
               {typeDocumentOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -173,7 +173,7 @@ function UpdateUser () {
                 name="documentNumber"
                 id="documentNumber"
                 placeholder="Numero de Documento del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="documentNumber"
@@ -190,7 +190,7 @@ function UpdateUser () {
                 name="phone"
                 id="phone"
                 placeholder="Telefono del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="phone"
@@ -205,7 +205,7 @@ function UpdateUser () {
                 name="address"
                 id="address"
                 placeholder="Dirección del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="address"
@@ -222,7 +222,7 @@ function UpdateUser () {
                 name="email"
                 id="email"
                 placeholder="Correo Electronico del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="email"
@@ -233,7 +233,7 @@ function UpdateUser () {
           <div key='7' className='w-1/2 ml-2'>
             <label htmlFor="roleId">Rol</label>
             <br />
-            <Field name="roleId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="roleId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione Rol</option>
               {roleOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -254,7 +254,7 @@ function UpdateUser () {
                 name="passwordDigest"
                 id="passwordDigest"
                 placeholder="Contraseña del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="passwordDigest"
@@ -265,7 +265,7 @@ function UpdateUser () {
         </div>
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Actualizar Usuario
           </button>
@@ -286,7 +286,7 @@ export function UpdateButtomUser ({ user }) {
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" oalt="Icono editar" title="Editar el usuario" nClick={() => {
       handleEdit(user)
     }}>
       <svg
