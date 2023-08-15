@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
 import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import {
   useGetAllQuotationClientsQuery,
   useGetAllQuotationClientDetailsQuery
 } from '../../context/Api/Common';
-import { CreateButtomQuotation } from './CreateQuotation';
+import { CreateButtomQuotation } from '../CreateQuotationClient/CreateQuotation';
 import { UpdateButtomQuotation } from './UpdateQuotation';
 import { DetailsButtomQuotation } from './DetailsQuotation';
 import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
@@ -170,8 +171,8 @@ const ListQuotation = () => {
               </form>
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-              <CreateButtomQuotation />
-            </div>
+            <Link to={'/createQuotation'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Crear Cotizacion</Link>
+          </div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-gray-400">
             <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
