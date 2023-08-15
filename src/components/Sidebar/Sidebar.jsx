@@ -67,7 +67,7 @@ function Sidebar () {
               <li>
                 <Link
                   to="/supplyPictograms"
-                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyPictograms' ? 'bg-custom-blue text-white': null}`}
+                  className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyPictograms' ? 'bg-custom-blue text-white' : null}`}
                 >
 
                   <span className="ml-3 text-base">Pictogramas</span>
@@ -82,7 +82,7 @@ function Sidebar () {
                   <span className="ml-3 text-base">Maquinas</span>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/impositionPlanch"
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/impositionPlanch' ? 'bg-custom-blue text-white' : null}`}
@@ -90,7 +90,7 @@ function Sidebar () {
 
                   <span className="ml-3 text-base">Imposición plancha</span>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li>

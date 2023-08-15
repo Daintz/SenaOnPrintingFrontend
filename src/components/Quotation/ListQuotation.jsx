@@ -12,8 +12,10 @@ import { DetailsButtomQuotation } from './DetailsQuotation';
 import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
 import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation';
 import { useReactToPrint } from 'react-to-print'
-import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
-import Reportquotation from './ReportQuotation';
+import { BsFillFileEarmarkPdfFill } from 'react-icons/bs'
+import Reportquotation from './ReportQuotation'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 const ListQuotation = () => {
   const tablePDF = useRef()
@@ -23,15 +25,15 @@ const ListQuotation = () => {
     documentTitle: 'Informe de clientes'
   })
 
-  const { data: dataApi, refetch: refetch1 } = useGetAllQuotationClientsQuery();
-  const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery();
+  const { data: dataApi,  error, isLoading, refetch: refetch1 } = useGetAllQuotationClientsQuery()
+  const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery()
 
-  const { isAction } = useSelector((state) => state.modal);
+  const { isAction } = useSelector((state) => state.modal)
 
   useEffect(() => {
-    refetch1();
-    refetch2();
-  }, [isAction]);
+    refetch1()
+    refetch2()
+  }, [isAction])
 
   const columns = useMemo(
     () => [
@@ -45,20 +47,20 @@ const ListQuotation = () => {
         accessor: 'quotationStatus',
         id: 'quotationStatus',
         Cell: ({ value }) => {
-          let statusText = '';
-          let statusColor = '';
-      
+          let statusText = ''
+          let statusColor = ''
+
           if (value === 1) {
-            statusText = 'En proceso';
-            statusColor = 'green';
+            statusText = 'En proceso'
+            statusColor = 'green'
           } else if (value === 2) {
-            statusText = 'Aprobado';
-            statusColor = 'lightblue';
+            statusText = 'Aprobado'
+            statusColor = 'lightblue'
           } else if (value === 3) {
-            statusText = 'No aprobado';
-            statusColor = 'lightcoral';
+            statusText = 'No aprobado'
+            statusColor = 'lightcoral'
           }
-      
+
           return (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <div
@@ -67,28 +69,28 @@ const ListQuotation = () => {
                   height: '12px',
                   borderRadius: '50%',
                   backgroundColor: statusColor,
-                  marginRight: '8px',
+                  marginRight: '8px'
                 }}
               ></div>
               <span>{statusText}</span>
             </div>
-          );
+          )
         }
       }
     ],
     []
-  );
+  )
 
   const data = useMemo(() => {
     if (dataApi && dataApi2) {
       const mergedData = dataApi.map((item, index) => ({
         ...item,
         ...dataApi2[index]
-      }));
-      return mergedData;
+      }))
+      return mergedData
     }
-    return [];
-  }, [dataApi, dataApi2]);
+    return []
+  }, [dataApi, dataApi2])
 
   const {
     getTableProps,
@@ -109,15 +111,12 @@ const ListQuotation = () => {
     },
     useGlobalFilter,
     usePagination
-  );
+  )
 
-  const { pageIndex, globalFilter } = state;
+  const { pageIndex, globalFilter } = state
 
-  if (!dataApi && !dataApi2) {
-    return <div>Loading...</div>;
-  }
-
-
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
   return (
     <>
       <div className='hidden'>
@@ -127,14 +126,14 @@ const ListQuotation = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
-      <BsFillFileEarmarkBreakFill />
+      <BsFillFileEarmarkPdfFill className='w-5 h-5'/>
       Crear un informe
     </button>
-    </div> 
+    </div>
       <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
         <div className="bg-white sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
