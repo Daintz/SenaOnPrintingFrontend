@@ -41,7 +41,7 @@ const getTypeService = () => {
   });
 };
 
-function CreateWarehause () {
+function CreateWarehause() {
   const [typeServiceIdOptions, settypeServiceIdOptions] = useState([]);
   const fetchOptions = () => {
     getTypeService().then((options) => {
@@ -77,7 +77,7 @@ function CreateWarehause () {
       data: typeServiceIdOptions,
       placeholder: 'Tipo de de bodega'
     },
-    
+
     {
       key: 2,
       name: 'ubication',
@@ -98,7 +98,7 @@ function CreateWarehause () {
       }}
       validationSchema={validationSchema}
     >
-          <Form className="space-y-6">
+      <Form className="space-y-6">
         {inputs.map(input => {
           return input.type == "select" ?
             <div key={input.key}>
@@ -135,7 +135,7 @@ function CreateWarehause () {
         })}
         <button
           type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Registrar Bodega
         </button>
@@ -144,7 +144,7 @@ function CreateWarehause () {
   )
 }
 
-export function CreateButtomWarehause () {
+export function CreateButtomWarehause() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
@@ -156,11 +156,11 @@ export function CreateButtomWarehause () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
-    <svg
+      <svg
         className="h-3.5 w-3.5 mr-2"
         fill="currentColor"
         viewBox="0 0 20 20"
