@@ -62,11 +62,10 @@ export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
 export const orderProductionApi = commonEndpointsApi('OrderProduction', 'orderProduction')
 export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
 export const quotationProviders = commonEndpointsApi('QuotationProviders', 'quotationProviders')
-export const supplyPictograms = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+export const SupplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 export const finishApi = commonEndpointsApi('Finish', 'finish')
 export const MachineApi = commonEndpointsApi('Machine', 'machine')
 export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
-export const supplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
@@ -128,7 +127,7 @@ export const {
   usePostMutation: usePostSupplyPictogramsMutation,
   usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
   useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
-} = supplyPictogrmas
+} = SupplyPictogrmas
 
 export const {
   useGetAllQuery: useGetAllUsersQuery,

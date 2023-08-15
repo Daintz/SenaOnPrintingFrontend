@@ -89,11 +89,11 @@ const ListQuotationProviders = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+    className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
-      <BsFillFileEarmarkBreakFill />
+      <BsFillFileEarmarkBreakFill className='w-5 h-5'/>
       Crear un informe
     </button>
     </div>
@@ -167,9 +167,7 @@ const ListQuotationProviders = () => {
                         : row.cells[0].render('Cell')}
                     </td>
                     <td {...row.cells[1].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[1].value === 'function'
-                        ? row.cells[1].value(row.cells[1])
-                        : row.cells[1].render('Cell')}
+                          <img src={row.cells[1].value} width={100} height={100}/>
                     </td>
                     <td {...row.cells[2].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[2].value === 'function'
