@@ -52,12 +52,20 @@ function updateWarehause() {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    await updateWarehause(values)
-
-    dispatch(changeAction())
-    dispatch(closeModal())
-    toast.success('Bodega actualizada con exito')
+    
+    const result = await updateWarehause(values)
+    
+    console.log('updateWarehause result', result);
+    
+    if (result.isSuccess) {
+      dispatch(changeAction())
+      dispatch(closeModal())
+      toast.success('Bodega actualizada con exito')
+    } else {
+      console.error('updateWarehause failed', result.error);
+    }
   }
+  
 
   const inputs = [
     {key: 0, name: 'typeServiceId', title: 'Tipo de bodega', type: 'select', data: typeServiceOptions, placeholder: 'Tipo de de bodega'},
@@ -85,7 +93,7 @@ function updateWarehause() {
               <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
                 <option value="0">Seleccione {input.title}</option>
                 {input.data.map(option => (
-                  <option value={option.value}>{option.label}</option>
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </Field>
               <ErrorMessage
