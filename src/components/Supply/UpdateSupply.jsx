@@ -82,7 +82,7 @@ function UpdateSupply () {
       type="text"
       name="name"
       id="name"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Name"
     />
        <ErrorMessage
@@ -101,7 +101,7 @@ function UpdateSupply () {
       type="text"
       name="dangerIndicators"
       id="dangerIndicators"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Indicadores de peligro"
     />
         <ErrorMessage
@@ -121,7 +121,7 @@ function UpdateSupply () {
       type="text"
       name="useInstructions"
       id="useInstructions"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Instrucciones"
     />
           <ErrorMessage
@@ -143,7 +143,7 @@ function UpdateSupply () {
       type="text"
       name="advices"
        id="advices"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Consejos"
     />
         <ErrorMessage
@@ -162,7 +162,7 @@ function UpdateSupply () {
             as="select"
             name="supplyType"
             id="supplyType"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value={1}>Devolutivo</option>
             <option value={2}>Consumible</option>
@@ -181,7 +181,7 @@ function UpdateSupply () {
             as="select"
             name="sortingWord"
             id="sortingWord"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value={1}>Peligro</option>
             <option value={2}>Atención</option>
@@ -200,7 +200,7 @@ function UpdateSupply () {
       type="number"
       name="quantity"
       id="quantity"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Cantidad"
     />
           <ErrorMessage
@@ -219,7 +219,7 @@ function UpdateSupply () {
       type="number"
       name="averageCost"
       id="averageCost"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
       placeholder="Costo promedio"
     />
           <ErrorMessage
@@ -234,7 +234,7 @@ function UpdateSupply () {
 
 <button
   type="submit"
-  className="col-span-3 w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+  className="col-span-3 w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
 >
   Actualizar insumo 
 </button>
