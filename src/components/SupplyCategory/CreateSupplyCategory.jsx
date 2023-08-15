@@ -11,6 +11,7 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import { FaAsterisk } from 'react-icons/fa'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -67,7 +68,12 @@ function CreateSupplyCategory () {
       <Form className="space-y-6">
         {inputs.map(input => (
           <div key={input.key}>
-            <label htmlFor={input.name}>{input.title}</label>
+          <div className='flex flex-row'>
+            <label htmlFor={input.name}>
+              {input.title}
+            </label>
+            <FaAsterisk className='w-2 h-2 ml-1 text-red-900' />
+          </div>
             {input.type === 'textarea'
               ? (
               <Field
@@ -96,7 +102,7 @@ function CreateSupplyCategory () {
         ))}
         <button
           type="submit"
-          className="w-full text-white bg-custom-blue hover:bg-ring-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Crear categoria insumo
         </button>
@@ -117,7 +123,7 @@ export function CreateButtonSupplyCategory () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:ring-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >

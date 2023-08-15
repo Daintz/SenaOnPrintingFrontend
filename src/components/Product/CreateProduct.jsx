@@ -13,6 +13,7 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import { useEffect, useMemo, useState } from 'react'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
+import { AiOutlineCloseCircle, AiOutlinePlusCircle } from 'react-icons/ai'
 import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
@@ -22,6 +23,8 @@ const validationSchema = Yup.object().shape({
 
 function CreateProduct () {
   const [dataApi, setDataApi] = useState([])
+  const [dataSupplies, setDataSupplies] = useState(false)
+  const [listSupplies, setListSupplies] = useState([])
 
   useEffect(() => {
     get()
@@ -55,6 +58,31 @@ function CreateProduct () {
     setTypeProductSelect(e.target.value)
   }
 
+  const handleDataSupplies = () => {
+    setDataSupplies(!dataSupplies)
+  }
+
+  const addProduct = (cell) => {
+    const existingSupply = listSupplies.find(supply => supply.id === cell.id)
+
+    if (existingSupply) {
+      const updatedSupplies = listSupplies.map(supply =>
+        supply.id === cell.id ? { ...supply, amount: supply.amount + 1 } : supply
+      )
+      setListSupplies(updatedSupplies)
+      console.log('repetido')
+    } else {
+      setListSupplies([...listSupplies, { ...cell, amount: 1 }])
+      console.log('agregado')
+    }
+
+    console.log(listSupplies)
+  }
+
+  const deleteProduct = (cell) => {
+    console.log('funciono: ', cell)
+  }
+
   const columns = useMemo(() => [
     { Header: 'Nombre insumo', accessor: 'name' },
     { Header: 'Indicadores de peligro insumo', accessor: 'dangerIndicators' },
@@ -64,7 +92,6 @@ function CreateProduct () {
     { Header: 'Tipo peligrosidad', accessor: 'sortingWord' },
     { Header: 'Cantidad', accessor: 'quantity' },
     { Header: 'Costo promedio', accessor: 'averageCost' },
-
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -404,74 +431,94 @@ function CreateProduct () {
   const rows = [...new Set(inputs.map(input => input.row))]
 
   return (
-    <Formik
-      initialValues={{
-        typeProduct: '',
-        name: '',
-        characteristics: '',
-        cost: ''
-      }}
-      onSubmit={values => {
-        handleSubmit(values)
-      }}
-      validationSchema={validationSchema}
-    >
-      <Form className="space-y-6">
-      {rows.map(row => (
-        <div key={row} className="flex">
-          {inputs
-            .filter(input => input.row === row)
-            .map((input) => (
-              input.typeProductOwner === typeProductSelect || input.typeProductOwner === ''
-                ? (
-                    input.type === 'select'
-                      ? (
-                          <>
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field as='select' name={input.name} id={input.name} value={input.value} onChange={input.action ?? undefined} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5">
-                              {input.options.map((option, index) => (
-                                <option key={index} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          </>
-                        )
-                      : (
-                          <>
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              type={input.type}
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          </>
-                        )
-                  )
-                : (
-                    <></>
-                  )
-            ))}
-        </div>
-      ))}
-        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Insumos</h2>
-        <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
+    !dataSupplies
+      ? (
+        <Formik
+          initialValues={{
+            typeProduct: '',
+            name: '',
+            characteristics: '',
+            cost: ''
+          }}
+          onSubmit={values => {
+            handleSubmit(values)
+          }}
+          validationSchema={validationSchema}
+        >
+          <Form className="space-y-6">
+          {rows.map(row => (
+            <div key={row} className="flex">
+              {inputs
+                .filter(input => input.row === row)
+                .map((input) => (
+                  input.typeProductOwner === typeProductSelect || input.typeProductOwner === ''
+                    ? (
+                        input.type === 'select'
+                          ? (
+                              <>
+                              <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                                <label htmlFor={input.name}>{input.title}</label>
+                                <Field as='select' name={input.name} id={input.name} value={input.value} onChange={input.action ?? undefined} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5">
+                                  {input.options.map((option, index) => (
+                                    <option key={index} value={option}>
+                                      {option}
+                                    </option>
+                                  ))}
+                                </Field>
+                                <ErrorMessage
+                                  name={input.name}
+                                  component="div"
+                                  className="text-red-500"
+                                />
+                              </div>
+                              </>
+                            )
+                          : (
+                              <>
+                              <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                                <label htmlFor={input.name}>{input.title}</label>
+                                <Field
+                                  type={input.type}
+                                  name={input.name}
+                                  id={input.name}
+                                  placeholder={input.placeholder}
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                                />
+                                <ErrorMessage
+                                  name={input.name}
+                                  component="div"
+                                  className="text-red-500"
+                                />
+                              </div>
+                              </>
+                            )
+                      )
+                    : (
+                        <></>
+                      )
+                ))}
+            </div>
+          ))}
+            <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Insumos</h2>
+            <button
+              onClick={handleDataSupplies}
+              className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Administrar insumos
+            </button>
+            <button
+              type="submit"
+              className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+            Crear producto
+          </button>
+        </Form>
+      </Formik>
+        )
+      : (
+        <>
+        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos</h2>
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
           <div className="w-full">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
@@ -531,10 +578,22 @@ function CreateProduct () {
                     className="border-b border-gray-500"
                   >
                     {row.cells.map((cell, index) => {
-                      return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
+                      return (
+                        <>
+                          <td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>
+                          {index === 8 &&
+                              <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
+                                <button type="button" onClick={() => addProduct(cell.row.original)}>
+                                  <AiOutlinePlusCircle alt="Icono agregar producto" title="Agregar producto" className="h-6 w-6 mr-2" />
+                                </button>
+                                <button type="button" onClick={() => deleteProduct(cell.row.original.id)}>
+                                  <AiOutlineCloseCircle alt="Icono eliminar producto" title="Eliminar producto" className="h-6 w-6 mr-2" />
+                                </button>
+                              </td>
+                          }
+                        </>
+                      )
                     })}
-                    <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                    </td>
                   </tr>
                 )
               })}
@@ -602,14 +661,17 @@ function CreateProduct () {
           </ul>
         </nav>
         </div>
+
+        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h2>
+
         <button
-          type="submit"
-          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          onClick={handleDataSupplies}
+          className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
-          Crear producto
+          Volver
         </button>
-      </Form>
-    </Formik>
+        </>
+        )
   )
 }
 

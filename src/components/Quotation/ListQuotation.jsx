@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { useTable, usePagination, useGlobalFilter } from 'react-table'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
+import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import {
   useGetAllQuotationClientsQuery,
   useGetAllQuotationClientDetailsQuery
-} from '../../context/Api/Common'
-import { CreateButtomQuotation } from './CreateQuotation'
-import { UpdateButtomQuotation } from './UpdateQuotation'
-import { DetailsButtomQuotation } from './DetailsQuotation'
-import { ChangeStateButtonQuotation } from './ChangeStateQuotation'
-import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation'
+} from '../../context/Api/Common';
+import { CreateButtomQuotation } from '../CreateQuotationClient/CreateQuotation';
+import { UpdateButtomQuotation } from './UpdateQuotation';
+import { DetailsButtomQuotation } from './DetailsQuotation';
+import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
+import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation';
 import { useReactToPrint } from 'react-to-print'
-import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { BsFillFileEarmarkPdfFill } from 'react-icons/bs'
 import Reportquotation from './ReportQuotation'
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 
 const ListQuotation = () => {
   const tablePDF = useRef()
@@ -22,7 +25,7 @@ const ListQuotation = () => {
     documentTitle: 'Informe de clientes'
   })
 
-  const { data: dataApi, refetch: refetch1 } = useGetAllQuotationClientsQuery()
+  const { data: dataApi,  error, isLoading, refetch: refetch1 } = useGetAllQuotationClientsQuery()
   const { data: dataApi2, refetch: refetch2 } = useGetAllQuotationClientDetailsQuery()
 
   const { isAction } = useSelector((state) => state.modal)
@@ -112,10 +115,8 @@ const ListQuotation = () => {
 
   const { pageIndex, globalFilter } = state
 
-  if (!dataApi && !dataApi2) {
-    return <div>Loading...</div>
-  }
-
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
   return (
     <>
       <div className='hidden'>
@@ -125,11 +126,11 @@ const ListQuotation = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
-      <BsFillFileEarmarkBreakFill />
+      <BsFillFileEarmarkPdfFill className='w-5 h-5'/>
       Crear un informe
     </button>
     </div>
@@ -169,8 +170,8 @@ const ListQuotation = () => {
               </form>
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-              <CreateButtomQuotation />
-            </div>
+            <Link to={'/createQuotation'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Crear Cotizacion</Link>
+          </div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-gray-400">
             <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
