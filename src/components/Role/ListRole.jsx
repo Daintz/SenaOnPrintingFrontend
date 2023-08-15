@@ -97,7 +97,7 @@ const ListRole = () => {
                   <h1 className="text-center text-3xl font-bold mb-10">No hay registros en la base de datos</h1>
                   <p className="text-center text-xl">Para empezar a visualizar la información debes de crear un rol</p>
                   <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
-                    <CreateButtonProduct />
+                    <CreateButtomRole />
                   </div>
                 </div>
               </>
