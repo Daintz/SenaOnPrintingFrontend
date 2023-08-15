@@ -146,7 +146,7 @@ const ListSupplyCategory = () => {
                 <CreateButtonSupplyCategory />
               </div>
             </div>
-          <div className="overflow-x-auto rounded-xl border border-gray-400">
+          <div className="overflow-x-autoundo red-xl border border-gray-400">
               <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   {headerGroups.map(headerGroup => (

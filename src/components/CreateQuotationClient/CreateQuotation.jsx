@@ -13,7 +13,9 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
-import InvoiceItem from './InvoiceItem';
+import { Link } from 'react-router-dom'
+import InvoiceItem from '../Quotation/InvoiceItem';
+import InvoiceItemMachine from '../Quotation/InvoiceItemMachine'
 import incrementString from './helpers/incrementString'
 import { uid } from 'uid';
 
@@ -138,6 +140,7 @@ function CreateQuotation() {
   const [cashierName, setCashierName] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [items, setItems] = useState([]);
+  const [itemsMachine, setItemsMachine] = useState([]);
 
   const optionsList = [
     {"value": "", "text": "Seleccione un producto"},
@@ -147,6 +150,15 @@ function CreateQuotation() {
     {"value": 4, "text": "Producto 4", "price": 50},
     {"value": 5, "text": "Producto 5", "price": 5},
     {"value": 6, "text": "Producto 6", "price": 1}
+  ]
+  const optionsListMachine = [
+    {"value": "", "text": "Seleccione una Maquina"},
+    {"value": 1, "text": "Maquina 1"},
+    {"value": 2, "text": "Maquina 2"},
+    {"value": 3, "text": "Maquina 3"},
+    {"value": 4, "text": "Maquina 4"},
+    {"value": 5, "text": "Maquina 5"},
+    {"value": 6, "text": "Maquina 6"}
   ]
 
 const reviewInvoiceHandler = (event) => {
@@ -180,9 +192,24 @@ const addItemHandler = (event) => {
     ...prevItem,
   ]);
 };
+const addItemHandlerMachine = (event) => {
+  const id = uid(6);
+  const machine = event.target[event.target.selectedIndex]
+  console.log()
+  setItemsMachine((prevItem) => [
+    {
+      id: id,
+      name: machine.text,
+    },
+    ...prevItem,
+  ]);
+};
 
 const deleteItemHandler = (id) => {
   setItems((prevItem) => prevItem.filter((item) => item.id !== id));
+};
+const deleteItemHandlerMachine = (id) => {
+  setItemsMachine((prevItem) => prevItem.filter((item) => item.id !== id));
 };
 
 const edtiItemHandler = (event) => {
@@ -200,7 +227,16 @@ const edtiItemHandler = (event) => {
     }
     return items;
   });
+  const newItemsMachine = itemsMachine.map((itemsMachine) => {
+    for (const key in items) {
+      if (key === editedItem.name && itemsMachine.id === editedItem.id) {
+        itemsMachine[key] = editedItem.value;
+      }
+    }
+    return itemsMachine;
+  });
 
+  setItemsMachine(newItemsMachine);
   setItems(newItems);
 };
 
@@ -232,14 +268,12 @@ const total = subtotal - discountRate + taxRate;
       setProductOptions(options)
     })
   }
+  const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
 
-
-  useEffect(() => {
+   useEffect(() => {
     fetchOptions()
   }, [])
   const dispatch = useDispatch()
-  const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
-  const [createQuotationClientDetail, { error: detailError, isLoading: detailIsLoading }] = usePostQuotationClientDetailMutation()
   const [quotationDetails, setQuotationDetails] = useState([])
 
  
@@ -298,12 +332,12 @@ const total = subtotal - discountRate + taxRate;
         <Form
         onSubmit={reviewInvoiceHandler}
         >
-          <div className="flex linea-horizontal mb-2
-          ">
+        <div className="flex justify-around">
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
             <div className="w-1/2">
-              <b>Codigo: </b>
+              <b>Codigo: 0001 </b>
             </div>
-          </div>
           <hr className="mb-4" />
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-2/4">
@@ -344,33 +378,7 @@ const total = subtotal - discountRate + taxRate;
             </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Usuario <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                as="select"
-                name="userId"
-                id="userId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                 <option value={0}>Seleccione</option>
-                {userOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage
-                name="userId"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
+          <div className="w-2/4">
               <label htmlFor="clientId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cliente <b className="text-red-700">*</b>
               </label>
@@ -382,21 +390,21 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                 <option value={0}>Seleccione</option>
-                {clientsOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                  <option value={0}>Seleccione</option>
+                  {clientsOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
               </Field>
               <ErrorMessage
                 name="clientId"
-
+       
                 component="div"
                 className="text-red-500"
               />
             </div>
-            <div className="w-1/4">
+            <div className="w-2/4">
               <label htmlFor="typeServiceId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Tipo de Servicio <b className="text-red-700">*</b>
               </label>
@@ -407,106 +415,67 @@ const total = subtotal - discountRate + taxRate;
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                 <option value={0}>Seleccione</option>
-                {typeServiceOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                  <option value={0}>Seleccione</option>
+                   {typeServiceOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+          ))}
               </Field>
               <ErrorMessage
                 name="typeServiceId"
-
                 component="div"
                 className="text-red-500"
               />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Maquina <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="select"
-                name="campo2"
-                id=""
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                // ? aqui van los campos del select
-              </Field>
             </div>
           </div>
           <div>
           <br></br>
           <br></br>
           </div>
-          <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6">
-        <label
-          htmlFor="productList"
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-1000 h-100">
+          <label
+          htmlFor="machineList"
           className="col-start-2 row-start-1 text-sm font-bold md:text-base"
         >
-          Seleccione un producto:
+          Seleccione una Maquina:
         </label>
         <Field
                 as="select"
-                name="productList"
-                id="productList"
-                onChange={addItemHandler}
+                name="machineList"
+                id="machineList"
+                onChange={addItemHandlerMachine}
                 value="0"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-90 p-2.5"
                 placeholder="100"
               >
-                {optionsList.map(option =>(
+                {optionsListMachine.map(option =>(
             <option key={option.value} value={option.value} price={option.price} name={option.text}>{option.text}</option>
           ))}
               </Field>
-        {/* <button
-          className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
-          type="button"
-          onClick={addItemHandler}
-        >
-          Add Item
-        </button> */}
-        <table className="w-full p-4 text-left">
+        <table className="w-1/4 p-4 text-left">
           <thead>
-            <tr className="border-b border-gray-900/10 text-sm md:text-base">
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th className="text-center">Precio</th>
-              <th className="text-center">Accion</th>
+            <tr className="border-b border-gray-900/10 text-xs md:text-base">
+              <th className='text-xs'>Maquina</th>
+              <th className="text-center text-xs">Accion</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
-              <InvoiceItem
+            {itemsMachine.map((item) => (
+              <InvoiceItemMachine
                 key={item.id}
                 id={item.id}
                 name={item.name}
-                qty={item.qty}
-                price={item.price}
-                onDeleteItem={deleteItemHandler}
+                onDeleteItem={deleteItemHandlerMachine}
               />
             ))}
           </tbody>
         </table>
-        <div className="flex flex-col items-end space-y-2 pt-6">
-          <div className="flex w-full justify-between md:w-1/2">
-            <span className="font-bold">Subtotal:</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </div>
-        
-          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
-            <span className="font-bold">Total:</span>
-            <span className="font-bold">
-              ${total % 1 === 0 ? total : total.toFixed(2)}
-            </span>
-          </div>
+            </div>
         </div>
-      </div>
-          </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
+            <div className="w-4/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Estado de la Cotizacion <b className="text-red-700">*</b>
               </label>
@@ -536,6 +505,76 @@ const total = subtotal - discountRate + taxRate;
             Crear Cotizacion
           </button>
           </center>
+          </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-1000 h-100">
+          <label
+          htmlFor="productList"
+          className="col-start-2 row-start-1 text-sm font-bold md:text-base"
+        >
+          Seleccione un producto:
+        </label>
+        <Field
+                as="select"
+                name="productList"
+                id="productList"
+                onChange={addItemHandler}
+                value="0"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-90 p-2.5"
+                placeholder="100"
+              >
+                {optionsList.map(option =>(
+            <option key={option.value} value={option.value} price={option.price} name={option.text}>{option.text}</option>
+          ))}
+              </Field>
+        <button
+          className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
+          type="button"
+          onClick={addItemHandler}
+        >
+          Añadir producto
+        </button> 
+        <table className="w-1/4 p-4 text-left">
+          <thead>
+            <tr className="border-b border-gray-900/10 text-xs md:text-base">
+              <th className='text-xs'>Producto</th>
+              <th className='text-xs'>Cantidad</th>
+              <th className="text-center text-xs">Precio</th>
+              <th className="text-center text-xs">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <InvoiceItem
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                qty={item.qty}
+                price={item.price}
+                onDeleteItem={deleteItemHandler}
+                onEdtiItem={edtiItemHandler}
+              />
+            ))}
+          </tbody>
+        </table>
+        <div className="flex flex-col items-end space-y-2 pt-6">
+          <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+        
+          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
+            <span className="font-bold">Total:</span>
+            <span className="font-bold">
+              ${total % 1 === 0 ? total : total.toFixed(2)}
+            </span>
+          </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        
         </Form>
       )}
     </Formik>
@@ -545,32 +584,34 @@ export function CreateButtomQuotation() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+   /*  dispatch(setWidth({ width: 'w-[1500px]' }))
     dispatch(openModal({ title: 'Crear Cotizacion Cliente' }))
-    dispatch(setAction({ action: 'creating' }))
-  }
+    dispatch(setAction({ action: 'creating' })) 
+  */} 
   // ?
-
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
-    >
-      <svg
-        className="h-3.5 w-3.5 mr-2"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          clipRule="evenodd"
-          fillRule="evenodd"
-          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-        />
-      </svg>
-      Crear Cotizacion
+    ><Tooltip title="Crear Cotiazacion" position="bottom"
+    animation="fade">
+      <Link to="/createQuotation">
+        <svg
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clipRule="evenodd"
+            fillRule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+          />
+        </svg>
+      </Link>
+      </Tooltip>
     </button>
   )
 }
