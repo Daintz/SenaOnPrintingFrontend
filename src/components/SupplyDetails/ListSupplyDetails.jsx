@@ -6,9 +6,19 @@ import { UpdateButtomSupplyDetails } from './UpdateSupplyDetails'
 import { ChangeStateButtonSupplyDetails } from './ChangeStateSupplyDetails'
 import { CreateButtomSupplyDetails } from './CreateSupplyDetails'
 import { DetailsButtomSupplyDetails } from './DetailsSupplyDetails'
+import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { useReactToPrint } from 'react-to-print'
+import ReportSupplyDetails from './ReportSupplyDetails'
+import React, { useRef } from 'react';
 
 
 const ListSupplyDetails = () => {
+  const tablePDF = useRef()
+
+  const generatePDF = useReactToPrint({
+    content: () => tablePDF.current,
+    documentTitle: 'Informe de loteo de insumos'
+  })
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllSupplyDetailsQuery()
 
@@ -27,10 +37,9 @@ const ListSupplyDetails = () => {
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     { Header: 'Cantidad actual', accessor: 'actualQuantity' },
-    { Header: 'Id insumo', accessor: 'supplyId' },
-    { Header: 'Id proveedor', accessor: 'providerId' },
-    { Header: 'Id bodega', accessor: 'warehouseId' },
-    
+    { Header: 'Insumo', accessor: 'supplyId' },
+    { Header: 'Proveedor', accessor: 'providerId' },
+    { Header: 'Bodega', accessor: 'warehouseId' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -72,6 +81,22 @@ const ListSupplyDetails = () => {
   }
 
   return (
+    <>
+    <div className='hidden'>
+      <div ref={tablePDF}>
+        <ReportSupplyDetails dataApi={dataApi}/>
+      </div>
+    </div>
+    <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
+    <button
+      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      onClick={ generatePDF }
+      type="button"
+    >
+      <BsFillFileEarmarkBreakFill />
+      Crear un informe
+    </button>
+    </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
@@ -111,7 +136,7 @@ const ListSupplyDetails = () => {
             <CreateButtomSupplyDetails />
           </div>
         </div>
-      <div className="overflow-x-auto rounded-xl border border-gray-400">
+        <div className="overflow-x-auto rounded-xl border border-gray-400">
           <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               {headerGroups.map(headerGroup => (
@@ -137,7 +162,6 @@ const ListSupplyDetails = () => {
                     className="border-b border-gray-500"
                   >
                     {row.cells.map((cell, index) => {
-                      console.log(cell)
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
@@ -220,6 +244,7 @@ const ListSupplyDetails = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

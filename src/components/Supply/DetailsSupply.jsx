@@ -12,8 +12,8 @@ function DetailsSupply () {
       <p><b>Indicadores de peligro insumo:</b> {dangerIndicators}</p>
       <p><b>Instrucciones:</b> {useInstructions}</p>
       <p><b>Consejos:</b> {advices}</p>
-      <p><b>Tipo insumo:</b> {supplyType}</p>
-      <p><b>Tipo peligrosidad:</b> {sortingWord}</p>
+      <p><b>Tipo insumo:</b> {supplyType === 1 ? 'Devolutivo' : 'Consumible'}</p>
+      <p><b>Tipo peligrosidad:</b> {sortingWord === 1 ? 'Peligro' : 'Atención'}</p>
       <p><b>Cantidad:</b> {quantity}</p>
       <p><b>Costo promedio:</b> {averageCost}</p>
       <p>

@@ -141,21 +141,18 @@ const ListSupplyPictograms = () => {
                     <td {...row.cells[2].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[2].value === 'function'
                         ? row.cells[2].value(row.cells[2])
-                        : row.cells[2].column.id === 'pictogramFileInfo'
-                          ? <img src={row.cells[2].value} width={100} height={100}/>
-                          : row.cells[2].render('Cell')}
+                        : row.cells[2].render('Cell')}
+                    </td>
+                    <td {...row.cells[3].getCellProps()} className="px-4 py-3">
+                          <img src={row.cells[3].value} width={100} height={100}/>
                     </td>
                    
-                    <td {...row.cells[3].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[3].value === 'function'
-                        ? row.cells[3].value(row.cells[3])
-                        : row.cells[3].render('Cell')}
-                    </td>
                     <td {...row.cells[4].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[4].value === 'function'
                         ? row.cells[4].value(row.cells[4])
                         : row.cells[4].render('Cell')}
                     </td>
+               
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       <DetailsButtomSupplyPictograms
                         supplyPictograms={row.original}

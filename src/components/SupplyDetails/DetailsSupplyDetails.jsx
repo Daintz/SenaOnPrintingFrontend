@@ -17,8 +17,6 @@ function DetailsSupplyDetails () {
       <p><b>Id insumo:</b> {supplyId}</p>
       <p><b>Id proveedor:</b> {providerId}</p>
       <p><b>Id bodega:</b> {warehouseId}</p>
-
-      
       <p>
       <b>Estado:</b> {' '}
       {statedAt
