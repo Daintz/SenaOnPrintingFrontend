@@ -85,7 +85,7 @@ const ListSupplyCategory = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
