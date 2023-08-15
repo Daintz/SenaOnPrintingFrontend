@@ -55,7 +55,7 @@ const ForgotPasswordEmail = () => {
                         </label>
                         <input
                             type="email"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -68,7 +68,7 @@ const ForgotPasswordEmail = () => {
                       <a className='text-blue'>Volver al formulario</a>
                     </Link>
                     <div className="mt-6">
-                        <button className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        <button className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Enviar Correo
                         </button>
                     </div>
