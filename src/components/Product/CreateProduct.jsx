@@ -45,6 +45,10 @@ function CreateProduct () {
   const [typeSouvernirSelect, setTypeSouvernirSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
+  const [backCover, setBackCover] = useState('')
+  const [backCoverInks, setBackCoverInks] = useState('')
+  const [innerSheets, setInnerSheets] = useState('')
+  const [innerSheetsInks, setInnerSheetsInks] = useState('')
 
   const getPaperCut = () => {
     return new Promise((resolve, reject) => {
@@ -120,6 +124,22 @@ function CreateProduct () {
 
   const handleFrontPageInks = e => {
     setFrontPageInks(e.target.value)
+  }
+
+  const handleBackCover = e => {
+    setBackCover(e.target.value)
+  }
+
+  const handleBackCoverInks = e => {
+    setBackCoverInks(e.target.value)
+  }
+
+  const handleInnerSheets = e => {
+    setInnerSheets(e.target.value)
+  }
+
+  const handleInnerSheetsInks = e => {
+    setInnerSheetsInks(e.target.value)
   }
 
   const addProduct = (cell) => {
@@ -218,7 +238,7 @@ function CreateProduct () {
       options: ['Elije una opción', ...paperCutOptions]
     },
     {
-      row: 1,
+      row: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'frontPage',
@@ -229,7 +249,7 @@ function CreateProduct () {
       action: handleFrontPage
     },
     {
-      row: 1,
+      row: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'frontPageInks',
@@ -240,7 +260,7 @@ function CreateProduct () {
       action: handleFrontPageInks
     },
     {
-      row: 1,
+      row: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'numberInks',
@@ -249,7 +269,7 @@ function CreateProduct () {
       placeholder: 'No. de tintas proceso libreta'
     },
     {
-      row: 1,
+      row: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'pantone',
@@ -258,7 +278,7 @@ function CreateProduct () {
       placeholder: 'Pantone libreta'
     },
     {
-      row: 1,
+      row: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'code',
@@ -267,7 +287,132 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
-      row: 2,
+      row: 3,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'backCover',
+      title: 'Contraportada',
+      type: 'select',
+      options: ['Elige una opción', 'Si', 'No'],
+      value: backCover,
+      action: handleBackCover
+    },
+    {
+      row: 3,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'backCoverInks',
+      title: 'Tintas contraportada',
+      type: 'select',
+      options: ['Elige una opción', 'Si', 'No'],
+      value: backCoverInks,
+      action: handleBackCoverInks
+    },
+    {
+      row: 3,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'numberInksBackCover',
+      title: 'No. de tintas proceso',
+      type: 'text',
+      placeholder: 'No. de tintas proceso libreta'
+    },
+    {
+      row: 3,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'pantoneBackCover',
+      title: 'Pantone',
+      type: 'text',
+      placeholder: 'Pantone libreta'
+    },
+    {
+      row: 3,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'codeBackCover',
+      title: 'Código',
+      type: 'text',
+      placeholder: 'Código libreta'
+    },
+    {
+      row: 4,
+      key: 8,
+      typeProductOwner: 'Libreta',
+      name: 'innerSheets',
+      title: 'Interior paginas',
+      type: 'select',
+      options: ['Elige una opción', 'Si', 'No'],
+      value: innerSheets,
+      action: handleInnerSheets
+    },
+    {
+      row: 4,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'innerSheetsInks',
+      title: 'Tintas paginas',
+      type: 'select',
+      options: ['Elige una opción', 'Si', 'No'],
+      value: innerSheetsInks,
+      action: handleInnerSheetsInks
+    },
+    {
+      row: 4,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'numberInksInnerSheets',
+      title: 'No. de tintas proceso',
+      type: 'text',
+      placeholder: 'No. de tintas proceso libreta'
+    },
+    {
+      row: 4,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'pantoneInnerSheets',
+      title: 'Pantone',
+      type: 'text',
+      placeholder: 'Pantone libreta'
+    },
+    {
+      row: 4,
+      key: 7,
+      typeProductOwner: 'Libreta',
+      name: 'codeInnerSheets',
+      title: 'Código',
+      type: 'text',
+      placeholder: 'Código libreta'
+    },
+    {
+      row: 5,
+      key: 10,
+      typeProductOwner: 'Libreta',
+      name: 'numberSheets',
+      title: 'Numero de hojas',
+      type: 'text',
+      placeholder: 'Numero de hojas del producto'
+    },
+    {
+      row: 5,
+      key: 10,
+      typeProductOwner: 'Libreta',
+      name: 'cost',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo del producto'
+    },
+    {
+      row: 5,
+      key: 10,
+      typeProductOwner: 'Libreta',
+      name: 'observations',
+      title: 'Observaciones',
+      type: 'text',
+      placeholder: 'Observaciones del producto'
+    },
+        {
+      row: 6,
       key: 3,
       typeProductOwner: 'Libreta',
       name: 'cover',
@@ -317,42 +462,13 @@ function CreateProduct () {
       ]
     },
     {
-      row: 2,
+      row: 6,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'laminated',
       title: 'Acabados',
       type: 'checkbox',
       checkboxes: finishOptions
-    },
-    {
-      row: 2,
-      key: 7,
-      typeProductOwner: 'Libreta',
-      name: 'BackCoverprintedInColor',
-      title: 'Contraportada impresa a color',
-      type: 'select',
-      options: ['Elige una opción', 'Si', 'No'],
-      placeholder: 'Contraportada impresa a color libreta'
-    },
-    {
-      row: 2,
-      key: 8,
-      typeProductOwner: 'Libreta',
-      name: 'interiorSheets',
-      title: 'Interior hojas',
-      type: 'select',
-      options: ['Elige una opción', 'En blanco', 'impresas a 1 tinta'],
-      placeholder: 'Interior hojas libreta'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Libreta',
-      name: 'cost',
-      title: 'Costo',
-      type: 'text',
-      placeholder: 'Costo del producto'
     },
     {
       row: 1,
@@ -594,7 +710,15 @@ function CreateProduct () {
                   (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
                   (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
                   (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                  (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si'))
+                  (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                  (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
+                  (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                  (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                  (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                  (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
+                  (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                  (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                  (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
                     ? (
                       <>
                         {console.log(frontPage === 'Si' && frontPageInks === 'Si')}
