@@ -8,20 +8,22 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
+
+
 const validationSchema = Yup.object().shape({
-  warehouseTypeId: Yup.string().required('Campo requerido'),
+  warehotypeServiceIduseTypeId: Yup.string().required('Campo requerido'),
   ubication: Yup.string().required('Campo requerido')
 })
 
-const getWarehausesType = () => {
+const getTypeService =async () => {
   return new Promise((resolve, reject) => {
-    clientAxios.get('/WarehauseType').then(
+    clientAxios.get('/TypeServices').then(
       (result) => {
-        const warehausestype = result.data.map((warehausetype) => ({
-          'label': warehausetype.name,
-          'value': warehausetype.id
+        const typeService = result.data.map((typeservice) => ({
+          'label': typeservice.name,
+          'value': typeservice.id
         }));
-        resolve(warehausestype);
+        resolve(typeService);
       },
       (error) => {
         reject(error);
@@ -30,54 +32,51 @@ const getWarehausesType = () => {
   });
 };
 
-function updateWarehause () {
-  const [warehauseTypeOptions, setWarehauseTypeOptions] = useState([]);
+function updateWarehause() {
+  const dispatch = useDispatch()
+  const { editingData } = useSelector((state) => state.modal)
+  const [updateWarehause, { error, isLoading }] = usePutWarehauseByIdMutation()
+  const [typeServiceOptions, settypeServiceOptions] = useState([]);
+
   const fetchOptions = () => {
-    getWarehausesType().then((options) => {
-      setWarehauseTypeOptions(options);
+    getTypeService().then((options) => {
+      settypeServiceOptions(options);
     });
   };
 
   useEffect(() => {
     fetchOptions();
   }, []);
-  const dispatch = useDispatch()
-  const { editingData } = useSelector((state) => state.modal)
-  const [updateWarehause, { error, isLoading }] = usePutWarehauseByIdMutation()
+  
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    await updateWarehause(values)
-
-    dispatch(changeAction())
-    dispatch(closeModal())
-    toast.success('Bodega actualizada con exito')
+    
+    const result = await updateWarehause(values)
+    
+    console.log('updateWarehause result', result);
+    
+    if (result.isSuccess) {
+      dispatch(changeAction())
+      dispatch(closeModal())
+      toast.success('Bodega actualizada con exito')
+    } else {
+      console.error('updateWarehause failed', result.error);
+    }
   }
+  
 
   const inputs = [
-    {
-      key: 1,
-      name: 'warehouseTypeId',
-      title: 'Tipo de bodega',
-      type: 'select',
-      data: warehauseTypeOptions,
-      placeholder: 'Tipo de de bodega'
-    },
-    {
-      key: 2,
-      name: 'ubication',
-      title: 'Ubicacion',
-      type: 'text',
-      placeholder: 'Ubicacion de la bodega'
-    }
+    {key: 0, name: 'typeServiceId', title: 'Tipo de bodega', type: 'select', data: typeServiceOptions, placeholder: 'Tipo de de bodega'},
+    {key: 1, name: 'ubication', title: 'Ubicacion', type: 'text', placeholder: 'Ubicacion de la bodega'}
   ]
 
   return (
     <Formik
       initialValues={{
         id: editingData.id,
-        warehouseTypeId: editingData.warehouseTypeId,
+        typeServiceId: editingData.typeServiceId,
         ubication: editingData.ubication
       }}
       onSubmit={(values) => {
@@ -85,7 +84,7 @@ function updateWarehause () {
       }}
       validationSchema={validationSchema}
     >
-       <Form className="space-y-6">
+      <Form className="space-y-6">
         {inputs.map(input => {
           return input.type == "select" ?
             <div key={input.key}>
@@ -94,7 +93,7 @@ function updateWarehause () {
               <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
                 <option value="0">Seleccione {input.title}</option>
                 {input.data.map(option => (
-                  <option value={option.value}>{option.label}</option>
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </Field>
               <ErrorMessage
@@ -122,7 +121,7 @@ function updateWarehause () {
         })}
         <button
           type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Actualizar Bodega
         </button>
@@ -131,7 +130,7 @@ function updateWarehause () {
   )
 }
 
-export function UpdateButtomWarehause ({ warehause }) {
+export function UpdateButtomWarehause({ warehause }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleEdit = (data) => {

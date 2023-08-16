@@ -27,6 +27,7 @@ function CreateProduct () {
   const [listSupplies, setListSupplies] = useState([])
 
   useEffect(() => {
+    fetchOptions()
     get()
   }, [])
 
@@ -38,7 +39,54 @@ function CreateProduct () {
   const dispatch = useDispatch()
   const [createProduct, { error, isLoading }] = usePostProductMutation()
 
+  const [paperCutOptions, setpaperCutOptions] = useState([])
+  const [finishOptions, setFinishOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
+  const [typeSouvernirSelect, setTypeSouvernirSelect] = useState('')
+  const [frontPage, setFrontPage] = useState('')
+  const [frontPageInks, setFrontPageInks] = useState('')
+
+  const getPaperCut = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/PaperCuts').then(
+        (result) => {
+          const paperCuts = result.data.map((paperCut) => (
+            paperCut.name
+          ))
+          resolve(paperCuts)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
+  const getFinish = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/Finish').then(
+        (result) => {
+          const finishes = result.data.map((finish) => ({
+            name: finish.name,
+            label: finish.name
+          }))
+          resolve(finishes)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
+  const fetchOptions = () => {
+    getPaperCut().then((options) => {
+      setpaperCutOptions(options)
+    })
+    getFinish().then((options) => {
+      setFinishOptions(options)
+    })
+  }
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
@@ -58,8 +106,20 @@ function CreateProduct () {
     setTypeProductSelect(e.target.value)
   }
 
+  const handleTypeSouvenir = e => {
+    setTypeSouvernirSelect(e.target.value)
+  }
+
   const handleDataSupplies = () => {
     setDataSupplies(!dataSupplies)
+  }
+
+  const handleFrontPage = e => {
+    setFrontPage(e.target.value)
+  }
+
+  const handleFrontPageInks = e => {
+    setFrontPageInks(e.target.value)
   }
 
   const addProduct = (cell) => {
@@ -67,20 +127,17 @@ function CreateProduct () {
 
     if (existingSupply) {
       const updatedSupplies = listSupplies.map(supply =>
-        supply.id === cell.id ? { ...supply, amount: supply.amount + 1 } : supply
+        supply.id === cell.id ? { ...supply } : supply
       )
       setListSupplies(updatedSupplies)
-      console.log('repetido')
     } else {
-      setListSupplies([...listSupplies, { ...cell, amount: 1 }])
-      console.log('agregado')
+      setListSupplies([...listSupplies, { ...cell }])
     }
-
-    console.log(listSupplies)
   }
 
   const deleteProduct = (cell) => {
-    console.log('funciono: ', cell)
+    const updatedListSupplies = listSupplies.filter(supply => supply.id !== cell)
+    setListSupplies(updatedListSupplies)
   }
 
   const columns = useMemo(() => [
@@ -118,7 +175,8 @@ function CreateProduct () {
     canPreviousPage,
     state,
     setGlobalFilter,
-    prepareRow
+    prepareRow,
+    rows: rowsTable
   } = useTable({
     data,
     columns
@@ -156,17 +214,8 @@ function CreateProduct () {
       typeProductOwner: 'Libreta',
       name: 'notebookSize',
       title: 'Tamaño',
-      type: 'text',
-      placeholder: 'Tamaño libreta'
-    },
-    {
-      row: 1,
-      key: 3,
-      typeProductOwner: 'Libreta',
-      name: 'cover',
-      title: 'Tapa',
-      type: 'text',
-      placeholder: 'Tapa libreta'
+      type: 'select',
+      options: ['Elije una opción', ...paperCutOptions]
     },
     {
       row: 1,
@@ -176,17 +225,105 @@ function CreateProduct () {
       title: 'Portada',
       type: 'select',
       options: ['Elige una opción', 'Si', 'No'],
-      placeholder: 'Portada libreta'
+      value: frontPage,
+      action: handleFrontPage
     },
     {
       row: 1,
+      key: 5,
+      typeProductOwner: 'Libreta',
+      name: 'frontPageInks',
+      title: 'Tintas portada',
+      type: 'select',
+      options: ['Elige una opción', 'Si', 'No'],
+      value: frontPageInks,
+      action: handleFrontPageInks
+    },
+    {
+      row: 1,
+      key: 5,
+      typeProductOwner: 'Libreta',
+      name: 'numberInks',
+      title: 'No. de tintas proceso',
+      type: 'text',
+      placeholder: 'No. de tintas proceso libreta'
+    },
+    {
+      row: 1,
+      key: 5,
+      typeProductOwner: 'Libreta',
+      name: 'pantone',
+      title: 'Pantone',
+      type: 'text',
+      placeholder: 'Pantone libreta'
+    },
+    {
+      row: 1,
+      key: 5,
+      typeProductOwner: 'Libreta',
+      name: 'code',
+      title: 'Código',
+      type: 'text',
+      placeholder: 'Código libreta'
+    },
+    {
+      row: 2,
+      key: 3,
+      typeProductOwner: 'Libreta',
+      name: 'cover',
+      title: 'Encuadernacion',
+      type: 'checkbox',
+      checkboxes: [
+        {
+          name: '1',
+          label: 'Anillado doble O'
+        },
+        {
+          name: '2',
+          label: 'Loops'
+        },
+        {
+          name: '3',
+          label: 'Paso'
+        },
+        {
+          name: '4',
+          label: 'Tapa dura'
+        },
+        {
+          name: '5',
+          label: 'Grapado'
+        },
+        {
+          name: '6',
+          label: 'Rústico/Cosido'
+        },
+        {
+          name: '7',
+          label: 'Lomo'
+        },
+        {
+          name: '8',
+          label: 'Sobrecubierta'
+        },
+        {
+          name: '9',
+          label: 'Tapa blanda'
+        },
+        {
+          name: '10',
+          label: 'Caballete'
+        }
+      ]
+    },
+    {
+      row: 2,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'laminated',
-      title: 'Laminadas',
-      type: 'select',
-      options: ['Elige una opción', 'Si', 'No'],
-      placeholder: 'Laminadas libreta'
+      title: 'Acabados',
+      type: 'checkbox',
+      checkboxes: finishOptions
     },
     {
       row: 2,
@@ -210,22 +347,24 @@ function CreateProduct () {
     },
     {
       row: 2,
-      key: 9,
-      typeProductOwner: 'Libreta',
-      name: 'ringed',
-      title: 'Anilladas',
-      type: 'select',
-      options: ['Elige una opción', 'Si', 'No'],
-      placeholder: 'Anilladas libreta'
-    },
-    {
-      row: 2,
       key: 10,
       typeProductOwner: 'Libreta',
       name: 'cost',
       title: 'Costo',
       type: 'text',
       placeholder: 'Costo del producto'
+    },
+    {
+      row: 1,
+      key: 11,
+      typeProductOwner: 'Souvenir',
+      name: 'typeSouvenir',
+      title: 'Tipo Souvenir',
+      type: 'select',
+      options: ['Elige una opción', 'Mug', 'Lapiceros', 'Termo', 'Bolsa', 'Camisa', 'Gorra'],
+      placeholder: 'Tipo de producto',
+      value: typeSouvernirSelect,
+      action: handleTypeSouvenir
     },
     {
       row: 1,
@@ -268,7 +407,7 @@ function CreateProduct () {
       key: 13,
       typeProductOwner: 'Souvenir',
       name: 'cover',
-      title: 'Tapa',
+      title: 'Encuadernacion',
       type: 'text',
       placeholder: 'Tapa souvenir'
     },
@@ -451,10 +590,33 @@ function CreateProduct () {
               {inputs
                 .filter(input => input.row === row)
                 .map((input) => (
-                  input.typeProductOwner === typeProductSelect || input.typeProductOwner === ''
+                  (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
+                  (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
+                  (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                  (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                  (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si'))
                     ? (
-                        input.type === 'select'
-                          ? (
+                      <>
+                        {console.log(frontPage === 'Si' && frontPageInks === 'Si')}
+                        {input.type === 'checkbox' &&
+                        <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                        <label>{input.title}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          {input.checkboxes.map((checkbox, index) => (
+                            <div key={index} className="flex items-center">
+                              <input
+                                type="checkbox"
+                                name={checkbox.name}
+                                id={checkbox.name}
+                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                              />
+                              <label htmlFor={checkbox.name} className="ml-2">{checkbox.label}</label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>}
+                        {input.type === 'select' &&
+                          (
                               <>
                               <div key={input.name} className="flex-1 mr-4 last:mr-0">
                                 <label htmlFor={input.name}>{input.title}</label>
@@ -472,8 +634,8 @@ function CreateProduct () {
                                 />
                               </div>
                               </>
-                            )
-                          : (
+                          )}
+                            {input.type === 'text' && (
                               <>
                               <div key={input.key} className="flex-1 mr-4 last:mr-0">
                                 <label htmlFor={input.name}>{input.title}</label>
@@ -491,7 +653,9 @@ function CreateProduct () {
                                 />
                               </div>
                               </>
-                            )
+                            )}
+
+                        </>
                       )
                     : (
                         <></>
@@ -516,70 +680,73 @@ function CreateProduct () {
       </Formik>
         )
       : (
-        <>
-        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos</h2>
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
-          <div className="w-full">
-            <form className="flex items-center">
-              <label htmlFor="simple-search" className="sr-only">
-                Search
-              </label>
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5 text-gray-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
+          <>
+              <div className="w-full md:w-1/2">
+                <form className="flex items-center">
+                  <label htmlFor="simple-search" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative w-full">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <svg
+                        aria-hidden="true"
+                        className="w-5 h-5 text-gray-500"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      id="simple-search"
+                      className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
+                      placeholder="Search"
+                      value={globalFilter || ''}
+                      onChange={e => setGlobalFilter(e.target.value)}
                     />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-                  placeholder="Search"
-                  value={globalFilter || ''}
-                  onChange={e => setGlobalFilter(e.target.value)}
-                />
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
-        </div>
-      <div className="overflow-x-auto rounded-xl border border-gray-400">
-          <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              {headerGroups.map(headerGroup => (
-                  <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column, index) => (
-                      <th scope="col" className='px-6 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
-                        {column.render('Header')}
-                    </th>
-                    ))}
-                    <th scope="col" key={5} className='px-6 py-3'>
-                        Acciones
-                    </th>
-                  </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map(row => {
-                prepareRow(row)
-                return (
-                  <tr
-                    {...row.getRowProps()}
-                    key={row.original.id}
-                    className="border-b border-gray-500"
-                  >
-                    {row.cells.map((cell, index) => {
-                      return (
-                        <>
+          <div className="overflow-x-auto rounded-xl border border-gray-400">
+              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  {headerGroups.map(headerGroup => (
+                      <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column, index) => (
+                          <th scope="col" className='px-6 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
+                            {column.render('Header')}
+                        </th>
+                        ))}
+                        <th scope="col" key={5} className='px-6 py-3'>
+                            Acciones
+                        </th>
+                      </tr>
+                  ))}
+                </thead>
+                  {rowsTable.length === 0
+                    ? (
+                      <>
+                        <p className='w-full text-center text-3xl font-bold ml-[170%] my-10'>No se encontraron registros con esta busqueda.</p>
+                      </>
+                      )
+                    : (
+                      <>
+                        {page.map(row => {
+                          prepareRow(row)
+                          return (
+                            <tbody key={row.original.id} {...getTableBodyProps()}>
+                            <tr
+                              {...row.getRowProps()}
+                              className="border-b border-gray-500"
+                            >
+                              {row.cells.map((cell, index) => {
+                                return (<>
                           <td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>
                           {index === 8 &&
                               <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
@@ -591,78 +758,128 @@ function CreateProduct () {
                                 </button>
                               </td>
                           }
-                        </>
+                        </>)
+                              })}
+                            </tr>
+                            </tbody>
+                          )
+                        })}
+                      </>
                       )
-                    })}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        <nav
-          className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-        >
-          <span className="text-sm font-normal text-gray-500">
-            Pagina {' '}
-            <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
-          </span>
-          <ul className="inline-flex items-stretch -space-x-px">
-            <li>
-              <button
-                className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-              >
-                <span className="sr-only">Anterior</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <a
-                className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              >
-                -
-              </a>
-            </li>
-            <li>
-              <button
-                className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                <span className="sr-only">Siguiente</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </li>
-          </ul>
-        </nav>
-        </div>
+                  }
+              </table>
+            <nav
+              className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+            >
+              <span className="text-sm font-normal text-gray-500">
+                Pagina {' '}
+                <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
+              </span>
+              <ul className="inline-flex items-stretch -space-x-px">
+                <li>
+                  <button
+                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                  >
+                    <span className="sr-only">Anterior</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+                <li>
+                  <a
+                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    -
+                  </a>
+                </li>
+                <li>
+                  <button
+                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                  >
+                    <span className="sr-only">Siguiente</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+            </div>
 
         <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h2>
+
+        <div className="overflow-x-auto rounded-xl border border-gray-400">
+              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  {headerGroups.map(headerGroup => (
+                      <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column, index) => (
+                          <th scope="col" className='px-3 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
+                            {column.render('Header')}
+                        </th>
+                        ))}
+                      </tr>
+                  ))}
+                </thead>
+                <>
+                <tbody>
+                  {listSupplies.map(listSupply => {
+                    return (
+                      <tr
+                        key={listSupply.id}
+                        className="border-b border-gray-500"
+                      >
+                        <td className="px-4 py-3">{listSupply.name}</td>
+                        <td className="px-4 py-3">{listSupply.dangerIndicators}</td>
+                        <td className="px-4 py-3">{listSupply.useInstructions}</td>
+                        <td className="px-4 py-3">{listSupply.advices}</td>
+                        <td className="px-4 py-3">{listSupply.supplyType}</td>
+                        <td className="px-4 py-3">{listSupply.sortingWord}</td>
+                        <td className="px-4 py-3">{listSupply.quantity}</td>
+                        <td className="px-4 py-3">{listSupply.averageCost}</td>
+                        <td className="px-4 py-3">{listSupply.statedAt
+                          ? (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                              Activo
+                            </span>
+                            )
+                          : (
+                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                              Inactivo
+                            </span>
+                            )}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+                </>
+              </table>
+            </div>
 
         <button
           onClick={handleDataSupplies}

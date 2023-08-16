@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
+
 
 function DetailsWarehause () {
   const { detailsData } = useSelector((state) => state.modal)
-  const {warehouseTypeId, ubication, statedAt } = detailsData
+  const {typeServiceId, ubication, statedAt } = detailsData
   return (
     <>
-      <p><b>Tipo de bodega:</b> {warehouseTypeId}</p>
+      <p><b>Tipo de bodega:</b> {typeServiceId}</p>
       <p><b>Ubicacion:</b> {ubication}</p>
       <p>
       <b>Estado:</b> {' '}
@@ -38,7 +39,7 @@ export function DetailsButtomWarehause ({ warehause }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <BsClipboard2 className="h-5 w-5 mr-2" />
+       <GrView alt="Icono detalles" title="Ver detalles de la bodega" className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }
