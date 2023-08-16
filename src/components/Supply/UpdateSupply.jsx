@@ -27,6 +27,18 @@ function UpdateSupply () {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
+
+    if (values.sortingWord === 1) {
+      values.name = values.name + ' Peligro'
+    } else if (values.sortingWord === 2) {
+      values.name = values.name + ' Atención'
+    }
+    if (values.supplyType === 1) {
+      values.name = values.name + ' Devolutivo'
+    } else if (values.supplyType === 2) {
+      values.name = values.name + ' Consumible'
+    }
+    
     await updateSupply(values)
 
     dispatch(changeAction())
@@ -143,43 +155,43 @@ function UpdateSupply () {
      
   </div>
   <div className="w-1/4">
-    <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Tipo insumo
-    </label>
-    <Field
-      type="number"
-      name="supplyType"
-      id="supplyType"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-      placeholder="Tipo insumo"
-    />
+          <label htmlFor="supplyType" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+          Tipo insumo
+          </label>
+          <Field
+            as="select"
+            name="supplyType"
+            id="supplyType"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          >
+            <option value={1}>Devolutivo</option>
+            <option value={2}>Consumible</option>
+          </Field>
           <ErrorMessage
-      name="supplyType"
-
-      component="div"
-      className="text-red-500"
-    />
-     
-  </div>
+            name="supplyType"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
   <div className="w-1/4">
-    <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-    Tipo peligrosidad
-    </label>
-    <Field
-      type="number"
-      name="sortingWord"
-      id="sortingWord"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-      placeholder="Tipo peligrosidad"
-    />
+          <label htmlFor="sortingWord" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+            Tipo de peligrosidad
+          </label>
+          <Field
+            as="select"
+            name="sortingWord"
+            id="sortingWord"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+          >
+            <option value={1}>Peligro</option>
+            <option value={2}>Atención</option>
+          </Field>
           <ErrorMessage
-      name="sortingWord"
-
-      component="div"
-      className="text-red-500"
-    />
-     
-  </div>
+            name="sortingWord"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
   <div className="w-1/4">
     <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
       Cantidad

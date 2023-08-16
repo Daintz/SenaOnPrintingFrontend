@@ -5,7 +5,6 @@ import {
 } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Provider from '../pages/Provider/Provider'
-import WarehauseType from '../pages/Warehausetype/Warehausetype'
 import Warehause from '../pages/Warehause/Warehause'
 import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
@@ -36,6 +35,7 @@ import DashboardLayout from '../layout/DashboardLayout'
 import QuotationClientApproved from '../pages/ListQuotationClientApproved/QuotationClientApproved'
 import Quotation from '../pages/Quotation/Quotation'
 import ViewOrderProduction from '../pages/CreateOrderProduction/CreateOrderProduction'
+import ViewQuotationClient from '../components/CreateQuotationClient/CreateQuotation'
 
 
 const router = createBrowserRouter(
@@ -45,10 +45,6 @@ const router = createBrowserRouter(
       <Route path="provider"
         element={<DashboardLayout>
           <Provider />
-        </DashboardLayout>} />
-      <Route path="warehausetype"
-        element={<DashboardLayout>
-          <WarehauseType />
         </DashboardLayout>} />
       <Route path="warehause"
         element={<DashboardLayout>
@@ -277,6 +273,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <ViewOrderProduction />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="createQuotation"
+        element={
+          <DashboardLayout>
+            <ViewQuotationClient />
           </DashboardLayout>
         }
       />

@@ -6,8 +6,18 @@ import { UpdateButtomSupply } from './UpdateSupply'
 import { ChangeStateButtonSupply } from './ChangeStateSupply'
 import { CreateButtomSupply } from './CreateSupply'
 import { DetailsButtomSupply } from './DetailsSupply'
+import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { useReactToPrint } from 'react-to-print'
+import ReportSupply from './ReportSupply'
+import React, { useRef } from 'react';
 
 const ListSupply = () => {
+  const tablePDF = useRef()
+
+  const generatePDF = useReactToPrint({
+    content: () => tablePDF.current,
+    documentTitle: 'Informe de insumos'
+  })
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllSupplyQuery()
 
@@ -24,11 +34,11 @@ const ListSupply = () => {
     { Header: 'Indicadores de peligro insumo', accessor: 'dangerIndicators' },
     { Header: 'Instrucciones', accessor: 'useInstructions' },
     { Header: 'Consejos', accessor: 'advices' },
-    { Header: 'Tipo insumo', accessor: 'supplyType' },
-    { Header: 'Tipo peligrosidad', accessor: 'sortingWord' },
+    { Header: 'Tipo insumo', accessor: 'supplyType' , Cell: ({ value }) => (value === 1 ? 'Devolutivo' : 'Consumible')},
+    { Header: 'Tipo peligrosidad', accessor: 'sortingWord', Cell: ({ value }) => (value === 1 ? 'Peligro' : 'Atención')},
     { Header: 'Cantidad', accessor: 'quantity' },
     { Header: 'Costo promedio', accessor: 'averageCost' },
-
+    
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -70,6 +80,22 @@ const ListSupply = () => {
   }
 
   return (
+    <>
+    <div className='hidden'>
+      <div ref={tablePDF}>
+        <ReportSupply dataApi={dataApi}/>
+      </div>
+    </div>
+    <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
+    <button
+      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      onClick={ generatePDF }
+      type="button"
+    >
+      <BsFillFileEarmarkBreakFill />
+      Crear un informe
+    </button>
+    </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
@@ -217,6 +243,7 @@ const ListSupply = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
