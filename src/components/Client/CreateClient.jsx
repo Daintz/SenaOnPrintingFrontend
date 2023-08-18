@@ -30,15 +30,15 @@ async function checkEmailExistence (email) {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().min(3, 'El nombre debe tener como minimo 3 letras').required('Campo requerido'),
-  phone: Yup.string().max(10, 'Telefono no puede tener mas de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-  email: Yup.string().required('Campo requerido').email('El email debe ser valido example@email.com').test('unique-email', 'El correo ya está en uso', async function (value) {
+  name: Yup.string().min(3, 'Minimo 3 letras').required('Campo requerido'),
+  phone: Yup.string().min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'Solo números'),
+  email: Yup.string().required('Campo requerido').email('debe tener @, .com').test('unique-email', 'Correo en uso', async function (value) {
     const response = await checkEmailExistence(value)
     return !response.exists // Devuelve false si el correo ya existe
   }),
-  center: Yup.string().min(3, 'el centro debe tener como minimo 3 letras').max(70, 'el centro debe tener como maximo 70 letras').required('Campo requerido'),
-  area: Yup.string().min(3, 'el area debe tener como minimo 3 letras').max(70, 'El area debe tener como maximo 70 letras').required('Campo requerido'),
-  regional: Yup.string().min(3, 'La regional debe tener como minimo 3 letras').max(70, 'La regional debe tener como maximo 70 letras').required('Campo requerido')
+  center: Yup.string().min(3, 'Minimo 3 letras').max(70, 'Maximo 70 letras').required('Campo requerido'),
+  area: Yup.string().min(3, 'Minimo 3 letras').max(70, 'Maximo 70 letras').required('Campo requerido'),
+  regional: Yup.string().min(3, 'Minimo 3 letras').max(70, 'Maximo 70 letras').required('Campo requerido')
 })
 
 function CreateClient () {
@@ -76,9 +76,9 @@ function CreateClient () {
     >
         <Form className="space-y-6">
         <div className="flex gap-5 mb-3">
-  <div className="w-1/2">
+  <div className="w-full">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Nombre
+      Nombre Completo
     </label>
     <Field
       type="text"
@@ -93,7 +93,9 @@ function CreateClient () {
       className="text-red-500"
     />
   </div>
-  <div className="w-1/2">
+</div>
+<div className="flex gap-5 mb-3">
+<div className="w-full">
     <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
       Teléfono
     </label>
@@ -110,8 +112,7 @@ function CreateClient () {
       className="text-red-500"
     />
   </div>
-</div>
-
+  </div>
 <div className="flex gap-5 mb-3">
   <div className="w-full">
     <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -194,9 +195,9 @@ function CreateClient () {
 
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Crear cliente
+            Registrar cliente
           </button>
         </Form>
     </Formik>
@@ -215,7 +216,7 @@ export function CreateButtonClient () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
@@ -232,7 +233,7 @@ export function CreateButtonClient () {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear cliente
+      Registrar cliente
     </button>
   )
 }
