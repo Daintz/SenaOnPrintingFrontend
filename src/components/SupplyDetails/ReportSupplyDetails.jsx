@@ -13,13 +13,12 @@ const ReportSupplyDetails = ({ dataApi }) => {
     { key: 'description', name: 'Descripción' },
     { key: 'supplyCost', name: 'Costo insumo' },
     { key: 'batch', name: 'Lote' },
-    { key: 'initialQuantity', name: 'Cantidad inicial' },
     { key: 'entryDate', name: 'Fecha de entrada' },
     { key: 'expirationDate', name: 'Fecha de caducidad' },
-    { key: 'actualQuantity', name: 'Fecha actual' },
-    { key: 'supplyId', name: 'Id insumo' },
-    { key: 'providerId', name: 'Id proveedor' },
-    { key: 'warehouseId', name: 'Id bodega' },
+    // { key: 'actualQuantity', name: 'Fecha actual' },
+    { key: 'supplyId', name: 'Insumo' },
+    { key: 'providerId', name: 'Proveedor' },
+    { key: 'warehouseId', name: 'Bodega' },
     { key: 'statedAt', name: 'Estado' }
   ]
  
@@ -32,10 +31,9 @@ const ReportSupplyDetails = ({ dataApi }) => {
       description: supplyDetails.description,
       supplyCost: supplyDetails.supplyCost,
       batch: supplyDetails.batch,
-      initialQuantity: supplyDetails.initialQuantity,
       entryDate: supplyDetails.entryDate,
       expirationDate: supplyDetails.expirationDate,
-      actualQuantity: supplyDetails.actualQuantity,
+      // actualQuantity: supplyDetails.actualQuantity,
       supplyId: supplyDetails.supplyId,
       providerId: supplyDetails.providerId,
       warehouseId: supplyDetails.warehouseId,
@@ -56,7 +54,7 @@ const ReportSupplyDetails = ({ dataApi }) => {
             className="h-10 mr-3"
             alt="SENA Logo"
           />
-          <h1 className="font-black text-3xl">Informe loteo de insumos</h1>
+          <h1 className="font-black text-3xl">Informe compra de insumos</h1>
           <p className="text-xl">Creado el dia: {formattedDate}</p>
         </div>
       </div>
@@ -84,7 +82,6 @@ const ReportSupplyDetails = ({ dataApi }) => {
             </th>
             <td className="px-4 py-3">{supplyDetails.supplyCost}</td>
             <td className="px-4 py-3">{supplyDetails.batch}</td>
-            <td className="px-4 py-3">{supplyDetails.initialQuantity}</td>
             <td className="px-4 py-3">{supplyDetails.entryDate}</td>
             <td className="px-4 py-3">{supplyDetails.expirationDate}</td>
             <td className="px-4 py-3">{supplyDetails.actualQuantity}</td>

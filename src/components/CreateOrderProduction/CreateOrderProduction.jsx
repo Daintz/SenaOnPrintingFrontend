@@ -12,16 +12,16 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
-import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { BsCheckCircle } from 'react-icons/bs'
-import { Tooltip } from 'react-tippy'
 import {HiOutlinePlusSm} from 'react-icons/hi'
+import clientAxios from '../../config/clientAxios'
+import { AiOutlineArrowRight } from 'react-icons/ai'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -32,31 +32,94 @@ const validationSchema = Yup.object().shape({
   // scheme: Yup.string().required('Campo requerido')
 })
 
+
 function CreateOrderProduction() {
 
   // const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
   // const { isAction 
   // } = useSelector((state) => state.modal)
-  // useEffect(() => {
-  //   refetch()
-  // }, [isAction])
 
   const dispatch = useDispatch()
+  const [paperCutOptions, setpaperCutOptions] = useState([])
+  const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
+  const [machineOptions, setMachineOptions] = useState([])
+
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [previewImage, setPreviewImage] = useState(null);
   const { detailsData } = useSelector((state) => state.modal)
   const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, productQuantity, productHeight, technicalSpecifications, typeService } = detailsData
   console.log('quotationClientDetailId:', detailsData.id);
+  //Formato de fecha
   const originalDateStr = detailsData.deliverDate;
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
-  // console.log(detailsData)
-  const paperCutsQuery = useGetAllPaperCutsQuery();
-  const paperCuts = paperCutsQuery.data;
-console.log(paperCuts)
-  const impositionPlanchsQuery = useGetAllImpositionPlanchsQuery();
-  const impositionPlanchs = impositionPlanchsQuery.data;
-console.log(impositionPlanchs)
+
+  useEffect(() => {
+    fetchOptions()
+
+  }, [])
+
+  const getPaperCut = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/PaperCuts').then(
+        (result) => {
+          const paperCuts = result.data.map((paperCut) => (
+            paperCut.name
+          ))
+          resolve(paperCuts)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
+const getImpositionPlanch = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/impositionPlanch').then(
+        (result) => {
+          const impositionPlanchs = result.data.map((impositionPlanch) => (
+            impositionPlanch.name
+          ))
+          resolve(impositionPlanchs)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
+const getMachine = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/Machine').then(
+        (result) => {
+          const Machines = result.data.map((machine) => (
+            machine.name
+          ))
+          resolve(Machines)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
+   const fetchOptions = () => {
+    getPaperCut().then((options) => {
+      setpaperCutOptions(options)
+    })
+    getImpositionPlanch().then((options) => {
+      setImpositionPlanchOptions(options)
+    })
+    getMachine().then((options) => {
+      setMachineOptions(options)
+    })
+
+  }
+
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
@@ -165,7 +228,7 @@ console.log(impositionPlanchs)
               {/* Columna izquierda */}
               <div className="w-1/5">
                 {/* Contenido de la columna izquierda */}
-                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2">
+                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ">
                   <div className="flex gap-5 grid-cols-4 mb-3">
                     
                     <div className="w-full">
@@ -177,7 +240,7 @@ console.log(impositionPlanchs)
         </div>
                   </div>
                 </div>
-                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2">
+                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300">
                   <div className="flex gap-5 grid-cols-4 mb-3">
                     {/* {dataApi.map((data, index) => ( */}
                     {/* <div className="flex linea-horizontal mb-2"> */}
@@ -261,18 +324,7 @@ console.log(impositionPlanchs)
                 placeholder="15"
               />
             </div> */}
-                  <div className="w-1/4">
-                    <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Usuario
-                    </label>
-                    <Field
-                      type="text"
-                      name="userId"
-                      id="userId"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="20"
-                    />
-                  </div>
+                  
                   <div className="w-1/4">
 
                     <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -286,33 +338,6 @@ console.log(impositionPlanchs)
                       placeholder="Drive"
                     />
                   </div>
-                  <div className="w-1/4">
-                    <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Sangrados
-                    </label>
-                    <Field
-                      type="text"
-                      name="indented"
-                      id="indented"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="5"
-                    />
-                  </div>
-                  <div className="w-1/4">
-                    <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Perfil de color
-                    </label>
-                    <Field
-                      type="text"
-                      name="colorProfile"
-                      id="colorProfile"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="CMYK"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-5 grid-cols-5 mb-3">
                   <div className="w-1/4">
                     <label htmlFor="program" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Programa
@@ -337,6 +362,23 @@ console.log(impositionPlanchs)
                       placeholder="1.0.5"
                     />
                   </div>
+                  
+                  <div className="w-1/4">
+                    <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Perfil de color
+                    </label>
+                    <Field
+                      type="text"
+                      name="colorProfile"
+                      id="colorProfile"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      placeholder="CMYK"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-5 grid-cols-5 mb-3">
+                  
                   {/* <div className="w-1/4">
               <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cantidad tintas
@@ -349,6 +391,30 @@ console.log(impositionPlanchs)
                 placeholder="4X1"
               />
             </div> */}
+            <div className="w-1/4">
+                    <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Sangrado
+                    </label>
+                    <Field
+                      type="text"
+                      name="indented"
+                      id="indented"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      placeholder="5"
+                    />
+                  </div>
+                  <div className="w-1/4">
+                    <label htmlFor="lineature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Lineatura
+                    </label>
+                    <Field
+                      type="text"
+                      name="lineature"
+                      id="lineature"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      placeholder="20 lpi"
+                    />
+                  </div>
                   <div className="w-1/4">
                     <label htmlFor="specialInk" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Tinta especial
@@ -461,19 +527,8 @@ console.log(impositionPlanchs)
                       <option value="Doble punto">Punto eliptico</option>
                     </Field>
                   </div>
+                  
                   {/* <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Sistema de impresión
-              </label>
-              <Field
-                type="text"
-                name="campo1"
-                id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="4X1*"
-              />
-            </div> */}
-                  <div className="w-2/4">
                     <label htmlFor="idPaperCut" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Corte de papel
                     </label>
@@ -484,14 +539,14 @@ console.log(impositionPlanchs)
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       {/* Opciones del select */}
-                      {paperCuts && paperCuts.map(paperCut => (
+                      {/* {paperCutOptions && paperCutOptions.map(paperCut => (
                         <option key={paperCut.id} value={paperCut.id}>
-                          {paperCut.name}
+                          {paperCut}
                         </option>
                       ))}
                     </Field>
-                  </div>
-                  <div className="w-2/4">
+                  </div> */} 
+                  <div className="w-1/4">
                     <label htmlFor="idImpositionPlanch" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
                     </label>
@@ -502,28 +557,34 @@ console.log(impositionPlanchs)
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       {/* Opciones del select */}
-                      {impositionPlanchs && impositionPlanchs.map(impositionPlanch => (
+                      {impositionPlanchOptions && impositionPlanchOptions.map(impositionPlanch => (
                         <option key={impositionPlanch.id} value={impositionPlanch.id}>
-                          {impositionPlanch.name}
+                          {impositionPlanch}
                         </option>
                       ))}
                     </Field>
                   </div>
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Maquinas
-              </label>
-              <Field
-                type="text"
-                name="campo2"
-                id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="20"
-              />
-            </div> */}
+                  <div className="w-1/4">
+                    <label htmlFor="idMachine" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Maquina
+                    </label>
+                    <Field
+                      as="select"
+                      name="idMachine"
+                      id="idMachine"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                    >
+                      {/* Opciones del select */}
+                      {machineOptions && machineOptions.map(machine => (
+                        <option key={machine.id} value={machine.id}>
+                          {machine}
+                        </option>
+                      ))}
+                    </Field>
+                  </div>
                 </div>
                 <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-1/4">
+                  <div className="w-2/4">
                     <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Esquema
                     </label>
@@ -540,7 +601,7 @@ console.log(impositionPlanchs)
 
                     />
                   </div>
-                  <div className="w-1/4">
+                  <div className="w-2/4">
                     <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imagen
                     </label>
@@ -557,7 +618,9 @@ console.log(impositionPlanchs)
 
                     />
                   </div>
-                  <div className="w-2/4">
+                  </div>
+                  <div className="flex gap-5 grid-cols-5 mb-3">
+                  <div className="w-full">
                     <label htmlFor="observations" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Observaciones
                     </label>
@@ -573,9 +636,9 @@ console.log(impositionPlanchs)
                 </div>
                 <button
                   type="submit"
-                  className="w-32 text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+                  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
                 >
-                  Guardar
+                  <AiOutlineArrowRight/>
                 </button>
 
               </div>

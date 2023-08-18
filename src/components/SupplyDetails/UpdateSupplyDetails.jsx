@@ -13,10 +13,12 @@ const validationSchema = Yup.object().shape({
   description: Yup.string().required('Campo requerido'),
   supplyCost: Yup.number().required('Campo requerido'),
   batch: Yup.string().required('Campo requerido'),
-  initialQuantity: Yup.number().required('Campo requerido'),
-  entryDate: Yup.date().required('Campo requerido'),
+  entryDate: Yup.date().required('Campo requerido').test('entryDateValidation', 'La fecha de entrada no puede ser anterior a la fecha actual', function (value) {
+    const currentDate = new Date();
+    return new Date(value) >= currentDate;
+  }),
   expirationDate: Yup.date().required('Campo requerido'),
-  actualQuantity: Yup.number().required('Campo requerido'),
+  // actualQuantity: Yup.number().required('Campo requerido'),
   supplyId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un insumo'),
   providerId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un proveedor'),
   warehouseId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir una bodega')
@@ -105,20 +107,19 @@ function updateSupplyDetails () {
 
     dispatch(changeAction())
     dispatch(closeModal())
-    toast.success('Loteo de insumo actualizado con exito')
+    toast.success('Compra de insumo actualizada con exito')
   }
 
   const inputs = [
     { key: 0, name: 'description', title: 'Descripcion', type: 'text', placeholder: 'Descripcion' },
     { key: 1, name: 'supplyCost', title: 'Costo insumo', type: 'number', placeholder: 'Costo insumo' },
     { key: 2, name: 'batch', title: 'Lote', type: 'text', placeholder: 'Lote' },
-    { key: 3, name: 'initialQuantity', title: 'Cantidad inicial', type: 'number', placeholder: 'Cantidad inicial' },
-    { key: 4, name: 'entryDate', title: 'Fecha de entrada', type: 'text', placeholder: 'Fecha de entrada' },
-    { key: 5, name: 'expirationDate', title: 'Fecha de caducidad', type: 'text', placeholder: 'Fecha de caducidad' },
-    { key: 6, name: 'actualQuantity', title: 'Cantidad actual', type: 'number', placeholder: 'Cantidad actual' },
-    { key: 7, name: 'supplyId', title: 'Id insumo', type: 'select', data: supplyOptions, placeholder: 'Id insumo' },
-    { key: 8, name: 'providerId', title: 'Id proveedor', type: 'select', data: providerOptions, placeholder: 'Id proveedor' },
-    { key: 9, name: 'warehouseId', title: 'Id bodega', type: 'select', data: warehauseOptions, placeholder: 'Id bodega' }
+    { key: 3, name: 'entryDate', title: 'Fecha de entrada', type: 'date', placeholder: 'Fecha de entrada' },
+    { key: 4, name: 'expirationDate', title: 'Fecha de caducidad', type: 'date', placeholder: 'Fecha de caducidad' },
+    // { key: 6, name: 'actualQuantity', title: 'Cantidad actual', type: 'number', placeholder: 'Cantidad actual' },
+    { key: 5, name: 'supplyId', title: 'Id insumo', type: 'select', data: supplyOptions, placeholder: 'Id insumo' },
+    { key: 6, name: 'providerId', title: 'Id proveedor', type: 'select', data: providerOptions, placeholder: 'Id proveedor' },
+    { key: 7, name: 'warehouseId', title: 'Id bodega', type: 'select', data: warehauseOptions, placeholder: 'Id bodega' }
   ]
 
   return (
@@ -128,10 +129,9 @@ function updateSupplyDetails () {
         description: editingData.description,
         supplyCost: editingData.supplyCost,
         batch: editingData.batch,
-        initialQuantity: editingData.initialQuantity,
-        entryDate: editingData.entryDate,
-        expirationDate: editingData.expirationDate,
-        actualQuantity: editingData.actualQuantity,
+        entryDate: editingData.entryDate ? new Date(editingData.entryDate).toISOString().split('T')[0] : '',
+        expirationDate: editingData.expirationDate ? new Date(editingData.expirationDate).toISOString().split('T')[0] : '',
+        // actualQuantity: editingData.actualQuantity,
         supplyId: editingData.supplyId,
         providerId: editingData.providerId,
         warehouseId: editingData.warehouseId,
@@ -150,7 +150,7 @@ function updateSupplyDetails () {
                 name="description"
                 id="description"
                 placeholder="Descripción"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="description"
@@ -165,7 +165,7 @@ function updateSupplyDetails () {
                 name="supplyCost"
                 id="supplyCost"
                 placeholder="Costo insumo"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="supplyCost"
@@ -182,7 +182,7 @@ function updateSupplyDetails () {
                 name="batch"
                 id="batch"
                 placeholder="Lote"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="batch"
@@ -190,7 +190,7 @@ function updateSupplyDetails () {
               className="text-red-500"
             />
           </div>
-
+{/* 
           <div key='3' className='w-1/4 mr-2'>
             <label htmlFor="initialQuantity">Cantidad inicial</label>
             <Field
@@ -198,66 +198,54 @@ function updateSupplyDetails () {
                 name="initialQuantity"
                 id="initialQuantity"
                 placeholder="Cantidad inicial"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="initialQuantity"
               component="div"
               className="text-red-500"
             />
-          </div>
-          <div key='4' className='w-1/4 ml-2'>
-            <label htmlFor="entryDate">Fecha de entrada</label>
-            <Field
-                type="date"
-                name="entryDate"
-                id="entryDate"
-                placeholder="Fecha de entrada"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="entryDate"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+          </div> */}
+          <div key='3' className='w-1/4 ml-2'>
+          <label htmlFor="entryDate">Fecha de entrada</label>
+          <Field
+            type="date"
+            name="entryDate"
+            id="entryDate"
+            placeholder="Fecha de entrada"
+            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+            
+          />
+          <ErrorMessage
+            name="entryDate"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
           </div>
         <div className='flex mb-2'>
-          <div key='5' className='w-1/4 mr-2'>
-            <label htmlFor="expirationDate">Fecha de caducidad</label>
-            <Field
-                type="date"
-                name="expirationDate"
-                id="expirationDate"
-                placeholder="Fecha de caducidad"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="expirationDate"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+        <div key='4' className='w-1/4 ml-2'>
+          <label htmlFor="expirationDate">Fecha de caducidad</label>
+          <Field
+            type="date"
+            name="expirationDate"
+            id="expirationDate"
+            placeholder="Fecha de caducidad"
+            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+            
+          />
+          <ErrorMessage
+            name="expirationDate"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
           <div className='flex mb-2'>
-          <div key='6' className='w-1/4 mr-2'>
-            <label htmlFor="actualQuantity">Cantidad actual</label>
-            <Field
-                type="number"
-                name="actualQuantity"
-                id="actualQuantity"
-                placeholder="Cantidad actual"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="actualQuantity"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='7' className='w-1/9 ml-2'>
-            <label htmlFor="supplyId">Id insumo</label>
+
+          <div key='5' className='w-1/9 ml-2'>
+            <label htmlFor="supplyId">Insumo</label>
             <br />
-            <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione un insumo</option>
               {supplyOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -269,10 +257,10 @@ function updateSupplyDetails () {
               className="text-red-500"
             />
           </div>
-          <div key='8' className='w-1/9 ml-2'>
-            <label htmlFor="providerId">Id proveedor</label>
+          <div key='6' className='w-1/9 ml-2'>
+            <label htmlFor="providerId">Proveedor</label>
             <br />
-            <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione un proveedor</option>
               {providerOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -284,10 +272,10 @@ function updateSupplyDetails () {
               className="text-red-500"
             />
           </div>
-          <div key='9' className='w-1/9 ml-2'>
-            <label htmlFor="warehouseId">Id bodega</label>
+          <div key='7' className='w-1/9 ml-2'>
+            <label htmlFor="warehouseId">Bodega</label>
             <br />
-            <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione una bodega</option>
               {warehauseOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -303,9 +291,9 @@ function updateSupplyDetails () {
         </div>
         <button
           type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
-          Actualizar loteo de insumo
+          Actualizar compra de insumo
         </button>
       </Form>
     </Formik>
@@ -317,7 +305,7 @@ export function UpdateButtomSupplyDetails ({ supplyDetails }) {
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(setWidth({ width: 'w-[1000]' }))
-    dispatch(openModal({ title: 'Editar loteo de insumos' }))
+    dispatch(openModal({ title: 'Editar compra de insumos' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
