@@ -24,6 +24,24 @@ async function checkNITExistence(NIT) {
   }
 }
 
+
+async function checkNameCompanyExistence(nameCompany) {
+  try {
+    const response = await clientAxios.get('/Provider');
+    const Providers = response.data;
+
+    // Verificar si el NIT ya existe en los proveedores
+    const NameComapanyExist = Providers.some(provider => provider.nameCompany === nameCompany);
+
+    return { exists: NameComapanyExist };
+  } catch (error) {
+    console.error('Error al verificar la existencia del Nombre de la empresa de la empresa:', error);
+    // Manejar el error adecuadamente en tu aplicación
+    return { exists: false };
+  }
+}
+
+
 async function checkEmailExistence(email) {
   try {
     const response = await clientAxios.get('/Provider');
@@ -41,21 +59,28 @@ async function checkEmailExistence(email) {
 }
 
 const validationSchema = Yup.object().shape({
-  nitCompany: Yup.string()
+  nitCompany: Yup.string().min(9, 'Minimo 9 digitos').max(15, 'Maximo 15 digitos')
     .required('Campo requerido')
     .test('unique-NIT', 'El NIT ya se encuentra registrado', async function (value) {
       const response = await checkNITExistence(value);
       return !response.exists; // Devuelve false si el NIT ya existe
     }),
-  nameCompany: Yup.string().required('Campo requerido'),
-  email: Yup.string()
+
+
+  nameCompany: Yup.string()
+    .required('Campo requerido').min(3, 'minimo 3 caracteres').max(50, 'Maximo 50 caracteres')
+    .test('unique-NAME', 'La empresa ya se encuentra registrado', async function (value) {
+      const response = await checkNameCompanyExistence(value);
+      return !response.exists; // Devuelve false si el NIT ya existe
+    }),
+  email: Yup.string().email('Correo no valido')
     .required('Campo requerido')
     .test('unique-email', 'El correo ya se encuentra registrado', async function (value) {
       const response = await checkEmailExistence(value);
       return !response.exists; // Devuelve false si el correo ya existe
     }),
-  phone: Yup.string().required('Campo requerido'),
-  companyAddress: Yup.string().required('Campo requerido')
+  phone: Yup.number('digite solo numeros').min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido'),
+  companyAddress: Yup.string().required('Campo requerido').min(7, 'Minimo 10 digitos').max(100, 'Maximo 100 digitos')
 });
 
 function CreateProvider() {
@@ -172,8 +197,8 @@ export function CreateButtomProvider() {
 
   return (
     <button
-    className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-    type="button"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      type="button"
       onClick={() => handleOpen()}
     >
       <svg

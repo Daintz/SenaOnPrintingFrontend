@@ -15,9 +15,9 @@ import { useState } from 'react'
 import { data } from 'autoprefixer'
 
 const validationSchema = Yup.object().shape({
-  code: Yup.string().required('Campo requerido'),
-  name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido'),
+  code: Yup.string().required('Campo requerido').min(5,'Minimo 5 caracteres').max(10,'Maximo 10 caracteres'),
+  name: Yup.string().required('Campo requerido').min(3,'Minimo 3 caracteres').max(30,'Maximo 30 caracteres'),
+  description: Yup.string().required('Campo requerido').min(10,'Minimo 10 caracteres').max(30,'Maximo 30 caracteres'),
   pictogramFile: Yup.string().required('Campo requerido')
 })
 
