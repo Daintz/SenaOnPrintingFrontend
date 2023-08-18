@@ -42,7 +42,6 @@ function CreateProduct () {
   const [paperCutOptions, setpaperCutOptions] = useState([])
   const [finishOptions, setFinishOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
-  const [typeSouvernirSelect, setTypeSouvernirSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
   const [backCover, setBackCover] = useState('')
@@ -108,10 +107,6 @@ function CreateProduct () {
 
   const handleTypeProduct = e => {
     setTypeProductSelect(e.target.value)
-  }
-
-  const handleTypeSouvenir = e => {
-    setTypeSouvernirSelect(e.target.value)
   }
 
   const handleDataSupplies = () => {
@@ -223,7 +218,7 @@ function CreateProduct () {
       name: 'typeProduct',
       title: 'Tipo de producto',
       type: 'select',
-      options: ['Elige una opción', 'Libreta', 'Souvenir', 'Gran formato', 'Papelería', 'Otros'],
+      options: ['Elige una opción', 'Libreta', 'Souvenir', 'Gran formato', 'Papelería'],
       placeholder: 'Tipo de producto',
       value: typeProductSelect,
       action: handleTypeProduct
@@ -389,9 +384,9 @@ function CreateProduct () {
       key: 10,
       typeProductOwner: 'Libreta',
       name: 'numberSheets',
-      title: 'Numero de hojas',
+      title: 'Numero de paginas',
       type: 'text',
-      placeholder: 'Numero de hojas del producto'
+      placeholder: 'Numero de paginas del producto'
     },
     {
       row: 5,
@@ -408,10 +403,10 @@ function CreateProduct () {
       typeProductOwner: 'Libreta',
       name: 'observations',
       title: 'Observaciones',
-      type: 'text',
+      type: 'textarea',
       placeholder: 'Observaciones del producto'
     },
-        {
+    {
       row: 6,
       key: 3,
       typeProductOwner: 'Libreta',
@@ -471,215 +466,112 @@ function CreateProduct () {
       checkboxes: finishOptions
     },
     {
-      row: 1,
-      key: 11,
+      row: 2,
+      key: 10,
       typeProductOwner: 'Souvenir',
-      name: 'typeSouvenir',
-      title: 'Tipo Souvenir',
-      type: 'select',
-      options: ['Elige una opción', 'Mug', 'Lapiceros', 'Termo', 'Bolsa', 'Camisa', 'Gorra'],
-      placeholder: 'Tipo de producto',
-      value: typeSouvernirSelect,
-      action: handleTypeSouvenir
-    },
-    {
-      row: 1,
-      key: 11,
-      typeProductOwner: 'Souvenir',
-      name: 'mug',
-      title: 'Mug',
+      name: 'dimensionSouvenir',
+      title: 'Dimension',
       type: 'text',
-      placeholder: 'Mug souvenir'
-    },
-    {
-      row: 1,
-      key: 12,
-      typeProductOwner: 'Souvenir',
-      name: 'nameOfficial',
-      title: 'Nombre del oficial',
-      type: 'text',
-      placeholder: 'Nombre del oficial souvenir'
-    },
-    {
-      row: 1,
-      key: 12,
-      typeProductOwner: 'Souvenir',
-      name: 'thermos',
-      title: 'Termo',
-      type: 'text',
-      placeholder: 'Termo souvenir'
-    },
-    {
-      row: 1,
-      key: 13,
-      typeProductOwner: 'Souvenir',
-      name: 'thermos',
-      title: 'Área de impresión',
-      type: 'text',
-      placeholder: 'Área de impresión souvenir'
-    },
-    {
-      row: 1,
-      key: 13,
-      typeProductOwner: 'Souvenir',
-      name: 'cover',
-      title: 'Encuadernacion',
-      type: 'text',
-      placeholder: 'Tapa souvenir'
+      placeholder: 'Dimension de souvenir'
     },
     {
       row: 2,
-      key: 14,
+      key: 10,
       typeProductOwner: 'Souvenir',
-      name: 'bag',
-      title: 'Bolsa',
+      name: 'profileColorSouvenir',
+      title: 'Perfil color',
       type: 'text',
-      placeholder: 'Bolsa souvenir'
+      placeholder: 'Perfil color de souvenir'
     },
     {
       row: 2,
-      key: 15,
+      key: 10,
       typeProductOwner: 'Souvenir',
-      name: 'shirt',
-      title: 'Camisa',
-      type: 'text',
-      placeholder: 'Camisa souvenir'
+      name: 'observationsSouvenir',
+      title: 'Observaciones',
+      type: 'textarea',
+      placeholder: 'Observaciones de souvenir'
+    },
+    {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Souvenir',
+      name: 'laminatedSouvenir',
+      title: 'Acabados',
+      type: 'checkbox',
+      checkboxes: finishOptions
     },
     {
       row: 2,
-      key: 16,
-      typeProductOwner: 'Souvenir',
-      name: 'size',
-      title: 'Talla',
-      type: 'text',
-      placeholder: 'Talla souvenir'
-    },
-    {
-      row: 2,
-      key: 17,
-      typeProductOwner: 'Souvenir',
-      name: 'cap',
-      title: 'Gorra',
-      type: 'text',
-      placeholder: 'Gorra souvenir'
-    },
-    {
-      row: 2,
-      key: 18,
-      typeProductOwner: 'Souvenir',
-      name: 'color',
-      title: 'Colores',
-      type: 'text',
-      placeholder: 'Colores souvenir'
-    },
-    {
-      row: 1,
-      key: 19,
+      key: 10,
       typeProductOwner: 'Gran formato',
-      name: 'impression',
-      title: 'Impresión',
+      name: 'dimensionLargeFormat',
+      title: 'Dimension',
       type: 'text',
-      placeholder: 'Impresión gran formato'
-    },
-    {
-      row: 1,
-      key: 20,
-      typeProductOwner: 'Papelería',
-      name: 'tulla',
-      title: 'Tula',
-      type: 'text',
-      placeholder: 'Tula papalería'
-    },
-    {
-      row: 1,
-      key: 21,
-      typeProductOwner: 'Papelería',
-      name: 'tacos',
-      title: 'Tacos',
-      type: 'text',
-      placeholder: 'Tacos papalería'
-    },
-    {
-      row: 1,
-      key: 22,
-      typeProductOwner: 'Papelería',
-      name: 'paper',
-      title: 'Papel',
-      type: 'text',
-      placeholder: 'Papel papalería'
+      placeholder: 'Dimension de gran formato'
     },
     {
       row: 2,
-      key: 23,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'profileColorLargeFormat',
+      title: 'Perfil color',
+      type: 'text',
+      placeholder: 'Perfil color de gran formato'
+    },
+    {
+      row: 2,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'observationsLargeFormat',
+      title: 'Observaciones',
+      type: 'textarea',
+      placeholder: 'Observaciones de gran formato'
+    },
+    {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'laminatedLargeFormat',
+      title: 'Acabados',
+      type: 'checkbox',
+      checkboxes: finishOptions
+    },
+    {
+      row: 2,
+      key: 10,
       typeProductOwner: 'Papelería',
-      name: 'leaves',
-      title: 'Hojas',
+      name: 'dimensionStationery',
+      title: 'Dimension',
       type: 'text',
-      placeholder: 'Hojas papalería'
+      placeholder: 'Dimension de papeleria'
     },
     {
       row: 2,
-      key: 24,
+      key: 10,
       typeProductOwner: 'Papelería',
-      name: 'windowDisplays',
-      title: 'Escaparelas',
+      name: 'profileColorStationery',
+      title: 'Perfil color',
       type: 'text',
-      placeholder: 'Escaparelas papalería'
+      placeholder: 'Perfil color de papeleria'
     },
     {
       row: 2,
-      key: 25,
+      key: 10,
       typeProductOwner: 'Papelería',
-      name: 'impression',
-      title: 'Impresión',
-      type: 'text',
-      placeholder: 'Impresión papalería'
+      name: 'observationsStationery',
+      title: 'Observaciones',
+      type: 'textarea',
+      placeholder: 'Observaciones de papeleria'
     },
     {
-      row: 2,
-      key: 26,
+      row: 3,
+      key: 10,
       typeProductOwner: 'Papelería',
-      name: 'size',
-      title: 'Tamaño',
-      type: 'text',
-      placeholder: 'Tamaño papalería'
-    },
-    {
-      row: 1,
-      key: 27,
-      typeProductOwner: 'Otros',
-      name: 'folder',
-      title: 'Tamaño carpeta',
-      type: 'text',
-      placeholder: 'Tamaño carpeta otros'
-    },
-    {
-      row: 2,
-      key: 28,
-      typeProductOwner: 'Otros',
-      name: 'laminated',
-      title: 'Laminada',
-      type: 'select',
-      options: ['Elige una opción', 'Si', 'No'],
-      placeholder: 'Laminada otros'
-    },
-    {
-      row: 2,
-      key: 29,
-      typeProductOwner: 'Otros',
-      name: 'descriptionLaminated',
-      title: 'Descripción laminada',
-      type: 'text',
-      placeholder: 'Descripción laminada'
-    },
-    {
-      row: 2,
-      key: 30,
-      typeProductOwner: 'Otros',
-      name: 'impression',
-      title: 'Impresión',
-      type: 'text',
-      placeholder: 'Impresión papalería'
+      name: 'laminatedStationery',
+      title: 'Acabados',
+      type: 'checkbox',
+      checkboxes: finishOptions
     }
   ]
 
@@ -721,7 +613,6 @@ function CreateProduct () {
                   (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
                     ? (
                       <>
-                        {console.log(frontPage === 'Si' && frontPageInks === 'Si')}
                         {input.type === 'checkbox' &&
                         <div key={input.key} className="flex-1 mr-4 last:mr-0">
                         <label>{input.title}</label>
@@ -758,6 +649,25 @@ function CreateProduct () {
                                 />
                               </div>
                               </>
+                          )}
+                          {input.type === 'textarea' && (
+                            <>
+                              <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                                <label htmlFor={input.name}>{input.title}</label>
+                                <Field
+                                  as="textarea"
+                                  name={input.name}
+                                  id={input.name}
+                                  placeholder={input.placeholder}
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                                />
+                                <ErrorMessage
+                                  name={input.name}
+                                  component="div"
+                                  className="text-red-500"
+                                />
+                              </div>
+                            </>
                           )}
                             {input.type === 'text' && (
                               <>
