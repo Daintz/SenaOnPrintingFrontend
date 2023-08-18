@@ -15,16 +15,48 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import clientAxios from '../../config/clientAxios' // Importar clientAxios para poder hacer la consulta
 
 const validationSchema = Yup.object().shape({
-  names: Yup.string().required('Campo requerido'),
-  surnames: Yup.string().required('Campo requerido'),
+  names: Yup.string().required('Campo requerido').max(30, "No puede tener mas de 30 caracteres"),
+  surnames: Yup.string().required('Campo requerido').max(30, "No puede tener mas de 30 caracteres"),
   typeDocumentId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de documento'),
-  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números').test('unique-document', 'El documento ya está en uso', async function (value) {
+    const response = await checkDocumentExistence(value)
+    return !response.exists // Devuelve false si el documento ya existe
+  }),
   phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-  address: Yup.string().required('Campo requerido'),
-  email: Yup.string().email().required('Campo requerido'),
+  address: Yup.string().required('Campo requerido').min(10, "Debe tener mas de 10 caracteres").max(35, "No puede tener mas de 35 caracteres"),
+  email: Yup.string().email("Formato de correo invalidos").required('Campo requerido').test('unique-email', 'El correo ya está en uso', async function (value) {
+    const response = await checkEmailExistence(value)
+    return !response.exists // Devuelve false si el nombre ya existe
+  }),
   roleId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un rol'),
   passwordDigest: Yup.string().min(6, 'Contraseña debe ser de al menos 6 caracteres').max(12, 'Contraseña no puede tener mas de 12 caracteres').required('Campo requerido')
 })
+
+async function checkEmailExistence (email) {
+  try {
+    const response = await clientAxios.get('/user')
+    const users = response.data
+    const emailExists = users.some(user => user.email === email)
+
+    return { exists: emailExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del correo:', error)
+    return { exists: false }
+  }
+}
+
+async function checkDocumentExistence (document) {
+  try {
+    const response = await clientAxios.get('/user')
+    const users = response.data
+    const documentExists = users.some(user => user.documentNumber === document)
+
+    return { exists: documentExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del numero de documento:', error)
+    return { exists: false }
+  }
+}
 
 const getTypeDocuments = () => {
   return new Promise((resolve, reject) => {
