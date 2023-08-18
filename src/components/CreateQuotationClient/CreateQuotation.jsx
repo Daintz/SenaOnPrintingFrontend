@@ -18,6 +18,7 @@ import InvoiceItem from '../Quotation/InvoiceItem';
 import InvoiceItemMachine from '../Quotation/InvoiceItemMachine'
 import incrementString from './helpers/incrementString'
 import { uid } from 'uid';
+import { CreateButtonProduct } from '../Product/CreateProduct'
 
 const validationSchema = Yup.object().shape({
   orderDate: Yup.date().required('Campo requerido').test('valid-deliver-date', 'La fecha de entrega debe ser igual a la fecha actual', function (value) {
@@ -141,6 +142,8 @@ function CreateQuotation() {
   const [customerName, setCustomerName] = useState('');
   const [items, setItems] = useState([]);
   const [itemsMachine, setItemsMachine] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+  const [currentDate1, setCurrentDate1] = useState(new Date().toISOString().split('T')[0]);
 
   const optionsList = [
     {"value": "", "text": "Seleccione un producto"},
@@ -304,8 +307,8 @@ const total = subtotal - discountRate + taxRate;
   return (
     <Formik
       initialValues={{
-        orderDate: '',
-        deliverDate: '',
+        orderDate: currentDate,
+        deliverDate: currentDate1,
         quotationStatus: '',
         userId: '',
         clientId: '',
@@ -332,32 +335,19 @@ const total = subtotal - discountRate + taxRate;
         <Form
         onSubmit={reviewInvoiceHandler}
         >
-        <div className="flex justify-around">
+        <div className="flex justify-between w-full">
           <div className="flex gap-5 grid-cols-5 mb-2">
           <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
-            <div className="w-1/2">
-              <b>Codigo: 0001 </b>
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-4/4">
+          <b>Codigo : 0001</b>
             </div>
+            <div className="w-4/4">
+             <b>Fecha: {new Date().toISOString().split('T')[0]}</b>
+            </div>
+          </div>
           <hr className="mb-4" />
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-2/4">
-              <label htmlFor="orderDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Fecha de Incio <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="date"
-                name="orderDate"
-                id="orderDate"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="Drive"
-              />
-              <ErrorMessage
-                name="orderDate"
-
-                component="div"
-                className="text-red-500"
-              />
-            </div>
             <div className="w-2/4">
               <label htmlFor="deliverDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Fecha de Entrega <b className="text-red-700">*</b>
@@ -368,38 +358,11 @@ const total = subtotal - discountRate + taxRate;
                 id="deliverDate"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="Libreta"
+                min={new Date().toISOString().split('T')[0]}
               />
               <ErrorMessage
                 name="deliverDate"
 
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-          </div>
-          <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
-              <label htmlFor="clientId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cliente <b className="text-red-700">*</b>
-              </label>
-              <Field
-                type="number"
-                as="select"
-                name="clientId"
-                id="clientId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                  <option value={0}>Seleccione</option>
-                  {clientsOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-              </Field>
-              <ErrorMessage
-                name="clientId"
-       
                 component="div"
                 className="text-red-500"
               />
@@ -429,64 +392,64 @@ const total = subtotal - discountRate + taxRate;
               />
             </div>
           </div>
-          <div>
-          <br></br>
-          <br></br>
-          </div>
-          <div className="flex gap-5 grid-cols-5 mb-2">
-          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-1000 h-100">
-          <label
-          htmlFor="machineList"
-          className="col-start-2 row-start-1 text-sm font-bold md:text-base"
-        >
-          Seleccione una Maquina:
-        </label>
-        <Field
-                as="select"
-                name="machineList"
-                id="machineList"
-                onChange={addItemHandlerMachine}
-                value="0"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-90 p-2.5"
-                placeholder="100"
-              >
-                {optionsListMachine.map(option =>(
-            <option key={option.value} value={option.value} price={option.price} name={option.text}>{option.text}</option>
-          ))}
-              </Field>
-        <table className="w-1/4 p-4 text-left">
-          <thead>
-            <tr className="border-b border-gray-900/10 text-xs md:text-base">
-              <th className='text-xs'>Maquina</th>
-              <th className="text-center text-xs">Accion</th>
-            </tr>
-          </thead>
-          <tbody>
-            {itemsMachine.map((item) => (
-              <InvoiceItemMachine
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                onDeleteItem={deleteItemHandlerMachine}
-              />
-            ))}
-          </tbody>
-        </table>
-            </div>
-        </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-4/4">
-              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Estado de la Cotizacion <b className="text-red-700">*</b>
+          <div className="w-4/4">
+              <label htmlFor="clientId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Cliente <b className="text-red-700">*</b>
               </label>
               <Field
+                type="number"
                 as="select"
+                name="clientId"
+                id="clientId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="100"
+              >
+                  <option value={0}>Seleccione</option>
+                  {clientsOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+              </Field>
+              <ErrorMessage
+                name="clientId"
+       
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+            
+          </div>
+          <div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="flex flex-col items-end space-y-2 pt-6">
+          <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+        
+          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
+            <span className="font-bold">Total:</span>
+            <span className="font-bold">
+              ${total % 1 === 0 ? total : total.toFixed(2)}
+            </span>
+          </div>
+            </div>
+        </div>
+        <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-4/4">
+              <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Estado de la Cotización <b className="text-red-700">*</b>
+              </label>
+              <Field
+                as="text"
                 name="quotationStatus"
                 id="quotationStatus"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                <option value={0}>Seleccione</option>
                 <option value={1}>En proceso</option>
               </Field>
               <ErrorMessage
@@ -498,18 +461,17 @@ const total = subtotal - discountRate + taxRate;
             </div>
           </div>
             <center>
-          <button
-            type="submit"
-            className="w-32 text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
-
-          >
-            Crear Cotizacion
-          </button>
+            <button
+                  type="submit"
+                  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+                >
+                  Crear Cotizacion
+                </button>
           </center>
           </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-2">
-          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-1000 h-100">
+          <div className="my-6 rounded-md bg-white shadow-sm md:p-10 w-[900px]">
           <label
           htmlFor="productList"
           className="col-start-2 row-start-1 text-sm font-bold md:text-base"
@@ -522,27 +484,24 @@ const total = subtotal - discountRate + taxRate;
                 id="productList"
                 onChange={addItemHandler}
                 value="0"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-90 p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
                 {optionsList.map(option =>(
             <option key={option.value} value={option.value} price={option.price} name={option.text}>{option.text}</option>
           ))}
               </Field>
-        <button
-          className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
-          type="button"
-          onClick={addItemHandler}
-        >
-          Añadir producto
-        </button> 
+              <div className="w-full md:w-auto  md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+              <CreateButtonProduct />
+            </div>
+            <br></br>
         <table className="w-1/4 p-4 text-left">
           <thead>
             <tr className="border-b border-gray-900/10 text-xs md:text-base">
               <th className='text-xs'>Producto</th>
               <th className='text-xs'>Cantidad</th>
               <th className="text-center text-xs">Precio</th>
-              <th className="text-center text-xs">Accion</th>
+              <th className="text-center text-xs">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -559,19 +518,7 @@ const total = subtotal - discountRate + taxRate;
             ))}
           </tbody>
         </table>
-        <div className="flex flex-col items-end space-y-2 pt-6">
-          <div className="flex w-full justify-between md:w-1/2">
-            <span className="font-bold">Subtotal:</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </div>
         
-          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
-            <span className="font-bold">Total:</span>
-            <span className="font-bold">
-              ${total % 1 === 0 ? total : total.toFixed(2)}
-            </span>
-          </div>
-            </div>
             </div>
         </div>
         </div>
@@ -594,7 +541,7 @@ export function CreateButtomQuotation() {
     <button
       type="button"
       onClick={() => handleOpen()}
-    ><Tooltip title="Crear Cotiazacion" position="bottom"
+    ><Tooltip title="Crear Cotiazación" position="bottom"
     animation="fade">
       <Link to="/createQuotation">
         <svg

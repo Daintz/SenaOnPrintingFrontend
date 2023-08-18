@@ -37,7 +37,7 @@ const ListQuotation = () => {
 
   const columns = useMemo(
     () => [
-      { Header: 'Codigo', accessor: 'id' },
+      { Header: 'Código', accessor: 'id' },
       { Header: 'Fecha de orden', accessor: 'orderDate' },
       { Header: 'Fecha de Entrega', accessor: 'deliverDate' },
       { Header: 'Cliente Id', accessor: 'clientId' },
@@ -225,7 +225,7 @@ const ListQuotation = () => {
             className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
           >
             <span className="text-sm font-normal text-gray-500">
-              Pagina {' '}
+              Página {' '}
               <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
             </span>
             <ul className="inline-flex items-stretch -space-x-px">
