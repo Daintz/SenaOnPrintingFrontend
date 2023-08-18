@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
 
 function DetailsClient () {
   const { detailsData } = useSelector((state) => state.modal)
@@ -31,7 +31,7 @@ export function DetailsButtonClient ({ client }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: '500px' }))
+    dispatch(setWidth({ width: 'w-[500px]' }))
     dispatch(openModal({ title: 'Detalles cliente' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: client }))
@@ -42,7 +42,7 @@ export function DetailsButtonClient ({ client }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <BsClipboard2 className="h-5 w-5 mr-2" />
+        <GrView alt="Icono detalles" title="Ver detalles del cliente" className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }
