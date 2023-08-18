@@ -1,22 +1,20 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
 
 function DetailsSupplyDetails () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { description, supplyCost, batch, initialQuantity, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
+  const { description, supplyCost, batch, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
   return (
     <>
       <p><b>Descripcion:</b> {description}</p>
       <p><b>Costo insumo:</b> {supplyCost}</p>
       <p><b>Lote:</b> {batch}</p>
-      <p><b>Cantidad inicial:</b> {initialQuantity}</p>
       <p><b>Fecha de entrada:</b> {entryDate}</p>
       <p><b>Fecha de caducidad:</b> {expirationDate}</p>
-      <p><b>Cantidad actual:</b> {actualQuantity}</p>
-      <p><b>Id insumo:</b> {supplyId}</p>
-      <p><b>Id proveedor:</b> {providerId}</p>
-      <p><b>Id bodega:</b> {warehouseId}</p>
+      <p><b>Insumo:</b> {supplyId}</p>
+      <p><b>Proveedor:</b> {providerId}</p>
+      <p><b>Bodega:</b> {warehouseId}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt
@@ -36,7 +34,7 @@ export function DetailsButtomSupplyDetails ({ supplyDetails }) {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: 'w-[500px]' }))
-    dispatch(openModal({ title: 'Detalles loteo de insumos' }))
+    dispatch(openModal({ title: 'Detalles compra de insumos' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: supplyDetails }))
   }
@@ -46,7 +44,7 @@ export function DetailsButtomSupplyDetails ({ supplyDetails }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <BsClipboard2 className="h-5 w-5 mr-2" />
+        <GrView className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }

@@ -397,7 +397,7 @@ function Sidebar () {
                   <span className="ml-3 text-base">Clientes</span>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to={'/quotationClient'}
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotationClient' ? 'bg-custom-blue text-white' : null}`}
@@ -405,7 +405,7 @@ function Sidebar () {
 
                   <span className="ml-3">Cotizacion Cliente</span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to={'/quotation'}
@@ -416,14 +416,14 @@ function Sidebar () {
                 </Link>
               </li>
 
-              <li>
+             {/*  <li>
                 <Link
                   to={'/quotationclientDetail'}
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotationclientDetail' ? 'bg-custom-blue text-white' : null}`}
                 >
                   <span className="ml-3">Cotizacion Cliente Detalles</span>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li>
