@@ -41,6 +41,7 @@ function CreateProduct () {
 
   const [paperCutOptions, setpaperCutOptions] = useState([])
   const [finishOptions, setFinishOptions] = useState([])
+  const [substrateOptions, setSubstrateOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
@@ -82,6 +83,23 @@ function CreateProduct () {
     })
   }
 
+  const getSubstrate = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/Substrates').then(
+        (result) => {
+          const substrates = result.data.map((substrate) => ({
+            name: substrate.name,
+            label: substrate.name
+          }))
+          resolve(substrates)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
   const fetchOptions = () => {
     getPaperCut().then((options) => {
       setpaperCutOptions(options)
@@ -89,9 +107,13 @@ function CreateProduct () {
     getFinish().then((options) => {
       setFinishOptions(options)
     })
+    getSubstrate().then((options) => {
+      setSubstrateOptions(options)
+    })
   }
 
   const handleSubmit = async values => {
+    console.log(values)
     if (isLoading) return <Spinner />
 
     await createProduct(values)
@@ -282,6 +304,15 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
+      row: 2,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateFrontPage',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 3,
       key: 7,
       typeProductOwner: 'Libreta',
@@ -329,6 +360,15 @@ function CreateProduct () {
       title: 'Código',
       type: 'text',
       placeholder: 'Código libreta'
+    },
+    {
+      row: 3,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateBackCover',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
     },
     {
       row: 4,
@@ -380,6 +420,15 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
+      row: 4,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateSheets',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 5,
       key: 10,
       typeProductOwner: 'Libreta',
@@ -420,38 +469,34 @@ function CreateProduct () {
         },
         {
           name: '2',
-          label: 'Loops'
-        },
-        {
-          name: '3',
           label: 'Paso'
         },
         {
-          name: '4',
+          name: '3',
           label: 'Tapa dura'
         },
         {
-          name: '5',
+          name: '4',
           label: 'Grapado'
         },
         {
-          name: '6',
+          name: '5',
           label: 'Rústico/Cosido'
         },
         {
-          name: '7',
+          name: '6',
           label: 'Lomo'
         },
         {
-          name: '8',
+          name: '7',
           label: 'Sobrecubierta'
         },
         {
-          name: '9',
+          name: '8',
           label: 'Tapa blanda'
         },
         {
-          name: '10',
+          name: '9',
           label: 'Caballete'
         }
       ]
@@ -466,6 +511,15 @@ function CreateProduct () {
       checkboxes: finishOptions
     },
     {
+      row: 6,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateNoteBook',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 2,
       key: 10,
       typeProductOwner: 'Souvenir',
@@ -473,15 +527,6 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de souvenir'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Souvenir',
-      name: 'profileColorSouvenir',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de souvenir'
     },
     {
       row: 2,
@@ -514,15 +559,6 @@ function CreateProduct () {
       row: 2,
       key: 10,
       typeProductOwner: 'Gran formato',
-      name: 'profileColorLargeFormat',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de gran formato'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Gran formato',
       name: 'observationsLargeFormat',
       title: 'Observaciones',
       type: 'textarea',
@@ -538,6 +574,15 @@ function CreateProduct () {
       checkboxes: finishOptions
     },
     {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'susbtrateLargeFormat',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 2,
       key: 10,
       typeProductOwner: 'Papelería',
@@ -545,15 +590,6 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de papeleria'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Papelería',
-      name: 'profileColorStationery',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de papeleria'
     },
     {
       row: 2,
@@ -572,6 +608,15 @@ function CreateProduct () {
       title: 'Acabados',
       type: 'checkbox',
       checkboxes: finishOptions
+    },
+    {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Papelería',
+      name: 'susbtrateStationery',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
     }
   ]
 
@@ -583,11 +628,10 @@ function CreateProduct () {
         <Formik
           initialValues={{
             typeProduct: '',
-            name: '',
-            characteristics: '',
-            cost: ''
+            name: ''
           }}
           onSubmit={values => {
+            console.log(values)
             handleSubmit(values)
           }}
           validationSchema={validationSchema}
@@ -603,14 +647,17 @@ function CreateProduct () {
                   (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
                   (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
                   (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                  (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
                   (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
                   (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                   (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                   (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                  (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                   (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
                   (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
                   (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                  (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
+                  (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                  (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
                     ? (
                       <>
                         {input.type === 'checkbox' &&
