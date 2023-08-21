@@ -33,10 +33,9 @@ const ListSupplyDetails = () => {
     { Header: 'Descripcion', accessor: 'description' },
     { Header: 'Costo insumo', accessor: 'supplyCost' },
     { Header: 'Lote', accessor: 'batch' },
-    { Header: 'Cantidad inicial', accessor: 'initialQuantity' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
-    { Header: 'Cantidad actual', accessor: 'actualQuantity' },
+    // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
     { Header: 'Insumo', accessor: 'supplyId' },
     { Header: 'Proveedor', accessor: 'providerId' },
     { Header: 'Bodega', accessor: 'warehouseId' },
@@ -54,6 +53,11 @@ const ListSupplyDetails = () => {
   ], [])
 
   const data = useMemo(() => (dataApi || []), [dataApi])
+
+  useEffect(() => {
+    refetch()
+  }, [isAction])
+  // ?
 
   const {
     getTableProps,
@@ -89,12 +93,12 @@ const ListSupplyDetails = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
       <BsFillFileEarmarkBreakFill />
-      Crear un informe
+      Generar informe
     </button>
     </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
