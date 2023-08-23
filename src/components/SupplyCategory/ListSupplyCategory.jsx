@@ -17,7 +17,7 @@ const ListSupplyCategory = () => {
 
   const generatePDF = useReactToPrint({
     content: () => tablePDF.current,
-    documentTitle: 'Informe de categoria de insumos'
+    documentTitle: 'Informe de categoría de insumos'
   })
 
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
@@ -100,7 +100,7 @@ const ListSupplyCategory = () => {
           <>
           <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
             <h1 className="text-center text-3xl font-bold mb-10">No hay registros en la base de datos</h1>
-            <p className="text-center text-xl">Para empezar a visualizar la información debes de crear una categoria de insumo</p>
+            <p className="text-center text-xl">Para empezar a visualizar la información debes de crear una categoría de insumo</p>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
               <CreateButtonSupplyCategory />
             </div>
