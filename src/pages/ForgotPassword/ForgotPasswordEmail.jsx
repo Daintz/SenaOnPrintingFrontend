@@ -65,7 +65,7 @@ const ForgotPasswordEmail = () => {
                       className='mt-6 mb-6'
                       to={"/"}
                     >
-                      <a className='text-blue'>Volver al formulario</a>
+                      <a className='text-blue'>Volver al inicio de sesion</a>
                     </Link>
                     <div className="mt-6">
                         <button className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
