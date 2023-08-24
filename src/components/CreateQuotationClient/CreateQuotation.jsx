@@ -348,7 +348,7 @@ const total = subtotal - discountRate + taxRate;
           </div>
           <hr className="mb-4" />
           <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-2/4">
+            <div className="w-4/4">
               <label htmlFor="deliverDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Fecha de Entrega <b className="text-red-700">*</b>
               </label>
@@ -363,30 +363,6 @@ const total = subtotal - discountRate + taxRate;
               <ErrorMessage
                 name="deliverDate"
 
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-2/4">
-              <label htmlFor="typeServiceId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Tipo de Servicio <b className="text-red-700">*</b>
-              </label>
-              <Field
-                as="select"
-                name="typeServiceId"
-                id="typeServiceId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                placeholder="100"
-              >
-                  <option value={0}>Seleccione</option>
-                   {typeServiceOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-          ))}
-              </Field>
-              <ErrorMessage
-                name="typeServiceId"
                 component="div"
                 className="text-red-500"
               />
@@ -465,18 +441,18 @@ const total = subtotal - discountRate + taxRate;
                   type="submit"
                   className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
                 >
-                  Crear Cotizacion
+                  Crear Cotización
                 </button>
           </center>
           </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-2">
-          <div className="my-6 rounded-md bg-white shadow-sm md:p-10 w-[900px]">
+          <div className="my-6 rounded-md bg-white shadow-sm md:p-10 w-[852px]">
           <label
           htmlFor="productList"
           className="col-start-2 row-start-1 text-sm font-bold md:text-base"
         >
-          Seleccione un producto:
+          Seleccione un producto:  <b className="text-red-700">*</b>
         </label>
         <Field
                 as="select"
@@ -501,6 +477,7 @@ const total = subtotal - discountRate + taxRate;
               <th className='text-xs'>Producto</th>
               <th className='text-xs'>Cantidad</th>
               <th className="text-center text-xs">Precio</th>
+              <th className="text-center text-xs">Tipo de Servicio</th>
               <th className="text-center text-xs">Acción</th>
             </tr>
           </thead>

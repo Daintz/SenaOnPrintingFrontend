@@ -22,7 +22,7 @@ function Sidebar () {
             >
               <BsGear className="w-[1.5rem] h-[1.5rem]" />
               <span className="flex-1 ml-3 text-left whitespace-nowrap">
-                Configuracion
+                Configuración
               </span>
               <svg
                 className="w-6 h-6"
@@ -79,7 +79,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/Machine' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3 text-base">Maquinas</span>
+                  <span className="ml-3 text-base">Máquinas</span>
                 </Link>
               </li>
               {/* <li>
@@ -250,7 +250,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyCategory' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3">Categoria de Insumos</span>
+                  <span className="ml-3">Categoría de Insumos</span>
                 </Link>
               </li>
               <li>
@@ -412,7 +412,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotation' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3">Cotizacion</span>
+                  <span className="ml-3">Cotización</span>
                 </Link>
               </li>
 

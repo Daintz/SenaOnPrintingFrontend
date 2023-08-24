@@ -115,8 +115,10 @@ const ListQuotation = () => {
 
   const { pageIndex, globalFilter } = state
 
+
   if (isLoading) return <Spinner />
   if (error) return <Error type={error.status} message={error.error} />
+
   return (
     <>
       <div className='hidden'>
@@ -134,11 +136,26 @@ const ListQuotation = () => {
       Crear un informe
     </button>
     </div>
-      <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
-        <div className="bg-white sm:rounded-lg overflow-hidden">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
-            <div className="w-full md:w-1/2">
-              <form className="flex items-center">
+    <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
+      <div className="bg-white sm:rounded-lg overflow-hidden">
+      {dataApi.length === 0
+        ? (
+          <>
+          <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
+            <h1 className="text-center text-3xl font-bold mb-10">No hay registros en la base de datos</h1>
+            <p className="text-center text-xl">Para empezar a visualizar la información debes de crear una Cotizacion</p>
+            <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+            <Link to={'/createQuotation'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Crear Cotización</Link>
+
+            </div>
+          </div>
+          </>
+          )
+        : (
+          <>
+            <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
+          <div className="w-full md:w-1/2">
+            <form className="flex items-center">
                 <label htmlFor="simple-search" className="sr-only">
                   Buscar
                 </label>
@@ -166,11 +183,11 @@ const ListQuotation = () => {
                     value={globalFilter || ''}
                     onChange={e => setGlobalFilter(e.target.value)}
                   />
-                </div>
-              </form>
-            </div>
+                 </div>
+            </form>
+          </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <Link to={'/createQuotation'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Crear Cotizacion</Link>
+            <Link to={'/createQuotation'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Crear Cotización</Link>
           </div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-gray-400">
@@ -282,6 +299,9 @@ const ListQuotation = () => {
               </li>
             </ul>
           </nav>
+          </>
+          )
+      }
         </div>
       </div>
     </>

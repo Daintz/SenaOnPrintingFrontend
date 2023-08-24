@@ -1,16 +1,50 @@
 import React from 'react';
 import InvoiceField from './InvoiceField';
+import { useEffect, useState } from 'react'
+import clientAxios from '../../config/clientAxios'
 
-const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
+const getTypeService = () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/TypeServices').then(
+      (result) => {
+        const TypeService = result.data.map((typeServices) => ({
+          'label': typeServices.name,
+          'value': typeServices.id
+        }))
+        resolve(TypeService)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
+const InvoiceItem = ({ id, name, qty, price, typeServiceId, onDeleteItem, onEdtiItem }) => {
   const deleteItemHandler = () => {
     onDeleteItem(id);
   };
-
+  
+  const [typeServiceOptions, setTypeServiceOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('');
+    useEffect(() => {
+      // Llamada a la función para obtener los datos
+      getTypeService()
+        .then((data) => {
+          setTypeServiceOptions(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }, [])
+    const handleSelectChange = (event) => {
+      setSelectedOption(event.target.value);
+    };
+  
+  
   return (
     <tr>
       <td className="w-full disabled">
         <InvoiceField
-          onEditItem={(event) => onEdtiItem(event)}
           cellData={{
             placeholder: 'Item name',
             type: 'text',
@@ -20,7 +54,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           }}
         />
       </td>
-      <td className="min-w-[65px] md:min-w-[80px]">
+      <td className="min-w-[40px] md:min-w-[40px]">
         <InvoiceField
           onEditItem={(event) => onEdtiItem(event)}
           cellData={{
@@ -32,7 +66,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           }}
         />
       </td>
-      <td className="relative min-w-[100px] md:min-w-[150px]">
+      <td className="relative min-w-[4px] md:min-w-[4px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="absolute left-2 top-1/2 h-6 w-6 -translate-y-1/2 text-gray-400 sm:left-4"
@@ -48,7 +82,6 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           />
         </svg>
         <InvoiceField
-          onEditItem={(event) => onEdtiItem(event)}
           cellData={{
             className: 'text-right',
             type: 'number',
@@ -59,6 +92,25 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
             value: price,
           }}
         />
+      </td>
+
+
+
+
+      <td className="relative min-w-[4px] md:min-w-[4px]">
+      <select
+        name="typeServiceId"
+        id={id}
+        value={selectedOption}
+        onChange={handleSelectChange}
+      >
+        <option value={0}>Seleccione</option>
+          {typeServiceOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       </td>
       <td className="flex items-center justify-center">
         <button
@@ -82,7 +134,8 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
         </button>
       </td>
     </tr>
+    
   );
-};
+}
 
 export default InvoiceItem;
