@@ -36,7 +36,7 @@ const ReportSupplyCategory = ({ dataApi }) => {
             className="h-10 mr-3"
             alt="SENA Logo"
           />
-          <h1 className="font-black text-3xl">Informe categoria insumos</h1>
+          <h1 className="font-black text-3xl">Informe categoría insumos</h1>
           <p className="text-xl">Creado el dia: {formattedDate}</p>
         </div>
       </div>

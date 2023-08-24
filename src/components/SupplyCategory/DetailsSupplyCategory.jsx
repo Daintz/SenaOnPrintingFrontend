@@ -28,7 +28,7 @@ export function DetailsButtonSupplyCategory ({ supplyCategory }) {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: 'w-[400px]' }))
-    dispatch(openModal({ title: 'Detalles categoria de insumos' }))
+    dispatch(openModal({ title: 'Detalles categoría de insumos' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: supplyCategory }))
   }
@@ -38,7 +38,7 @@ export function DetailsButtonSupplyCategory ({ supplyCategory }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <GrView alt="Icono detalles" title="Ver detalles de la categoria de insumo" className="opacity-60 h-5 w-5 mr-2" />
+        <GrView alt="Icono detalles" title="Ver detalles de la categoría de insumo" className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }

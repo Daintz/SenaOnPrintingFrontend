@@ -20,7 +20,7 @@ import clientAxios from '../../config/clientAxios'
   ubication: Yup.string().required('Campo requerido')
 }) */
 const validationSchema = Yup.object().shape({
-  ubication: Yup.string().required('Campo requerido'),
+  ubication: Yup.string().required('Campo requerido').min(5,'Minimo 5 caracteres').max(50,'Maximo 50 Caracteres'),
   typeServiceId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de boega'),
 })
 

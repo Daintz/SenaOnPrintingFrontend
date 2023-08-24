@@ -66,8 +66,8 @@ function CreateSupply () {
         supplyType: 1,
         sortingWord: 1,
         quantity: 0,
-        averageCost: 0
-     
+        averageCost: 0,
+        statedAt: true
    
       }}
       onSubmit={(values) => {
@@ -87,7 +87,7 @@ function CreateSupply () {
                 type="text"
                 name="name"
                 id="Nombre"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Nombre"
               />
                  <ErrorMessage
@@ -106,7 +106,7 @@ function CreateSupply () {
                 type="text"
                 name="dangerIndicators"
                 id="dangerIndicators"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 rows="6" cols="40"
                 placeholder="Indicadores de peligro"
               />
@@ -127,7 +127,7 @@ function CreateSupply () {
                 type="text"
                 name="useInstructions"
                 id="useInstructions"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Instrucciones"
               />
                     <ErrorMessage
@@ -149,7 +149,7 @@ function CreateSupply () {
                 type="text"
                 name="advices"
                  id="advices"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Consejos"
               />
                   <ErrorMessage
@@ -168,7 +168,7 @@ function CreateSupply () {
             as="select"
             name="supplyType"
             id="supplyType"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value={1}>Devolutivo</option>
             <option value={2}>Consumible</option>
@@ -187,7 +187,7 @@ function CreateSupply () {
                 as="select"
                 name="supplyType"
                 id="supplyType"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Tipo insumo"
               />
                   <option value={1}>Devolutivo</option>
@@ -209,7 +209,7 @@ function CreateSupply () {
             as="select"
             name="sortingWord"
             id="sortingWord"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
           >
             <option value={1}>Peligro</option>
             <option value={2}>Atención</option>
@@ -228,7 +228,7 @@ function CreateSupply () {
                 type="number"
                 name="quantity"
                 id="quantity"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Cantidad"
               />
                     <ErrorMessage
@@ -247,7 +247,7 @@ function CreateSupply () {
                 type="number"
                 name="averageCost"
                 id="averageCost"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                 placeholder="Costo promedio"
               />
                     <ErrorMessage
@@ -262,7 +262,7 @@ function CreateSupply () {
         
           <button
             type="submit"
-            className="col-span-3 w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="col-span-3 w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Crear Insumo
           </button>
@@ -285,7 +285,7 @@ export function CreateButtomSupply () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
