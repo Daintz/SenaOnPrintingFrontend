@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyPictogramsQuery } from '../../context/Api/Common'
 import { ChangeStateButtonSupplyPictograms } from '../SupplyPictograms/ChangeStatedSupplyPictograms'
