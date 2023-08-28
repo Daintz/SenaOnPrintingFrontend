@@ -19,9 +19,10 @@ import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { BsCheckCircle } from 'react-icons/bs'
-import {HiOutlinePlusSm} from 'react-icons/hi'
+import { HiOutlinePlusSm } from 'react-icons/hi'
 import clientAxios from '../../config/clientAxios'
 import { AiOutlineArrowRight } from 'react-icons/ai'
+import { BsImages } from 'react-icons/bs';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
@@ -33,31 +34,46 @@ const validationSchema = Yup.object().shape({
 })
 
 
+
+
 function CreateOrderProduction() {
 
+
   // const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
-  // const { isAction 
+  // const { isAction
   // } = useSelector((state) => state.modal)
+
 
   const dispatch = useDispatch()
   const [paperCutOptions, setpaperCutOptions] = useState([])
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
 
+
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
-  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedImage1, setSelectedImage1] = useState(null);
+  const [previewImage1, setPreviewImage1] = useState(null);
+
+  const [selectedImage2, setSelectedImage2] = useState(null);
+  const [previewImage2, setPreviewImage2] = useState(null);
   const { detailsData } = useSelector((state) => state.modal)
   const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, productQuantity, productHeight, technicalSpecifications, typeService } = detailsData
   console.log('quotationClientDetailId:', detailsData.id);
+
+  const userId = sessionStorage.getItem('UserId');
+  console.log(userId)
   //Formato de fecha
   const originalDateStr = detailsData.deliverDate;
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
 
+
   useEffect(() => {
     fetchOptions()
 
+
   }, [])
+
 
   const getPaperCut = () => {
     return new Promise((resolve, reject) => {
@@ -75,7 +91,8 @@ function CreateOrderProduction() {
     })
   }
 
-const getImpositionPlanch = () => {
+
+  const getImpositionPlanch = () => {
     return new Promise((resolve, reject) => {
       clientAxios.get('/impositionPlanch').then(
         (result) => {
@@ -91,7 +108,8 @@ const getImpositionPlanch = () => {
     })
   }
 
-const getMachine = () => {
+
+  const getMachine = () => {
     return new Promise((resolve, reject) => {
       clientAxios.get('/Machine').then(
         (result) => {
@@ -107,7 +125,8 @@ const getMachine = () => {
     })
   }
 
-   const fetchOptions = () => {
+
+  const fetchOptions = () => {
     getPaperCut().then((options) => {
       setpaperCutOptions(options)
     })
@@ -118,10 +137,13 @@ const getMachine = () => {
       setMachineOptions(options)
     })
 
+
   }
+
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
+
 
     // console.log('userId:', values.userId);
     // console.log('materialReception', values.materialReception);
@@ -130,7 +152,7 @@ const getMachine = () => {
     const formData = new FormData();
     console.log('quotationClientDetailId:', detailsData.id);
     formData.append('quotationClientDetailId', detailsData.id);
-    formData.append('userId', values.userId);
+    formData.append('userId', userId);
     formData.append('materialReception', values.materialReception);
     formData.append('programVersion', values.programVersion);
     formData.append('indented', values.indented);
@@ -149,6 +171,8 @@ const getMachine = () => {
     await createOrderProduction(formData);
 
 
+
+
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
@@ -157,18 +181,24 @@ const getMachine = () => {
       autoClose: 1000
     })
   }
-  const handleFileChange = event => {
+  const handleFileChange = (event, setImage, setPreviewImage) => {
     const file = event.target.files[0];
+    setImage(file);
+
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
       };
       reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
     }
   };
 
+
   return (
+
 
     <Formik
       initialValues={{
@@ -195,33 +225,38 @@ const getMachine = () => {
     >
       {({ setFieldValue }) => (
 
+
         <Form>
-    <div className="relative bg-white py-5 px-10 shadow-2xl mdm:py-10 mdm:px-8">
+          <div className="relative bg-white py-5 px-10 shadow-2xl mdm:py-10 mdm:px-8">
 
-          <div>
-            <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px', fontWeight: 'bold' }}>Crear orden de producción</h1>
-          </div>
-          <div>
-            {/* Parte superior: Fila completa */}
-            <div className="py-4">
-              <div className="flex gap-5 grid-cols-4 mb-3">
-                {/* {dataApi.map((data, index) => ( */}
-                {/* <div className="flex linea-horizontal mb-2"> */}
-                <div className="w-2/4">
-                  <p><b>Código:</b> {detailsData.quotationClientId}</p>
-                  <p><b>Fecha entrega:</b> {formattedDate}</p>
 
+            <div>
+              <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px', fontWeight: 'bold' }}>Crear orden de producción</h1>
+            </div>
+            <div>
+              {/* Parte superior: Fila completa */}
+              <div className="py-4">
+                <div className="flex gap-5 grid-cols-4 mb-3">
+                  {/* {dataApi.map((data, index) => ( */}
+                  {/* <div className="flex linea-horizontal mb-2"> */}
+                  <div className="w-2/4">
+                    <p><b>Código:</b> {detailsData.quotationClientId}</p>
+                    <p><b>Fecha entrega:</b> {formattedDate}</p>
+
+
+                  </div>
+                  <div className="w-2/4">
+                    <p><b>Cliente:</b> {detailsData.name}</p>
+                    <p><b>Tipo de servicio:</b> {detailsData.typeService}</p>
+
+
+                  </div>
+                  {/* </div> */}
+                  {/* ))} */}
                 </div>
-                <div className="w-2/4">
-                  <p><b>Cliente:</b> {detailsData.name}</p>
-                  <p><b>Tipo de servicio:</b> {detailsData.typeService}</p>
-
-                </div>
-                {/* </div> */}
-                {/* ))} */}
               </div>
             </div>
-            </div>
+
 
             {/* Parte inferior: Dos columnas */}
             <div className="flex gap-4">
@@ -230,14 +265,14 @@ const getMachine = () => {
                 {/* Contenido de la columna izquierda */}
                 <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ">
                   <div className="flex gap-5 grid-cols-4 mb-3">
-                    
+
                     <div className="w-full">
                       <p><b>Producto:</b> {productName}</p>
                       <p><b>Cantidad</b> {productQuantity}</p>
                     </div>
                     <div className="flex items-center justify-center w-15 h-15">
-          <BsCheckCircle className="text-blue-500 h-6 w-6" />
-        </div>
+                      <BsCheckCircle className="text-blue-500 h-6 w-6" />
+                    </div>
                   </div>
                 </div>
                 <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300">
@@ -245,7 +280,7 @@ const getMachine = () => {
                     {/* {dataApi.map((data, index) => ( */}
                     {/* <div className="flex linea-horizontal mb-2"> */}
                     <div className="w-full">
-                    <p><b>Producto:</b> Mug</p>
+                      <p><b>Producto:</b> Mug</p>
                       <p><b>Cantidad</b> 5</p>
                     </div>
                     {/* </div> */}
@@ -254,8 +289,9 @@ const getMachine = () => {
                 </div>
               </div>
 
+
               {/* Columna derecha */}
-              <div className="w-4/5">
+              <div className="w-4/5 border-l-[3px] border-gray pl-4">
                 {/* Contenido de la columna derecha */}
                 {/* <hr className="mb-4" /> */}
                 <div className="flex gap-5 grid-cols-4 mb-3">
@@ -264,6 +300,7 @@ const getMachine = () => {
               <p><b>Ancho:</b> {detailsData.productHeight}</p>
               <p><b>Alto:</b> {detailsData.productWidth}</p>
               <p><b>Cantidad de tintas:</b> {detailsData.inkQuantity}</p>
+
 
             </div>
             <div className="w-2/4">
@@ -285,7 +322,9 @@ const getMachine = () => {
               />
             </div> */}
 
+
                 </div>
+
 
                 <div className="flex gap-5 grid-cols-5 mb-3">
                   {/* <div className="w-1/4">
@@ -324,8 +363,10 @@ const getMachine = () => {
                 placeholder="15"
               />
             </div> */}
-                  
+
+
                   <div className="w-1/4">
+
 
                     <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Recepción material
@@ -362,7 +403,7 @@ const getMachine = () => {
                       placeholder="1.0.5"
                     />
                   </div>
-                  
+
                   <div className="w-1/4">
                     <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Perfil de color
@@ -377,8 +418,9 @@ const getMachine = () => {
                   </div>
                 </div>
 
+
                 <div className="flex gap-5 grid-cols-5 mb-3">
-                  
+
                   {/* <div className="w-1/4">
               <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cantidad tintas
@@ -391,7 +433,7 @@ const getMachine = () => {
                 placeholder="4X1"
               />
             </div> */}
-            <div className="w-1/4">
+                  <div className="w-1/4">
                     <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Sangrado
                     </label>
@@ -415,7 +457,7 @@ const getMachine = () => {
                       placeholder="20 lpi"
                     />
                   </div>
-                  <div className="w-1/4">
+                  {/* <div className="w-1/4">
                     <label htmlFor="specialInk" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Tinta especial
                     </label>
@@ -438,7 +480,7 @@ const getMachine = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="#10054"
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex gap-5 grid-cols-5 mb-3">
                   {/* <div className="w-1/4">
@@ -508,7 +550,10 @@ const getMachine = () => {
           </Field>
         </div> */}
 
+
                 </div>
+
+
 
 
                 <div className="flex gap-5 grid-cols-5 mb-3">
@@ -527,7 +572,7 @@ const getMachine = () => {
                       <option value="Doble punto">Punto eliptico</option>
                     </Field>
                   </div>
-                  
+
                   {/* <div className="w-1/4">
                     <label htmlFor="idPaperCut" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Corte de papel
@@ -539,13 +584,13 @@ const getMachine = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       {/* Opciones del select */}
-                      {/* {paperCutOptions && paperCutOptions.map(paperCut => (
+                  {/* {paperCutOptions && paperCutOptions.map(paperCut => (
                         <option key={paperCut.id} value={paperCut.id}>
                           {paperCut}
                         </option>
                       ))}
                     </Field>
-                  </div> */} 
+                  </div> */}
                   <div className="w-1/4">
                     <label htmlFor="idImpositionPlanch" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
@@ -584,52 +629,76 @@ const getMachine = () => {
                   </div>
                 </div>
                 <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-2/4">
-                    <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                  <div className="w-1/4">
+                    <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-700">
                       Esquema
                     </label>
-                    <input
-                      type="file"
-                      name="scheme"
-                      id="scheme"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="4X1*"
-                      onChange={event => {
-                        setFieldValue("scheme", event.target.files[0]);
-                        handleFileChange(event);
-                      }}
-
-                    />
+                    <div className={`border-dotted border-gray-300 border-2 h-[200px] p-0 mb-4 relative ${previewImage2 ? 'h-auto' : ''}`}>
+                      {previewImage2 ? (
+                        <img
+                          src={previewImage2}
+                          alt="Previsualización de la imagen"
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <BsImages className="text-gray-500 text-5xl" />
+                        </div>
+                      )}
+                    </div>
+                    <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer">
+                      Selecciona el archivo
+                      <input
+                        type="file"
+                        name="scheme"
+                        id="scheme"
+                        className="sr-only"
+                        onChange={(event) => handleFileChange(event, setSelectedImage2, setPreviewImage2)}
+                      />
+                    </label>
                   </div>
-                  <div className="w-2/4">
-                    <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+
+
+                  <div className="w-1/4">
+                    <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-700">
                       Imagen
                     </label>
-                    <input
-                      type="file"
-                      name="image"
-                      id="image"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="Libreta"
-                      onChange={event => {
-                        setFieldValue("image", event.target.files[0]);
-                        handleFileChange(event);
-                      }}
 
-                    />
+                    <div className={`border-dotted border-gray-300 border-2 h-[200px] p-0 mb-4 relative ${previewImage1 ? 'h-auto' : ''}`}>
+                      {previewImage1 ? (
+                        <img
+                          src={previewImage1}
+                          alt="Previsualización de la imagen"
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <BsImages className="text-gray-500 text-5xl" />
+                        </div>
+                      )}
+                    </div>
+
+                    <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer">
+                      Selecciona un archivo
+                      <input
+                        type="file"
+                        name="image"
+                        id="image"
+                        className="sr-only"
+                        onChange={(event) => handleFileChange(event, setSelectedImage1, setPreviewImage1)}
+                      />
+                    </label>
                   </div>
-                  </div>
-                  <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-full">
+                  <div className="w-2/4">
                     <label htmlFor="observations" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Observaciones
                     </label>
                     <Field
-                    as="textarea"
+                      as="textarea"
                       type="text"
                       name="observations"
                       id="observations"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full  p-2.5 h-48 resize-none"
                       placeholder="20"
                     />
                   </div>
@@ -638,18 +707,21 @@ const getMachine = () => {
                   type="submit"
                   className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
                 >
-                  <AiOutlineArrowRight/>
+                  <AiOutlineArrowRight />
                 </button>
+
 
               </div>
             </div>
           </div>
+
 
         </Form>
       )}
     </Formik>
   )
 }
+
 
 export function CreateButtomOrderProduction({ orderProduction }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
@@ -663,16 +735,19 @@ export function CreateButtomOrderProduction({ orderProduction }) {
   }
   // ?
 
+
   return (
     <button
       type="button"
       onClick={() => handleOpen()}
     >
       <Link to="/createOP">
-        <HiOutlinePlusSm alt="Icono detalles" title="Crear OP" className="h-7 w-7 mr-2"/>
+        <HiOutlinePlusSm alt="Icono detalles" title="Crear OP" className="h-7 w-7 mr-2" />
       </Link>
     </button>
   )
 }
 
+
 export default CreateOrderProduction
+
