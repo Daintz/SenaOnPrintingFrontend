@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
+import jwtDecode from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -21,9 +22,12 @@ const Login = () => {
     }).then((resp) => {
       //alert(resp.message)
       if (resp.token.length !== 0) {
-        sessionStorage.setItem('session_token', resp.token)
-        toast.success(resp.message)
-        usenavigate('/dashboard')
+        const token = resp.token;
+        const decodedToken = jwtDecode(token); // Decodificar el token JWT
+        sessionStorage.setItem('session_token', token);
+        sessionStorage.setItem('UserId', decodedToken.id);
+        toast.success(resp.message);
+        usenavigate('/dashboard');
       }
     }).catch((err) => {
       toast.error(err.response.data.message)
