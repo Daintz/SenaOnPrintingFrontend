@@ -150,23 +150,25 @@ function CreateOrderProduction() {
     // console.log('programVersion', values.programVersion);
     // console.log('imageInfo', values.image);
     const formData = new FormData();
+    console.log(values)
     console.log('quotationClientDetailId:', detailsData.id);
+    console.log('userId', userId);
     formData.append('quotationClientDetailId', detailsData.id);
     formData.append('userId', userId);
     formData.append('materialReception', values.materialReception);
     formData.append('programVersion', values.programVersion);
     formData.append('indented', values.indented);
     formData.append('colorProfile', values.colorProfile);
-    formData.append('specialInk', values.specialInk);
-    formData.append('inkCode', values.inkCode);
-    formData.append('idPaperCut', values.idPaperCut);
-    formData.append('imageInfo', values.image);
+    // formData.append('specialInk', values.specialInk);
+    // formData.append('inkCode', values.inkCode);
+    // formData.append('idPaperCut', values.idPaperCut);
+    formData.append('imageInfo', selectedImage1);
     formData.append('observations', values.observations);
     formData.append('statedAt', true);
     formData.append('orderStatus', 2);
     formData.append('program', values.program);
     formData.append('typePoint', values.typePoint);
-    formData.append('schemeInfo', values.scheme);
+    formData.append('schemeInfo', selectedImage2);
     console.log(formData)
     await createOrderProduction(formData);
 
@@ -207,9 +209,6 @@ function CreateOrderProduction() {
         programVersion: '',
         indented: '',
         colorProfile: '',
-        specialInk: '',
-        inkCode: '',
-        idPaperCut: 1,
         image: '',
         observations: '',
         statedAt: true,
@@ -234,11 +233,8 @@ function CreateOrderProduction() {
               <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px', fontWeight: 'bold' }}>Crear orden de producción</h1>
             </div>
             <div>
-              {/* Parte superior: Fila completa */}
               <div className="py-4">
                 <div className="flex gap-5 grid-cols-4 mb-3">
-                  {/* {dataApi.map((data, index) => ( */}
-                  {/* <div className="flex linea-horizontal mb-2"> */}
                   <div className="w-2/4">
                     <p><b>Código:</b> {detailsData.quotationClientId}</p>
                     <p><b>Fecha entrega:</b> {formattedDate}</p>
@@ -251,18 +247,11 @@ function CreateOrderProduction() {
 
 
                   </div>
-                  {/* </div> */}
-                  {/* ))} */}
                 </div>
               </div>
             </div>
-
-
-            {/* Parte inferior: Dos columnas */}
             <div className="flex gap-4">
-              {/* Columna izquierda */}
               <div className="w-1/5">
-                {/* Contenido de la columna izquierda */}
                 <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ">
                   <div className="flex gap-5 grid-cols-4 mb-3">
 
@@ -277,94 +266,25 @@ function CreateOrderProduction() {
                 </div>
                 <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300">
                   <div className="flex gap-5 grid-cols-4 mb-3">
-                    {/* {dataApi.map((data, index) => ( */}
-                    {/* <div className="flex linea-horizontal mb-2"> */}
+
                     <div className="w-full">
                       <p><b>Producto:</b> Mug</p>
                       <p><b>Cantidad</b> 5</p>
                     </div>
-                    {/* </div> */}
-                    {/* ))} */}
+
                   </div>
                 </div>
               </div>
-
-
-              {/* Columna derecha */}
               <div className="w-4/5 border-l-[3px] border-gray pl-4">
-                {/* Contenido de la columna derecha */}
-                {/* <hr className="mb-4" /> */}
+
                 <div className="flex gap-5 grid-cols-4 mb-3">
-                  {/* <div className="w-2/4">
-              <p><b>Pieza gráfica:</b> {detailsData.productName}</p>
-              <p><b>Ancho:</b> {detailsData.productHeight}</p>
-              <p><b>Alto:</b> {detailsData.productWidth}</p>
-              <p><b>Cantidad de tintas:</b> {detailsData.inkQuantity}</p>
 
-
-            </div>
-            <div className="w-2/4">
-            <p><b>Cantidad de piezas:</b> {detailsData.productQuantity}</p>
-              <p><b>N° páginas:</b> {detailsData.numberOfPages}</p>
-              <p><b>Especificaciones técnicas:</b> {detailsData.technicalSpecifications}</p>
-              <p><b>Tipo de servicio:</b> {detailsData.typeService}</p>
-            </div> */}
-                  {/* <div className="w-2/4">
-              <label htmlFor="quotationClientDetailId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Detalle cotización
-              </label>
-              <Field
-                type="text"
-                name="quotationClientDetailId"
-                id="quotationClientDetailId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Libreta"
-              />
-            </div> */}
 
 
                 </div>
 
 
                 <div className="flex gap-5 grid-cols-5 mb-3">
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                N° de páginas
-              </label>
-              <Field
-                type="text"
-                name="campo1"
-                id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="100"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Ancho
-              </label>
-              <Field
-                type="text"
-                name="campo2"
-                id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="20.5"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Alto
-              </label>
-              <Field
-                type="text"
-                name="campo3"
-                id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="15"
-              />
-            </div> */}
-
-
                   <div className="w-1/4">
 
 
@@ -372,12 +292,19 @@ function CreateOrderProduction() {
                       Recepción material
                     </label>
                     <Field
+                      as="select"
                       type="text"
                       name="materialReception"
                       id="materialReception"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="Drive"
-                    />
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+                      <option value="0">Selecciona</option>
+                      <option value="USB">USB</option>
+                      <option value="Gmail">Gmail</option>
+                      <option value="Drive">Drive</option>
+                      <option value="Otro">Otro</option>
+                      <option value="No aplica">No aplica</option>
+                    </Field>
+
                   </div>
                   <div className="w-1/4">
                     <label htmlFor="program" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -421,18 +348,7 @@ function CreateOrderProduction() {
 
                 <div className="flex gap-5 grid-cols-5 mb-3">
 
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cantidad tintas
-              </label>
-              <Field
-                type="text"
-                name="campo3"
-                id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="4X1"
-              />
-            </div> */}
+
                   <div className="w-1/4">
                     <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Sangrado
@@ -457,98 +373,7 @@ function CreateOrderProduction() {
                       placeholder="20 lpi"
                     />
                   </div>
-                  {/* <div className="w-1/4">
-                    <label htmlFor="specialInk" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Tinta especial
-                    </label>
-                    <Field
-                      type="text"
-                      name="specialInk"
-                      id="specialInk"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="..."
-                    />
-                  </div>
-                  <div className="w-1/4">
-                    <label htmlFor="inkCode" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Código de tinta
-                    </label>
-                    <Field
-                      type="text"
-                      name="inkCode"
-                      id="inkCode"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="#10054"
-                    />
-                  </div> */}
-                </div>
-                <div className="flex gap-5 grid-cols-5 mb-3">
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Acabados
-              </label>
-              <Field
-                type="text"
-                name="campo1"
-                id="campo1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Adobe"
-              />
-            </div> */}
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Sustratos
-              </label>
-              <Field
-                type="text"
-                name="campo2"
-                id="campo2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="1.0.5"
-              />
-            </div> */}
-                  {/* <div className="w-1/4">
-          <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-            Lineatura
-          </label>
-          <Field
-            as="select"
-            name="campo3"
-            id="campo3"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          >
-            <option value="0">Selecciona</option>
-            <option value="12 lpi">12 lpi</option>
-            <option value="50 lpi">50 lpi</option>
-          </Field>
-        </div> */}
-                  {/* <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Gramaje/ calibre
-              </label>
-              <Field
-                type="text"
-                name="campo3"
-                id="campo3"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="..."
-              />
-            </div> */}
-                  {/* <div className="w-1/4">
-          <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-            Imposición
-          </label>
-          <Field
-            as="select"
-            name="campo3"
-            id="campo3"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          >
-            <option value="0">Selecciona</option>
-            <option value="Giro pinza">Giro pinza</option>
-            <option value="Doble punto">Doble punto</option>
-          </Field>
-        </div> */}
+
 
 
                 </div>
@@ -573,24 +398,6 @@ function CreateOrderProduction() {
                     </Field>
                   </div>
 
-                  {/* <div className="w-1/4">
-                    <label htmlFor="idPaperCut" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Corte de papel
-                    </label>
-                    <Field
-                      as="select"
-                      name="idPaperCut"
-                      id="idPaperCut"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                    >
-                      {/* Opciones del select */}
-                  {/* {paperCutOptions && paperCutOptions.map(paperCut => (
-                        <option key={paperCut.id} value={paperCut.id}>
-                          {paperCut}
-                        </option>
-                      ))}
-                    </Field>
-                  </div> */}
                   <div className="w-1/4">
                     <label htmlFor="idImpositionPlanch" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
@@ -619,7 +426,6 @@ function CreateOrderProduction() {
                       id="idMachine"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
-                      {/* Opciones del select */}
                       {machineOptions && machineOptions.map(machine => (
                         <option key={machine.id} value={machine.id}>
                           {machine}
