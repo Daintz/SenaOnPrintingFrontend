@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
     const response = await checkDocumentExistence(value)
     return !response.exists // Devuelve false si el documento ya existe
   }),
-  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Teléfono debe ser de 10 digitos').max(10, 'Teléfono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   address: Yup.string().required('Campo requerido').min(10, "Debe tener mas de 10 caracteres").max(35, "No puede tener mas de 35 caracteres"),
   email: Yup.string().email("Formato de correo invalidos").required('Campo requerido').test('unique-email', 'El correo ya está en uso', async function (value) {
     const response = await checkEmailExistence(value)
@@ -53,7 +53,7 @@ async function checkDocumentExistence (document) {
 
     return { exists: documentExists }
   } catch (error) {
-    console.error('Error al verificar la existencia del numero de documento:', error)
+    console.error('Error al verificar la existencia del número de documento:', error)
     return { exists: false }
   }
 }
@@ -151,16 +151,16 @@ function CreateUser() {
     {
       key: 3,
       name: 'documentNumber',
-      title: 'Numero de Documento',
+      title: 'Número de Documento',
       type: 'text',
-      placeholder: 'Numero de Documento del Usuario'
+      placeholder: 'Número de Documento del Usuario'
     },
     {
       key: 4,
       name: 'phone',
-      title: 'Telefono',
+      title: 'Teléfono',
       type: 'text',
-      placeholder: 'Telefono del Usuario'
+      placeholder: 'Teléfono del Usuario'
     },
     {
       key: 5,
@@ -172,9 +172,9 @@ function CreateUser() {
     {
       key: 6,
       name: 'email',
-      title: 'Correo Electronico',
+      title: 'Correo Electrónico',
       type: 'email',
-      placeholder: 'Correo Electronico del Usuario'
+      placeholder: 'Correo Electrónico del Usuario'
     },
     {
       key: 7,
@@ -262,12 +262,12 @@ function CreateUser() {
             />
           </div>
           <div key='3' className='w-1/2 ml-2'>
-            <label htmlFor="documentNumber">Numero de Documento</label>
+            <label htmlFor="documentNumber">Número de Documento</label>
             <Field
                 type="text"
                 name="documentNumber"
                 id="documentNumber"
-                placeholder="Numero de Documento del Usuario"
+                placeholder="Número de Documento del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
@@ -279,12 +279,12 @@ function CreateUser() {
         </div>
         <div className='flex mb-2'>
           <div key='4' className='w-1/2 mr-2'>
-            <label htmlFor="phone">Telefono</label>
+            <label htmlFor="phone">Teléfono</label>
             <Field
                 type="text"
                 name="phone"
                 id="phone"
-                placeholder="Telefono del Usuario"
+                placeholder="Teléfono del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
@@ -316,7 +316,7 @@ function CreateUser() {
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Correo Electronico del Usuario"
+                placeholder="Correo Electrónico del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage

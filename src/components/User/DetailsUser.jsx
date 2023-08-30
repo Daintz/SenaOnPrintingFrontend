@@ -10,10 +10,10 @@ function DetailsUser () {
       <p><b>Nombres:</b> {names}</p>
       <p><b>Apellidos:</b> {surnames}</p>
       <p><b>Tipo de Documento:</b> {typeDocumentId}</p>
-      <p><b>Numero de Documento:</b> {documentNumber}</p>
+      <p><b>Número de Documento:</b> {documentNumber}</p>
       <p><b>Telefono:</b> {phone}</p>
       <p><b>Direccion:</b> {address}</p>
-      <p><b>Correo Electronico:</b> {email}</p>
+      <p><b>Correo Electrónico:</b> {email}</p>
       <p><b>Rol:</b> {roleId}</p>
       <p>
       <b>Estado:</b> {' '}

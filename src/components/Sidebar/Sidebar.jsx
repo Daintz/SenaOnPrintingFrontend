@@ -22,7 +22,7 @@ function Sidebar () {
             >
               <BsGear className="w-[1.5rem] h-[1.5rem]" />
               <span className="flex-1 ml-3 text-left whitespace-nowrap">
-                Configuracion
+                Configuración
               </span>
               <svg
                 className="w-6 h-6"
