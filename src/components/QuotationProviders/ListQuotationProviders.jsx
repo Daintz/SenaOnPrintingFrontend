@@ -9,6 +9,7 @@ import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import  ReportQuotationProviders  from './ReportQuotationProviders'
 
+
 const ListQuotationProviders = () => {
 
   const tablePDF = useRef()
@@ -48,6 +49,7 @@ const ListQuotationProviders = () => {
         </span>)
   },
   ], [])
+  
 
   const data = useMemo(()=>(dataApi || []),[dataApi])
   useEffect(() => {
@@ -166,13 +168,13 @@ const ListQuotationProviders = () => {
                         ? row.cells[0].value(row.cells[0])
                         : row.cells[0].render('Cell')}
                     </td>
-                    <td {...row.cells[1].getCellProps()} className="px-4 py-3">
-                          <img src={row.cells[1].value} width={100} height={100}/>
-                    </td>
+                    <a href={`https://localhost:7262/api/QuotationProviders/file/${row.original.id}`} download>
+                       Descargar Cotización
+                      </a>
                     <td {...row.cells[2].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[2].value === 'function'
                         ? row.cells[2].value(row.cells[2])
-                        : row.cells[2].column.id === 'pictogramFileInfo'
+                        : row.cells[2].column.id === 'QuotationProviderFile'
                           ? <img src={row.cells[2].value} width={100} height={100}/>
                           : row.cells[2].render('Cell')}
                     </td>
@@ -188,13 +190,13 @@ const ListQuotationProviders = () => {
                         : row.cells[4].render('Cell')}
                     </td>
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomQuotationProviders
-                        quotationProviders={row.original}
-                      />
+
+                    
                  
                       <ChangeStateButtonQuotationProviders
                         quotationProviders={row.original}
                       />
+                    
                     </td>
                   </tr>
                 )
@@ -235,7 +237,7 @@ const ListQuotationProviders = () => {
               <a
                 className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
-                -
+                
               </a>
             </li>
             <li>
