@@ -103,7 +103,7 @@ async function checkEmailExistence (email) {
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(3, 'Minimo 3 letras').required('Campo requerido'),
   phone: Yup.string().min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'Solo números'),
-  email: Yup.string().required('Campo requerido').email('debe tener @, .com').test('unique-email', 'Correo en uso', async function (value) {
+  email: Yup.string().required('Campo requerido').email('debe tener @, dominio').test('unique-email', 'Correo en uso', async function (value) {
     const response = await checkEmailExistence(value)
     return !response.exists // Devuelve false si el correo ya existe
   }),
@@ -243,18 +243,6 @@ function CreateClient () {
                 formatOptionLabel={(option) => (
                   <div>{option.label}</div>
                 )}
-                styles={{
-                  control: (provided, state) => ({
-                    ...provided,
-                    borderColor: state.isSelected ? 'green' : 'gray',
-                    boxShadow: state.isSelected ? '0 0 0 1px green' : 'none'
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected ? 'green' : 'white',
-                    color: state.isSelected ? 'white' : 'black'
-                  })
-                }}
                 />
                 <ErrorMessage
                   name="regional"
