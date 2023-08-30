@@ -81,7 +81,7 @@ function UpdateMachine () {
   </div>
   <div className="w-2/4">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Ancho minimo
+      Ancho mínimo
     </label>
     <Field
       type="Number"
@@ -101,7 +101,7 @@ function UpdateMachine () {
   </div>
   <div className="w-1/4">
     <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-     Alto minimo
+     Alto mínimo
     </label>
     <Field
       type="Number"
@@ -123,7 +123,7 @@ function UpdateMachine () {
 <div className="flex gap-5 grid-cols-5 mb-3">
   <div className="w-1/4">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
- Ancho maximo
+ Ancho máximo
     </label>
     <Field
       type="Number"
@@ -142,7 +142,7 @@ function UpdateMachine () {
   </div>
   <div className="w-1/4">
     <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Alto maximo
+      Alto máximo
     </label>
     <Field
       type="Number"
@@ -201,9 +201,9 @@ function UpdateMachine () {
 
 <button
   type="submit"
-  className="col-span-3 w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+  className="col-span-3 w-full text-white border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
 >
-  Actualizar Maquina 
+  Actualizar Máquina 
 </button>
 </Form>
           
@@ -217,14 +217,15 @@ export function UpdateButtomMachine ({ machine }) {
   const dispatch = useDispatch()
   const handleEdit = (data) => {
     dispatch(setWidth({ width: '-[1500px]' }))
-    dispatch(openModal({ title: 'Editar Maquinas' }))
+    dispatch(openModal({ title: 'Editar Máquinas' }))
     dispatch(setAction({ action: 'editing' }))
     dispatch(openEditing({ editingData: data }))
   }
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" 
+    onClick={() => {
       handleEdit(machine)
     }}>
       <svg

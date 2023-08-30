@@ -21,10 +21,10 @@ const ListMachine = () => {
   const columns = useMemo(() => [
 
     { Header: 'Nombre', accessor: 'name' },
-    { Header: 'Ancho minimo  ', accessor: 'minimumHeight' },
-    { Header: 'Alto minimo ', accessor: 'minimumWidth' },
-    { Header: 'Ancho maximo ', accessor: 'maximumHeight' },
-    { Header: 'Alto maximo', accessor: 'maximumWidth' },
+    { Header: 'Ancho mínimo  ', accessor: 'minimumHeight' },
+    { Header: 'Alto mínimo ', accessor: 'minimumWidth' },
+    { Header: 'Ancho máximo ', accessor: 'maximumHeight' },
+    { Header: 'Alto máximo', accessor: 'maximumWidth' },
     { Header: 'Costo por hora', accessor: 'costByUnit' },
     { Header: 'Costo por unidad', accessor: 'costByHour' },
 

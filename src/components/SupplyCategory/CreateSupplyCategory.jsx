@@ -14,8 +14,8 @@ import { toast } from 'react-toastify'
 import { FaAsterisk } from 'react-icons/fa'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  name: Yup.string().required('Campo requerido').min(3, 'Minimo 3 caracteres').max(30, 'Maximo 30 caracteres'),
+  description: Yup.string().required('Campo requerido').min(20, 'Minimo 20 caracteres').max(255, 'Maximo 255 caracteres')
 })
 
 function CreateSupplyCategory () {
@@ -41,14 +41,14 @@ function CreateSupplyCategory () {
     {
       key: 0,
       name: 'name',
-      title: 'Nombre categoria insumo',
+      title: 'Nombre categoría insumo',
       type: 'text',
       placeholder: 'Nombre'
     },
     {
       key: 1,
       name: 'description',
-      title: 'Descripción categoria insumo',
+      title: 'Descripción categoría insumo',
       type: 'textarea',
       placeholder: 'Descripción'
     }
@@ -104,7 +104,7 @@ function CreateSupplyCategory () {
           type="submit"
           className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
-          Crear categoria insumo
+          Crear categoría insumo
         </button>
       </Form>
     </Formik>
@@ -116,7 +116,7 @@ export function CreateButtonSupplyCategory () {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: 'w-[400px]' }))
-    dispatch(openModal({ title: 'Crear categoria de insumos' }))
+    dispatch(openModal({ title: 'Crear categoría de insumos' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?
@@ -140,7 +140,7 @@ export function CreateButtonSupplyCategory () {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear categoria insumo
+      Crear categoría insumo
     </button>
   )
 }
