@@ -59,7 +59,7 @@ async function checkEmailExistence(email) {
 }
 
 const validationSchema = Yup.object().shape({
-  nitCompany: Yup.string().min(9, 'Minimo 9 digitos').max(15, 'Maximo 15 digitos')
+  nitCompany: Yup.string().min(8, 'Minimo 8 digitos').max(15, 'Maximo 15 digitos')
     .required('Campo requerido')
     .test('unique-NIT', 'El NIT ya se encuentra registrado', async function (value) {
       const response = await checkNITExistence(value);
@@ -73,13 +73,13 @@ const validationSchema = Yup.object().shape({
       const response = await checkNameCompanyExistence(value);
       return !response.exists; // Devuelve false si el NIT ya existe
     }),
-  email: Yup.string().email('Correo no valido')
+  email: Yup.string()
     .required('Campo requerido')
     .test('unique-email', 'El correo ya se encuentra registrado', async function (value) {
       const response = await checkEmailExistence(value);
       return !response.exists; // Devuelve false si el correo ya existe
     }),
-  phone: Yup.number('digite solo numeros').min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido'),
+  phone: Yup.string('digite solo numeros').min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido'),
   companyAddress: Yup.string().required('Campo requerido').min(7, 'Minimo 10 digitos').max(100, 'Maximo 100 digitos')
 });
 

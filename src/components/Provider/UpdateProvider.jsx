@@ -55,16 +55,16 @@ function updateProvider() {
     {
       key: 3,
       name: 'phone',
-      title: 'Telefono',
+      title: 'Teléfono',
       type: 'text',
-      placeholder: 'Telefono de la empresa'
+      placeholder: 'Teléfono de la empresa'
     },
     {
       key: 4,
       name: 'companyAddress',
-      title: 'Direccion de la empresa',
+      title: 'Dirección de la empresa',
       type: 'text',
-      placeholder: 'Direccion de la empresa'
+      placeholder: 'Dirección de la empresa'
     }
   ]
 
