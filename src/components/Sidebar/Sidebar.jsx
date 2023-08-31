@@ -250,7 +250,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyCategory' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3">Categoria de Insumos</span>
+                  <span className="ml-3">Categoría de Insumos</span>
                 </Link>
               </li>
               <li>
