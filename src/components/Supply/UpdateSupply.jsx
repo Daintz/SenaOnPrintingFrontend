@@ -167,248 +167,272 @@ function UpdateSupply() {
       validationSchema={validationSchema}
     >
       {({ values, setFieldValue }) => (        
-        <Form>
+      <Form>
 
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Nombre insumo
-              </label>
-              <Field
-                type="text"
-                name="name"
-                id="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Name"
-              />
-              <ErrorMessage
-                name="name"
-
-                component="div"
-                className="text-red-500"
-              />
-
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Indicadores de peligro
-              </label>
-              <Field
-                type="text"
-                name="dangerIndicators"
-                id="dangerIndicators"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Indicadores de peligro"
-              />
-              <ErrorMessage
-                name="dangerIndicators"
-
-                component="div"
-                className="text-red-500"
-              />
-
-
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Instrucciones
-              </label>
-              <Field
-                type="text"
-                name="useInstructions"
-                id="useInstructions"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Instrucciones"
-              />
-              <ErrorMessage
-                name="useInstructions"
-
-                component="div"
-                className="text-red-500"
-              />
-
-            </div>
-          </div>
-
-          <div className="flex gap-5 grid-cols-5 mb-3">
-            <div className="w-1/4">
-              <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Consejos
-              </label>
-              <Field
-                type="text"
-                name="advices"
-                id="advices"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Consejos"
-              />
-              <ErrorMessage
-                name="advices"
-
-                component="div"
-                className="text-red-500"
-              />
-
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="supplyType" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Tipo insumo
-              </label>
-              <Field
-                as="select"
-                name="supplyType"
-                id="supplyType"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-              >
-                <option value={1}>Devolutivo</option>
-                <option value={2}>Consumible</option>
-              </Field>
-              <ErrorMessage
-                name="supplyType"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="sortingWord" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Tipo de peligrosidad
-              </label>
-              <Field
-                as="select"
-                name="sortingWord"
-                id="sortingWord"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-              >
-                <option value={1}>Peligro</option>
-                <option value={2}>Atención</option>
-              </Field>
-              <ErrorMessage
-                name="sortingWord"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Cantidad
-              </label>
-              <Field
-                type="number"
-                name="quantity"
-                id="quantity"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Cantidad"
-              />
-              <ErrorMessage
-                name="quantity"
-
-                component="div"
-                className="text-red-500"
-              />
-
-            </div>
-            <div className="w-1/4">
-              <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Costo promedio
-              </label>
-              <Field
-                type="number"
-                name="averageCost"
-                id="averageCost"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                placeholder="Costo promedio"
-              />
-              <ErrorMessage
-                name="averageCost"
-
-                component="div"
-                className="text-red-500"
-              />
-
-            </div>
-          </div>
-
-          <div className="flex gap-5 grid-cols-5 mb-3">
-
+      <div className="flex gap-5 grid-cols-5 mb-3">
+        <div className="w-1/2">
+          <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+           Nombre
+          </label>
+          <Field
+            type="text"
+            name="name"
+            id="Nombre"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="Nombre"
+          />
+             <ErrorMessage
+            name="name"
+   
+            component="div"
+            className="text-red-500"
+          />
+     
+        </div>
+        <div className="w-1/4">
+      <label htmlFor="supplyType" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+      Tipo insumo
+      </label>
+      <Field
+        as="select"
+        name="supplyType"
+        id="supplyType"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      >
+        <option value={1}>Devolutivo</option>
+        <option value={2}>Consumible</option>
+      </Field>
+      <ErrorMessage
+        name="supplyType"
+        component="div"
+        className="text-red-500"
+      />
+    </div>
+    <div className="w-1/4">
+      <label htmlFor="sortingWord" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+        Tipo de peligrosidad
+      </label>
+      <Field
+        as="select"
+        name="sortingWord"
+        id="sortingWord"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      >
+        <option value={1}>Peligro</option>
+        <option value={2}>Atención</option>
+      </Field>
+      <ErrorMessage
+        name="sortingWord"
+        component="div"
+        className="text-red-500"
+      />
+    </div>
+        <div className="w-1/1">
+          <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+            Cantidad
+          </label>
+          <Field
+            type="number"
+            name="quantity"
+            id="quantity"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="0"
+          />
+                <ErrorMessage
+            name="quantity"
+   
+            component="div"
+            className="text-red-500"
+          />
            
-          <div className="w-2/4">
-            <label htmlFor="unitMeasuresId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Unidad de medida
-            </label>
-            <Field name="unitMeasuresId">
-              {({ field }) => (
-                <Select
-                  {...field}
-                  options={unitMeasuresIdOptions}
-                  isMulti
-                  value={selectedUnitMeasures}
-                  onChange={(selectedOptions) => {
-                    setSelectedUnitMeasures(selectedOptions);
-                    setFieldValue(
-                      "unitMeasuresId",
-                      selectedOptions.map((option) => option.value)
-                    );
-                  }}
-                />
-              )}
-            </Field>
-          </div>
+        </div>
+        <div className="w-1/4">
+          <label htmlFor="averageCost" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+            Costo promedio
+          </label>
+          <Field
+            type="number"
+            name="averageCost"
+            id="averageCost"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="0"
+          />
+            <ErrorMessage
+            name="averageCost"
+            component="div"
+            className="text-red-500"
+          />
 
-          <div className="w-2/4">
-            <label htmlFor="supplyPictogramsId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Pictogramas
-            </label>
-            <Field name="supplyPictogramsId">
-              {({ field }) => (
-                <Select
-                  {...field}
-                  options={SupplyPictogramsIdOptions}
-                  isMulti
-                  value={selectedSupplyPictograms}
-                  onChange={(selectedOptions) => {
-                    setSelectedSupplyPictograms(selectedOptions);
-                    setFieldValue(
-                      "supplyPictogramsId",
-                      selectedOptions.map((option) => option.value)
-                    );
-                  }}
-                />
-              )}
-            </Field>
-          </div>
+        </div>
+      </div>
+      <div className="flex gap-5 grid-cols-5 mb-3">
+    <div className="w-2/4">
+      <label htmlFor="unitMeasuresId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+        Unidad de medida
+      </label>
+      <Field name="unitMeasuresId">
+        {({ field }) => (
+          <Select
+            {...field}
+            options={unitMeasuresIdOptions}
+            isMulti
+            value={selectedUnitMeasures}
+            onChange={(selectedOptions) =>{
+              setSelectedUnitMeasures(selectedOptions);
+              setFieldValue(
+                "unitMeasuresId",
+                selectedOptions.map((option) => option.value)
+              );
+            }}
+          />
+        )}
+      </Field>
+    </div>
+    
+    <div className="w-2/4">
+      <label htmlFor="supplyPictogramsId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+        Pictogramas de insumo
+      </label>
+      <Field name="supplyPictogramsId">
+        {({ field }) => (
+          <Select
+            {...field}
+            options={SupplyPictogramsIdOptions}
+            isMulti
+            value={selectedSupplyPictograms}
+            onChange={(selectedOptions) => {
+              setSelectedSupplyPictograms(selectedOptions);
+              setFieldValue(
+                "supplyPictogramsId",
+                selectedOptions.map((option) => option.value)
+              );
+            }}
+          />
+        )}
+      </Field>
+    </div>
 
-          <div className="w-2/4">
-            <label htmlFor="supplyCategoriesId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Categorias de insumos
-            </label>
-            <Field name="supplyCategoriesId">
-              {({ field }) => (
-                <Select
-                  {...field}
-                  options={supplyCategoriesIdOptions}
-                  isMulti
-                  value={selectedSupplyCategories}
-                  onChange={(selectedOptions) => {
-                    setSelectedSupplyCategories(selectedOptions);
-                    setFieldValue(
-                      "supplyCategoriesId",
-                      selectedOptions.map((option) => option.value)
-                    );
-                  }}
-                />
-              )}
-            </Field>
-          </div>
-          
-          </div>
+    <div className="w-2/4">
+      <label htmlFor="supplyCategoriesId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+        Categorías de insumo
+      </label>
+      <Field name="supplyCategoriesId">
+        {({ field }) => (
+          <Select
+            {...field}
+            options={supplyCategoriesIdOptions}
+            isMulti
+            value={selectedSupplyCategories}
+            onChange={(selectedOptions) => {
+              setSelectedSupplyCategories(selectedOptions);
+              setFieldValue(
+                "supplyCategoriesId",
+                selectedOptions.map((option) => option.value)
+              );
+            }}
+          />
+        )}
+        </Field>
+    </div>
+    </div>
 
-          <button
-            type="submit"
-            className="col-span-3 w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Actualizar insumo
-          </button>
-        </Form>
+      <div className="flex gap-5 grid-cols-5 mb-3">
+        <div className="w-2/4">
+          <label htmlFor="advices" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+       Consejos
+          </label>
+          <Field
+            as="textarea"
+            type="text"
+            name="advices"
+            id="advices"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            rows="6" cols="40"
+            placeholder="Consejos"
+
+          />
+              <ErrorMessage
+            name="advices"
+            component="div"
+            className="text-red-500"
+          />
+
+        </div>
+        <div className="w-2/4">
+          <label htmlFor="dangerIndicators" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+          Indicadores de peligro
+          </label>
+          <Field
+            as="textarea"
+            type="text"
+            name="dangerIndicators"
+            id="dangerIndicators"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            rows="6" cols="40"
+            placeholder="Indicadores de peligro"
+          />
+              <ErrorMessage
+            name="dangerIndicators"
+            component="div"
+            className="text-red-500"
+          />
+           
+
+        </div>
+        <div className="w-2/4">
+          <label htmlFor="useInstructions" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+           Instrucciones
+          </label>
+          <Field
+            as="textarea"
+            type="text"
+            name="useInstructions"
+            id="useInstructions"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            rows="6" cols="40"
+            placeholder="Instrucciones"
+          />
+                <ErrorMessage
+            name="useInstructions"
+            component="div"
+            className="text-red-500"
+          />
+           
+        </div>
+
+        {/* <div className="w-1/8">
+          <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+            Tipo insumo
+          </label>
+          <Field
+            as="select"
+            name="supplyType"
+            id="supplyType"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            placeholder="Tipo insumo"
+          />
+              <option value={1}>Devolutivo</option>
+              <option value={2}>Consumible</option>
+              
+                <ErrorMessage
+            name="supplyType"
+   
+            component="div"
+            className="text-red-500"
+          />
+           
+        </div> */}
+
+       </div>
+    
+      <button
+        type="submit"
+        className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+      >
+        Actualizar Insumo
+      </button>
+      <button type="submit"></button>
+    </Form>
       )}
     </Formik>
   )

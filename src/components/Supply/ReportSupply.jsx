@@ -10,10 +10,10 @@ const ReportSupply = ({ dataApi }) => {
   })
 
   const columns = [
-    { key: 'name', name: 'Nombre insumo' },
-    { key: 'dangerIndicators', name: 'Indicadores de peligro insumo' },
-    { key: 'useInstructions', name: 'Instrucciones' },
-    { key: 'advices', name: 'Consejos' },
+    { key: 'name', name: 'Nombre' },
+    // { key: 'dangerIndicators', name: 'Indicadores de peligro insumo' },
+    // { key: 'useInstructions', name: 'Instrucciones' },
+    // { key: 'advices', name: 'Consejos' },
     { key: 'supplyType', name: 'Tipo insumo' },
     { key: 'sortingWord', name: 'Tipo peligrosidad' },
     { key: 'quantity', name: 'Cantidad' },
@@ -27,9 +27,9 @@ const ReportSupply = ({ dataApi }) => {
     ? dataApi.map(supply => ({
       id: supply.id,
       name: supply.name,
-      dangerIndicators: supply.dangerIndicators,
-      useInstructions: supply.useInstructions,
-      advices: supply.advices,
+      // dangerIndicators: supply.dangerIndicators,
+      // useInstructions: supply.useInstructions,
+      // advices: supply.advices,
       supplyType: supply.supplyType === 1 ? 'Devolutivo' : 'Consumible',
       sortingWord: supply.sortingWord === 1 ? 'Peligro' : 'Atención',
       quantity: supply.quantity,
@@ -77,11 +77,31 @@ const ReportSupply = ({ dataApi }) => {
             >
               {supply.name}
             </th>
-            <td className="px-4 py-3">{supply.dangerIndicators}</td>
+            {/* <td className="px-4 py-3">{supply.dangerIndicators}</td>
             <td className="px-4 py-3">{supply.useInstructions}</td>
-            <td className="px-4 py-3">{supply.advices}</td>
-            <td className="px-4 py-3">{supply.supplyType}</td>
-            <td className="px-4 py-3">{supply.sortingWord}</td>
+            <td className="px-4 py-3">{supply.advices}</td> */}
+            <td className="px-4 py-3">
+                <span
+                  className={`rounded-full px-2 py-1 text-xs font-medium ${
+                    supply.supplyType === 'Devolutivo'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                  }`}
+                >
+                  {supply.supplyType}
+                </span>
+              </td>
+              <td className="px-4 py-3">
+                <span
+                  className={`rounded-full px-2 py-1 text-xs font-medium ${
+                    supply.sortingWord === 'Peligro'
+                      ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                  }`}
+                >
+                  {supply.sortingWord}
+                </span>
+              </td>
             <td className="px-4 py-3">{supply.quantity}</td>
             <td className="px-4 py-3">{supply.averageCost}</td>
             <td className="px-6 py-4">

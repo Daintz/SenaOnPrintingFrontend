@@ -30,9 +30,9 @@ const ListSupplyDetails = () => {
   // ?
 
   const columns = useMemo(() => [
-    { Header: 'Descripcion', accessor: 'description' },
+    { Header: 'Lote', accessor: 'id' },
+    { Header: 'Descripción', accessor: 'description' },
     { Header: 'Costo insumo', accessor: 'supplyCost' },
-    { Header: 'Lote', accessor: 'batch' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
@@ -188,7 +188,7 @@ const ListSupplyDetails = () => {
           className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
         >
           <span className="text-sm font-normal text-gray-500">
-            Pagina {' '}
+            Página {' '}
             <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
           </span>
           <ul className="inline-flex items-stretch -space-x-px">

@@ -29,10 +29,10 @@ function ChangeStateSupplyDetails () {
 
   return (
     <>
-      <p className="text-lg">Para cambiar de estado este producto debes darle click a <b>aceptar</b>.</p>
+      <p className="text-lg">Para cambiar de estado la compra de insumos debes darle click a <b>aceptar</b>.</p>
       <div className="px-6 py-4 grid grid-cols-2  place-content-center" >
-        <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Aceptar</button>
-        <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
+        <button type="button" className="text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Aceptar</button>
+        <button type="button" className="text-white bg-red-900 hover:bg-red-800 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
       </div>
     </>
    

@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { GrView } from 'react-icons/gr'
+import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsSupplyDetails () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { description, supplyCost, batch, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
+  const { id, description, supplyCost, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
   return (
     <>
+      <p><b>Lote:</b> {id}</p>
       <p><b>Descripcion:</b> {description}</p>
       <p><b>Costo insumo:</b> {supplyCost}</p>
-      <p><b>Lote:</b> {batch}</p>
       <p><b>Fecha de entrada:</b> {entryDate}</p>
       <p><b>Fecha de caducidad:</b> {expirationDate}</p>
       <p><b>Insumo:</b> {supplyId}</p>
@@ -44,7 +44,7 @@ export function DetailsButtomSupplyDetails ({ supplyDetails }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <GrView className="opacity-60 h-5 w-5 mr-2" />
+        <BsClipboard2 className="h-5 w-5 mr-2" />
       </button>
   )
 }

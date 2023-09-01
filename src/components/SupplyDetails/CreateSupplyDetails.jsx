@@ -19,9 +19,9 @@ import { uid } from 'uid';
 
 
 const validationSchema = Yup.object().shape({
-  description: Yup.string().required('Campo requerido'),
+  description: Yup.string(),
   supplyCost: Yup.number().required('Campo requerido'),
-  batch: Yup.string(),
+  // batch: Yup.string(),
   entryDate: Yup.date().required('Campo requerido'),
   expirationDate: Yup.date().required('Campo requerido'),
   supplyId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un insumo'),
@@ -35,7 +35,8 @@ const getSupply = () => {
       (result) => {
         const supplyId = result.data.map((Supply) => ({
           'label': Supply.name,
-          'value': Supply.id
+          'value': Supply.id,
+          'price': Supply.id.averageCost
         }));
         resolve(supplyId);
       },
@@ -68,8 +69,8 @@ const getWarehause = () => {
     clientAxios.get('/Warehause').then(
       (result) => {
         const warehouseId = result.data.map((Warehause) => ({
-          'label': Warehause.warehouseTypeId,
-          'value': Warehause.warehouseTypeId
+          'label': Warehause.ubication,
+          'value': Warehause.id
         }));
         resolve(warehouseId);
       },
@@ -89,7 +90,9 @@ function CreateSupplyDetails() {
   const [cashierName, setCashierName] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [items, setItems] = useState([]);
-  const [batchNumber, setBatchNumber] = useState(1);
+  const [tax, setTax] = useState('');
+  const [discount, setDiscount] = useState('');
+  // const [batchNumber, setBatchNumber] = useState(1);
   const [entryDate, setEntryDate] = useState(new Date());
   // const optionsList = [
   //   {"value": "", "text": "Seleccione un insumo"},
@@ -104,35 +107,30 @@ const reviewInvoiceHandler = (event) => {
 };
 
 const addNextInvoiceHandler = () => {
-  const currentYear = entryDate.getFullYear();
-  const nextBatchNumber = batchNumber + 1;
-  const formattedBatchNumber = nextBatchNumber.toString().padStart(3, '0');
-  const newBatchNumber = `${formattedBatchNumber}-${currentYear}`;
-  setBatchNumber(nextBatchNumber);
   setInvoiceNumber((prevNumber) => incrementString(prevNumber));
   setItems([
     {
       id: uid(6),
       name: '',
       qty: 1,
-
+      price: '1.00',
     },
   ]);
-  setFieldValue('batch', newBatchNumber);
 };
 
 const addItemHandler = (event) => {
-  const name = uid(6);
-  const Supply = event.target[event.target.selectedIndex]
-  console.log()
-  setItems((prevItem) => [
+  const selectedOption = event.target[event.target.selectedIndex];
+  const supplyname = selectedOption.label;
+  const supplyPrice = selectedOption.price;
+
+  setItems((prevItems) => [
+    ...prevItems,
     {
-      id: name,
-      name: name,
+      id: uid(6),
+      name: supplyname,
       qty: 1,
-      
+      price: supplyPrice,
     },
-    ...prevItem,
   ]);
 };
 
@@ -159,13 +157,16 @@ const edtiItemHandler = (event) => {
   setItems(newItems);
 };
 
-const handleEntryDateChange = (date) => {
-  setEntryDate(date);
-  const currentYear = date.getFullYear();
-  const formattedBatchNumber = (batchNumber % 1000).toString().padStart(3, '0');
-  const newBatchNumber = `${formattedBatchNumber}-${currentYear}`;
-  setFieldValue('batch', newBatchNumber);
-};
+const subtotal = items.reduce((prev, curr) => {
+  if (curr.name.trim().length > 0)
+    return prev + Number(curr.price * Math.floor(curr.qty));
+  else return prev;
+}, 0);
+const taxRate = (tax * subtotal) / 100;
+const discountRate = (discount * subtotal) / 100;
+const total = subtotal - discountRate + taxRate;
+
+
   
 
   const fetchOptions = () => {
@@ -212,96 +213,42 @@ const handleEntryDateChange = (date) => {
       initialValues={{
         description: '',
         supplyCost: 0,
-        batch: '',
+        // batch: '',
         entryDate: currentDate, //currentDate, Asignar la fecha actual al campo de fecha de entrada
         expirationDate: '',
         supplyId: 0,
         providerId: 0,
         warehouseId: 0,
-        suppliesLabel: '',
         securityFile: ''
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
       {({ setFieldValue, values, handleSubmit, errors, touched }) => (
-      <Form onSubmit={reviewInvoiceHandler}
-       className="space-y-6">
-      <div className='flex mb-2'>
-        <div  className='w-1/2 mr-2'>
-          <label htmlFor="description">Descripción</label>
-          <Field
-              type="text"
-              name="description"
-              id="description"
-              placeholder="Descripción"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          />
-          <ErrorMessage
-            name="description"
-            component="div"
-            className="text-red-500"
-          />
-        </div>
-        <div  className='w-1/4 ml-2'>
-          <label htmlFor="supplyCost">Costo insumo</label>
-          <Field
-              type="number"
-              name="supplyCost"
-              id="supplyCost"
-              placeholder="Costo insumo"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          />
-          <ErrorMessage
-            name="supplyCost"
-            component="div"
-            className="text-red-500"
-          />
-        </div>
-      </div>
-      <div className='flex mb-2'>
-      <div  className='w-1/4 ml-2'>
-          <label htmlFor="batch">Lote</label>
-          <Field
-              type="text"
-              name="batch"
-              id="batch"
-              placeholder="Lote"
-              value={batchNumber.toString().padStart(3, '0') + '-' + new Date().getFullYear()}
-              readOnly
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-              
-          />
-          <ErrorMessage
-            name="batch"
-            component="div"
-            className="text-red-500"
-          />
-        </div>
-        
-        {/* <div  className='w-1/4 mr-2'>
-          <label htmlFor="initialQuantity">Cantidad inicial</label>
-          <Field
-              type="number"
-              name="initialQuantity"
-              id="initialQuantity"
-              placeholder="Cantidad inicial"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          />
-          <ErrorMessage
-            name="initialQuantity"
-            component="div"
-            className="text-red-500"
-          />
-        </div> */}
-        <div className="w-1/4 ml-2">
+        <Form
+        onSubmit={reviewInvoiceHandler}
+        >
+        <div className="flex justify-between w-full">
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-4/4">
+          <b>Codigo : 0001</b>
+            </div>
+            <div className="w-4/4">
+             <b>Fecha: {new Date().toISOString().split('T')[0]}</b>
+            </div>
+          </div>
+          <hr className="mb-4" />
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-1/4 ml-2">
               <label htmlFor="entryDate">Fecha de entrada</label>
               <Field
                 type="date"
                 name="entryDate"
                 id="entryDate"
                 placeholder="Fecha de entrada"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 min={new Date().toISOString().split('T')[0]}
               />
               {errors.entryDate && touched.entryDate && (
@@ -316,41 +263,24 @@ const handleEntryDateChange = (date) => {
               name="expirationDate"
               id="expirationDate"
               placeholder="Fecha de caducidad"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-          />
-          <ErrorMessage
-            name="expirationDate"
-            component="div"
-            className="text-red-500"
-          />
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              min={new Date().toISOString().split('T')[0]}
+              />
+              {errors.entryDate && touched.entryDate && (
+                <div className="text-red-500">{errors.entryDate}</div>
+              )}
         </div>
-        
-      <div className='flex mb-2'>
-        
-        <div className='flex mb-2'>
-        {/* <div  className='w-1/9 ml-2'>
-          <label htmlFor="supplyId">Insumo</label>
-          <br />
-          <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
-            <option value={0}>Seleccione un insumo</option>
-            {supplyOptions.map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </Field>
-          <ErrorMessage
-            name="supplyId"
-            component="div"
-            className="text-red-500"
-          />
-        </div> */}
-        <div  className='w-1/9 ml-2'>
+        </div>
+
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div  className='w-1/4 ml-2'>
           <label htmlFor="providerId">Proveedor</label>
           <br />
-          <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+          <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
             <option value={0}>Seleccione un proveedor</option>
             {providerOptions.map(option => (
               <option key={option.value} value={option.value}>{option.label}</option>
-              
+
             ))}
           </Field>
           <ErrorMessage
@@ -359,11 +289,11 @@ const handleEntryDateChange = (date) => {
             className="text-red-500"
           />
         </div>
-        </div>
-        <div  className='w-1/9 ml-2'>
+
+        <div  className='w-1/4 ml-2'>
           <label htmlFor="warehouseId">Bodega</label>
           <br />
-          <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+          <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
             <option value={0}>Seleccione una bodega</option>
             {warehauseOptions.map(option =>  (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -375,72 +305,129 @@ const handleEntryDateChange = (date) => {
             className="text-red-500"
           />
         </div>
-      </div>
-      </div>
-      <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6">
+        </div>
+        <div className="flex gap-5 grid-cols-5 mb-3">
+        <div  className='w-1/2 mr-2'>
+          <label htmlFor="description">Descripción</label>
+          <Field
+              as="textarea"
+              type="text"
+              name="description"
+              id="description"
+              placeholder="Descripción"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              rows="6" cols="100"
+          />
+          <ErrorMessage
+            name="description"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
+        
+          </div>
+          <div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="flex flex-col items-end space-y-2 pt-6">
+          <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+        
+          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
+            <span className="font-bold">Total:</span>
+            <span className="font-bold">
+              ${total % 1 === 0 ? total : total.toFixed(2)}
+            </span>
+          </div>
+            </div>
+        </div>
+            <center>
+            <button
+                  type="submit"
+                  className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-ring-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Crear Compra de Insumos
+                </button>
+          </center>
+          </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 rounded-md bg-white shadow-sm md:p-10 w-[700px]">
         <label
           htmlFor="supplyId"
           className="col-start-2 row-start-1 text-sm font-bold md:text-base"
         >
           Seleccione un insumo:
         </label>
-        <Field name="supplyId" as="select" onChange={addItemHandler} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+        <Field name="supplyId" as="select" onChange={addItemHandler} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" >
             <option value={0}>Seleccione un insumo</option>
             {supplyOptions.map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+              <option key={option.value} price={option.price} value={option.value}>{option.label}</option>
             ))}
           </Field>
-          <ErrorMessage
-            name="supplyId"
-            component="div"
-            className="text-red-500"
-          />
-        {/* <button
-          className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
-          type="button"
-          onClick={addItemHandler}
-        >
-          Add Item
-        </button> */}
-        <table className="w-full p-4 text-left">
-          <thead>
-            <tr className="border-b border-gray-900/10 text-sm md:text-base">
-              <th>Insumo</th>
-              <th>Cantidad</th>
-              <th className="text-center">Accion</th>
-            </tr>
-          </thead>
-          <tbody>
+              <div className="w-full md:w-auto  md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+              <CreateButtomSupplyDetails />
+            </div>
+            <br></br>
+            <table className="w-full p-4 text-left">
+              <thead>
+                <tr className="border-b border-gray-900/10 text-xs md:text-base">
+                  <th className='w-2/4'>Insumo</th>
+                  <th className='w-1/4 text-center'>Cantidad</th>
+                  <th className="w-1/4 text-center">Precio</th>
+                  <th className="w-1/4 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+              {/* {items.map(item => (
+                  <tr key={item.id} className="border-b border-gray-900/10">
+                    <td className="w-2/4 py-2">{item.name}</td>
+                    <td className="w-1/4 py-2 text-center">
+                      <input
+                        type="number"
+                        value={item.qty}
+                        onChange={event => edtiItemHandler(event, item.id)}
+                        name="qty"
+                        className="w-4/5 text-center bg-gray-100 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5"
+                      />
+                    </td>
+                    <td className="w-1/4 py-2 text-center">${item.price}</td>
+                    <td className="w-1/4 py-2 text-center">
+                      <button
+                        onClick={() => deleteItemHandler(item.id)}
+                        className="text-red-600 hover:text-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5"
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))} */}
             {items.map((item) => (
               <InvoiceItem
                 key={item.id}
                 id={item.id}
                 name={item.name}
                 qty={item.qty}
+                price={item.price}
                 onDeleteItem={deleteItemHandler}
                 onEdtiItem={edtiItemHandler}
-
               />
             ))}
           </tbody>
         </table>
         
-      </div>
-                        
-
-      </div>
-      <button
-        type="submit"
-        className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-      >
-        Crear compra de insumo
-      </button>
-    </Form>
+            </div>
+        </div>
+        </div>
+        
+        </Form>
       )}
     </Formik>
   )
 }
+
 
 export function CreateButtomSupplyDetails () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
@@ -454,7 +441,7 @@ export function CreateButtomSupplyDetails () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
@@ -753,7 +740,7 @@ export default CreateSupplyDetails
 //                 name="description"
 //                 id="description"
 //                 placeholder="Descripción"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="description"
@@ -768,7 +755,7 @@ export default CreateSupplyDetails
 //                 name="supplyCost"
 //                 id="supplyCost"
 //                 placeholder="Costo insumo"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="supplyCost"
@@ -785,7 +772,7 @@ export default CreateSupplyDetails
 //                 name="batch"
 //                 id="batch"
 //                 placeholder="Lote"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="batch"
@@ -801,7 +788,7 @@ export default CreateSupplyDetails
 //                 name="initialQuantity"
 //                 id="initialQuantity"
 //                 placeholder="Cantidad inicial"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="initialQuantity"
@@ -816,7 +803,7 @@ export default CreateSupplyDetails
 //                 name="entryDate"
 //                 id="entryDate"
 //                 placeholder="Fecha de entrada"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="entryDate"
@@ -833,7 +820,7 @@ export default CreateSupplyDetails
 //                 name="expirationDate"
 //                 id="expirationDate"
 //                 placeholder="Fecha de caducidad"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="expirationDate"
@@ -849,7 +836,7 @@ export default CreateSupplyDetails
 //                 name="actualQuantity"
 //                 id="actualQuantity"
 //                 placeholder="Cantidad actual"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //             />
 //             <ErrorMessage
 //               name="actualQuantity"
@@ -860,7 +847,7 @@ export default CreateSupplyDetails
 //           <div key='7' className='w-1/9 ml-2'>
 //             <label htmlFor="supplyId">Id insumo</label>
 //             <br />
-//             <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+//             <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
 //               <option value="0">Seleccione un insumo</option>
 //               {supplyOptions.map(option => (
 //                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -875,7 +862,7 @@ export default CreateSupplyDetails
 //           <div key='8' className='w-1/9 ml-2'>
 //             <label htmlFor="providerId">Id proveedor</label>
 //             <br />
-//             <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+//             <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
 //               <option value="0">Seleccione un proveedor</option>
 //               {providerOptions.map(option => (
 //                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -891,7 +878,7 @@ export default CreateSupplyDetails
 //           <div key='9' className='w-1/9 ml-2'>
 //             <label htmlFor="warehouseId">Id bodega</label>
 //             <br />
-//             <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+//             <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
 //               <option value="0">Seleccione una bodega</option>
 //               {warehauseOptions.map(option =>  (
 //                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -915,7 +902,7 @@ export default CreateSupplyDetails
 //                 type="file"
 //                 name="suppliesLabel"
 //                 id="suppliesLabel"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //                 placeholder="Etiqueta de insumo"
 //                 onChange={event => {
 //                   setFieldValue("suppliesLabel", event.target.files[0]);
@@ -934,7 +921,7 @@ export default CreateSupplyDetails
 //                 type="file"
 //                 name="securityFile"
 //                 id="securityFile"
-//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+//                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
 //                 placeholder="Ficha de seguridad"
 //                 onChange={event => {
 //                   setFieldValue("securityFile", event.target.files[0]);
@@ -947,7 +934,7 @@ export default CreateSupplyDetails
 //           </div>
 //         <button
 //           type="submit"
-//           className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+//           className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
 //         >
 //           Crear loteo de insumo
 //         </button>
@@ -969,7 +956,7 @@ export default CreateSupplyDetails
 
 //   return (
 //     <button
-//     className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+//     className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
 //     type="button"
 //     onClick={() => handleOpen()}
 //   >

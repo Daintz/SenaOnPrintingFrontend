@@ -10,18 +10,14 @@ import clientAxios from '../../config/clientAxios'
 import { useEffect, useState } from 'react'
 
 const validationSchema = Yup.object().shape({
-  description: Yup.string().required('Campo requerido'),
+  description: Yup.string(),
   supplyCost: Yup.number().required('Campo requerido'),
-  batch: Yup.string().required('Campo requerido'),
-  entryDate: Yup.date().required('Campo requerido').test('entryDateValidation', 'La fecha de entrada no puede ser anterior a la fecha actual', function (value) {
-    const currentDate = new Date();
-    return new Date(value) >= currentDate;
-  }),
+  // batch: Yup.string(),
+  entryDate: Yup.date().required('Campo requerido'),
   expirationDate: Yup.date().required('Campo requerido'),
-  // actualQuantity: Yup.number().required('Campo requerido'),
   supplyId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un insumo'),
   providerId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un proveedor'),
-  warehouseId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir una bodega')
+  warehouseId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir una bodega'),
 })
 
 const getSupply = () => {
@@ -82,6 +78,81 @@ function updateSupplyDetails () {
   const [supplyOptions, setSupplyOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
   const [warehauseOptions, setWarehauseOptions] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+  const [invoiceNumber, setInvoiceNumber] = useState(1);
+  const [cashierName, setCashierName] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [items, setItems] = useState([]);
+  const [tax, setTax] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [entryDate, setEntryDate] = useState(new Date());
+  
+
+  const reviewInvoiceHandler = (event) => {
+    event.preventDefault();
+    setIsOpen(true);
+  };
+  
+  const addNextInvoiceHandler = () => {
+    setInvoiceNumber((prevNumber) => incrementString(prevNumber));
+    setItems([
+      {
+        id: uid(6),
+        name: '',
+        qty: 1,
+        price: '1.00',
+      },
+    ]);
+  };
+  
+  
+  const addItemHandler = (event) => {
+    const name = uid(6);
+    const Supply = event.target[event.target.selectedIndex]
+    console.log()
+    setItems((prevItem) => [
+      {
+        id: name,
+        name: name,
+        qty: 1,
+        price: Supply.getAttribute('price'),
+        
+      },
+      ...prevItem,
+    ]);
+  };
+  
+  const deleteItemHandler = (id) => {
+    setItems((prevItem) => prevItem.filter((item) => item.id !== id));
+  };
+  
+  const edtiItemHandler = (event) => {
+    const editedItem = {
+      id: event.target.id,
+      name: event.target.name,
+      value: event.target.value,
+    };
+  
+    const newItems = items.map((items) => {
+      for (const key in items) {
+        if (key === editedItem.name && items.id === editedItem.id) {
+          items[key] = editedItem.value;
+        }
+      }
+      return items;
+    });
+  
+    setItems(newItems);
+  };
+  
+  const subtotal = items.reduce((prev, curr) => {
+    if (curr.name.trim().length > 0)
+      return prev + Number(curr.price * Math.floor(curr.qty));
+    else return prev;
+  }, 0);
+  const taxRate = (tax * subtotal) / 100;
+  const discountRate = (discount * subtotal) / 100;
+  const total = subtotal - discountRate + taxRate;
 
   const fetchOptions = () => {
     getSupply().then((options) => {
@@ -93,6 +164,7 @@ function updateSupplyDetails () {
     getWarehause().then((options) => {
       setWarehauseOptions(options);
     });
+    
   };
 
   useEffect(() => {
@@ -111,191 +183,214 @@ function updateSupplyDetails () {
   }
 
   const inputs = [
-    { key: 0, name: 'description', title: 'Descripcion', type: 'text', placeholder: 'Descripcion' },
-    { key: 1, name: 'supplyCost', title: 'Costo insumo', type: 'number', placeholder: 'Costo insumo' },
-    { key: 2, name: 'batch', title: 'Lote', type: 'text', placeholder: 'Lote' },
-    { key: 3, name: 'entryDate', title: 'Fecha de entrada', type: 'date', placeholder: 'Fecha de entrada' },
-    { key: 4, name: 'expirationDate', title: 'Fecha de caducidad', type: 'date', placeholder: 'Fecha de caducidad' },
+    // { key: 1, name: 'supplyCost', title: 'Costo insumo', type: 'number', placeholder: 'Costo insumo' },
+    // { key: 2, name: 'batch', title: 'Lote', type: 'text', placeholder: 'Lote' },
+    { key: 0, name: 'entryDate', title: 'Fecha de entrada', type: 'date', placeholder: 'Fecha de entrada' },
+    { key: 1, name: 'expirationDate', title: 'Fecha de caducidad', type: 'date', placeholder: 'Fecha de caducidad' },
     // { key: 6, name: 'actualQuantity', title: 'Cantidad actual', type: 'number', placeholder: 'Cantidad actual' },
+    { key: 2, name: 'providerId', title: 'Id proveedor', type: 'select', data: providerOptions, placeholder: 'Id proveedor' },
+    { key: 3, name: 'warehouseId', title: 'Id bodega', type: 'select', data: warehauseOptions, placeholder: 'Id bodega' },
+    { key: 4, name: 'description', title: 'Descripcion', type: 'text', placeholder: 'Descripcion' },
     { key: 5, name: 'supplyId', title: 'Id insumo', type: 'select', data: supplyOptions, placeholder: 'Id insumo' },
-    { key: 6, name: 'providerId', title: 'Id proveedor', type: 'select', data: providerOptions, placeholder: 'Id proveedor' },
-    { key: 7, name: 'warehouseId', title: 'Id bodega', type: 'select', data: warehauseOptions, placeholder: 'Id bodega' }
   ]
 
   return (
     <Formik
       initialValues={{
         id: editingData.id,
-        description: editingData.description,
-        supplyCost: editingData.supplyCost,
-        batch: editingData.batch,
         entryDate: editingData.entryDate ? new Date(editingData.entryDate).toISOString().split('T')[0] : '',
         expirationDate: editingData.expirationDate ? new Date(editingData.expirationDate).toISOString().split('T')[0] : '',
-        // actualQuantity: editingData.actualQuantity,
-        supplyId: editingData.supplyId,
         providerId: editingData.providerId,
         warehouseId: editingData.warehouseId,
+        description: editingData.description,
+        supplyId: editingData.supplyId,
+        // supplyCost: editingData.supplyCost,
+        // batch: editingData.batch,
+        // actualQuantity: editingData.actualQuantity,
       }}
       onSubmit={(values) => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-        <div className='flex mb-2'>
-          <div key='0' className='w-1/2 mr-2'>
-            <label htmlFor="description">Descripción</label>
-            <Field
-                type="text"
-                name="description"
-                id="description"
-                placeholder="Descripción"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="description"
-              component="div"
-              className="text-red-500"
-            />
+      {({ setFieldValue, values, handleSubmit, errors, touched }) => (
+        <Form
+        onSubmit={reviewInvoiceHandler}
+        >
+        <div className="flex justify-between w-full">
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div className="w-4/4">
+          <b>Codigo : 0001</b>
+            </div>
+            <div className="w-4/4">
+             <b>Fecha: {new Date().toISOString().split('T')[0]}</b>
+            </div>
           </div>
-          <div key='1' className='w-1/4 ml-2'>
-            <label htmlFor="supplyCost">Costo insumo</label>
-            <Field
-                type="number"
-                name="supplyCost"
-                id="supplyCost"
-                placeholder="Costo insumo"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="supplyCost"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+          <hr className="mb-4" />
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div key='0' className="w-1/4 ml-2">
+              <label htmlFor="entryDate">Fecha de entrada</label>
+              <Field
+                type="date"
+                name="entryDate"
+                id="entryDate"
+                placeholder="Fecha de entrada"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                min={new Date().toISOString().split('T')[0]}
+              />
+              {errors.entryDate && touched.entryDate && (
+                <div className="text-red-500">{errors.entryDate}</div>
+              )}
         </div>
-        <div className='flex mb-2'>
-          <div key='2' className='w-1/7 ml-2'>
-            <label htmlFor="batch">Lote</label>
-            <Field
-                type="text"
-                name="batch"
-                id="batch"
-                placeholder="Lote"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="batch"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-{/* 
-          <div key='3' className='w-1/4 mr-2'>
-            <label htmlFor="initialQuantity">Cantidad inicial</label>
-            <Field
-                type="number"
-                name="initialQuantity"
-                id="initialQuantity"
-                placeholder="Cantidad inicial"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="initialQuantity"
-              component="div"
-              className="text-red-500"
-            />
-          </div> */}
-          <div key='3' className='w-1/4 ml-2'>
-          <label htmlFor="entryDate">Fecha de entrada</label>
-          <Field
-            type="date"
-            name="entryDate"
-            id="entryDate"
-            placeholder="Fecha de entrada"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            
-          />
-          <ErrorMessage
-            name="entryDate"
-            component="div"
-            className="text-red-500"
-          />
-        </div>
-          </div>
-        <div className='flex mb-2'>
-        <div key='4' className='w-1/4 ml-2'>
+
+        <div key='1' className='w-1/4 mr-2'>
           <label htmlFor="expirationDate">Fecha de caducidad</label>
           <Field
-            type="date"
-            name="expirationDate"
-            id="expirationDate"
-            placeholder="Fecha de caducidad"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-            
-          />
+              type="date"
+              name="expirationDate"
+              id="expirationDate"
+              placeholder="Fecha de caducidad"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              min={new Date().toISOString().split('T')[0]}
+              />
+              {errors.entryDate && touched.entryDate && (
+                <div className="text-red-500">{errors.entryDate}</div>
+              )}
+        </div>
+        </div>
+
+          <div className="flex gap-5 grid-cols-5 mb-3">
+          <div key='2' className='w-1/4 ml-2'>
+          <label htmlFor="providerId">Proveedor</label>
+          <br />
+          <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <option value={0}>Seleccione un proveedor</option>
+            {providerOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+
+            ))}
+          </Field>
           <ErrorMessage
-            name="expirationDate"
+            name="providerId"
             component="div"
             className="text-red-500"
           />
         </div>
-          <div className='flex mb-2'>
 
-          <div key='5' className='w-1/9 ml-2'>
-            <label htmlFor="supplyId">Insumo</label>
-            <br />
-            <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
-              <option value="0">Seleccione un insumo</option>
-              {supplyOptions.map(option => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="supplyId"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='6' className='w-1/9 ml-2'>
-            <label htmlFor="providerId">Proveedor</label>
-            <br />
-            <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
-              <option value="0">Seleccione un proveedor</option>
-              {providerOptions.map(option => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="providerId"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='7' className='w-1/9 ml-2'>
-            <label htmlFor="warehouseId">Bodega</label>
-            <br />
-            <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
-              <option value="0">Seleccione una bodega</option>
-              {warehauseOptions.map(option => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="warehouseId"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+        <div key='3' className='w-1/4 ml-2'>
+          <label htmlFor="warehouseId">Bodega</label>
+          <br />
+          <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <option value={0}>Seleccione una bodega</option>
+            {warehauseOptions.map(option =>  (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </Field>
+          <ErrorMessage
+            name="warehouseId"
+            component="div"
+            className="text-red-500"
+          />
         </div>
         </div>
-        <button
-          type="submit"
-          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        <div className="flex gap-5 grid-cols-5 mb-3">
+        <div key='4' className='w-1/2 mr-2'>
+          <label htmlFor="description">Descripción</label>
+          <Field
+              as="textarea"
+              type="text"
+              name="description"
+              id="description"
+              placeholder="Descripción"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              rows="6" cols="100"
+          />
+          <ErrorMessage
+            name="description"
+            component="div"
+            className="text-red-500"
+          />
+        </div>
+        
+          </div>
+          <div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div className="flex flex-col items-end space-y-2 pt-6">
+          <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+        
+          <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
+            <span className="font-bold">Total:</span>
+            <span className="font-bold">
+              ${total % 1 === 0 ? total : total.toFixed(2)}
+            </span>
+          </div>
+            </div>
+        </div>
+            <center>
+            <button
+                  type="submit"
+                  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+                >
+                  Actualizar Compra de Insumos
+                </button>
+                
+          </center>
+          </div>
+          </div>
+          <div className="flex gap-5 grid-cols-5 mb-2">
+          <div key='5' className="my-6 rounded-md bg-white shadow-sm md:p-10 w-[700px]">
+        <label
+          htmlFor="supplyId"
+          className="col-start-2 row-start-1 text-sm font-bold md:text-base"
         >
-          Actualizar compra de insumo
-        </button>
-      </Form>
+          Seleccione un insumo:
+        </label>
+        <Field name="supplyId" as="select" onChange={addItemHandler} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <option value={0}>Seleccione un insumo</option>
+            {supplyOptions.map(option => (
+              <option key={option.value} price={option.price} value={option.value}>{option.label}</option>
+            ))}
+          </Field>
+              <div className="w-full md:w-auto  md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+              <UpdateButtomSupplyDetails />
+            </div>
+            <br></br>
+        <table className="w-1/4 p-4 text-left">
+          <thead>
+            <tr className="border-b border-gray-900/10 text-xs md:text-base">
+              <th className='text-xs'>Insumo</th>
+              <th className='text-xs'>Cantidad</th>
+              <th className="text-center text-xs">Precio</th>
+              <th className="text-center text-xs">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <InvoiceItem
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                qty={item.qty}
+                price={item.price}
+                onDeleteItem={deleteItemHandler}
+                onEdtiItem={edtiItemHandler}
+              />
+            ))}
+          </tbody>
+        </table>
+        
+            </div>
+        </div>
+        </div>
+        
+        </Form>
+        )}
     </Formik>
   )
 }

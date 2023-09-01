@@ -4,7 +4,9 @@ import { GrView } from 'react-icons/gr'
 
 function DetailsSupply () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { name, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost, statedAt } = detailsData
+  console.log('Detalles de Supply:', detailsData);
+  const { name, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost,statedAt } = detailsData
+  console.log(detailsData);
   return (
     <>
     
@@ -16,6 +18,11 @@ function DetailsSupply () {
       <p><b>Tipo peligrosidad:</b> {sortingWord === 1 ? 'Peligro' : 'Atención'}</p>
       <p><b>Cantidad:</b> {quantity}</p>
       <p><b>Costo promedio:</b> {averageCost}</p>
+      {/* <p><b>Categorías de Insumos:</b> {Array.isArray(detailsData.SupplyCategories) ? detailsData.SupplyCategories.join(', ') : 'No disponible'}</p>
+
+
+      <p><b>Unidad de medida:</b> {unitMeasuresXSupply && unitMeasuresXSupply.map(unit => unit.name).join(', ')}</p>
+      <p><b>Pictogramas:</b> {supplyXSupplyPictogram && supplyXSupplyPictogram.map(pictogram => pictogram.name).join(', ')}</p> */}
       <p>
       <b>Estado:</b> {' '}
       {statedAt
