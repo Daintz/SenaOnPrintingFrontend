@@ -16,7 +16,78 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
 import clientAxios from '../../config/clientAxios'
-
+import Select from 'react-select'
+const regionalAreas = {
+  'REGIONAL AMAZONAS': ['LETICIA'],
+  'REGIONAL ANTIOQUIA': ['CALDAS', 'EL BAGRE', 'ITAGUI', 'MEDELLIN', 'CAUCASIA', 'PUERTO BERRIO', 'RIONEGRO', 'URABA'],
+  'REGIONAL ARAUCA': ['ARAUCA'],
+  'REGIONAL ATLANTICO': ['BARRANQUILLA', 'SABANALARGA'],
+  'REGIONAL BOLIVAR': ['CARTAGENA'],
+  'REGIONAL BOYACA': ['DUITAMA', 'TUNJA', 'MORCA', 'SOGAMOSO'],
+  'REGIONAL CALDAS': ['LA DORADA', 'MANIZALES'],
+  'REGIONAL CAQUETA': ['FLORENCIA'],
+  'REGIONAL CASANARE': ['YOPAL'],
+  'REGIONAL CAUCA': ['POPAYAN'],
+  'REGIONAL CESAR': ['VALLEDUPAR', 'AGUACHICA'],
+  'REGIONAL CHOCO': ['QUIBDO'],
+  'REGIONAL CORDOBA': ['MONTERIA'],
+  'REGIONAL CUNDINAMARCA': ['SOACHA', 'VILLETA', 'FUSAGASUGA', 'GIRARDOT', 'MOSQUERA', 'CHIA'],
+  'REGIONAL DISTRITO CAPITAL': ['BOGOTÁ'],
+  'REGIONAL GUAINIA': ['PUERTO INIRIDA'],
+  'REGIONAL GUAVIARE': ['SAN JOSE DEL GUAVIARE'],
+  'REGIONAL HUILA': ['CAMPO ALEGRE', 'GARZON', 'LA PLATA', 'NEIVA', 'PITALITO'],
+  'REGIONAL LA GUAJIRA': ['RIOHACHA'],
+  'REGIONAL MAGDALENA': ['SANTA MARTA'],
+  'REGIONAL META': ['VILLAVICENCIO'],
+  'REGIONAL NARIÑO': ['IPIALES', 'TUMACO', 'SAN JUAN DE PASTO'],
+  'REGIONAL NORTE DE SANTANDER': ['CUCUTA'],
+  'REGIONAL PUTUMAYO': ['PUERTO ASIS'],
+  'REGIONAL QUINDIO': ['ARMENIA'],
+  'REGIONAL RISARALDA': ['PEREIRA', 'DOS QUEBRADAS'],
+  'REGIONAL SAN ANDRES PROVIDENCIA': ['SAN ANDRES'],
+  'REGIONAL SANTANDER': ['GIRON', 'FLORIDA BLANCA', 'PIEDECUESTA', 'BUCARAMANGA', 'BARRANCABERMEJA', 'SAN GIL', 'MALAGA', 'VELEZ'],
+  'REGIONAL SUCRE': ['SINCELEJO'],
+  'REGIONAL TOLIMA': ['IBAGUE'],
+  'REGIONAL VALLE DEL CAUCA': ['CALI', 'BUGA', 'TULUA', 'BUENAVENTURA', 'CARTAGO', 'PALMIRA'],
+  'REGIONAL VAUPES': ['MITU'],
+  'REGIONAL VICHADA': ['VICHADA']
+  // Agrega las demás regionales y sus áreas aquí
+}
+const regionales = [
+  'REGIONAL AMAZONAS',
+  'REGIONAL ANTIOQUIA',
+  'REGIONAL ARAUCA',
+  'REGIONAL ATLANTICO',
+  'REGIONAL BOLIVAR',
+  'REGIONAL BOYACA',
+  'REGIONAL CALDAS',
+  'REGIONAL CAQUETA',
+  'REGIONAL CASANARE',
+  'REGIONAL CAUCA',
+  'REGIONAL CESAR',
+  'REGIONAL CHOCO',
+  'REGIONAL CORDOBA',
+  'REGIONAL CUNDINAMARCA',
+  'REGIONAL DISTRITO CAPITAL',
+  'REGIONAL GUAINIA',
+  'REGIONAL GUAVIARE',
+  'REGIONAL HUILA',
+  'REGIONAL LA GUAJIRA',
+  'REGIONAL MAGDALENA',
+  'REGIONAL META',
+  'REGIONAL NARIÑO',
+  'REGIONAL NORTE DE SANTANDER',
+  'REGIONAL PUTUMAYO',
+  'REGIONAL QUINDIO',
+  'REGIONAL RISARALDA',
+  'REGIONAL SAN ANDRES PROVIDENCIA',
+  'REGIONAL SANTANDER',
+  'REGIONAL SUCRE',
+  'REGIONAL TOLIMA',
+  'REGIONAL VALLE DEL CAUCA',
+  'REGIONAL VAUPES',
+  'REGIONAL VICHADA'
+]
 async function checkEmailExistence (email) {
   try {
     const response = await clientAxios.get('/Client')
@@ -43,15 +114,11 @@ const validationSchema = Yup.object().shape({
     .required('Campo requerido')
     .email('El email debe ser válido')
     .test('unique-email', 'El Correo ya está en uso', async function (value) {
-      const { path, createError } = this
       const initialEmail = this.resolve(Yup.ref('initialEmail'))
-
       console.log('initialEmail:', initialEmail)
-
       if (value === initialEmail) {
         return true
       }
-
       const response = await checkEmailExistence(value)
       return !response.exists // Devuelve false si el nombre ya existe
     }),
@@ -99,21 +166,21 @@ function UpdateClient () {
         name: editingData.name,
         phone: editingData.phone,
         email: editingData.email,
-        center: editingData.center,
-        area: editingData.area,
         regional: editingData.regional,
-        initialEmail: editingData.email
+        area: editingData.area,
+        center: editingData.center
       }}
       onSubmit={(values) => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-      <div className="flex gap-5 mb-3">
-  <div className="w-1/2">
+      {({ values, setFieldValue }) => (
+        <Form className="max-w-screen-lg mx-auto p-2">
+          <div className="flex gap-5 mb-3">
+            <div className="w-full">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Nombre
+      Nombre Completo
     </label>
     <Field
       type="text"
@@ -127,8 +194,10 @@ function UpdateClient () {
       component="div"
       className="text-red-500"
     />
-  </div>
-  <div className="w-1/2">
+   </div>
+          </div>
+          <div className="flex gap-5 mb-3">
+            <div className="w-1/2">
     <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
       Teléfono
     </label>
@@ -144,11 +213,8 @@ function UpdateClient () {
       component="div"
       className="text-red-500"
     />
-  </div>
-</div>
-
-<div className="flex gap-5 mb-3">
-  <div className="w-full">
+   </div>
+        <div className="w-1/2">
     <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
       Correo
     </label>
@@ -164,9 +230,100 @@ function UpdateClient () {
       component="div"
       className="text-red-500"
     />
-  </div>
-</div>
+   </div>
+          </div>
+          <div className="flex gap-5 mb-3">
+            <div className="w-full">
+              <label
+                htmlFor="campo3"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+              >
+                Regional
+              </label>
+              <Select
+                name="regional"
+                id="regional"
+                value={values.regional}
+                onChange={(selectedOption) => {
+                  const selectedRegional = selectedOption.value
+                  setFieldValue('regional', selectedRegional)
+                  setFieldValue('area', '') // Resetear el valor del área cuando cambie la regional
 
+                  // Actualizar las opciones del select de áreas
+                  const areas = regionalAreas[selectedRegional] || []
+                  setFieldValue('areas', areas)
+                }}
+                options={regionales.map((regional) => ({
+                  value: regional,
+                  label: regional
+                }))}
+                placeholder={values.regional ? values.regional : 'Selecciona regional'}
+                noOptionsMessage={() => 'No hay opciones disponibles'}
+                className="bg-gray-50 text-gray-900 text-sm"
+                classNamePrefix="react-select"
+                isSearchable
+                isClearable
+                menuPlacement="auto"
+                formatOptionLabel={(option) => (
+                  <div>{option.label}</div>
+                )}
+                styles={{
+                  control: (provided, state) => ({
+                    ...provided,
+                    borderColor: state.isSelected ? 'green' : 'gray',
+                    boxShadow: state.isSelected ? '0 0 0 1px green' : 'none'
+                  }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    backgroundColor: state.isSelected ? 'green' : 'white',
+                    color: state.isSelected ? 'white' : 'black'
+                  })
+                }}
+                />
+                <ErrorMessage
+                  name="regional"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+              <div className="w-1/2">
+              <label
+                htmlFor="campo2"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+              >
+                Área
+              </label>
+              <Select
+  name="area"
+  id="area"
+  value={values.area}
+  onChange={(selectedOption) => {
+    setFieldValue('area', selectedOption.value)
+  }}
+  options={(values.areas || []).map((area) => ({
+    value: area,
+    label: area
+  }))}
+  placeholder={
+    values.area ? values.area : 'Selecciona Área'
+  }
+  noOptionsMessage={() => 'No hay opciones disponibles'}
+  className="bg-gray-50 text-gray-900 text-sm"
+  classNamePrefix="react-select"
+  isSearchable
+  isClearable
+  menuPlacement="auto"
+  formatOptionLabel={(option) => <div>{option.label}</div>}
+  styles={{
+  }}
+/>
+<ErrorMessage
+  name="area"
+  component="div"
+  className="text-red-500"
+/>
+</div>
+</div>
 <div className="flex gap-5 mb-3">
   <div className="w-full">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -184,55 +341,16 @@ function UpdateClient () {
       component="div"
       className="text-red-500"
     />
-  </div>
-</div>
-
-<div className="flex gap-5 mb-3">
-  <div className="w-full">
-    <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Área
-    </label>
-    <Field
-      type="text"
-      name="area"
-      id="area"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-      placeholder="Área"
-    />
-    <ErrorMessage
-      name="area"
-      component="div"
-      className="text-red-500"
-    />
-  </div>
-</div>
-
-<div className="flex gap-5 mb-3">
-  <div className="w-full">
-    <label htmlFor="campo3" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-      Regional
-    </label>
-    <Field
-      type="text"
-      name="regional"
-      id="regional"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-      placeholder="Regional"
-    />
-    <ErrorMessage
-      name="regional"
-      component="div"
-      className="text-red-500"
-    />
-  </div>
-</div>
-        <button
-          type="submit"
-          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-custom-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          Actualizar cliente
-        </button>
-      </Form>
+   </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-custom-blue font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Actualizar cliente
+          </button>
+        </Form>
+      )}
     </Formik>
   )
 }
