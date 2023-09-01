@@ -25,6 +25,7 @@ function CreateProduct () {
   const [dataApi, setDataApi] = useState([])
   const [dataSupplies, setDataSupplies] = useState(false)
   const [listSupplies, setListSupplies] = useState([])
+  const [listSuppliesIds, setListSuppliesIds] = useState([])
 
   useEffect(() => {
     fetchOptions()
@@ -40,8 +41,6 @@ function CreateProduct () {
   const [createProduct, { error, isLoading }] = usePostProductMutation()
 
   const [paperCutOptions, setpaperCutOptions] = useState([])
-  const [finishOptions, setFinishOptions] = useState([])
-  const [substrateOptions, setSubstrateOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
@@ -66,49 +65,9 @@ function CreateProduct () {
     })
   }
 
-  const getFinish = () => {
-    return new Promise((resolve, reject) => {
-      clientAxios.get('/Finish').then(
-        (result) => {
-          const finishes = result.data.map((finish) => ({
-            name: finish.name,
-            label: finish.name
-          }))
-          resolve(finishes)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
-
-  const getSubstrate = () => {
-    return new Promise((resolve, reject) => {
-      clientAxios.get('/Substrates').then(
-        (result) => {
-          const substrates = result.data.map((substrate) => ({
-            name: substrate.name,
-            label: substrate.name
-          }))
-          resolve(substrates)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
-
   const fetchOptions = () => {
     getPaperCut().then((options) => {
       setpaperCutOptions(options)
-    })
-    getFinish().then((options) => {
-      setFinishOptions(options)
-    })
-    getSubstrate().then((options) => {
-      setSubstrateOptions(options)
     })
   }
 
@@ -170,11 +129,21 @@ function CreateProduct () {
     } else {
       setListSupplies([...listSupplies, { ...cell }])
     }
+
+    const existingSupplyIds = listSuppliesIds.find(supply => supply === cell.id)
+
+    if (!existingSupplyIds) {
+      setListSuppliesIds([...listSuppliesIds, cell.id])
+    }
   }
 
   const deleteProduct = (cell) => {
     const updatedListSupplies = listSupplies.filter(supply => supply.id !== cell)
     setListSupplies(updatedListSupplies)
+
+    const updatedListSuppliesIds = listSuppliesIds.filter(supply => supply !== cell)
+    console.log(updatedListSuppliesIds)
+    setListSuppliesIds(updatedListSuppliesIds)
   }
 
   const columns = useMemo(() => [
@@ -309,7 +278,59 @@ function CreateProduct () {
       name: 'susbtrateFrontPage',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 3,
@@ -359,15 +380,6 @@ function CreateProduct () {
       title: 'Código',
       type: 'text',
       placeholder: 'Código libreta'
-    },
-    {
-      row: 3,
-      key: 6,
-      typeProductOwner: 'Libreta',
-      name: 'susbtrateBackCover',
-      title: 'Sustrato',
-      type: 'checkbox',
-      checkboxes: substrateOptions
     },
     {
       row: 4,
@@ -425,7 +437,59 @@ function CreateProduct () {
       name: 'susbtrateSheets',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 5,
@@ -463,39 +527,27 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
-          name: '1',
           label: 'Anillado doble O'
         },
         {
-          name: '2',
           label: 'Paso'
         },
         {
-          name: '3',
           label: 'Tapa dura'
         },
         {
-          name: '4',
-          label: 'Grapado'
-        },
-        {
-          name: '5',
           label: 'Rústico/Cosido'
         },
         {
-          name: '6',
           label: 'Lomo'
         },
         {
-          name: '7',
           label: 'Sobrecubierta'
         },
         {
-          name: '8',
           label: 'Tapa blanda'
         },
         {
-          name: '9',
           label: 'Caballete'
         }
       ]
@@ -507,7 +559,35 @@ function CreateProduct () {
       name: 'laminated',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 6,
@@ -516,7 +596,59 @@ function CreateProduct () {
       name: 'susbtrateNoteBook',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 2,
@@ -526,6 +658,15 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de souvenir'
+    },
+    {
+      row: 2,
+      key: 10,
+      typeProductOwner: 'Souvenir',
+      name: 'costSouvenir',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de souvenir'
     },
     {
       row: 2,
@@ -543,7 +684,35 @@ function CreateProduct () {
       name: 'laminatedSouvenir',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 2,
@@ -553,6 +722,15 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de gran formato'
+    },
+    {
+      row: 2,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'costLargeFormat',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de Gran formato'
     },
     {
       row: 2,
@@ -570,7 +748,35 @@ function CreateProduct () {
       name: 'laminatedLargeFormat',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 3,
@@ -579,7 +785,59 @@ function CreateProduct () {
       name: 'susbtrateLargeFormat',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 2,
@@ -589,6 +847,15 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de papeleria'
+    },
+    {
+      row: 2,
+      key: 10,
+      typeProductOwner: 'Papelería',
+      name: 'costStationery',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de Papelería'
     },
     {
       row: 2,
@@ -606,7 +873,35 @@ function CreateProduct () {
       name: 'laminatedStationery',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 3,
@@ -615,7 +910,59 @@ function CreateProduct () {
       name: 'susbtrateStationery',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     }
   ]
 
@@ -638,7 +985,6 @@ function CreateProduct () {
         numberInksBackCover: '',
         pantoneBackCover: '',
         codeBackCover: '',
-        susbtrateBackCover: [],
         innerSheets: '',
         innerSheetsInks: '',
         numberInksInnerSheets: '',
@@ -647,9 +993,10 @@ function CreateProduct () {
         susbtrateSheets: [],
         numberSheets: '',
         cost: '',
+        costSouvenir: '',
         observations: '',
-        cover: '',
-        laminated: '',
+        cover: [],
+        laminated: [],
         susbtrateNoteBook: [],
         dimensionSouvenir: '',
         observationsSouvenir: '',
@@ -661,12 +1008,62 @@ function CreateProduct () {
         dimensionStationery: '',
         observationsStationery: '',
         laminatedStationery: '',
+        supplies: [],
+        selectedCheckboxes: [],
         susbtrateStationery: []
       }}
       onSubmit={values => {
+        const coverToSaveInDatabase = values.cover.join(', ')
+        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage.join(', ')
+        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets.join(', ')
+        const laminatedToSaveInDatabase = values.laminated.join(', ')
+        const susbtrateLargeFormatToSaveInDatabase = values.susbtrateLargeFormat.join(', ')
+        const susbtrateStationeryToSaveInDatabase = values.susbtrateStationery.join(', ')
+        const susbtrateNoteBookToSaveInDatabase = values.susbtrateNoteBook.join(', ')
+
+        const dataFormToApi = {
+          Name: values.name,
+          TypeProduct: typeProductSelect,
+          size: values.notebookSize,
+          Cost: parseInt(values.cost) ? values.cost : (values.costSouvenir ? values.costSouvenir : (values.costLargeFormat ? values.costLargeFormat : values.costStationary)),
+          Observations: values.observations !== ''
+            ? values.observations
+            : (values.observationsSouvenir !== ''
+                ? values.observationsSouvenir
+                : (values.observationsStationery !== ''
+                    ? values.observationsStationery
+                    : values.observationsLargeFormat)),
+          FrontPage: values.frontPage === 'Si',
+          FrontPageInks: values.frontPageInks === 'Si',
+          FrontPageNumberInks: values.numberInks,
+          FrontPagePantone: values.pantone,
+          FrontPageCode: values.code,
+          BackCover: values.backCover === 'Si',
+          BackCoverInks: values.backCoverInks === 'Si',
+          BackCoverNumberInks: values.numberInksBackCover,
+          BackCoverPantone: values.backCoverPantone,
+          BackCoverCode: values.codeBackCover,
+          Inside: values.innerSheets === 'Si',
+          InsideInks: values.innerSheetsInks === 'Si',
+          InsideNumberInks: values.numberInksInnerSheets,
+          InsidePantone: values.pantoneInnerSheets,
+          InsideCode: values.codeInnerSheets,
+          NumberPages: parseInt(values.numberSheets),
+          Dimension: values.dimensionSouvenir ? values.dimensionSouvenir : (values.dimensionStationery ? values.dimensionStationery : values.dimensionLargeFormat),
+          cover: coverToSaveInDatabase,
+          susbtrateFrontPage: susbtrateFrontPageToSaveInDatabase,
+          susbtrateSheets: susbtrateSheetsToSaveInDatabase,
+          susbtrateNoteBook: susbtrateNoteBookToSaveInDatabase,
+          laminated: laminatedToSaveInDatabase,
+          susbtrateLargeFormat: susbtrateLargeFormatToSaveInDatabase,
+          susbtrateStationery: susbtrateStationeryToSaveInDatabase,
+          SupplyIds: listSuppliesIds
+        }
+        console.log(dataFormToApi)
         console.log(values)
+
         // console.log({ ...values, typeProduct: typeProductSelect })
-        // handleSubmit(values)
+        handleSubmit(dataFormToApi)
       }}
       validationSchema={validationSchema}
     >
@@ -696,51 +1093,80 @@ function CreateProduct () {
                 (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
                   ? (
                     <>
-                      {input.type === 'checkbox' &&
-                        <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                          <label>{input.title}</label>
-                          <div className="grid grid-cols-2 gap-4">
-                            {input.checkboxes.map((checkbox, index) => (
-                              <div key={index} className="flex items-center">
-                                <Field
-                                  type="checkbox"
-                                  name={`${checkbox.name} ${input.name}`}
-                                  id={`${checkbox.name} ${input.name}`}
-                                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                />
-                                <label htmlFor={`${checkbox.name} ${input.name}`} className="ml-2">{checkbox.label}</label>
-                              </div>
-                            ))}
+                    {input.type === 'checkbox' && (
+                      <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                        <label>{input.title}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          {input.checkboxes.map((checkbox, index) => (
+                            <div key={index} className="flex items-center">
+                              <Field
+                                type="checkbox"
+                                name={input.name}
+                                value={checkbox.label}
+                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                              />
+                              <label htmlFor={input.label} className="ml-2">
+                                {checkbox.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                        {input.type === 'select' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
                           </div>
-                        </div>
-                      }
-                      {input.type === 'select' &&
-                        <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                          <label htmlFor={input.name}>{input.title}</label>
-                          <Field
-                            as='select'
-                            name={input.name}
-                            id={input.name}
-                            value={values[input.name]}
-                            onChange={(e) => {
-                              handleChange(e)
-                              input.action && input.action(e)
-                            }}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                          >
-                              {input.options.map((option, index) => (
-                                <option key={index} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                          </Field>
-                          <ErrorMessage
-                            name={input.name}
-                            component="div"
-                            className="text-red-500"
-                          />
-                        </div>
-                        }
+                          }
+                          {input.type === 'select' & input.name === '' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
                         {input.type === 'textarea' &&
                           <div key={input.key} className="flex-1 mr-4 last:mr-0">
                             <label htmlFor={input.name}>{input.title}</label>
