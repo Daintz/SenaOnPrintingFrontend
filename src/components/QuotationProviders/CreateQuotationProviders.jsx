@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { useDispatch } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { usePostQuotationProvidersMutation } from '../../context/Api/Common'
 import {
@@ -11,8 +11,9 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { data } from 'autoprefixer'
+import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
   quotationDate: Yup.date().required('Campo requerido'),
@@ -21,10 +22,45 @@ const validationSchema = Yup.object().shape({
   providerId: Yup.number().required('Campo requerido')
 })
 
+
+
 function CreateQuotationProviders () {
+  const [ProviderOptions, setProviderOptions] = useState([]);
+
+  
+  useEffect(() => {
+    fetchOptions();
+  }, []);
+
+  //GET PARA EL SELECT
+  const getProvider = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/Provider').then(
+        (result) => {
+          const Providers = result.data.map((provider) => ({
+            'id': provider.id,
+            'name': provider.nameCompany
+        }))
+          resolve(Providers)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+ //CERRADO
+ const fetchOptions = () => {
+  getProvider().then((options) => {
+    setProviderOptions(options);
+  });
+
+};
   const dispatch = useDispatch()
   const [createQuotationProviders, { error, isLoading }] = usePostQuotationProvidersMutation()
   const [previewImage, setPreviewImage] = useState(null)
+
+
   const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
@@ -139,24 +175,33 @@ function CreateQuotationProviders () {
           htmlFor="providerId"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
         >
-          Id del proveedor
+          Proveedor
           </label>
         <Field
-          type="number"
+          as="select"
           name="providerId"
           id="providerId"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-          placeholder="id del proveedor"
-        />
+          placeholder="id del proveedor">
+          {/* Opciones del select */}
+          <option value="0">Seleccione proveedor</option>
+          {ProviderOptions && ProviderOptions.map(provider => (
+            <option
+            key={provider.id} value={provider.id}>
+              {provider.name}
+            </option>
+          ))}
+
         <ErrorMessage
       name="providerId"
       component="div"
       className="text-red-500"
     />
+    </Field>
         <button
         type="submit"
         className="flex items-center justify-center border border-gray-700 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-700 font-medium rounded-lg text-sm px-10 py-2"
-      
+
         >
           Crear Cotización a proveedores
         </button>
