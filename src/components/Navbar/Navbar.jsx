@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {IoIosArrowDown, IoIosArrowUp} from 'react-icons//io'
 import { useState, useRef, useEffect } from 'react';
 
@@ -16,6 +16,12 @@ function Navbar () {
     }
   };
 
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('session_token');
+    navigate("/login", { replace: true });
+  };
+
   useEffect(() => {
     // Agrega un event listener para detectar clics fuera del componente
     document.addEventListener('mousedown', handleClickOutside);
@@ -26,7 +32,6 @@ function Navbar () {
     };
   }, []);
 
-  
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -117,13 +122,14 @@ function Navbar () {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to={'/'}
+                    <button
+                      type="button"
+                      onClick={handleLogout}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
-                      Cerrar sesion
-                    </Link>
+                      Cerrar sesión
+                    </button>
                   </li>
                 </ul>
               </div>

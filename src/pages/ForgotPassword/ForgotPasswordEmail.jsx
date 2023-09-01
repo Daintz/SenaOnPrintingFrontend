@@ -63,7 +63,7 @@ const ForgotPasswordEmail = () => {
                     </div>
                     <Link
                       className='mt-6 mb-6'
-                      to={"/"}
+                      to={"/login"}
                     >
                       <a className='text-blue'>Volver al inicio de sesión</a>
                     </Link>
