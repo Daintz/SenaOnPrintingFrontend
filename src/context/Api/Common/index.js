@@ -4,7 +4,14 @@ const commonEndpointsApi = (entityName, entityUrl) => {
   return createApi({
     reducerPath: 'commonApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
+      baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`,
+      prepareHeaders: (headers) => {
+        const token = localStorage.getItem('session_token');
+        if (token) {
+          headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+      },
     }),
     endpoints: (builder) => ({
       getAll: builder.query({

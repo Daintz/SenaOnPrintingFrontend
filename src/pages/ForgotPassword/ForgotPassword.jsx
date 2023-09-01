@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     setToken(queryParameters.get("token"))
     if(token == null || email == null) {
       toast.error('Token de recuperacion o correo invalido')
-      usenavigate('/')
+      usenavigate('/login')
     }
   }, [])
 

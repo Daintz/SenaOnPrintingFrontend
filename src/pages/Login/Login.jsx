@@ -11,7 +11,7 @@ const Login = () => {
   const usenavigate = useNavigate()
 
   useEffect(() => {
-    sessionStorage.clear()
+    localStorage.clear()
   }, [])
 
   const handleLogin = async (e) => {
@@ -24,10 +24,10 @@ const Login = () => {
       if (resp.token.length !== 0) {
         const token = resp.token;
         const decodedToken = jwtDecode(token); // Decodificar el token JWT
-        sessionStorage.setItem('session_token', token);
-        sessionStorage.setItem('UserId', decodedToken.id);
+        localStorage.setItem('session_token', token);
+        localStorage.setItem('UserId', decodedToken.id);
         toast.success(resp.message);
-        usenavigate('/dashboard');
+        usenavigate('/');
       }
     }).catch((err) => {
       toast.error(err.response.data.message)
