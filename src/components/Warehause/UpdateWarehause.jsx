@@ -69,7 +69,7 @@ function updateWarehause() {
 
   const inputs = [
     {key: 0, name: 'typeServiceId', title: 'Tipo de bodega', type: 'select', data: typeServiceOptions, placeholder: 'Tipo de de bodega'},
-    {key: 1, name: 'ubication', title: 'Ubicacion', type: 'text', placeholder: 'Ubicacion de la bodega'}
+    {key: 1, name: 'ubication', title: 'Ubicación', type: 'text', placeholder: 'Ubicación de la bodega'}
   ]
 
   return (

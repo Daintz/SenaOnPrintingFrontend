@@ -19,24 +19,25 @@ const ListSupplyPictograms = () => {
 
 
 
-  const columns = useMemo(()=>[
+  const columns = useMemo(() => [
     { Header: 'Codigo', accessor: 'code' },
     { Header: 'Nombre', accessor: 'name' },
-    {Header: 'Descripcion', accessor: 'description'},
-    {Header: 'Imagen', accessor: 'pictogramFile'},
-    {Header: 'Estado',
-    accessor: 'statedAt',
-    Cell: ({ value }) => (value
-      ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+    { Header: 'Descripcion', accessor: 'description' },
+    { Header: 'Imagen', accessor: 'pictogramFile' },
+    {
+      Header: 'Estado',
+      accessor: 'statedAt',
+      Cell: ({ value }) => (value
+        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
           Activo
         </span>
-      : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
           Inactivo
         </span>)
-  },
+    },
   ], [])
 
-  const data = useMemo(()=>(dataApi || []),[dataApi])
+  const data = useMemo(() => (dataApi || []), [dataApi])
 
   const {
     getTableProps,
@@ -54,8 +55,8 @@ const ListSupplyPictograms = () => {
     data,
     columns
   },
-  useGlobalFilter,
-  usePagination)
+    useGlobalFilter,
+    usePagination)
 
   const { pageIndex, globalFilter } = state
 
@@ -69,33 +70,10 @@ const ListSupplyPictograms = () => {
         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
-              <label htmlFor="simple-search" className="sr-only">
-                Search
-              </label>
+
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5 text-gray-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
                 </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-                  placeholder="Search"
-                  value={globalFilter || ''}
-                  onChange={e => setGlobalFilter(e.target.value)}
-                />
               </div>
             </form>
           </div>
@@ -103,8 +81,48 @@ const ListSupplyPictograms = () => {
             <CreateButtomSupplyPictograms />
           </div>
         </div>
-        <div className="overflow-x-auto rounded-xl border border-gray-400">
-          <table className="w-full text-sm text-left text-gray-500"{...getTableProps()}>
+
+        <div className="flex flex-wrap justify-center -mx-4">
+          {dataApi.map(supplyPictogram => (
+            <div
+              key={supplyPictogram.id}
+              className="w-1/4 max-w-sm p-4 mx-4 my-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:border-gray-300"
+            >
+              <div className="flex justify-center">
+                <img
+                  src={supplyPictogram.pictogramFile}
+                  width="300px"
+                  height="300px"
+                />
+              </div>
+              <p><b>Código:</b> {supplyPictogram.code}</p>
+              <p><b>Símbolo:</b> {supplyPictogram.description}</p>
+              <p><b>Nombre del pictograma:</b> {supplyPictogram.name}</p>
+              <div className="flex justify-between items-center mt-2">
+                <p>
+                  <b>Estado:</b>{' '}
+                  {supplyPictogram.statedAt ? (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                      Activo
+                    </span>
+                  ) : (
+                    <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                      Inactivo
+                    </span>
+                  )}
+                </p>
+                <ChangeStateButtonSupplyPictograms
+                  supplyPictograms={supplyPictogram}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+
+      {/* <table className="w-full text-sm text-left text-gray-500"{...getTableProps()}>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             {headerGroups.map(headerGroup => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
@@ -163,75 +181,15 @@ const ListSupplyPictograms = () => {
                         supplyPictograms={row.original}
                       />
                     </td>
+                    
                   </tr>
                 )
               })}
             </tbody>
-          </table>
-        <nav
-          className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-        >
-          <span className="text-sm font-normal text-gray-500">
-            Pagina {' '}
-            <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
-          </span>
-          <ul className="inline-flex items-stretch -space-x-px">
-            <li>
-              <button
-                className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-              >
-                <span className="sr-only">Anterior</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <a
-                className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              >
-                -
-              </a>
-            </li>
-            <li>
-              <button
-                className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                <span className="sr-only">Siguiente</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </li>
-          </ul>
-        </nav>
-        </div>
-      </div>
+          </table> */}
+
     </div>
+
   )
 }
 

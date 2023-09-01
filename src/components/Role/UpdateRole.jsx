@@ -27,6 +27,8 @@ function UpdateRole () {
     toast.success('Rol actualizado con exito')
   }
 
+  const permissions = [{label: "Configuración", value: 1}, {label: "Usuarios", value: 2},{label:  "Bodega", value: 3}, {label: "Insumos", value: 4}, {label: "Proveedores", value: 5}, {label: "Clientes", value: 6}, {label: "Producción", value: 7}];
+
   const inputs = [
     { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre del Rol' },
     { key: 1, name: 'description', title: 'Descripción', type: 'text', placeholder: 'Descripción del Rol' }
