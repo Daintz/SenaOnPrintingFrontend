@@ -33,7 +33,7 @@ const ListProduct = () => {
   const columns = useMemo(() => [
     { Header: 'Nombre', accessor: 'name' },
     { Header: 'Tipo producto', accessor: 'typeProduct' },
-    { Header: 'Caracteristicas', accessor: 'characteristics' },
+    { Header: 'Observaciones', accessor: 'observations' },
     { Header: 'Costo', accessor: 'cost' },
     {
       Header: 'Estado',
@@ -76,7 +76,7 @@ const ListProduct = () => {
 
   return (
     <>
-    {console.log(dataApi.length)}
+    {console.log(dataApi)}
     <div className='hidden'>
       <div ref={tablePDF}>
         <ReportProduct dataApi={dataApi}/>
