@@ -83,7 +83,7 @@ function CreateWarehause() {
       name: 'ubication',
       title: 'Ubicación',
       type: 'text',
-      placeholder: 'Ubicacion de la bodega'
+      placeholder: 'Ubicación de la bodega'
     }
   ]
 

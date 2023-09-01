@@ -168,9 +168,9 @@ const ListQuotationProviders = () => {
                         ? row.cells[0].value(row.cells[0])
                         : row.cells[0].render('Cell')}
                     </td>
-                    <a href={`https://localhost:7262/api/QuotationProviders/file/${row.original.id}`} download>
+                   <b> <a href={`https://localhost:7262/api/QuotationProviders/file/${row.original.id}`} download >
                        Descargar Cotización
-                      </a>
+                      </a></b>
                     <td {...row.cells[2].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[2].value === 'function'
                         ? row.cells[2].value(row.cells[2])
