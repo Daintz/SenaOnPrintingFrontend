@@ -107,9 +107,23 @@ const ListOrderProduction = () => {
     if (error) return <Error type={error.status} message={error.error} />
 
   return (
+    <>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
-        <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
+    {dataApi.length === 0
+      ? (
+        <>
+        <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
+          <h1 className="text-center text-3xl font-bold mb-10">No hay ordenes de producción planeadas</h1>
+          <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+          <Link to={'/planOP'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</Link>
+            </div>
+        </div>
+        </>
+        )
+      : (
+        <>
+    <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
@@ -262,14 +276,17 @@ const ListOrderProduction = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </button>
-              </li>
-            </ul>
-          </nav>
+                  </button>
+            </li>
+          </ul>
+        </nav>
         </div>
+          </>
+          )
+      }
       </div>
     </div>
-    
+    </>
   )
 }
 

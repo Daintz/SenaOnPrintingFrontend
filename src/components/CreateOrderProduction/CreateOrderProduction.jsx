@@ -24,6 +24,7 @@ import clientAxios from '../../config/clientAxios'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { BsImages } from 'react-icons/bs';
 
+
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
   scheme: Yup.string().required('Campo requerido')
@@ -45,7 +46,6 @@ function CreateOrderProduction() {
 
 
   const dispatch = useDispatch()
-  const [paperCutOptions, setpaperCutOptions] = useState([])
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
 
@@ -56,10 +56,11 @@ function CreateOrderProduction() {
 
   const [selectedImage2, setSelectedImage2] = useState(null);
   const [previewImage2, setPreviewImage2] = useState(null);
-  const { detailsData } = useSelector((state) => state.modal)
-  const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, productQuantity, productHeight, technicalSpecifications, typeService } = detailsData
-  console.log('quotationClientDetailId:', detailsData.id);
 
+  const { detailsData } = useSelector((state) => state.modal)
+  const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, quantity, productHeight, technicalSpecifications, typeService } = detailsData
+  // console.log(detailsData.id)
+  const quotationClientDetailId = detailsData.id
   const userId = sessionStorage.getItem('UserId');
   console.log(userId)
   //Formato de fecha
@@ -74,31 +75,20 @@ function CreateOrderProduction() {
 
   }, [])
 
+  const handleButtonClick = () => {
+    window.location.href = '/OrderProduction';
+  };
 
-  const getPaperCut = () => {
-    return new Promise((resolve, reject) => {
-      clientAxios.get('/PaperCuts').then(
-        (result) => {
-          const paperCuts = result.data.map((paperCut) => (
-            paperCut.name
-          ))
-          resolve(paperCuts)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
 
 
   const getImpositionPlanch = () => {
     return new Promise((resolve, reject) => {
       clientAxios.get('/impositionPlanch').then(
         (result) => {
-          const impositionPlanchs = result.data.map((impositionPlanch) => (
-            impositionPlanch.name
-          ))
+          const impositionPlanchs = result.data.map((impositionPlanch) => ({
+            id: impositionPlanch.id,
+            name: impositionPlanch.name
+        }))
           resolve(impositionPlanchs)
         },
         (error) => {
@@ -113,23 +103,22 @@ function CreateOrderProduction() {
     return new Promise((resolve, reject) => {
       clientAxios.get('/Machine').then(
         (result) => {
-          const Machines = result.data.map((machine) => (
-            machine.name
-          ))
-          resolve(Machines)
+          const Machines = result.data.map((machine) => ({
+            id: machine.id,
+            name: machine.name
+          }));
+          resolve(Machines);
         },
         (error) => {
-          reject(error)
+          reject(error);
         }
-      )
-    })
-  }
-
+      );
+    });
+  };
+  
 
   const fetchOptions = () => {
-    getPaperCut().then((options) => {
-      setpaperCutOptions(options)
-    })
+
     getImpositionPlanch().then((options) => {
       setImpositionPlanchOptions(options)
     })
@@ -151,9 +140,9 @@ function CreateOrderProduction() {
     // console.log('imageInfo', values.image);
     const formData = new FormData();
     console.log(values)
-    console.log('quotationClientDetailId:', detailsData.id);
+    console.log('quotationClientDetailId:', quotationClientDetailId);
     console.log('userId', userId);
-    formData.append('quotationClientDetailId', detailsData.id);
+    formData.append('quotationClientDetailId', quotationClientDetailId);
     formData.append('userId', userId);
     formData.append('materialReception', values.materialReception);
     formData.append('programVersion', values.programVersion);
@@ -164,6 +153,8 @@ function CreateOrderProduction() {
     // formData.append('idPaperCut', values.idPaperCut);
     formData.append('imageInfo', selectedImage1);
     formData.append('observations', values.observations);
+    formData.append('machineId', values.machineId)
+    formData.append('impositionPlanchId', values.impositionPlanchId)
     formData.append('statedAt', true);
     formData.append('orderStatus', 2);
     formData.append('program', values.program);
@@ -204,7 +195,8 @@ function CreateOrderProduction() {
 
     <Formik
       initialValues={{
-        userId: 1,
+        userId: userId,
+        quotationClientDetailId: quotationClientDetailId,
         materialReception: '',
         programVersion: '',
         indented: '',
@@ -215,6 +207,8 @@ function CreateOrderProduction() {
         orderStatus: 1,
         program: '',
         typePoint: '',
+        impositionPlanchId: 0,
+        machineId: 0,
         scheme: ''
       }}
       onSubmit={(values) => {
@@ -243,7 +237,7 @@ function CreateOrderProduction() {
                   </div>
                   <div className="w-2/4">
                     <p><b>Cliente:</b> {detailsData.name}</p>
-                    <p><b>Tipo de servicio:</b> {detailsData.typeService}</p>
+                    <p><b>Tipo de servicio:</b> {detailsData.typeService.name}</p>
 
 
                   </div>
@@ -257,7 +251,7 @@ function CreateOrderProduction() {
 
                     <div className="w-full">
                       <p><b>Producto:</b> {productName}</p>
-                      <p><b>Cantidad</b> {productQuantity}</p>
+                      <p><b>Cantidad:</b> {quantity}</p>
                     </div>
                     <div className="flex items-center justify-center w-15 h-15">
                       <BsCheckCircle className="text-blue-500 h-6 w-6" />
@@ -399,36 +393,36 @@ function CreateOrderProduction() {
                   </div>
 
                   <div className="w-1/4">
-                    <label htmlFor="idImpositionPlanch" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                    <label htmlFor="impositionPlanchId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
                     </label>
                     <Field
                       as="select"
-                      name="idImpositionPlanch"
-                      id="idImpositionPlanch"
+                      name="impositionPlanchId"
+                      id="impositionPlanchId"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
-                      {/* Opciones del select */}
                       {impositionPlanchOptions && impositionPlanchOptions.map(impositionPlanch => (
                         <option key={impositionPlanch.id} value={impositionPlanch.id}>
-                          {impositionPlanch}
+                          {impositionPlanch.name}
                         </option>
                       ))}
                     </Field>
                   </div>
+
                   <div className="w-1/4">
-                    <label htmlFor="idMachine" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                    <label htmlFor="machineId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Maquina
                     </label>
                     <Field
                       as="select"
-                      name="idMachine"
-                      id="idMachine"
+                      name="machineId"
+                      id="machineId"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
                       {machineOptions && machineOptions.map(machine => (
                         <option key={machine.id} value={machine.id}>
-                          {machine}
+                          {machine.name}
                         </option>
                       ))}
                     </Field>
@@ -513,6 +507,7 @@ function CreateOrderProduction() {
                   type="submit"
                   className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
                 >
+                  <Link to={"/OrderProduction"}></Link>
                   <AiOutlineArrowRight />
                 </button>
 
@@ -533,7 +528,7 @@ export function CreateButtomOrderProduction({ orderProduction }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    console.log(`ID del orderProduction: ${orderProduction}`);
+    // console.log(`ID del orderProduction: ${orderProduction}`);
     // dispatch(setWidth({ width: 'w-[1000]' }))
     // dispatch(openModal({ title: 'Crear orden de producción' }))
     // dispatch(setAction({ action: 'creating' }))
