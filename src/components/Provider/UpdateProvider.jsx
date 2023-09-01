@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
   nitCompany: Yup.string().required('Campo requerido'),
   nameCompany: Yup.string().required('Campo requerido'),
   email: Yup.string().required('Campo requerido'),
-  phone: Yup.string().required('Campo requerido'),
+  phone: Yup.string().required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   companyAddress: Yup.string().required('Campo requerido')
 })
 

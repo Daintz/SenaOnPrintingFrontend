@@ -79,7 +79,7 @@ const validationSchema = Yup.object().shape({
       const response = await checkEmailExistence(value);
       return !response.exists; // Devuelve false si el correo ya existe
     }),
-  phone: Yup.string('digite solo numeros').min(7, 'Minimo 10 digitos').max(10, 'Maximo 10 digitos').required('Campo requerido'),
+  phone: Yup.string('digite solo numeros').min(10, 'Minimo 10 digitos').required('Campo requerido').max(10,'Maximo 10 numeros').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   companyAddress: Yup.string().required('Campo requerido').min(7, 'Minimo 10 digitos').max(100, 'Maximo 100 digitos')
 });
 

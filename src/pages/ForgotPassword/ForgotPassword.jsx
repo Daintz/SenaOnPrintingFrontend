@@ -33,7 +33,7 @@ const ForgotPassword = () => {
       toast.success(resp.message)
       usenavigate('/')
     }).catch((err) => {
-      toast.error('Token de recuperacion o correo invalido')
+      toast.error('Token de recuperación o correo invalido')
     })
   }
 

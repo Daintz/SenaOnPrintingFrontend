@@ -16,16 +16,48 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import clientAxios from '../../config/clientAxios' // Importar clientAxios para poder hacer la consulta
 
 const validationSchema = Yup.object().shape({
-  names: Yup.string().required('Campo requerido'),
-  surnames: Yup.string().required('Campo requerido'),
+  names: Yup.string().required('Campo requerido').max(30, "No puede tener mas de 30 caracteres"),
+  surnames: Yup.string().required('Campo requerido').max(30, "No puede tener mas de 30 caracteres"),
   typeDocumentId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de documento'),
-  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-  address: Yup.string().required('Campo requerido'),
-  email: Yup.string().email().required('Campo requerido'),
+  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números').test('unique-document', 'El documento ya está en uso', async function (value) {
+    const response = await checkDocumentExistence(value)
+    return !response.exists // Devuelve false si el documento ya existe
+  }),
+  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Teléfono debe ser de 10 digitos').max(10, 'Teléfono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  address: Yup.string().required('Campo requerido').min(10, "Debe tener mas de 10 caracteres").max(35, "No puede tener mas de 35 caracteres"),
+  email: Yup.string().email("Formato de correo invalidos").required('Campo requerido').test('unique-email', 'El correo ya está en uso', async function (value) {
+    const response = await checkEmailExistence(value)
+    return !response.exists // Devuelve false si el nombre ya existe
+  }),
   roleId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un rol'),
   passwordDigest: Yup.string().min(6, 'Contraseña debe ser de al menos 6 caracteres').max(12, 'Contraseña no puede tener mas de 12 caracteres').required('Campo requerido')
 })
+
+async function checkEmailExistence (email) {
+  try {
+    const response = await clientAxios.get('/user')
+    const users = response.data
+    const emailExists = users.some(user => user.email === email)
+
+    return { exists: emailExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del correo:', error)
+    return { exists: false }
+  }
+}
+
+async function checkDocumentExistence (document) {
+  try {
+    const response = await clientAxios.get('/user')
+    const users = response.data
+    const documentExists = users.some(user => user.documentNumber === document)
+
+    return { exists: documentExists }
+  } catch (error) {
+    console.error('Error al verificar la existencia del número de documento:', error)
+    return { exists: false }
+  }
+}
 
 const getTypeDocuments = () => {
   return new Promise((resolve, reject) => {
@@ -120,16 +152,16 @@ function CreateUser() {
     {
       key: 3,
       name: 'documentNumber',
-      title: 'Numero de Documento',
+      title: 'Número de Documento',
       type: 'text',
-      placeholder: 'Numero de Documento del Usuario'
+      placeholder: 'Número de Documento del Usuario'
     },
     {
       key: 4,
       name: 'phone',
-      title: 'Telefono',
+      title: 'Teléfono',
       type: 'text',
-      placeholder: 'Telefono del Usuario'
+      placeholder: 'Teléfono del Usuario'
     },
     {
       key: 5,
@@ -141,9 +173,9 @@ function CreateUser() {
     {
       key: 6,
       name: 'email',
-      title: 'Correo Electronico',
+      title: 'Correo Electrónico',
       type: 'email',
-      placeholder: 'Correo Electronico del Usuario'
+      placeholder: 'Correo Electrónico del Usuario'
     },
     {
       key: 7,
@@ -231,12 +263,12 @@ function CreateUser() {
             />
           </div>
           <div key='3' className='w-1/2 ml-2'>
-            <label htmlFor="documentNumber">Numero de Documento</label>
+            <label htmlFor="documentNumber">Número de Documento</label>
             <Field
                 type="text"
                 name="documentNumber"
                 id="documentNumber"
-                placeholder="Numero de Documento del Usuario"
+                placeholder="Número de Documento del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
@@ -248,12 +280,12 @@ function CreateUser() {
         </div>
         <div className='flex mb-2'>
           <div key='4' className='w-1/2 mr-2'>
-            <label htmlFor="phone">Telefono</label>
+            <label htmlFor="phone">Teléfono</label>
             <Field
                 type="text"
                 name="phone"
                 id="phone"
-                placeholder="Telefono del Usuario"
+                placeholder="Teléfono del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
@@ -285,7 +317,7 @@ function CreateUser() {
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Correo Electronico del Usuario"
+                placeholder="Correo Electrónico del Usuario"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage

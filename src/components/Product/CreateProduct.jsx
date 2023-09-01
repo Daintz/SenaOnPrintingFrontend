@@ -18,7 +18,7 @@ import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  characteristics: Yup.string().required('Campo requerido')
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida')
 })
 
 function CreateProduct () {
@@ -41,6 +41,7 @@ function CreateProduct () {
 
   const [paperCutOptions, setpaperCutOptions] = useState([])
   const [finishOptions, setFinishOptions] = useState([])
+  const [substrateOptions, setSubstrateOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
@@ -82,6 +83,23 @@ function CreateProduct () {
     })
   }
 
+  const getSubstrate = () => {
+    return new Promise((resolve, reject) => {
+      clientAxios.get('/Substrates').then(
+        (result) => {
+          const substrates = result.data.map((substrate) => ({
+            name: substrate.name,
+            label: substrate.name
+          }))
+          resolve(substrates)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
+
   const fetchOptions = () => {
     getPaperCut().then((options) => {
       setpaperCutOptions(options)
@@ -89,9 +107,13 @@ function CreateProduct () {
     getFinish().then((options) => {
       setFinishOptions(options)
     })
+    getSubstrate().then((options) => {
+      setSubstrateOptions(options)
+    })
   }
 
   const handleSubmit = async values => {
+    console.log(values)
     if (isLoading) return <Spinner />
 
     await createProduct(values)
@@ -219,7 +241,6 @@ function CreateProduct () {
       title: 'Tipo de producto',
       type: 'select',
       options: ['Elige una opción', 'Libreta', 'Souvenir', 'Gran formato', 'Papelería'],
-      placeholder: 'Tipo de producto',
       value: typeProductSelect,
       action: handleTypeProduct
     },
@@ -282,6 +303,15 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
+      row: 2,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateFrontPage',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 3,
       key: 7,
       typeProductOwner: 'Libreta',
@@ -329,6 +359,15 @@ function CreateProduct () {
       title: 'Código',
       type: 'text',
       placeholder: 'Código libreta'
+    },
+    {
+      row: 3,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateBackCover',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
     },
     {
       row: 4,
@@ -380,6 +419,15 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
+      row: 4,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateSheets',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 5,
       key: 10,
       typeProductOwner: 'Libreta',
@@ -420,38 +468,34 @@ function CreateProduct () {
         },
         {
           name: '2',
-          label: 'Loops'
-        },
-        {
-          name: '3',
           label: 'Paso'
         },
         {
-          name: '4',
+          name: '3',
           label: 'Tapa dura'
         },
         {
-          name: '5',
+          name: '4',
           label: 'Grapado'
         },
         {
-          name: '6',
+          name: '5',
           label: 'Rústico/Cosido'
         },
         {
-          name: '7',
+          name: '6',
           label: 'Lomo'
         },
         {
-          name: '8',
+          name: '7',
           label: 'Sobrecubierta'
         },
         {
-          name: '9',
+          name: '8',
           label: 'Tapa blanda'
         },
         {
-          name: '10',
+          name: '9',
           label: 'Caballete'
         }
       ]
@@ -466,6 +510,15 @@ function CreateProduct () {
       checkboxes: finishOptions
     },
     {
+      row: 6,
+      key: 6,
+      typeProductOwner: 'Libreta',
+      name: 'susbtrateNoteBook',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 2,
       key: 10,
       typeProductOwner: 'Souvenir',
@@ -473,15 +526,6 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de souvenir'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Souvenir',
-      name: 'profileColorSouvenir',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de souvenir'
     },
     {
       row: 2,
@@ -514,15 +558,6 @@ function CreateProduct () {
       row: 2,
       key: 10,
       typeProductOwner: 'Gran formato',
-      name: 'profileColorLargeFormat',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de gran formato'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Gran formato',
       name: 'observationsLargeFormat',
       title: 'Observaciones',
       type: 'textarea',
@@ -538,6 +573,15 @@ function CreateProduct () {
       checkboxes: finishOptions
     },
     {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'susbtrateLargeFormat',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
+    },
+    {
       row: 2,
       key: 10,
       typeProductOwner: 'Papelería',
@@ -545,15 +589,6 @@ function CreateProduct () {
       title: 'Dimension',
       type: 'text',
       placeholder: 'Dimension de papeleria'
-    },
-    {
-      row: 2,
-      key: 10,
-      typeProductOwner: 'Papelería',
-      name: 'profileColorStationery',
-      title: 'Perfil color',
-      type: 'text',
-      placeholder: 'Perfil color de papeleria'
     },
     {
       row: 2,
@@ -572,236 +607,289 @@ function CreateProduct () {
       title: 'Acabados',
       type: 'checkbox',
       checkboxes: finishOptions
+    },
+    {
+      row: 3,
+      key: 10,
+      typeProductOwner: 'Papelería',
+      name: 'susbtrateStationery',
+      title: 'Sustrato',
+      type: 'checkbox',
+      checkboxes: substrateOptions
     }
   ]
 
   const rows = [...new Set(inputs.map(input => input.row))]
 
   return (
-    !dataSupplies
-      ? (
-        <Formik
-          initialValues={{
-            typeProduct: '',
-            name: '',
-            characteristics: '',
-            cost: ''
-          }}
-          onSubmit={values => {
-            handleSubmit(values)
-          }}
-          validationSchema={validationSchema}
-        >
-          <Form className="space-y-6">
-          {rows.map(row => (
-            <div key={row} className="flex">
-              {inputs
-                .filter(input => input.row === row)
-                .map((input) => (
-                  (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
-                  (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
-                  (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                  (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                  (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                  (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
-                  (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                  (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                  (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                  (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
-                  (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                  (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                  (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
-                    ? (
-                      <>
-                        {input.type === 'checkbox' &&
+    <Formik
+      initialValues={{
+        name: '',
+        typeProduct: '',
+        notebookSize: '',
+        frontPage: '',
+        frontPageInks: '',
+        numberInks: '',
+        pantone: '',
+        code: '',
+        susbtrateFrontPage: [],
+        backCover: '',
+        backCoverInks: '',
+        numberInksBackCover: '',
+        pantoneBackCover: '',
+        codeBackCover: '',
+        susbtrateBackCover: [],
+        innerSheets: '',
+        innerSheetsInks: '',
+        numberInksInnerSheets: '',
+        pantoneInnerSheets: '',
+        codeInnerSheets: '',
+        susbtrateSheets: [],
+        numberSheets: '',
+        cost: '',
+        observations: '',
+        cover: '',
+        laminated: '',
+        susbtrateNoteBook: [],
+        dimensionSouvenir: '',
+        observationsSouvenir: '',
+        laminatedSouvenir: '',
+        dimensionLargeFormat: '',
+        observationsLargeFormat: '',
+        laminatedLargeFormat: '',
+        susbtrateLargeFormat: [],
+        dimensionStationery: '',
+        observationsStationery: '',
+        laminatedStationery: '',
+        susbtrateStationery: []
+      }}
+      onSubmit={values => {
+        console.log(values)
+        // console.log({ ...values, typeProduct: typeProductSelect })
+        // handleSubmit(values)
+      }}
+      validationSchema={validationSchema}
+    >
+      {!dataSupplies
+        ? ({ handleChange, values }) => (
+        <Form className="space-y-6">
+        {rows.map(row => (
+          <div key={row} className="flex">
+            {inputs
+              .filter(input => input.row === row)
+              .map((input) => (
+                (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
+                (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
+                (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
+                (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
+                (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
+                  ? (
+                    <>
+                      {input.type === 'checkbox' &&
                         <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                        <label>{input.title}</label>
-                        <div className="grid grid-cols-2 gap-4">
-                          {input.checkboxes.map((checkbox, index) => (
-                            <div key={index} className="flex items-center">
-                              <input
-                                type="checkbox"
-                                name={checkbox.name}
-                                id={checkbox.name}
-                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                              />
-                              <label htmlFor={checkbox.name} className="ml-2">{checkbox.label}</label>
-                            </div>
-                          ))}
+                          <label>{input.title}</label>
+                          <div className="grid grid-cols-2 gap-4">
+                            {input.checkboxes.map((checkbox, index) => (
+                              <div key={index} className="flex items-center">
+                                <Field
+                                  type="checkbox"
+                                  name={`${checkbox.name} ${input.name}`}
+                                  id={`${checkbox.name} ${input.name}`}
+                                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                />
+                                <label htmlFor={`${checkbox.name} ${input.name}`} className="ml-2">{checkbox.label}</label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>}
-                        {input.type === 'select' &&
-                          (
-                              <>
-                              <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                                <label htmlFor={input.name}>{input.title}</label>
-                                <Field as='select' name={input.name} id={input.name} value={input.value} onChange={input.action ?? undefined} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5">
-                                  {input.options.map((option, index) => (
-                                    <option key={index} value={option}>
-                                      {option}
-                                    </option>
-                                  ))}
-                                </Field>
-                                <ErrorMessage
-                                  name={input.name}
-                                  component="div"
-                                  className="text-red-500"
-                                />
-                              </div>
-                              </>
-                          )}
-                          {input.type === 'textarea' && (
-                            <>
-                              <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                                <label htmlFor={input.name}>{input.title}</label>
-                                <Field
-                                  as="textarea"
-                                  name={input.name}
-                                  id={input.name}
-                                  placeholder={input.placeholder}
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                                />
-                                <ErrorMessage
-                                  name={input.name}
-                                  component="div"
-                                  className="text-red-500"
-                                />
-                              </div>
-                            </>
-                          )}
-                            {input.type === 'text' && (
-                              <>
-                              <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                                <label htmlFor={input.name}>{input.title}</label>
-                                <Field
-                                  type={input.type}
-                                  name={input.name}
-                                  id={input.name}
-                                  placeholder={input.placeholder}
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                                />
-                                <ErrorMessage
-                                  name={input.name}
-                                  component="div"
-                                  className="text-red-500"
-                                />
-                              </div>
-                              </>
-                            )}
-
-                        </>
-                      )
-                    : (
-                        <></>
-                      )
-                ))}
-            </div>
-          ))}
-            <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Insumos</h2>
-            <button
-              onClick={handleDataSupplies}
-              className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Administrar insumos
-            </button>
-            <button
-              type="submit"
-              className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-            Crear producto
-          </button>
-        </Form>
-      </Formik>
-        )
-      : (
-          <>
-              <div className="w-full md:w-1/2">
-                <form className="flex items-center">
-                  <label htmlFor="simple-search" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative w-full">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <svg
-                        aria-hidden="true"
-                        className="w-5 h-5 text-gray-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      id="simple-search"
-                      className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-                      placeholder="Search"
-                      value={globalFilter || ''}
-                      onChange={e => setGlobalFilter(e.target.value)}
-                    />
-                  </div>
-                </form>
-              </div>
-          <div className="overflow-x-auto rounded-xl border border-gray-400">
-              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                  {headerGroups.map(headerGroup => (
-                      <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column, index) => (
-                          <th scope="col" className='px-6 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
-                            {column.render('Header')}
-                        </th>
-                        ))}
-                        <th scope="col" key={5} className='px-6 py-3'>
-                            Acciones
-                        </th>
-                      </tr>
-                  ))}
-                </thead>
-                  {rowsTable.length === 0
-                    ? (
-                      <>
-                        <p className='w-full text-center text-3xl font-bold ml-[170%] my-10'>No se encontraron registros con esta busqueda.</p>
+                      }
+                      {input.type === 'select' &&
+                        <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                          <label htmlFor={input.name}>{input.title}</label>
+                          <Field
+                            as='select'
+                            name={input.name}
+                            id={input.name}
+                            value={values[input.name]}
+                            onChange={(e) => {
+                              handleChange(e)
+                              input.action && input.action(e)
+                            }}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                          >
+                              {input.options.map((option, index) => (
+                                <option key={index} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                          </Field>
+                          <ErrorMessage
+                            name={input.name}
+                            component="div"
+                            className="text-red-500"
+                          />
+                        </div>
+                        }
+                        {input.type === 'textarea' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as="textarea"
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
+                        {input.type === 'text' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              type={input.type}
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
                       </>
-                      )
-                    : (
-                      <>
-                        {page.map(row => {
-                          prepareRow(row)
-                          return (
-                            <tbody key={row.original.id} {...getTableBodyProps()}>
+                    )
+                  : (
+                      <></>
+                    )
+              )
+              )
+            }
+          </div>
+        ))}
+          <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Insumos</h2>
+          <button
+            onClick={handleDataSupplies}
+            className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Administrar insumos
+          </button>
+          <button
+            type="submit"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+          Crear producto
+        </button>
+      </Form>
+          )
+
+        : (
+        <>
+          <div className="w-full md:w-1/2">
+            <form className="flex items-center">
+              <label htmlFor="simple-search" className="sr-only">
+                Search
+              </label>
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
+                  placeholder="Search"
+                  value={globalFilter || ''}
+                  onChange={e => setGlobalFilter(e.target.value)}
+                />
+              </div>
+            </form>
+          </div>
+          <div className="overflow-x-auto rounded-xl border border-gray-400">
+            <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                {headerGroups.map(headerGroup => (
+                  <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column, index) => (
+                      <th scope="col" className='px-6 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
+                        {column.render('Header')}
+                    </th>
+                    ))}
+                    <th scope="col" key={5} className='px-6 py-3'>
+                        Acciones
+                    </th>
+                  </tr>
+                ))}
+              </thead>
+                {rowsTable.length === 0
+                  ? (
+                    <>
+                      <p className='w-full text-center text-3xl font-bold ml-[170%] my-10'>No se encontraron registros con esta busqueda.</p>
+                    </>
+                    )
+                  : (
+                    <>
+                      {page.map(row => {
+                        prepareRow(row)
+                        return (
+                          <tbody key={row.original.id} {...getTableBodyProps()}>
                             <tr
                               {...row.getRowProps()}
                               className="border-b border-gray-500"
                             >
                               {row.cells.map((cell, index) => {
                                 return (<>
-                          <td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>
-                          {index === 8 &&
-                              <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                                <button type="button" onClick={() => addProduct(cell.row.original)}>
-                                  <AiOutlinePlusCircle alt="Icono agregar producto" title="Agregar producto" className="h-6 w-6 mr-2" />
-                                </button>
-                                <button type="button" onClick={() => deleteProduct(cell.row.original.id)}>
-                                  <AiOutlineCloseCircle alt="Icono eliminar producto" title="Eliminar producto" className="h-6 w-6 mr-2" />
-                                </button>
-                              </td>
-                          }
-                        </>)
+                                  <td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>
+                                  {index === 8 &&
+                                      <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
+                                        <button type="button" onClick={() => addProduct(cell.row.original)}>
+                                          <AiOutlinePlusCircle alt="Icono agregar producto" title="Agregar producto" className="h-6 w-6 mr-2" />
+                                        </button>
+                                        <button type="button" onClick={() => deleteProduct(cell.row.original.id)}>
+                                          <AiOutlineCloseCircle alt="Icono eliminar producto" title="Eliminar producto" className="h-6 w-6 mr-2" />
+                                        </button>
+                                      </td>
+                                  }
+                                </>)
                               })}
                             </tr>
-                            </tbody>
-                          )
-                        })}
-                      </>
-                      )
-                  }
-              </table>
+                          </tbody>
+                        )
+                      })}
+                    </>
+                    )
+                }
+            </table>
             <nav
               className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
             >
@@ -863,66 +951,67 @@ function CreateProduct () {
                 </li>
               </ul>
             </nav>
-            </div>
+          </div>
 
-        <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h2>
+      <h className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h>
 
-        <div className="overflow-x-auto rounded-xl border border-gray-400">
-              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                  {headerGroups.map(headerGroup => (
-                      <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column, index) => (
-                          <th scope="col" className='px-3 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
-                            {column.render('Header')}
-                        </th>
-                        ))}
-                      </tr>
+      <div className="overflow-x-auto rounded-xl border border-gray-400">
+        <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            {headerGroups.map(headerGroup => (
+                <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column, index) => (
+                    <th scope="col" className='px-3 py-3' key={`${column.id}-${index}`} {...column.getHeaderProps()}>
+                      {column.render('Header')}
+                  </th>
                   ))}
-                </thead>
-                <>
-                <tbody>
-                  {listSupplies.map(listSupply => {
-                    return (
-                      <tr
-                        key={listSupply.id}
-                        className="border-b border-gray-500"
-                      >
-                        <td className="px-4 py-3">{listSupply.name}</td>
-                        <td className="px-4 py-3">{listSupply.dangerIndicators}</td>
-                        <td className="px-4 py-3">{listSupply.useInstructions}</td>
-                        <td className="px-4 py-3">{listSupply.advices}</td>
-                        <td className="px-4 py-3">{listSupply.supplyType}</td>
-                        <td className="px-4 py-3">{listSupply.sortingWord}</td>
-                        <td className="px-4 py-3">{listSupply.quantity}</td>
-                        <td className="px-4 py-3">{listSupply.averageCost}</td>
-                        <td className="px-4 py-3">{listSupply.statedAt
-                          ? (
-                            <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                              Activo
-                            </span>
-                            )
-                          : (
-                            <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                              Inactivo
-                            </span>
-                            )}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-                </>
-              </table>
-            </div>
-
-        <button
-          onClick={handleDataSupplies}
-          className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          Volver
-        </button>
-        </>
-        )
+                </tr>
+            ))}
+          </thead>
+          <>
+          <tbody>
+            {listSupplies.map(listSupply => {
+              return (
+                <tr
+                  key={listSupply.id}
+                  className="border-b border-gray-500"
+                >
+                  <td className="px-4 py-3">{listSupply.name}</td>
+                  <td className="px-4 py-3">{listSupply.dangerIndicators}</td>
+                  <td className="px-4 py-3">{listSupply.useInstructions}</td>
+                  <td className="px-4 py-3">{listSupply.advices}</td>
+                  <td className="px-4 py-3">{listSupply.supplyType}</td>
+                  <td className="px-4 py-3">{listSupply.sortingWord}</td>
+                  <td className="px-4 py-3">{listSupply.quantity}</td>
+                  <td className="px-4 py-3">{listSupply.averageCost}</td>
+                  <td className="px-4 py-3">{listSupply.statedAt
+                    ? (
+                      <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                        Activo
+                      </span>
+                      )
+                    : (
+                      <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                        Inactivo
+                      </span>
+                      )}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+          </>
+        </table>
+      </div>
+      <button
+        onClick={handleDataSupplies}
+        className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+      >
+        Volver
+      </button>
+      </>
+          )
+      }
+  </Formik>
   )
 }
 
