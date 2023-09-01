@@ -10,14 +10,14 @@ const ReportUser = ({ dataApi }) => {
   })
 
   const columns = [
-    {name: 'Numero de Documento', key: 'documentNumber'},
+    {name: 'Número de Documento', key: 'documentNumber'},
     {name: 'Tipo de Documento', key: 'typeDocumentId'},
     {name: 'Nombres', key: 'names'},
     {name: 'Apellidos', key: 'surnames'},
     {name: 'Rol', key: 'roleId'},
-    {name: 'Correo Electronico', key: 'email'},
-    {name: 'Telefono', key: 'phone'},
-    {name: 'Direccion', key: 'address'}
+    {name: 'Correo Electrónico', key: 'email'},
+    {name: 'Teléfono', key: 'phone'},
+    {name: 'Dirección', key: 'address'}
   ]
 
   //console.log(dataApi)

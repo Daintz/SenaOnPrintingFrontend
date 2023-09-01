@@ -81,11 +81,11 @@ const ListUser = () => {
   //console.log(dataApi)
 
   const columns = useMemo(() => [
-    { Header: 'Numero de Documento', accessor: 'documentNumber' },
+    { Header: 'Número de Documento', accessor: 'documentNumber' },
     { Header: 'Tipo de Documento', accessor: 'typeDocumentId' },
     { Header: 'Nombres', accessor: 'names' },
     { Header: 'Apellidos', accessor: 'surnames' },
-    { Header: 'Correo Electronico', accessor: 'email' },
+    { Header: 'Correo Electrónico', accessor: 'email' },
     { Header: 'Rol', accessor: 'roleId' },
     {
       Header: 'Estado',
@@ -151,7 +151,7 @@ const ListUser = () => {
               <>
                 <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
                   <h1 className="text-center text-3xl font-bold mb-10">No hay registros en la base de datos</h1>
-                  <p className="text-center text-xl">Para empezar a visualizar la información debes de crear un rol</p>
+                  <p className="text-center text-xl">Para empezar a visualizar la información debes de crear un usuario</p>
                   <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
                     <CreateButtomUser />
                   </div>
@@ -246,7 +246,7 @@ const ListUser = () => {
                     className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
                   >
                     <span className="text-sm font-normal text-gray-500">
-                      Pagina {' '}
+                      Página {' '}
                       <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
                     </span>
                     <ul className="inline-flex items-stretch -space-x-px">

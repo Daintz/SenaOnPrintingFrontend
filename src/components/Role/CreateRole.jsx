@@ -6,6 +6,7 @@ import {
   setAction,
   setWidth
 } from '../../context/Slices/Modal/ModalSlice'
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
@@ -14,7 +15,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  description: Yup.string().required('Campo requerido'),
+  permissionIds: Yup.array().min(1, 'Campo requerido')
 })
 
 function CreateRole () {
@@ -33,7 +35,7 @@ function CreateRole () {
     }
     toast.success('Rol creado con exito')
   }
-
+  const permissions = [{label: "Configuración", value: 1}, {label: "Usuarios", value: 2},{label:  "Bodega", value: 3}, {label: "Insumos", value: 4}, {label: "Proveedores", value: 5}, {label: "Clientes", value: 6}, {label: "Producción", value: 7}];
   const inputs = [
     {
       key: 0,
@@ -55,7 +57,8 @@ function CreateRole () {
     <Formik
       initialValues={{
         name: '',
-        description: ''
+        description: '',
+        permissionIds: []
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -80,6 +83,21 @@ function CreateRole () {
               />
             </div>
           ))}
+          <div id="permissions" className="title">Lista de Permisos:</div>
+          <div id="permissions_container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} role="group" aria-labelledby="permissions">
+            {permissions.map((option) => (
+              <label className='m-2'>
+                <Field
+                  id={"permission"+option.value}
+                  className='mr-2'
+                  type="checkbox"
+                  name={"permission_"+option.value}
+                  value={option.value}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
           <button
             type="submit"
             className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
