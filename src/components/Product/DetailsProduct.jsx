@@ -4,7 +4,8 @@ import { GrView } from 'react-icons/gr'
 
 function DetailsProduct () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { typeProduct, name, observations, cost, size, frontPage, frontPageInks, FrontPagePantone, frontPageCode, statedAt, backCover, backCoverInks, backCoverPantone, backCoverCode, inside, insideInks, insidePantone, insideCode, numberPages, dimension, cover, susbtrateFrontPage, susbtrateSheets, laminated, susbtrateLargeFormat, susbtrateStationery, supplies, substratum } = detailsData
+  const { typeProduct, name, observations, cost, size, frontPage, frontPageInks, FrontPagePantone, frontPageCode, statedAt, backCover, backCoverInks, backCoverPantone, backCoverCode, inside, insideInks, insidePantone, insideCode, numberPages, dimension, cover, susbtrateFrontPage, susbtrateSheets, bindings, susbtrateLargeFormat, susbtrateStationery, supplies, substratum } = detailsData
+  console.log(detailsData)
 
   return (
     <div className="grid grid-cols-3 gap-16 ">
@@ -35,7 +36,7 @@ function DetailsProduct () {
         <p><b>Encuadernacion:</b> {cover}</p>
       </div>
       <div>
-        <p><b>Acabados:</b> {laminated}</p>
+        <p><b>Acabados:</b> {bindings}</p>
         <p><b>Sustratos gran formato:</b> {susbtrateLargeFormat}</p>
         <p><b>Sustratos papeleria:</b> {susbtrateStationery}</p>
         <p><b>Sustratos:</b> {substratum}</p>

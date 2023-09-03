@@ -36,8 +36,6 @@ function updateProduct () {
   const { editingData } = useSelector((state) => state.modal)
   const [updateProduct, { error, isLoading }] = usePutProductByIdMutation()
 
-  console.log(editingData)
-
   const [paperCutOptions, setpaperCutOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
@@ -46,6 +44,23 @@ function updateProduct () {
   const [backCoverInks, setBackCoverInks] = useState('')
   const [innerSheets, setInnerSheets] = useState('')
   const [innerSheetsInks, setInnerSheetsInks] = useState('')
+
+  useEffect(() => {
+    editingData.supplies.map(supply => (
+      setListSupplies([...listSupplies, { ...supply.supply }])
+    ))
+    editingData.supplies.map(supply => (
+      setListSuppliesIds([...listSuppliesIds, supply.supplyId])
+    ))
+    setTypeProductSelect(editingData.typeProduct)
+    setFrontPage(editingData.frontPage === true ? 'Si' : 'No')
+    setFrontPageInks(editingData.frontPageInks === true ? 'Si' : 'No')
+    setBackCover(editingData.backCover === true ? 'Si' : 'No')
+    setBackCoverInks(editingData.backCoverInks === true ? 'Si' : 'No')
+    setInnerSheets(editingData.inside === true ? 'Si' : 'No')
+    setInnerSheetsInks(editingData.insideInks === true ? 'Si' : 'No')
+    console.log(editingData)
+  }, [])
 
   const getPaperCut = () => {
     return new Promise((resolve, reject) => {
@@ -70,7 +85,6 @@ function updateProduct () {
   }
 
   const handleSubmit = async values => {
-    console.log('me ejecuto')
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
     await updateProduct(values)
@@ -129,16 +143,21 @@ function updateProduct () {
     const existingSupplyIds = listSuppliesIds.find(supply => supply === cell.id)
 
     if (!existingSupplyIds) {
+      console.log(cell.id)
       setListSuppliesIds([...listSuppliesIds, cell.id])
+      console.log(listSuppliesIds)
     }
   }
+
+  useEffect(() => {
+    console.log(listSuppliesIds)
+  }, [listSuppliesIds])
 
   const deleteProduct = (cell) => {
     const updatedListSupplies = listSupplies.filter(supply => supply.id !== cell)
     setListSupplies(updatedListSupplies)
 
     const updatedListSuppliesIds = listSuppliesIds.filter(supply => supply !== cell)
-    console.log(updatedListSuppliesIds)
     setListSuppliesIds(updatedListSuppliesIds)
   }
 
@@ -964,6 +983,16 @@ function updateProduct () {
 
   const rows = [...new Set(inputs.map(input => input.row))]
 
+  const convertStringtoArray = (string) => {
+    const str = string
+    const valuesArray = str.split(',').map(value => {
+      const num = parseFloat(value.trim())
+      return isNaN(num) ? value.trim() : num
+    })
+
+    return valuesArray
+  }
+
   return (
     <Formik
       initialValues={{
@@ -973,58 +1002,74 @@ function updateProduct () {
         notebookSize: editingData.size,
         frontPage: editingData.frontPage === true ? 'Si' : 'No',
         frontPageInks: editingData.frontPageInks === true ? 'Si' : 'No',
-        numberInks: '',
+        numberInks: editingData.frontPageNumberInks,
         pantone: editingData.frontPagePantone,
         code: editingData.frontPageCode,
-        susbtrateFrontPage: [],
+        susbtrateFrontPage: editingData.substratumFrontPage !== '' ? convertStringtoArray(editingData.substratumFrontPage) : '',
         backCover: editingData.backCover === true ? 'Si' : 'No',
         backCoverInks: editingData.backCoverInks === true ? 'Si' : 'No',
-        numberInksBackCover: '',
+        numberInksBackCover: editingData.backCoverNumberInks,
         pantoneBackCover: editingData.backCoverPantone,
         codeBackCover: editingData.backCoverCode,
         innerSheets: editingData.inside === true ? 'Si' : 'No',
         innerSheetsInks: editingData.insideInks === true ? 'Si' : 'No',
-        numberInksInnerSheets: '',
-        pantoneInnerSheets: editingData.insideInksPantone,
-        codeInnerSheets: editingData.insideInksCode,
-        susbtrateSheets: [],
+        numberInksInnerSheets: editingData.insideNumberInks,
+        pantoneInnerSheets: editingData.insidePantone,
+        codeInnerSheets: editingData.insideCode,
+        susbtrateSheets: editingData.substratumInside !== '' ? convertStringtoArray(editingData.substratumInside) : '',
         numberSheets: editingData.numberPages,
-        cost: editingData.cost,
-        costSouvenir: editingData.cost,
-        observations: editingData.observations,
-        cover: [],
-        laminated: [],
-        susbtrateNoteBook: [],
-        dimensionSouvenir: editingData.dimensionx,
-        observationsSouvenir: editingData.observations,
-        laminatedSouvenir: '',
-        dimensionLargeFormat: '',
-        observationsLargeFormat: editingData.observations,
-        laminatedLargeFormat: '',
-        susbtrateLargeFormat: [],
-        dimensionStationery: editingData.dimension,
-        observationsStationery: editingData.observations,
-        laminatedStationery: '',
+        cost: editingData.cost ? (editingData.typeProduct === 'Libreta' ? editingData.cost : '0') : '0',
+        costSouvenir: editingData.cost ? (editingData.typeProduct === 'Souvenir' ? editingData.cost : '0') : '0',
+        costLargeFormat: editingData.cost ? (editingData.typeProduct === 'Gran formato' ? editingData.cost : '0') : '0',
+        costStationery: editingData.cost ? (editingData.typeProduct === 'Papelería' ? editingData.cost : '0') : '0',
+        observations: editingData.observations !== '' ? (editingData.typeProduct === 'Libreta' ? editingData.observations : '') : '',
+        cover: editingData.cover !== '' ? convertStringtoArray(editingData.cover) : '',
+        laminated: editingData.bindings ? (editingData.typeProduct === 'Libreta' ? convertStringtoArray(editingData.bindings) : []) : [],
+        susbtrateNoteBook: editingData.substratum ? (editingData.typeProduct === 'Libreta' ? convertStringtoArray(editingData.substratum) : []) : [],
+        dimensionSouvenir: editingData.dimension !== '' ? (editingData.typeProduct === 'Souvenir' ? editingData.dimension : '') : '',
+        observationsSouvenir: editingData.observations !== '' ? (editingData.typeProduct === 'Souvenir' ? editingData.observations : '') : '',
+        laminatedSouvenir: editingData.bindings ? (editingData.typeProduct === 'Souvenir' ? convertStringtoArray(editingData.bindings) : []) : [],
+        dimensionLargeFormat: editingData.dimension !== '' ? (editingData.typeProduct === 'Gran formato' ? editingData.dimension : '') : '',
+        observationsLargeFormat: editingData.observations !== '' ? (editingData.typeProduct === 'Gran formato' ? editingData.observations : '') : '',
+        laminatedLargeFormat: editingData.bindings ? (editingData.typeProduct === 'Gran formato' ? convertStringtoArray(editingData.bindings) : []) : [],
+        susbtrateLargeFormat: editingData.substratum ? (editingData.typeProduct === 'Gran formato' ? convertStringtoArray(editingData.substratum) : []) : [],
+        dimensionStationery: editingData.dimension !== '' ? (editingData.typeProduct === 'Papelería' ? editingData.dimension : '') : '',
+        observationsStationery: editingData.observations !== '' ? (editingData.typeProduct === 'Papelería' ? editingData.observations : '') : '',
+        laminatedStationery: editingData.bindings ? (editingData.typeProduct === 'Papelería' ? convertStringtoArray(editingData.bindings) : []) : [],
         supplies: [],
         selectedCheckboxes: [],
-        susbtrateStationery: [],
-        SupplyIds: editingData.supplies.map(({ supplyId }) => supplyId)
+        susbtrateStationery: editingData.substratum ? (editingData.typeProduct === 'Papelería' ? convertStringtoArray(editingData.substratum) : []) : []
       }}
       onSubmit={values => {
-        const coverToSaveInDatabase = values.cover.join(', ')
-        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage.join(', ')
-        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets.join(', ')
-        const laminatedToSaveInDatabase = values.laminated.join(', ')
-        const susbtrateLargeFormatToSaveInDatabase = values.susbtrateLargeFormat.join(', ')
-        const susbtrateStationeryToSaveInDatabase = values.susbtrateStationery.join(', ')
-        const susbtrateNoteBookToSaveInDatabase = values.susbtrateNoteBook.join(', ')
+        console.log(values)
+        const coverToSaveInDatabase = values.cover.length !== 0 ? values.cover.join(', ') : ''
+        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage.length !== 0 ? values.susbtrateFrontPage.join(', ') : ''
+        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets.length !== 0 ? values.susbtrateSheets.join(', ') : ''
+        const susbtrateToSaveInDatabase =
+        values.susbtrateNoteBook.length !== 0
+          ? values.susbtrateNoteBook.join(', ')
+          : values.susbtrateLargeFormat.length !== 0
+            ? values.susbtrateLargeFormat.join(', ')
+            : values.susbtrateStationery.length !== 0
+              ? values.susbtrateStationery.join(', ')
+              : ''
+        const laminatedToSaveInDatabase =
+        values.laminated.length !== 0
+          ? values.laminated.join(', ')
+          : values.laminatedSouvenir.length !== 0
+            ? values.laminatedSouvenir.join(', ')
+            : values.laminatedLargeFormat.length !== 0
+              ? values.laminatedLargeFormat.join(', ')
+              : values.laminatedStationery.length !== 0
+                ? values.laminatedStationery.join(', ')
+                : ''
 
         const dataFormToApi = {
           id: editingData.id,
           Name: values.name,
           TypeProduct: values.typeProduct,
           size: values.notebookSize,
-          Cost: parseInt(values.cost) ? values.cost : (values.costSouvenir ? values.costSouvenir : (values.costLargeFormat ? values.costLargeFormat : values.costStationary)),
+          Cost: values.cost !== '0' ? parseInt(values.cost) : (values.costSouvenir !== '0' ? parseInt(values.costSouvenir) : (values.costLargeFormat !== '0' ? parseInt(values.costLargeFormat) : (values.costStationary !== '0' ? parseInt(values.costStationary) : 0))),
           Observations: values.observations !== ''
             ? values.observations
             : (values.observationsSouvenir !== ''
@@ -1050,14 +1095,13 @@ function updateProduct () {
           NumberPages: parseInt(values.numberSheets),
           Dimension: values.dimensionSouvenir ? values.dimensionSouvenir : (values.dimensionStationery ? values.dimensionStationery : values.dimensionLargeFormat),
           cover: coverToSaveInDatabase,
-          susbtrateFrontPage: susbtrateFrontPageToSaveInDatabase,
-          susbtrateSheets: susbtrateSheetsToSaveInDatabase,
-          susbtrateNoteBook: susbtrateNoteBookToSaveInDatabase,
-          laminated: laminatedToSaveInDatabase,
-          susbtrateLargeFormat: susbtrateLargeFormatToSaveInDatabase,
-          susbtrateStationery: susbtrateStationeryToSaveInDatabase,
-          SupplyIds: editingData.supplies.map(({ supplyId }) => supplyId)
+          substratum: susbtrateToSaveInDatabase,
+          substratumFrontPage: susbtrateFrontPageToSaveInDatabase,
+          substratumInside: susbtrateSheetsToSaveInDatabase,
+          bindings: laminatedToSaveInDatabase,
+          SupplyIds: listSuppliesIds
         }
+        console.log(listSuppliesIds)
         console.log(dataFormToApi)
         console.log(values)
 

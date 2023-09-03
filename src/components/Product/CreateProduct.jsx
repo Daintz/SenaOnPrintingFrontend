@@ -994,38 +994,54 @@ function CreateProduct () {
         numberSheets: '',
         cost: '',
         costSouvenir: '',
+        costLargeFormat: '',
+        costStationery: '',
         observations: '',
         cover: [],
         laminated: [],
         susbtrateNoteBook: [],
         dimensionSouvenir: '',
         observationsSouvenir: '',
-        laminatedSouvenir: '',
+        laminatedSouvenir: [],
         dimensionLargeFormat: '',
         observationsLargeFormat: '',
-        laminatedLargeFormat: '',
+        laminatedLargeFormat: [],
         susbtrateLargeFormat: [],
         dimensionStationery: '',
         observationsStationery: '',
-        laminatedStationery: '',
+        laminatedStationery: [],
         supplies: [],
         selectedCheckboxes: [],
         susbtrateStationery: []
       }}
       onSubmit={values => {
-        const coverToSaveInDatabase = values.cover.join(', ')
-        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage.join(', ')
-        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets.join(', ')
-        const laminatedToSaveInDatabase = values.laminated.join(', ')
-        const susbtrateLargeFormatToSaveInDatabase = values.susbtrateLargeFormat.join(', ')
-        const susbtrateStationeryToSaveInDatabase = values.susbtrateStationery.join(', ')
-        const susbtrateNoteBookToSaveInDatabase = values.susbtrateNoteBook.join(', ')
+        const coverToSaveInDatabase = values.cover ? values.cover.join(', ') : ''
+        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage ? values.susbtrateFrontPage.join(', ') : ''
+        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets ? values.susbtrateSheets.join(', ') : ''
+        const susbtrateToSaveInDatabase =
+        values.susbtrateNoteBook.length !== 0
+          ? values.susbtrateNoteBook.join(', ')
+          : values.susbtrateLargeFormat.length !== 0
+            ? values.susbtrateLargeFormat.join(', ')
+            : values.susbtrateStationery.length !== 0
+              ? values.susbtrateStationery.join(', ')
+              : ''
+        const laminatedToSaveInDatabase =
+        values.laminated.length !== 0
+          ? values.laminated.join(', ')
+          : values.laminatedSouvenir.length !== 0
+            ? values.laminatedSouvenir.join(', ')
+            : values.laminatedLargeFormat.length !== 0
+              ? values.laminatedLargeFormat.join(', ')
+              : values.laminatedStationery.length !== 0
+                ? values.laminatedStationery.join(', ')
+                : ''
 
         const dataFormToApi = {
           Name: values.name,
           TypeProduct: typeProductSelect,
           size: values.notebookSize,
-          Cost: parseInt(values.cost) ? values.cost : (values.costSouvenir ? values.costSouvenir : (values.costLargeFormat ? values.costLargeFormat : values.costStationary)),
+          Cost: values.cost !== '' ? parseInt(values.cost) : (values.costSouvenir !== '' ? parseInt(values.costSouvenir) : (values.costLargeFormat !== '' ? parseInt(values.costLargeFormat) : (values.costStationary !== '' ? parseInt(values.costStationary) : 0))),
           Observations: values.observations !== ''
             ? values.observations
             : (values.observationsSouvenir !== ''
@@ -1035,28 +1051,26 @@ function CreateProduct () {
                     : values.observationsLargeFormat)),
           FrontPage: values.frontPage === 'Si',
           FrontPageInks: values.frontPageInks === 'Si',
-          FrontPageNumberInks: values.numberInks,
-          FrontPagePantone: values.pantone,
-          FrontPageCode: values.code,
+          FrontPageNumberInks: values.numberInks ? values.numberInks : '',
+          FrontPagePantone: values.pantone ? values.pantone : '',
+          FrontPageCode: values.code ? values.code : '',
           BackCover: values.backCover === 'Si',
           BackCoverInks: values.backCoverInks === 'Si',
-          BackCoverNumberInks: values.numberInksBackCover,
-          BackCoverPantone: values.backCoverPantone,
-          BackCoverCode: values.codeBackCover,
+          BackCoverNumberInks: values.numberInksBackCover ? values.numberInksBackCover : '',
+          backCoverPantone: values.pantoneBackCover ? values.pantoneBackCover : '',
+          backCoverCode: values.codeBackCover ? values.codeBackCover : '',
           Inside: values.innerSheets === 'Si',
           InsideInks: values.innerSheetsInks === 'Si',
-          InsideNumberInks: values.numberInksInnerSheets,
-          InsidePantone: values.pantoneInnerSheets,
-          InsideCode: values.codeInnerSheets,
-          NumberPages: parseInt(values.numberSheets),
-          Dimension: values.dimensionSouvenir ? values.dimensionSouvenir : (values.dimensionStationery ? values.dimensionStationery : values.dimensionLargeFormat),
+          InsideNumberInks: values.numberInksInnerSheets ? values.numberInksInnerSheets : '',
+          InsidePantone: values.pantoneInnerSheets ? values.pantoneInnerSheets : '',
+          InsideCode: values.codeInnerSheets ? values.codeInnerSheets : '',
+          NumberPages: values.numberSheets ? parseInt(values.numberSheets) : 0,
+          Dimension: values.dimensionSouvenir ? values.dimensionSouvenir : (values.dimensionStationery ? values.dimensionStationery : (values.dimensionLargeFormat ? values.dimensionLargeFormat : '')),
           cover: coverToSaveInDatabase,
-          susbtrateFrontPage: susbtrateFrontPageToSaveInDatabase,
-          susbtrateSheets: susbtrateSheetsToSaveInDatabase,
-          susbtrateNoteBook: susbtrateNoteBookToSaveInDatabase,
-          laminated: laminatedToSaveInDatabase,
-          susbtrateLargeFormat: susbtrateLargeFormatToSaveInDatabase,
-          susbtrateStationery: susbtrateStationeryToSaveInDatabase,
+          substratum: susbtrateToSaveInDatabase,
+          substratumFrontPage: susbtrateFrontPageToSaveInDatabase,
+          substratumInside: susbtrateSheetsToSaveInDatabase,
+          bindings: laminatedToSaveInDatabase,
           SupplyIds: listSuppliesIds
         }
         console.log(dataFormToApi)
