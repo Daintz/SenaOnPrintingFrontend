@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
 
 function DetailsSupplyDetails () {
   const { detailsData } = useSelector((state) => state.modal)
@@ -44,7 +45,7 @@ export function DetailsButtomSupplyDetails ({ supplyDetails }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <BsClipboard2 className="h-5 w-5 mr-2" />
+        <GrView className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }
