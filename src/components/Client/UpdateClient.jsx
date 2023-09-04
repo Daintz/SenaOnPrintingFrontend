@@ -325,7 +325,100 @@ function UpdateClient () {
 </div>
 </div>
 <div className="flex gap-5 mb-3">
-  <div className="w-full">
+<div className="w-1/2">
+              <label
+                htmlFor="campo3"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+              >
+                Regional
+              </label>
+              <Select
+                name="regional"
+                id="regional"
+                value={editingData.regional}
+                onChange={(selectedOption) => {
+                  const selectedRegional = selectedOption.value
+                  setFieldValue('regional', selectedRegional)
+                  setFieldValue('area', '') // Resetear el valor del área cuando cambie la regional
+
+                  // Actualizar las opciones del select de áreas
+                  const areas = regionalAreas[selectedRegional] || []
+                  setFieldValue('areas', areas)
+                }}
+                options={regionales.map((regional) => ({
+                  value: regional,
+                  label: regional
+                }))}
+                placeholder={editingData.regional ? editingData.regional : 'Selecciona regional'}
+                noOptionsMessage={() => 'No hay opciones disponibles'}
+                className="bg-gray-50 text-gray-900 text-sm"
+                classNamePrefix="react-select"
+                isSearchable
+                isClearable
+                menuPlacement="auto"
+                formatOptionLabel={(option) => (
+                  <div>{option.label}</div>
+                )}
+                styles={{
+                  control: (provided, state) => ({
+                    ...provided,
+                    borderColor: state.isSelected ? 'green' : 'gray',
+                    boxShadow: state.isSelected ? '0 0 0 1px green' : 'none'
+                  }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    backgroundColor: state.isSelected ? 'green' : 'white',
+                    color: state.isSelected ? 'white' : 'black'
+                  })
+                }}
+                />
+                <ErrorMessage
+                  name="regional"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+
+<div className="w-1/2">
+              <label
+                htmlFor="campo2"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+              >
+                Área
+              </label>
+              <Select
+  name="area"
+  id="area"
+  value={editingData.area}
+  onChange={(selectedOption) => {
+    setFieldValue('area', selectedOption.value)
+  }}
+  options={(editingData.areas || []).map((area) => ({
+    value: area,
+    label: area
+  }))}
+  placeholder={
+    editingData.area ? editingData.area : 'Selecciona Área'
+  }
+  noOptionsMessage={() => 'No hay opciones disponibles'}
+  className="bg-gray-50 text-gray-900 text-sm"
+  classNamePrefix="react-select"
+  isSearchable
+  isClearable
+  menuPlacement="auto"
+  formatOptionLabel={(option) => <div>{option.label}</div>}
+  styles={{
+  }}
+/>
+<ErrorMessage
+  name="area"
+  component="div"
+  className="text-red-500"
+/>
+</div>
+</div>
+<div className="flex gap-5 mb-3">
+<div className="w-full">
     <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
       Centro
     </label>

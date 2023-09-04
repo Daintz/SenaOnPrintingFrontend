@@ -79,7 +79,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/Machine' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3 text-base">Maquinas</span>
+                  <span className="ml-3 text-base">Máquinas</span>
                 </Link>
               </li>
               {/* <li>
@@ -412,7 +412,7 @@ function Sidebar () {
                   className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/quotation' ? 'bg-custom-blue text-white' : null}`}
                 >
 
-                  <span className="ml-3">Cotizacion</span>
+                  <span className="ml-3">Cotización</span>
                 </Link>
               </li>
 
