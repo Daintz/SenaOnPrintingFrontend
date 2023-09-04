@@ -286,7 +286,7 @@ export function UpdateButtomUser ({ user }) {
   // ?
 
   return (
-    <button type="button" oalt="Icono editar" title="Editar el usuario" nClick={() => {
+    <button type="button" oalt="Icono editar" title="Editar el usuario" onClick={() => {
       handleEdit(user)
     }}>
       <svg
