@@ -1,7 +1,7 @@
 import React from 'react';
 import InvoiceField from './InvoiceField';
 
-const InvoiceItem = ({ id, name, qty,onDeleteItem, onEdtiItem }) => {
+const InvoiceItem = ({ id,price, name, qty,onDeleteItem, onEdtiItem }) => {
   const deleteItemHandler = () => {
     onDeleteItem(id);
   };
@@ -32,6 +32,20 @@ const InvoiceItem = ({ id, name, qty,onDeleteItem, onEdtiItem }) => {
           }}
         />
       </td>
+      <td className="min-w-[65px] md:min-w-[80px]">
+        <InvoiceField
+          onEditItem={(event) => onEdtiItem(event)}
+          cellData={{
+            type: 'number',
+            min: '0.01',
+            step:'0.01',
+            name: 'price',
+            id: id,
+            value: price,
+          }}
+        />
+      </td>
+
       <td className="relative min-w-[100px] md:min-w-[150px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"

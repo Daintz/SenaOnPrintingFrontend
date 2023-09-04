@@ -4,7 +4,12 @@ import { GrView } from 'react-icons/gr'
 
 function DetailsSupply () {
   const { detailsData } = useSelector((state) => state.modal)
-  const { name, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost, statedAt } = detailsData
+  console.log('Detalles de Supply:', detailsData);
+  const { name, dangerIndicators, useInstructions, advices, supplyType, sortingWord, quantity, averageCost,statedAt } = detailsData
+  const supplyCategories = detailsData.supplyCategoriesXSupply?.map(item => item.supplyCategoryNavigation.name);
+  const unitMeasures = detailsData.unitMeasuresXSupply?.map(item => item.unitMeasure.name);
+  const supplyPictograms = detailsData.supplyXSupplyPictogram?.map(item => item.supplyPictogram.name);
+  console.log("detailsData");
   return (
     <>
     
@@ -16,6 +21,9 @@ function DetailsSupply () {
       <p><b>Tipo peligrosidad:</b> {sortingWord === 1 ? 'Peligro' : 'Atención'}</p>
       <p><b>Cantidad:</b> {quantity}</p>
       <p><b>Costo promedio:</b> {averageCost}</p>
+      <p><b>Categoría de insumos:</b> {supplyCategories.length > 0 ? supplyCategories.join(', ') : 'No disponible'}</p>
+      <p><b>Unidad de medida:</b> {unitMeasures.length > 0 ? unitMeasures.join(', ') : 'No disponible'}</p>
+      <p><b>Pictogramas:</b> {supplyPictograms.length > 0 ? supplyPictograms.join(', ') : 'No disponible'}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt

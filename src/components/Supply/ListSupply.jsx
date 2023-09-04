@@ -30,14 +30,43 @@ const ListSupply = () => {
 
   const columns = useMemo(() => [
 
-    { Header: 'Nombre insumo', accessor: 'name' },
-    { Header: 'Indicadores de peligro insumo', accessor: 'dangerIndicators' },
-    { Header: 'Instrucciones', accessor: 'useInstructions' },
-    { Header: 'Consejos', accessor: 'advices' },
-    { Header: 'Tipo insumo', accessor: 'supplyType' , Cell: ({ value }) => (value === 1 ? 'Devolutivo' : 'Consumible')},
-    { Header: 'Tipo peligrosidad', accessor: 'sortingWord', Cell: ({ value }) => (value === 1 ? 'Peligro' : 'Atención')},
-    { Header: 'Cantidad', accessor: 'quantity' },
-    { Header: 'Costo promedio', accessor: 'averageCost' },
+    { Header: 'Nombre',
+    accessor: 'name',
+    Cell: ({ value }) => (
+      <div style={{ width: 'auto', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {value}
+      </div>
+    )
+  },
+  
+  { Header: 'Tipo insumo', accessor: 'supplyType' , Cell: ({ value }) => (
+    <span
+      className={`rounded-full px-2 py-1 text-xs font-medium ${
+        value === 1
+          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+      }`}
+    >
+      {value === 1 ? 'Devolutivo' : 'Consumible'}
+    </span>
+  )
+},
+    
+  { Header: 'Tipo peligrosidad', accessor: 'sortingWord', Cell: ({ value }) => (
+    <span
+      className={`rounded-full px-2 py-1 text-xs font-medium ${
+        value === 1
+          ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+          : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+      }`}
+    >
+      {value === 1 ? 'Peligro' : 'Atención'}
+    </span>
+  )
+},
+  { Header: 'Cantidad', accessor: 'quantity' },
+  { Header: 'Costo promedio', accessor: 'averageCost' },
+  
     
     {
       Header: 'Estado',

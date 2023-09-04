@@ -1,16 +1,19 @@
-import { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyDetailsQuery } from '../../context/Api/Common'
-import { UpdateButtomSupplyDetails } from './UpdateSupplyDetails'
 import { ChangeStateButtonSupplyDetails } from './ChangeStateSupplyDetails'
 import { CreateButtomSupplyDetails } from './CreateSupplyDetails'
 import { DetailsButtomSupplyDetails } from './DetailsSupplyDetails'
 import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import ReportSupplyDetails from './ReportSupplyDetails'
-import React, { useRef } from 'react';
+import clientAxios from '../../config/clientAxios'
 
+const get = async (id) => {
+  const { data } = await clientAxios(`/Warehause/${id}`)
+  return data.ubication
+}
 
 const ListSupplyDetails = () => {
   const tablePDF = useRef()
@@ -29,16 +32,25 @@ const ListSupplyDetails = () => {
   }, [isAction])
   // ?
 
+  const findNameWarehouse = async (id) => {
+    const result = await get(id)
+    const name = result
+    return name
+  }
+
   const columns = useMemo(() => [
-    { Header: 'Descripcion', accessor: 'description' },
-    { Header: 'Costo insumo', accessor: 'supplyCost' },
-    { Header: 'Lote', accessor: 'batch' },
+    // { Header: 'Lote', accessor: 'id' },
+    { Header: 'Descripción', accessor: 'description' },
+    // { Header: 'Costo insumo', accessor: 'supplyCost' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
     { Header: 'Insumo', accessor: 'supplyId' },
     { Header: 'Proveedor', accessor: 'providerId' },
-    { Header: 'Bodega', accessor: 'warehouseId' },
+    {
+      Header: 'Bodega',
+      accessor: 'warehouseId'
+    },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -140,9 +152,9 @@ const ListSupplyDetails = () => {
             <CreateButtomSupplyDetails />
           </div>
         </div>
-        <div className="overflow-x-auto rounded-xl border border-gray-400">
-          <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <div className="overflow-x-autoundo red-xl border border-gray-400">
+              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               {headerGroups.map(headerGroup => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column, index) => (
@@ -172,9 +184,6 @@ const ListSupplyDetails = () => {
                     <DetailsButtomSupplyDetails
                       supplyDetails={row.original}
                       />
-                      <UpdateButtomSupplyDetails
-                      supplyDetails={row.original}
-                      />
                       <ChangeStateButtonSupplyDetails
                       supplyDetails={row.original}
                       />
@@ -188,7 +197,7 @@ const ListSupplyDetails = () => {
           className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
         >
           <span className="text-sm font-normal text-gray-500">
-            Pagina {' '}
+            Página {' '}
             <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
           </span>
           <ul className="inline-flex items-stretch -space-x-px">
