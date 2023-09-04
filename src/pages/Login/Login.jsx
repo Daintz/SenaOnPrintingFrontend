@@ -11,7 +11,7 @@ const Login = () => {
   const usenavigate = useNavigate()
 
   useEffect(() => {
-    sessionStorage.clear()
+    localStorage.clear()
   }, [])
 
   const handleLogin = async (e) => {
@@ -24,10 +24,11 @@ const Login = () => {
       if (resp.token.length !== 0) {
         const token = resp.token;
         const decodedToken = jwtDecode(token); // Decodificar el token JWT
-        sessionStorage.setItem('session_token', token);
-        sessionStorage.setItem('UserId', decodedToken.id);
+        localStorage.setItem('session_token', token);
+        localStorage.setItem('UserId', decodedToken.id);
+        console.log(decodedToken.id)
         toast.success(resp.message);
-        usenavigate('/dashboard');
+        usenavigate('/');
       }
     }).catch((err) => {
       toast.error(err.response.data.message)
@@ -42,7 +43,7 @@ const Login = () => {
               <div className="flex flex-col items-center justify-center">
                 <img src="https://oficinavirtualderadicacion.sena.edu.co/oficinavirtual/Resources/logoSenaNaranja.png" alt="Logo" className="mb-2 w-20 h-20" />
                 <h1 className="text-3xl font-semibold text-center text-green-700">
-                  Inicio de Sesion
+                  Inicio de Sesión
                 </h1>
               </div>
                 <form onSubmit={handleLogin} className="mt-6">
@@ -51,7 +52,7 @@ const Login = () => {
                             htmlFor="email"
                             className="block text-sm font-semibold text-gray-800"
                         >
-                            Correo Electronico
+                            Correo Electrónico
                         </label>
                         <input
                             type="email"
@@ -80,11 +81,11 @@ const Login = () => {
                       className='mt-6 mb-6'
                       to={"/olvide_contraseña"}
                     >
-                      <a className='text-blue'>Olvide mi Contraseña</a>
+                      <a className='text-blue'>Olvidé mi Contraseña</a>
                     </Link>
                     <div className="mt-6">
                         <button className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Iniciar Sesion
+                            Iniciar Sesión
                         </button>
                     </div>
                 </form>

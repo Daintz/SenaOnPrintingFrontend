@@ -11,11 +11,11 @@ import clientAxios from '../../config/clientAxios'
 
 
 const validationSchema = Yup.object().shape({
-  warehotypeServiceIduseTypeId: Yup.string().required('Campo requerido'),
+  typeServiceId: Yup.string().required('Campo requerido'),
   ubication: Yup.string().required('Campo requerido')
 })
 
-const getTypeService =async () => {
+const getTypeService = async () => {
   return new Promise((resolve, reject) => {
     clientAxios.get('/TypeServices').then(
       (result) => {
@@ -35,6 +35,7 @@ const getTypeService =async () => {
 function updateWarehause() {
   const dispatch = useDispatch()
   const { editingData } = useSelector((state) => state.modal)
+
   const [updateWarehause, { error, isLoading }] = usePutWarehauseByIdMutation()
   const [typeServiceOptions, settypeServiceOptions] = useState([]);
 
@@ -47,32 +48,25 @@ function updateWarehause() {
   useEffect(() => {
     fetchOptions();
   }, []);
-  
+
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    
-    const result = await updateWarehause(values)
-    
-    console.log('updateWarehause result', result);
-    
-    if (result.isSuccess) {
-      dispatch(changeAction())
-      dispatch(closeModal())
-      toast.success('Bodega actualizada con exito')
-    } else {
-      console.error('updateWarehause failed', result.error);
-    }
+    await updateWarehause(values)
+
+    dispatch(changeAction())
+    dispatch(closeModal())
+    toast.success('Bodega actualizada con exito')
   }
-  
+
 
   const inputs = [
-    {key: 0, name: 'typeServiceId', title: 'Tipo de bodega', type: 'select', data: typeServiceOptions, placeholder: 'Tipo de de bodega'},
-    {key: 1, name: 'ubication', title: 'Ubicacion', type: 'text', placeholder: 'Ubicacion de la bodega'}
-  ]
+    { key: 0, name: 'typeServiceId', title: 'Tipo de bodega', type: 'select', data: typeServiceOptions, placeholder: 'Tipo de de bodega' },
+    { key: 1, name: 'ubication', title: 'Ubicación', type: 'text', placeholder: 'Ubicación de la bodega' }
+]
 
-  return (
+return (
     <Formik
       initialValues={{
         id: editingData.id,
@@ -80,6 +74,7 @@ function updateWarehause() {
         ubication: editingData.ubication
       }}
       onSubmit={(values) => {
+        console.log(values)
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
@@ -92,8 +87,8 @@ function updateWarehause() {
               <br />
               <Field name={input.name} as={input.type} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
                 <option value="0">Seleccione {input.title}</option>
-                {input.data.map(option => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
+                {input.data.map((option, index) => (
+                  <option key={index} value={option.value}>{option.label}</option>
                 ))}
               </Field>
               <ErrorMessage
@@ -127,7 +122,8 @@ function updateWarehause() {
         </button>
       </Form>
     </Formik>
-  )
+)
+        
 }
 
 export function UpdateButtomWarehause({ warehause }) {
@@ -143,7 +139,9 @@ export function UpdateButtomWarehause({ warehause }) {
 
   return (
     <button type="button" onClick={() => {
+
       handleEdit(warehause)
+
     }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"

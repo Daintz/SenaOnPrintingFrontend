@@ -51,7 +51,7 @@ const ForgotPasswordEmail = () => {
                             htmlFor="email"
                             className="block text-sm font-semibold text-gray-800"
                         >
-                            Correo Electronico
+                            Correo Electrónico
                         </label>
                         <input
                             type="email"
@@ -63,9 +63,9 @@ const ForgotPasswordEmail = () => {
                     </div>
                     <Link
                       className='mt-6 mb-6'
-                      to={"/"}
+                      to={"/login"}
                     >
-                      <a className='text-blue'>Volver al Inicio de Sesion</a>
+                      <a className='text-blue'>Volver al inicio de sesión</a>
                     </Link>
                     <div className="mt-6">
                         <button className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">

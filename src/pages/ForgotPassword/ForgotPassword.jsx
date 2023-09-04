@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     setToken(queryParameters.get("token"))
     if(token == null || email == null) {
       toast.error('Token de recuperacion o correo invalido')
-      usenavigate('/')
+      usenavigate('/login')
     }
   }, [])
 
@@ -33,7 +33,7 @@ const ForgotPassword = () => {
       toast.success(resp.message)
       usenavigate('/')
     }).catch((err) => {
-      toast.error('Token de recuperacion o correo invalido')
+      toast.error('Token de recuperación o correo invalido')
     })
   }
 

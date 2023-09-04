@@ -11,8 +11,8 @@ const ReportProduct = ({ dataApi }) => {
 
   const columns = [
     { key: 'name', name: 'Nombre' },
-    { key: 'characteristics', name: 'Caracteristicas' },
     { key: 'typeProduct', name: 'Tipo de producto' },
+    { key: 'observations', name: 'Observaciones' },
     { key: 'cost', name: 'Costo' },
     { key: 'statedAt', name: 'Estado' }
   ]
@@ -21,8 +21,8 @@ const ReportProduct = ({ dataApi }) => {
     ? dataApi.map((product) => ({
       id: product.id,
       name: product.name,
-      characteristics: product.characteristics,
       typeProduct: product.typeProduct,
+      observations: product.observations,
       cost: product.cost,
       statedAt: product.statedAt
     }))
@@ -66,8 +66,8 @@ const ReportProduct = ({ dataApi }) => {
             >
               {product.name}
             </th>
-            <td className="px-4 py-3">{product.characteristics}</td>
             <td className="px-4 py-3">{product.typeProduct}</td>
+            <td className="px-4 py-3">{product.observations}</td>
             <td className="px-4 py-3">{product.cost}</td>
             <td className="px-6 py-4">
               {product.statedAt

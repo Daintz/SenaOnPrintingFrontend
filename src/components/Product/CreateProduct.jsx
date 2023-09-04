@@ -23,8 +23,8 @@ const validationSchema = Yup.object().shape({
 
 function CreateProduct () {
   const [dataApi, setDataApi] = useState([])
-  const [dataSupplies, setDataSupplies] = useState(false)
   const [listSupplies, setListSupplies] = useState([])
+  const [listSuppliesIds, setListSuppliesIds] = useState([])
 
   useEffect(() => {
     fetchOptions()
@@ -40,8 +40,6 @@ function CreateProduct () {
   const [createProduct, { error, isLoading }] = usePostProductMutation()
 
   const [paperCutOptions, setpaperCutOptions] = useState([])
-  const [finishOptions, setFinishOptions] = useState([])
-  const [substrateOptions, setSubstrateOptions] = useState([])
   const [typeProductSelect, setTypeProductSelect] = useState('')
   const [frontPage, setFrontPage] = useState('')
   const [frontPageInks, setFrontPageInks] = useState('')
@@ -49,6 +47,21 @@ function CreateProduct () {
   const [backCoverInks, setBackCoverInks] = useState('')
   const [innerSheets, setInnerSheets] = useState('')
   const [innerSheetsInks, setInnerSheetsInks] = useState('')
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = 4 // Número total de páginas del formulario
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + (typeProductSelect !== 'Libreta' ? 3 : 1))
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - (typeProductSelect !== 'Libreta' ? 3 : 1))
+    }
+  }
 
   const getPaperCut = () => {
     return new Promise((resolve, reject) => {
@@ -66,49 +79,9 @@ function CreateProduct () {
     })
   }
 
-  const getFinish = () => {
-    return new Promise((resolve, reject) => {
-      clientAxios.get('/Finish').then(
-        (result) => {
-          const finishes = result.data.map((finish) => ({
-            name: finish.name,
-            label: finish.name
-          }))
-          resolve(finishes)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
-
-  const getSubstrate = () => {
-    return new Promise((resolve, reject) => {
-      clientAxios.get('/Substrates').then(
-        (result) => {
-          const substrates = result.data.map((substrate) => ({
-            name: substrate.name,
-            label: substrate.name
-          }))
-          resolve(substrates)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
-
   const fetchOptions = () => {
     getPaperCut().then((options) => {
       setpaperCutOptions(options)
-    })
-    getFinish().then((options) => {
-      setFinishOptions(options)
-    })
-    getSubstrate().then((options) => {
-      setSubstrateOptions(options)
     })
   }
 
@@ -129,10 +102,6 @@ function CreateProduct () {
 
   const handleTypeProduct = e => {
     setTypeProductSelect(e.target.value)
-  }
-
-  const handleDataSupplies = () => {
-    setDataSupplies(!dataSupplies)
   }
 
   const handleFrontPage = e => {
@@ -170,11 +139,21 @@ function CreateProduct () {
     } else {
       setListSupplies([...listSupplies, { ...cell }])
     }
+
+    const existingSupplyIds = listSuppliesIds.find(supply => supply === cell.id)
+
+    if (!existingSupplyIds) {
+      setListSuppliesIds([...listSuppliesIds, cell.id])
+    }
   }
 
   const deleteProduct = (cell) => {
     const updatedListSupplies = listSupplies.filter(supply => supply.id !== cell)
     setListSupplies(updatedListSupplies)
+
+    const updatedListSuppliesIds = listSuppliesIds.filter(supply => supply !== cell)
+    console.log(updatedListSuppliesIds)
+    setListSuppliesIds(updatedListSuppliesIds)
   }
 
   const columns = useMemo(() => [
@@ -226,6 +205,7 @@ function CreateProduct () {
   const inputs = [
     {
       row: 1,
+      page: 1,
       key: 0,
       typeProductOwner: '',
       name: 'name',
@@ -235,6 +215,7 @@ function CreateProduct () {
     },
     {
       row: 1,
+      page: 1,
       key: 1,
       typeProductOwner: '',
       name: 'typeProduct',
@@ -246,6 +227,7 @@ function CreateProduct () {
     },
     {
       row: 1,
+      page: 1,
       key: 2,
       typeProductOwner: 'Libreta',
       name: 'notebookSize',
@@ -255,6 +237,7 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'frontPage',
@@ -266,6 +249,7 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'frontPageInks',
@@ -277,6 +261,7 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'numberInks',
@@ -286,6 +271,7 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'pantone',
@@ -295,6 +281,7 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 5,
       typeProductOwner: 'Libreta',
       name: 'code',
@@ -304,15 +291,69 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 2,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'susbtrateFrontPage',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 3,
+      page: 2,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'backCover',
@@ -324,6 +365,7 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 2,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'backCoverInks',
@@ -335,6 +377,7 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 2,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'numberInksBackCover',
@@ -344,6 +387,7 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 2,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'pantoneBackCover',
@@ -353,6 +397,7 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 2,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'codeBackCover',
@@ -361,16 +406,8 @@ function CreateProduct () {
       placeholder: 'Código libreta'
     },
     {
-      row: 3,
-      key: 6,
-      typeProductOwner: 'Libreta',
-      name: 'susbtrateBackCover',
-      title: 'Sustrato',
-      type: 'checkbox',
-      checkboxes: substrateOptions
-    },
-    {
       row: 4,
+      page: 3,
       key: 8,
       typeProductOwner: 'Libreta',
       name: 'innerSheets',
@@ -382,6 +419,7 @@ function CreateProduct () {
     },
     {
       row: 4,
+      page: 3,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'innerSheetsInks',
@@ -393,6 +431,7 @@ function CreateProduct () {
     },
     {
       row: 4,
+      page: 3,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'numberInksInnerSheets',
@@ -402,6 +441,7 @@ function CreateProduct () {
     },
     {
       row: 4,
+      page: 3,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'pantoneInnerSheets',
@@ -411,6 +451,7 @@ function CreateProduct () {
     },
     {
       row: 4,
+      page: 3,
       key: 7,
       typeProductOwner: 'Libreta',
       name: 'codeInnerSheets',
@@ -420,15 +461,69 @@ function CreateProduct () {
     },
     {
       row: 4,
+      page: 3,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'susbtrateSheets',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 5,
+      page: 1,
       key: 10,
       typeProductOwner: 'Libreta',
       name: 'numberSheets',
@@ -438,6 +533,7 @@ function CreateProduct () {
     },
     {
       row: 5,
+      page: 1,
       key: 10,
       typeProductOwner: 'Libreta',
       name: 'cost',
@@ -447,6 +543,7 @@ function CreateProduct () {
     },
     {
       row: 5,
+      page: 1,
       key: 10,
       typeProductOwner: 'Libreta',
       name: 'observations',
@@ -456,6 +553,7 @@ function CreateProduct () {
     },
     {
       row: 6,
+      page: 1,
       key: 3,
       typeProductOwner: 'Libreta',
       name: 'cover',
@@ -463,63 +561,134 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
-          name: '1',
           label: 'Anillado doble O'
         },
         {
-          name: '2',
           label: 'Paso'
         },
         {
-          name: '3',
           label: 'Tapa dura'
         },
         {
-          name: '4',
-          label: 'Grapado'
-        },
-        {
-          name: '5',
           label: 'Rústico/Cosido'
         },
         {
-          name: '6',
           label: 'Lomo'
         },
         {
-          name: '7',
           label: 'Sobrecubierta'
         },
         {
-          name: '8',
           label: 'Tapa blanda'
         },
         {
-          name: '9',
           label: 'Caballete'
         }
       ]
     },
     {
       row: 6,
+      page: 1,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'laminated',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 6,
+      page: 1,
       key: 6,
       typeProductOwner: 'Libreta',
       name: 'susbtrateNoteBook',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Souvenir',
       name: 'dimensionSouvenir',
@@ -529,6 +698,17 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 1,
+      key: 10,
+      typeProductOwner: 'Souvenir',
+      name: 'costSouvenir',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de souvenir'
+    },
+    {
+      row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Souvenir',
       name: 'observationsSouvenir',
@@ -538,15 +718,45 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 1,
       key: 10,
       typeProductOwner: 'Souvenir',
       name: 'laminatedSouvenir',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Gran formato',
       name: 'dimensionLargeFormat',
@@ -556,6 +766,17 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 1,
+      key: 10,
+      typeProductOwner: 'Gran formato',
+      name: 'costLargeFormat',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de Gran formato'
+    },
+    {
+      row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Gran formato',
       name: 'observationsLargeFormat',
@@ -565,24 +786,107 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 1,
       key: 10,
       typeProductOwner: 'Gran formato',
       name: 'laminatedLargeFormat',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 3,
+      page: 1,
       key: 10,
       typeProductOwner: 'Gran formato',
       name: 'susbtrateLargeFormat',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     },
     {
       row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Papelería',
       name: 'dimensionStationery',
@@ -592,6 +896,17 @@ function CreateProduct () {
     },
     {
       row: 2,
+      page: 1,
+      key: 10,
+      typeProductOwner: 'Papelería',
+      name: 'costStationery',
+      title: 'Costo',
+      type: 'text',
+      placeholder: 'Costo de Papelería'
+    },
+    {
+      row: 2,
+      page: 1,
       key: 10,
       typeProductOwner: 'Papelería',
       name: 'observationsStationery',
@@ -601,21 +916,103 @@ function CreateProduct () {
     },
     {
       row: 3,
+      page: 1,
       key: 10,
       typeProductOwner: 'Papelería',
       name: 'laminatedStationery',
       title: 'Acabados',
       type: 'checkbox',
-      checkboxes: finishOptions
+      checkboxes: [
+        {
+          label: 'Brillo UV'
+        },
+        {
+          label: 'Sanduchado'
+        },
+        {
+          label: 'Laminado'
+        },
+        {
+          label: 'Anillado'
+        },
+        {
+          label: 'Plegado'
+        },
+        {
+          label: 'Desprendible'
+        },
+        {
+          label: 'Sobrecubierta'
+        },
+        {
+          label: 'Tapa blanda'
+        },
+        {
+          label: 'Caballete'
+        }
+      ]
     },
     {
       row: 3,
+      page: 1,
       key: 10,
       typeProductOwner: 'Papelería',
       name: 'susbtrateStationery',
       title: 'Sustrato',
       type: 'checkbox',
-      checkboxes: substrateOptions
+      checkboxes: [
+        {
+          label: 'Bond'
+        },
+        {
+          label: 'Periódico'
+        },
+        {
+          label: 'Bristol'
+        },
+        {
+          label: 'Esmaltado C1S'
+        },
+        {
+          label: 'Rústico/Cosido'
+        },
+        {
+          label: 'Bond Adhesivo'
+        },
+        {
+          label: 'Opalina'
+        },
+        {
+          label: 'Esmaltado C2S'
+        },
+        {
+          label: 'Esmalt Adhesivo'
+        },
+        {
+          label: 'Albanene'
+        },
+        {
+          label: 'Kraft'
+        },
+        {
+          label: 'Vinilo adhesivo'
+        },
+        {
+          label: 'Vinilo Transfer'
+        },
+        {
+          label: 'P. Sublimación'
+        },
+        {
+          label: 'Cartón Industrial'
+        },
+        {
+          label: 'Cartón Duplex'
+        },
+        {
+          label: 'Fotográfico'
+        }
+      ]
     }
   ]
 
@@ -638,7 +1035,6 @@ function CreateProduct () {
         numberInksBackCover: '',
         pantoneBackCover: '',
         codeBackCover: '',
-        susbtrateBackCover: [],
         innerSheets: '',
         innerSheetsInks: '',
         numberInksInnerSheets: '',
@@ -647,36 +1043,103 @@ function CreateProduct () {
         susbtrateSheets: [],
         numberSheets: '',
         cost: '',
+        costSouvenir: '',
+        costLargeFormat: '',
+        costStationery: '',
         observations: '',
-        cover: '',
-        laminated: '',
+        cover: [],
+        laminated: [],
         susbtrateNoteBook: [],
         dimensionSouvenir: '',
         observationsSouvenir: '',
-        laminatedSouvenir: '',
+        laminatedSouvenir: [],
         dimensionLargeFormat: '',
         observationsLargeFormat: '',
-        laminatedLargeFormat: '',
+        laminatedLargeFormat: [],
         susbtrateLargeFormat: [],
         dimensionStationery: '',
         observationsStationery: '',
-        laminatedStationery: '',
+        laminatedStationery: [],
+        supplies: [],
+        selectedCheckboxes: [],
         susbtrateStationery: []
       }}
       onSubmit={values => {
+        const coverToSaveInDatabase = values.cover ? values.cover.join(', ') : ''
+        const susbtrateFrontPageToSaveInDatabase = values.susbtrateFrontPage ? values.susbtrateFrontPage.join(', ') : ''
+        const susbtrateSheetsToSaveInDatabase = values.susbtrateSheets ? values.susbtrateSheets.join(', ') : ''
+        const susbtrateToSaveInDatabase =
+        values.susbtrateNoteBook.length !== 0
+          ? values.susbtrateNoteBook.join(', ')
+          : values.susbtrateLargeFormat.length !== 0
+            ? values.susbtrateLargeFormat.join(', ')
+            : values.susbtrateStationery.length !== 0
+              ? values.susbtrateStationery.join(', ')
+              : ''
+        const laminatedToSaveInDatabase =
+        values.laminated.length !== 0
+          ? values.laminated.join(', ')
+          : values.laminatedSouvenir.length !== 0
+            ? values.laminatedSouvenir.join(', ')
+            : values.laminatedLargeFormat.length !== 0
+              ? values.laminatedLargeFormat.join(', ')
+              : values.laminatedStationery.length !== 0
+                ? values.laminatedStationery.join(', ')
+                : ''
+
+        const dataFormToApi = {
+          Name: values.name,
+          TypeProduct: typeProductSelect,
+          size: values.notebookSize,
+          Cost: values.cost !== '' ? parseInt(values.cost) : (values.costSouvenir !== '' ? parseInt(values.costSouvenir) : (values.costLargeFormat !== '' ? parseInt(values.costLargeFormat) : (values.costStationary !== '' ? parseInt(values.costStationary) : 0))),
+          Observations: values.observations !== ''
+            ? values.observations
+            : (values.observationsSouvenir !== ''
+                ? values.observationsSouvenir
+                : (values.observationsStationery !== ''
+                    ? values.observationsStationery
+                    : values.observationsLargeFormat)),
+          FrontPage: values.frontPage === 'Si',
+          FrontPageInks: values.frontPageInks === 'Si',
+          FrontPageNumberInks: values.numberInks ? values.numberInks : '',
+          FrontPagePantone: values.pantone ? values.pantone : '',
+          FrontPageCode: values.code ? values.code : '',
+          BackCover: values.backCover === 'Si',
+          BackCoverInks: values.backCoverInks === 'Si',
+          BackCoverNumberInks: values.numberInksBackCover ? values.numberInksBackCover : '',
+          backCoverPantone: values.pantoneBackCover ? values.pantoneBackCover : '',
+          backCoverCode: values.codeBackCover ? values.codeBackCover : '',
+          Inside: values.innerSheets === 'Si',
+          InsideInks: values.innerSheetsInks === 'Si',
+          InsideNumberInks: values.numberInksInnerSheets ? values.numberInksInnerSheets : '',
+          InsidePantone: values.pantoneInnerSheets ? values.pantoneInnerSheets : '',
+          InsideCode: values.codeInnerSheets ? values.codeInnerSheets : '',
+          NumberPages: values.numberSheets ? parseInt(values.numberSheets) : 0,
+          Dimension: values.dimensionSouvenir ? values.dimensionSouvenir : (values.dimensionStationery ? values.dimensionStationery : (values.dimensionLargeFormat ? values.dimensionLargeFormat : '')),
+          cover: coverToSaveInDatabase,
+          substratum: susbtrateToSaveInDatabase,
+          substratumFrontPage: susbtrateFrontPageToSaveInDatabase,
+          substratumInside: susbtrateSheetsToSaveInDatabase,
+          bindings: laminatedToSaveInDatabase,
+          SupplyIds: listSuppliesIds
+        }
+        console.log(dataFormToApi)
         console.log(values)
+
         // console.log({ ...values, typeProduct: typeProductSelect })
-        // handleSubmit(values)
+        handleSubmit(dataFormToApi)
       }}
       validationSchema={validationSchema}
-    >
-      {!dataSupplies
-        ? ({ handleChange, values }) => (
-        <Form className="space-y-6">
-        {rows.map(row => (
+  >
+  {({ handleChange, values }) => (
+    <Form>
+      <div>
+        {currentPage === 1 && (
+          <div>
+          {rows.map(row => (
           <div key={row} className="flex">
             {inputs
-              .filter(input => input.row === row)
+              .filter(input => input.row === row & input.page === 1)
               .map((input) => (
                 (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
                 (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
@@ -696,51 +1159,80 @@ function CreateProduct () {
                 (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
                   ? (
                     <>
-                      {input.type === 'checkbox' &&
-                        <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                          <label>{input.title}</label>
-                          <div className="grid grid-cols-2 gap-4">
-                            {input.checkboxes.map((checkbox, index) => (
-                              <div key={index} className="flex items-center">
-                                <Field
-                                  type="checkbox"
-                                  name={`${checkbox.name} ${input.name}`}
-                                  id={`${checkbox.name} ${input.name}`}
-                                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                />
-                                <label htmlFor={`${checkbox.name} ${input.name}`} className="ml-2">{checkbox.label}</label>
-                              </div>
-                            ))}
+                    {input.type === 'checkbox' && (
+                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
+                        <label>{input.title}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          {input.checkboxes.map((checkbox, index) => (
+                            <div key={index} className="flex items-center">
+                              <Field
+                                type="checkbox"
+                                name={input.name}
+                                value={checkbox.label}
+                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                              />
+                              <label htmlFor={input.label} className="ml-2">
+                                {checkbox.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                        {input.type === 'select' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
                           </div>
-                        </div>
-                      }
-                      {input.type === 'select' &&
-                        <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                          <label htmlFor={input.name}>{input.title}</label>
-                          <Field
-                            as='select'
-                            name={input.name}
-                            id={input.name}
-                            value={values[input.name]}
-                            onChange={(e) => {
-                              handleChange(e)
-                              input.action && input.action(e)
-                            }}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                          >
-                              {input.options.map((option, index) => (
-                                <option key={index} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                          </Field>
-                          <ErrorMessage
-                            name={input.name}
-                            component="div"
-                            className="text-red-500"
-                          />
-                        </div>
-                        }
+                          }
+                          {input.type === 'select' & input.name === '' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
                         {input.type === 'textarea' &&
                           <div key={input.key} className="flex-1 mr-4 last:mr-0">
                             <label htmlFor={input.name}>{input.title}</label>
@@ -784,26 +1276,305 @@ function CreateProduct () {
               )
             }
           </div>
-        ))}
-          <h2 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Insumos</h2>
-          <button
-            onClick={handleDataSupplies}
-            className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Administrar insumos
-          </button>
-          <button
-            type="submit"
-            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-          Crear producto
-        </button>
-      </Form>
-          )
+          ))}
+        </div>
+        )}
 
-        : (
-        <>
-          <div className="w-full md:w-1/2">
+        {currentPage === 2 && (
+          <div>
+          {rows.map(row => (
+          <div key={row} className="flex">
+            {inputs
+              .filter(input => input.row === row & input.page === 2)
+              .map((input) => (
+                (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
+                (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
+                (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
+                (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
+                (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
+                  ? (
+                    <>
+                    {input.type === 'checkbox' && (
+                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
+                        <label>{input.title}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          {input.checkboxes.map((checkbox, index) => (
+                            <div key={index} className="flex items-center">
+                              <Field
+                                type="checkbox"
+                                name={input.name}
+                                value={checkbox.label}
+                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                              />
+                              <label htmlFor={input.label} className="ml-2">
+                                {checkbox.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                        {input.type === 'select' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
+                          {input.type === 'select' & input.name === '' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
+                        {input.type === 'textarea' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as="textarea"
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
+                        {input.type === 'text' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              type={input.type}
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
+                      </>
+                    )
+                  : (
+                      <></>
+                    )
+              )
+              )
+            }
+          </div>
+          ))}
+        </div>
+        )}
+
+        {currentPage === 3 && (
+          <div>
+          {rows.map(row => (
+          <div key={row} className="flex">
+            {inputs
+              .filter(input => input.row === row & input.page === 3)
+              .map((input) => (
+                (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
+                (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
+                (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
+                (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
+                (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
+                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
+                (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
+                (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
+                  ? (
+                    <>
+                    {input.type === 'checkbox' && (
+                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
+                        <label>{input.title}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          {input.checkboxes.map((checkbox, index) => (
+                            <div key={index} className="flex items-center">
+                              <Field
+                                type="checkbox"
+                                name={input.name}
+                                value={checkbox.label}
+                                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                              />
+                              <label htmlFor={input.label} className="ml-2">
+                                {checkbox.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                        {input.type === 'select' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
+                          {input.type === 'select' & input.name === '' &&
+                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as='select'
+                              name={input.name}
+                              id={input.name}
+                              value={values[input.name]}
+                              onChange={(e) => {
+                                handleChange(e)
+                                input.action && input.action(e)
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                            >
+                                {input.options.map((option, index) => (
+                                  <option key={index} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                            </Field>
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                          }
+                        {input.type === 'textarea' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              as="textarea"
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
+                        {input.type === 'text' &&
+                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
+                            <label htmlFor={input.name}>{input.title}</label>
+                            <Field
+                              type={input.type}
+                              name={input.name}
+                              id={input.name}
+                              placeholder={input.placeholder}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                            />
+                            <ErrorMessage
+                              name={input.name}
+                              component="div"
+                              className="text-red-500"
+                            />
+                          </div>
+                        }
+                      </>
+                    )
+                  : (
+                      <></>
+                    )
+              )
+              )
+            }
+          </div>
+          ))}
+        </div>
+        )}
+
+        {currentPage === 4 && (
+          <>
+          <div className="w-full md:w-1/2 space-y-6">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
                 Search
@@ -1002,16 +1773,28 @@ function CreateProduct () {
           </>
         </table>
       </div>
-      <button
-        onClick={handleDataSupplies}
-        className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-      >
-        Volver
-      </button>
       </>
-          )
+        )
       }
-  </Formik>
+      </div>
+      <div className='space-x-5 mt-8'>
+        <button type='button' onClick={handlePrevPage} disabled={currentPage === 1} className='text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center'>
+          Página anterior
+        </button>
+        <button type='button' onClick={handleNextPage} disabled={currentPage === totalPages} className='text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center'>
+          Siguiente página
+        </button>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-6"
+      >
+        Crear producto
+      </button>
+    </Form>
+  )}
+</Formik>
   )
 }
 

@@ -184,22 +184,24 @@ function CreateQuotationProviders () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="id del proveedor">
           {/* Opciones del select */}
+          <option value="0">Seleccione proveedor</option>
           {ProviderOptions && ProviderOptions.map(provider => (
-            <option key={provider.id} value={provider.id}>
+            <option
+            key={provider.id} value={provider.id}>
               {provider.name}
             </option>
           ))}
-        
+
         <ErrorMessage
       name="providerId"
       component="div"
       className="text-red-500"
-    /> 
+    />
     </Field>
         <button
         type="submit"
         className="flex items-center justify-center border border-gray-700 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-700 font-medium rounded-lg text-sm px-10 py-2"
-      
+
         >
           Crear Cotización a proveedores
             

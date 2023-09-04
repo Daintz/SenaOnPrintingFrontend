@@ -81,7 +81,7 @@ function Updatefinish () {
           ))}
           <button
             type="submit"
-            className="col-span-3 w-full text-white border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+            className="col-span-3 w-full border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
             
           >
         Actualizar Acabado
