@@ -76,7 +76,6 @@ const ListProduct = () => {
 
   return (
     <>
-    {console.log(dataApi)}
     <div className='hidden'>
       <div ref={tablePDF}>
         <ReportProduct dataApi={dataApi}/>
