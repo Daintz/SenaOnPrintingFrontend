@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
+import { useGetAllQuotationClientApprovedQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from '../../components/OrderProduction/UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from '../../components/OrderProduction/ChangeStateOrderProduction'
 import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 
 const ListQuotationClientApproved = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllQuotationClientDetailApprovedQuery()
+  const { data: dataApi, refetch } = useGetAllQuotationClientApprovedQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -18,15 +18,38 @@ const ListQuotationClientApproved = () => {
     refetch()
   }, [isAction])
   // ?
-
+console.log(dataApi)
   const columns = useMemo(() => [
-    { Header: 'Cotización detalle', accessor: 'id' },
-    { Header: 'Cotización', accessor: 'quotationClientId' },
+    { Header: 'Codigo', accessor: 'code' },
     { Header: 'Fecha de orden', accessor: 'orderDate' },
     { Header: 'Fecha de entrega', accessor: 'deliverDate' },
     { Header: 'Cliente', accessor: 'name' },
-    { Header: 'Producto', accessor: 'productName' },
-  ], [])
+    {
+      Header: 'Productos',
+      accessor: 'quotationClientDetails',
+      Cell: ({ value }) => {
+        if (value && value.length > 0) {
+          return (
+            <ul>
+            {value.map((detail, index) => (
+              <li key={index}>
+                {`${index + 1}: ${detail.productName}`}
+              </li>
+              ))}
+            </ul>
+          );
+        } else {
+          return 'Sin productos';
+        }
+      },
+    },
+  ], []);
+
+  
+  
+  
+  
+  
 
   const data = useMemo(() => (dataApi || []), [dataApi])
 
@@ -126,7 +149,7 @@ const ListQuotationClientApproved = () => {
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       
                       <CreateButtomOrderProduction
-                        orderProduction={row.original}
+                      quotationClient={row.original}
                       />
                     </td>
                   </tr>
