@@ -7,9 +7,9 @@ function DetailsSupplyDetails () {
   const { id, description, supplyCost, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
   return (
     <>
-      <p><b>Lote:</b> {id}</p>
+      {/* <p><b>Lote:</b> {id}</p> */}
       <p><b>Descripcion:</b> {description}</p>
-      <p><b>Costo insumo:</b> {supplyCost}</p>
+      {/* <p><b>Costo insumo:</b> {supplyCost}</p> */}
       <p><b>Fecha de entrada:</b> {entryDate}</p>
       <p><b>Fecha de caducidad:</b> {expirationDate}</p>
       <p><b>Insumo:</b> {supplyId}</p>

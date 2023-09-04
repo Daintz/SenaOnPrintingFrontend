@@ -50,7 +50,7 @@ const getSupplyPictograms = () => {
     clientAxios.get('/SupplyPictogrmas').then(
       (result) => {
         const SupplyPictogram = result.data.map((supplypictogram) => ({
-          'label': supplypictogram.name,
+          'label': supplypictogram.pictogramFile,
           'value': supplypictogram.id
         }));
         resolve(SupplyPictogram);

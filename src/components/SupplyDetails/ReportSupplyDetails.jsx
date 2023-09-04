@@ -11,8 +11,8 @@ const ReportSupplyDetails = ({ dataApi }) => {
 
   const columns = [
     { key: 'description', name: 'Descripción' },
-    { key: 'supplyCost', name: 'Costo insumo' },
-    { key: 'batch', name: 'Lote' },
+    // { key: 'supplyCost', name: 'Costo insumo' },
+    // { key: 'batch', name: 'Lote' },
     { key: 'entryDate', name: 'Fecha de entrada' },
     { key: 'expirationDate', name: 'Fecha de caducidad' },
     // { key: 'actualQuantity', name: 'Fecha actual' },
@@ -29,8 +29,8 @@ const ReportSupplyDetails = ({ dataApi }) => {
     ? dataApi.map(supplyDetails => ({
       id: supplyDetails.id,
       description: supplyDetails.description,
-      supplyCost: supplyDetails.supplyCost,
-      batch: supplyDetails.batch,
+      // supplyCost: supplyDetails.supplyCost,
+      // batch: supplyDetails.batch,
       entryDate: supplyDetails.entryDate,
       expirationDate: supplyDetails.expirationDate,
       // actualQuantity: supplyDetails.actualQuantity,
@@ -80,11 +80,10 @@ const ReportSupplyDetails = ({ dataApi }) => {
             >
               {supplyDetails.description}
             </th>
-            <td className="px-4 py-3">{supplyDetails.supplyCost}</td>
-            <td className="px-4 py-3">{supplyDetails.batch}</td>
+            {/* <td className="px-4 py-3">{supplyDetails.supplyCost}</td> */}
+            {/* <td className="px-4 py-3">{supplyDetails.batch}</td> */}
             <td className="px-4 py-3">{supplyDetails.entryDate}</td>
             <td className="px-4 py-3">{supplyDetails.expirationDate}</td>
-            <td className="px-4 py-3">{supplyDetails.actualQuantity}</td>
             <td className="px-4 py-3">{supplyDetails.supplyId}</td>
             <td className="px-4 py-3">{supplyDetails.providerId}</td>
             <td className="px-4 py-3">{supplyDetails.warehouseId}</td>

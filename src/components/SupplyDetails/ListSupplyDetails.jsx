@@ -1,16 +1,19 @@
-import { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyDetailsQuery } from '../../context/Api/Common'
-import { UpdateButtomSupplyDetails } from './UpdateSupplyDetails'
 import { ChangeStateButtonSupplyDetails } from './ChangeStateSupplyDetails'
 import { CreateButtomSupplyDetails } from './CreateSupplyDetails'
 import { DetailsButtomSupplyDetails } from './DetailsSupplyDetails'
 import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import ReportSupplyDetails from './ReportSupplyDetails'
-import React, { useRef } from 'react';
+import clientAxios from '../../config/clientAxios'
 
+const get = async (id) => {
+  const { data } = await clientAxios(`/Warehause/${id}`)
+  return data.ubication
+}
 
 const ListSupplyDetails = () => {
   const tablePDF = useRef()
@@ -29,16 +32,25 @@ const ListSupplyDetails = () => {
   }, [isAction])
   // ?
 
+  const findNameWarehouse = async (id) => {
+    const result = await get(id)
+    const name = result
+    return name
+  }
+
   const columns = useMemo(() => [
-    { Header: 'Lote', accessor: 'id' },
+    // { Header: 'Lote', accessor: 'id' },
     { Header: 'Descripción', accessor: 'description' },
-    { Header: 'Costo insumo', accessor: 'supplyCost' },
+    // { Header: 'Costo insumo', accessor: 'supplyCost' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
     { Header: 'Insumo', accessor: 'supplyId' },
     { Header: 'Proveedor', accessor: 'providerId' },
-    { Header: 'Bodega', accessor: 'warehouseId' },
+    {
+      Header: 'Bodega',
+      accessor: 'warehouseId'
+    },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -140,9 +152,9 @@ const ListSupplyDetails = () => {
             <CreateButtomSupplyDetails />
           </div>
         </div>
-        <div className="overflow-x-auto rounded-xl border border-gray-400">
-          <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <div className="overflow-x-autoundo red-xl border border-gray-400">
+              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               {headerGroups.map(headerGroup => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column, index) => (
@@ -170,9 +182,6 @@ const ListSupplyDetails = () => {
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                     <DetailsButtomSupplyDetails
-                      supplyDetails={row.original}
-                      />
-                      <UpdateButtomSupplyDetails
                       supplyDetails={row.original}
                       />
                       <ChangeStateButtonSupplyDetails
