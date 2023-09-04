@@ -3,11 +3,19 @@ import { openModal, setAction, setDetailsData, setWidth } from '../../context/Sl
 import { BsClipboard2 } from 'react-icons/bs'
 
 function DetailsQuotationClient () {
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString(undefined, options);
+    return formattedDate;
+  }
+
   const { detailsData } = useSelector((state) => state.modal)
   const { orderDate, deliverDate, userId, clientId, typeServiceId, quotationStatus, statedAt } = detailsData
   return (
     <>
-      <p><b>Fecha de orden:</b> {orderDate}</p>
+      <p><b>Fecha de orden:</b> {formatDate()}</p>
       <p><b>Fecha de entrega:</b> {deliverDate}</p>
       <p><b>Usuario Id:</b> {userId}</p>
       <p><b>Cliente Id:</b> {clientId}</p>

@@ -1,7 +1,7 @@
 import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
 import ListQuotation from '../../components/Quotation/ListQuotation'
-import UpdateQuotation from '../../components/Quotation/UpdateQuotation'
+import UpdateQuotation from '../../components/UpdateQuotationClient/UpdateQuotation'
 import CreateQuotation from '../../components/CreateQuotationClient/CreateQuotation'
 import DetailsQuotation from '../../components/Quotation/DetailsQuotation'
 import ChangeStateQuotation from '../../components/Quotation/ChangeStateQuotation'

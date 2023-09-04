@@ -7,7 +7,7 @@ import {
   useGetAllQuotationClientDetailsQuery
 } from '../../context/Api/Common';
 import { CreateButtomQuotation } from '../CreateQuotationClient/CreateQuotation';
-import { UpdateButtomQuotation } from './UpdateQuotation';
+
 import { DetailsButtomQuotation } from './DetailsQuotation';
 import { ChangeStateButtonQuotation } from './ChangeStateQuotation';
 import { ChangeStatusButtonQuotation } from './ChangeStatusQuotation';
@@ -41,7 +41,6 @@ const ListQuotation = () => {
       { Header: 'Fecha de orden', accessor: 'orderDate' },
       { Header: 'Fecha de Entrega', accessor: 'deliverDate' },
       { Header: 'Cliente Id', accessor: 'clientId' },
-      { Header: 'Tipo de servicio Id', accessor: 'typeServiceId' },
       {
         Header: 'Estado Cotizacion',
         accessor: 'quotationStatus',
@@ -222,9 +221,7 @@ const ListQuotation = () => {
                         <DetailsButtomQuotation
                           quotation={row.original}
                         />
-                        <UpdateButtomQuotation
-                          quotation={row.original}
-                        />
+                       
                        {/*  <ChangeStateButtonQuotation
                           quotation={row.original}
                         /> */}

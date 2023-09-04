@@ -36,6 +36,7 @@ import QuotationClientApproved from '../pages/ListQuotationClientApproved/Quotat
 import Quotation from '../pages/Quotation/Quotation'
 import ViewOrderProduction from '../pages/CreateOrderProduction/CreateOrderProduction'
 import ViewQuotationClient from '../components/CreateQuotationClient/CreateQuotation'
+import UpdateQuotation from '../components/UpdateQuotationClient/UpdateQuotation'
 
 
 const router = createBrowserRouter(
@@ -281,6 +282,14 @@ const router = createBrowserRouter(
         element={
           <DashboardLayout>
             <ViewQuotationClient />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="upadateQuotation"
+        element={
+          <DashboardLayout>
+            <UpdateQuotation />
           </DashboardLayout>
         }
       />
