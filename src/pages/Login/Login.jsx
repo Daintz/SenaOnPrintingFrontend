@@ -26,6 +26,7 @@ const Login = () => {
         const decodedToken = jwtDecode(token); // Decodificar el token JWT
         localStorage.setItem('session_token', token);
         localStorage.setItem('UserId', decodedToken.id);
+        console.log(decodedToken.id)
         toast.success(resp.message);
         usenavigate('/');
       }

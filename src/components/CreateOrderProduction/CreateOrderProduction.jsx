@@ -13,15 +13,15 @@ import {
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react'
-import { useGetAllOrderProductionsQuery } from '../../context/Api/Common'
+import { useGetAllOrderProductionsQuery, useGetProductByIdQuery } from '../../context/Api/Common'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { BsCheckCircle } from 'react-icons/bs'
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import clientAxios from '../../config/clientAxios'
-import { AiOutlineArrowRight } from 'react-icons/ai'
+import { GiCheckMark } from 'react-icons/gi'
 import { BsImages } from 'react-icons/bs';
 
 
@@ -38,13 +38,12 @@ const validationSchema = Yup.object().shape({
 
 
 function CreateOrderProduction() {
-
-
+  const usenavigate = useNavigate()
   // const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
   // const { isAction
   // } = useSelector((state) => state.modal)
-
-
+  const [productoActivo, setProductoActivo] = useState(null);
+  const [productosList, setProductosList] = useState([]);
   const dispatch = useDispatch()
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
@@ -58,10 +57,8 @@ function CreateOrderProduction() {
   const [previewImage2, setPreviewImage2] = useState(null);
 
   const { detailsData } = useSelector((state) => state.modal)
-  const { id, orderDate, deliverDate, name, phoneClient, emailClient, quotationClientId, productName, productWidth, numberOfPages, inkQuantity, quantity, productHeight, technicalSpecifications, typeService } = detailsData
-  // console.log(detailsData.id)
-  const quotationClientDetailId = detailsData.id
-  const userId = sessionStorage.getItem('UserId');
+  console.log(detailsData.id)
+  const userId = localStorage.getItem('UserId');
   console.log(userId)
   //Formato de fecha
   const originalDateStr = detailsData.deliverDate;
@@ -71,15 +68,10 @@ function CreateOrderProduction() {
 
   useEffect(() => {
     fetchOptions()
-
-
-  }, [])
-
-  const handleButtonClick = () => {
-    window.location.href = '/OrderProduction';
-  };
-
-
+    if (detailsData.quotationClientDetails.length > 0 && productoActivo === null) {
+      setProductoActivo(detailsData.quotationClientDetails[0].id);
+    }
+  }, [detailsData.quotationClientDetails, productoActivo]);
 
   const getImpositionPlanch = () => {
     return new Promise((resolve, reject) => {
@@ -88,7 +80,7 @@ function CreateOrderProduction() {
           const impositionPlanchs = result.data.map((impositionPlanch) => ({
             id: impositionPlanch.id,
             name: impositionPlanch.name
-        }))
+          }))
           resolve(impositionPlanchs)
         },
         (error) => {
@@ -115,7 +107,7 @@ function CreateOrderProduction() {
       );
     });
   };
-  
+
 
   const fetchOptions = () => {
 
@@ -130,50 +122,95 @@ function CreateOrderProduction() {
   }
 
 
+  const handleButtonClick = (values) => {
+    
+    const productoActual = detailsData.quotationClientDetails === productoActivo;
+    const indiceSiguiente = (productoActual + 1) % detailsData.quotationClientDetails.length;
+    
+    
+    // Obtén el ID del próximo producto
+    const nuevoProductoActivo = detailsData.quotationClientDetails[indiceSiguiente].id;
+
+    console.log(productoActivo)
+    const orderProduction = {
+      quotationClientDetailId: productoActivo,
+      userId: parseInt(userId),
+      materialReception: values.materialReception,
+      program: values.program,
+      programVersion: values.programVersion,
+      indented: parseInt(values.indented),
+      lineature: values.lineature,
+      colorProfile: values.colorProfile,
+      typePoint: values.typePoint,
+      observations: values.observations,
+      imageInfo: selectedImage1,
+      impositionPlanchId: parseInt(values.impositionPlanchId),
+      machineId: parseInt(values.machineId),
+      orderStatus: 2,
+      statedAt: true,
+      schemeInfo: selectedImage2,
+    };
+
+    setProductoActivo(nuevoProductoActivo);
+
+    console.log(orderProduction)
+    // Establece el nuevo producto activo
+    setProductosList((prevList) => {
+      const newList = [...prevList, orderProduction];
+
+      console.log('Lista después de agregar el producto:', newList); // Muestra la lista actualizada
+      if (newList.length == detailsData.quotationClientDetails.length){
+
+          handleSubmit(newList) // Supongo que createOrderProduction envía la orden al servidor
+
+      }
+      return newList;
+    });
+
+  // Itera a través de la lista de productos y envía cada uno al servidor
+
+    
+  };
+
+
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
 
-    // console.log('userId:', values.userId);
-    // console.log('materialReception', values.materialReception);
-    // console.log('programVersion', values.programVersion);
-    // console.log('imageInfo', values.image);
-    const formData = new FormData();
-    console.log(values)
-    console.log('quotationClientDetailId:', quotationClientDetailId);
-    console.log('userId', userId);
-    formData.append('quotationClientDetailId', quotationClientDetailId);
-    formData.append('userId', userId);
-    formData.append('materialReception', values.materialReception);
-    formData.append('programVersion', values.programVersion);
-    formData.append('indented', values.indented);
-    formData.append('colorProfile', values.colorProfile);
-    // formData.append('specialInk', values.specialInk);
-    // formData.append('inkCode', values.inkCode);
-    // formData.append('idPaperCut', values.idPaperCut);
+    for (const value of values) {
+      const formData = new FormData();
+    formData.append('quotationClientDetailId', value.quotationClientDetailId);
+    formData.append('userId', value.userId);
+    formData.append('materialReception', value.materialReception);
+    formData.append('programVersion', value.programVersion);
+    formData.append('indented', value.indented);
+    formData.append('colorProfile', value.colorProfile);
     formData.append('imageInfo', selectedImage1);
-    formData.append('observations', values.observations);
-    formData.append('machineId', values.machineId)
-    formData.append('impositionPlanchId', values.impositionPlanchId)
+    formData.append('lineature', value.lineature);
+    formData.append('observations', value.observations);
+    formData.append('machineId', value.machineId)
+    formData.append('impositionPlanchId', value.impositionPlanchId)
     formData.append('statedAt', true);
     formData.append('orderStatus', 2);
-    formData.append('program', values.program);
-    formData.append('typePoint', values.typePoint);
+    formData.append('program', value.program);
+    formData.append('typePoint', value.typePoint);
     formData.append('schemeInfo', selectedImage2);
     console.log(formData)
     await createOrderProduction(formData);
 
+    }
 
-
-
+    usenavigate('/OrderProduction');
     dispatch(changeAction())
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Imposición plancha creada con exito', {
+    toast.success('Orden creada con exito', {
       autoClose: 1000
     })
   }
+
+
   const handleFileChange = (event, setImage, setPreviewImage) => {
     const file = event.target.files[0];
     setImage(file);
@@ -196,7 +233,7 @@ function CreateOrderProduction() {
     <Formik
       initialValues={{
         userId: userId,
-        quotationClientDetailId: quotationClientDetailId,
+        quotationClientDetailId: productoActivo,
         materialReception: '',
         programVersion: '',
         indented: '',
@@ -212,7 +249,7 @@ function CreateOrderProduction() {
         scheme: ''
       }}
       onSubmit={(values) => {
-        handleSubmit(values)
+        handleButtonClick(values)
       }}
     // validationSchema={validationSchema}
     >
@@ -230,45 +267,36 @@ function CreateOrderProduction() {
               <div className="py-4">
                 <div className="flex gap-5 grid-cols-4 mb-3">
                   <div className="w-2/4">
-                    <p><b>Código:</b> {detailsData.quotationClientId}</p>
+                    <p><b>Código:</b> {detailsData.code}</p>
                     <p><b>Fecha entrega:</b> {formattedDate}</p>
 
 
                   </div>
                   <div className="w-2/4">
                     <p><b>Cliente:</b> {detailsData.name}</p>
-                    <p><b>Tipo de servicio:</b> {detailsData.typeService.name}</p>
-
-
+                    <p><b>Tipo de servicio:</b> {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-1/5">
-                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ">
-                  <div className="flex gap-5 grid-cols-4 mb-3">
-
-                    <div className="w-full">
-                      <p><b>Producto:</b> {productName}</p>
-                      <p><b>Cantidad:</b> {quantity}</p>
+                {detailsData.quotationClientDetails.map((product, index) => (
+                  <div       className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ${productoActivo === product.id ? 'border-black' : ''}`}
+                  key={index}
+                  onClick={() => setProductoActivo(product.id)}>
+                    <div className="flex gap-5 grid-cols-4 mb-3" >
+                      <div className="w-full">
+                        <p><b>Producto:</b> {product.productName}</p>
+                        <p><b>Cantidad:</b> {product.quantity}</p>
+                      </div>
+                      <div className="flex items-center justify-center w-15 h-15">
+                        <BsCheckCircle className="text-blue-500 h-6 w-6" />
+                      </div>
                     </div>
-                    <div className="flex items-center justify-center w-15 h-15">
-                      <BsCheckCircle className="text-blue-500 h-6 w-6" />
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300">
-                  <div className="flex gap-5 grid-cols-4 mb-3">
-
-                    <div className="w-full">
-                      <p><b>Producto:</b> Mug</p>
-                      <p><b>Cantidad</b> 5</p>
-                    </div>
-
-                  </div>
-                </div>
+                  </div>))}
               </div>
+
               <div className="w-4/5 border-l-[3px] border-gray pl-4">
 
                 <div className="flex gap-5 grid-cols-4 mb-3">
@@ -341,8 +369,6 @@ function CreateOrderProduction() {
 
 
                 <div className="flex gap-5 grid-cols-5 mb-3">
-
-
                   <div className="w-1/4">
                     <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Sangrado
@@ -355,6 +381,7 @@ function CreateOrderProduction() {
                       placeholder="5"
                     />
                   </div>
+                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Digital' && (
                   <div className="w-1/4">
                     <label htmlFor="lineature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Lineatura
@@ -367,15 +394,9 @@ function CreateOrderProduction() {
                       placeholder="20 lpi"
                     />
                   </div>
+                  )}
 
-
-
-                </div>
-
-
-
-
-                <div className="flex gap-5 grid-cols-5 mb-3">
+{detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Offset' && (
                   <div className="w-1/4">
                     <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Tipo de punto
@@ -386,12 +407,12 @@ function CreateOrderProduction() {
                       id="typePoint"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
-                      <option value="0">Selecciona</option>
+                      <option value="0">Seleccione</option>
                       <option value="Giro pinza">Punto redondo</option>
                       <option value="Doble punto">Punto eliptico</option>
                     </Field>
                   </div>
-
+                )}
                   <div className="w-1/4">
                     <label htmlFor="impositionPlanchId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
@@ -401,7 +422,7 @@ function CreateOrderProduction() {
                       name="impositionPlanchId"
                       id="impositionPlanchId"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                    >
+                    >  <option value="0">Seleccione</option>
                       {impositionPlanchOptions && impositionPlanchOptions.map(impositionPlanch => (
                         <option key={impositionPlanch.id} value={impositionPlanch.id}>
                           {impositionPlanch.name}
@@ -420,6 +441,7 @@ function CreateOrderProduction() {
                       id="machineId"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                     >
+                      <option value="0">Seleccione</option>
                       {machineOptions && machineOptions.map(machine => (
                         <option key={machine.id} value={machine.id}>
                           {machine.name}
@@ -427,6 +449,13 @@ function CreateOrderProduction() {
                       ))}
                     </Field>
                   </div>
+                </div>
+
+
+
+
+                <div className="flex gap-5 grid-cols-5 mb-3">
+                
                 </div>
                 <div className="flex gap-5 grid-cols-5 mb-3">
                   <div className="w-1/4">
@@ -504,12 +533,18 @@ function CreateOrderProduction() {
                   </div>
                 </div>
                 <button
-                  type="submit"
-                  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
-                >
-                  <Link to={"/OrderProduction"}></Link>
-                  <AiOutlineArrowRight />
-                </button>
+  type="submit"
+  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+>
+  {productoActivo === detailsData.quotationClientDetails[detailsData.quotationClientDetails.length - 1].id ? (
+    "Guardar"
+  ) : (
+    <>
+      <Link to={"/OrderProduction"}></Link>
+      <GiCheckMark />
+    </>
+  )}
+</button>
 
 
               </div>
@@ -524,7 +559,9 @@ function CreateOrderProduction() {
 }
 
 
-export function CreateButtomOrderProduction({ orderProduction }) {
+export function CreateButtomOrderProduction({ quotationClient }) {
+
+  console.log(quotationClient)
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
@@ -532,7 +569,7 @@ export function CreateButtomOrderProduction({ orderProduction }) {
     // dispatch(setWidth({ width: 'w-[1000]' }))
     // dispatch(openModal({ title: 'Crear orden de producción' }))
     // dispatch(setAction({ action: 'creating' }))
-    dispatch(setDetailsData({ detailsData: orderProduction }))
+    dispatch(setDetailsData({ detailsData: quotationClient }))
   }
   // ?
 

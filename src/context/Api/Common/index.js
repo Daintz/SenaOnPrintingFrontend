@@ -166,6 +166,7 @@ export const {
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,
   usePutByIdMutation: usePutQuotationClientByIdMutation,
+  useGetAllApprovedQuery: useGetAllQuotationClientApprovedQuery,
   useDeleteByIdMutation: useDeleteQuotationClientByIdMutation,
   useDeleteStatusMutation: useDeleteQuotationStatusMutation
 } = quotationClientApi
@@ -173,7 +174,6 @@ export const {
 export const {
   useGetAllQuery: useGetAllQuotationClientDetailsQuery,
   useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
-  useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
   usePostMutation: usePostQuotationClientDetailMutation,
   usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
   useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
