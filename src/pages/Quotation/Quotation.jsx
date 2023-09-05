@@ -4,7 +4,7 @@ import ListQuotation from '../../components/Quotation/ListQuotation'
 import UpdateQuotation from '../../components/UpdateQuotationClient/UpdateQuotation'
 import CreateQuotation from '../../components/CreateQuotationClient/CreateQuotation'
 import DetailsQuotation from '../../components/Quotation/DetailsQuotation'
-import ChangeStateQuotation from '../../components/Quotation/ChangeStateQuotation'
+import ChangeStatusQuotation from '../../components/Quotation/ChangeStatusQuotation'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 
 
@@ -24,7 +24,7 @@ const QuotationClient = () => {
         {action === 'editing' ? <UpdateQuotation /> : undefined}
           {action === 'creating' ? <CreateQuotation /> : undefined}
           {action === 'details' ? <DetailsQuotation /> : undefined}
-          {action === 'changing' ? <ChangeStateQuotation /> : undefined}
+          {action === 'changing' ? <ChangeStatusQuotation /> : undefined}
          
         </NewModal>
       </div>

@@ -221,8 +221,8 @@ const ListQuotation = () => {
                         <DetailsButtomQuotation
                           quotation={row.original}
                         />
-                       
-                       {/*  <ChangeStateButtonQuotation
+                      
+                       {/*  <ChanonQuotation
                           quotation={row.original}
                         /> */}
                          <ChangeStatusButtonQuotation
