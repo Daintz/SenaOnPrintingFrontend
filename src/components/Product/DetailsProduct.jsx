@@ -118,7 +118,7 @@ function DetailsProduct () {
             <div>
               <p><b>Dimension:</b> {dimension}</p>
               <p><b>Acabados:</b> {bindings}</p>
-              <p><b>Sustratos:</b> {susbtrateLargeFormat}</p>
+              <p><b>Sustratos:</b> {susbtrateStationery}</p>
             </div>
             <div>
               <p><b>Insumos:</b> {supplies[0].supply.name}</p>
