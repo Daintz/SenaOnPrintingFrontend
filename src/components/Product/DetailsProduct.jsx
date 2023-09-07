@@ -38,7 +38,7 @@ function DetailsProduct () {
             <div>
               <p><b>Acabados:</b> {bindings}</p>
               <p><b>Sustratos:</b> {substratum}</p>
-              <p><b>Insumos:</b> {supplies[0].supply.name}</p>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
               <p><b>Observaciones:</b> {observations}</p>
             </div>
             <p>
@@ -66,7 +66,7 @@ function DetailsProduct () {
               <p><b>Sustratos:</b> {susbtrateLargeFormat}</p>
             </div>
             <div>
-              <p><b>Insumos:</b> {supplies[0].supply.name}</p>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
               <p><b>Observaciones:</b> {observations}</p>
             </div>
             <p>
@@ -93,7 +93,7 @@ function DetailsProduct () {
               <p><b>Acabados:</b> {bindings}</p>
             </div>
             <div>
-              <p><b>Insumos:</b> {supplies[0].supply.name}</p>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
               <p><b>Observaciones:</b> {observations}</p>
             </div>
             <p>
@@ -121,7 +121,7 @@ function DetailsProduct () {
               <p><b>Sustratos:</b> {susbtrateStationery}</p>
             </div>
             <div>
-              <p><b>Insumos:</b> {supplies[0].supply.name}</p>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
               <p><b>Observaciones:</b> {observations}</p>
             </div>
             <p>
