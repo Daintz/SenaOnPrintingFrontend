@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik, FieldArray } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  description: Yup.string().required('Campo requerido'),
+  permissionIds: Yup.array().min(1, 'Seleccione un permiso')
 })
 
 function UpdateRole () {
@@ -20,7 +21,8 @@ function UpdateRole () {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    await updateRole(values)
+    // await updateRole(values)
+    console.log(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
@@ -34,12 +36,15 @@ function UpdateRole () {
     { key: 1, name: 'description', title: 'Descripción', type: 'text', placeholder: 'Descripción del Rol' }
   ]
 
+  const selectedPermissions = editingData.permissionsByRoles.map(({ permissionId })=> (permissionId))
+
   return (
     <Formik
       initialValues={{
         id: editingData.id,
         name: editingData.name,
-        description: editingData.description
+        description: editingData.description,
+        permissionIds: selectedPermissions
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -64,6 +69,40 @@ function UpdateRole () {
               />
             </div>
           ))}
+          <div id="permissionIds" className="title">Lista de Permisos:</div>
+          <div id="permissions_container">
+            <FieldArray
+                name="permissionIds"
+                render={arrayHelper => (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} role="group" aria-labelledby="permissionIds">
+                    {permissions.map((option, index) => (
+                    <label key={`permission.${index}`} className='ml-5'>
+                        <input
+                        className='mr-2'
+                        type="checkbox"
+                        value={option.value}
+                        checked={arrayHelper.form.values.permissionIds.includes(option.value)}
+                        onChange={e => {
+                            if (e.target.checked) arrayHelper.push(option.value);
+                            else {
+                                const idx = arrayHelper.form.values.permissionIds.indexOf(option.value);
+                                arrayHelper.remove(idx);
+                            }
+                            console.log(arrayHelper.form.values.permissionIds)
+                        }}
+                        />
+                        {option.label}
+                    </label>
+                    ))}
+                </div>
+                )}
+            />
+            <ErrorMessage
+                name={"permissionIds"}
+                component="div"
+                className="text-red-500"
+                />
+          </div>
           <button
             type="submit"
             className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
