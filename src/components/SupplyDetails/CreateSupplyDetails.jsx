@@ -375,7 +375,7 @@ function CreateSupplyDetails () {
           <div className="w-full md:w-1/2">
             <div className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
-                Search
+                Buscar
               </label>
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -468,10 +468,10 @@ function CreateSupplyDetails () {
                                         </td>
                                         <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={`${cell.row.original.id}-actions`}>
                                           <button type="button" onClick={() => addSupply(cell.row.original)}>
-                                            <AiOutlinePlusCircle alt="Icono agregar producto" title="Agregar producto" className="h-6 w-6 mr-2" />
+                                            <AiOutlinePlusCircle alt="Icono agregar " title="Agregar " className="h-6 w-6 mr-2" />
                                           </button>
                                           <button type="button" onClick={() => deleteSupply(cell.row.original.id)}>
-                                            <AiOutlineCloseCircle alt="Icono eliminar producto" title="Eliminar producto" className="h-6 w-6 mr-2" />
+                                            <AiOutlineCloseCircle alt="Icono eliminar " title="Eliminar " className="h-6 w-6 mr-2" />
                                           </button>
                                         </td>
                                       </>
@@ -490,7 +490,7 @@ function CreateSupplyDetails () {
               className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
             >
               <span className="text-sm font-normal text-gray-500">
-                Pagina {' '}
+                Página {' '}
                 <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
               </span>
               <ul className="inline-flex items-stretch -space-x-px">

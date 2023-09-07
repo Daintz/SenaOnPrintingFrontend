@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyDetailsQuery } from '../../context/Api/Common'
@@ -10,12 +10,11 @@ import { useReactToPrint } from 'react-to-print'
 import ReportSupplyDetails from './ReportSupplyDetails'
 import clientAxios from '../../config/clientAxios'
 
-const get = async (id) => {
-  const { data } = await clientAxios(`/Warehause/${id}`)
-  return data.ubication
-}
-
 const ListSupplyDetails = () => {
+  const [loading, setLoading] = useState(true)
+  const [dataWarehause, setDataWarehause] = useState([])
+  const [dataProvider, setDataProvider] = useState([])
+
   const tablePDF = useRef()
 
   const generatePDF = useReactToPrint({
@@ -27,30 +26,17 @@ const ListSupplyDetails = () => {
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
-  useEffect(() => {
-    refetch()
-  }, [isAction])
-  // ?
-
-  const findNameWarehouse = async (id) => {
-    const result = await get(id)
-    const name = result
-    return name
-  }
 
   const columns = useMemo(() => [
     // { Header: 'Lote', accessor: 'id' },
     { Header: 'Descripción', accessor: 'description' },
-    // { Header: 'Costo insumo', accessor: 'supplyCost' },
+    // { Header: 'Costo insumo', accessor: 'averageCost' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
     { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
     { Header: 'Insumo', accessor: 'supplyId' },
-    { Header: 'Proveedor', accessor: 'providerId' },
-    {
-      Header: 'Bodega',
-      accessor: 'warehouseId'
-    },
+    {Header: 'Proveedor',accessor: 'providerId'},
+    {Header: 'Bodega', accessor: 'warehouseId'},
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -65,6 +51,18 @@ const ListSupplyDetails = () => {
   ], [])
 
   const data = useMemo(() => (dataApi || []), [dataApi])
+
+  useEffect(() => {
+    clientAxios('/Provider')
+      .then(response => {
+        setDataProvider(response.data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error al obtener datos:', error)
+        setLoading(false)
+      })
+  }, [])
 
   useEffect(() => {
     refetch()
@@ -93,6 +91,10 @@ const ListSupplyDetails = () => {
   const { pageIndex, globalFilter } = state
 
   if (!dataApi) {
+    return <div>Cargando...</div>
+  }
+
+  if (loading) {
     return <div>Cargando...</div>
   }
 
@@ -152,9 +154,9 @@ const ListSupplyDetails = () => {
             <CreateButtomSupplyDetails />
           </div>
         </div>
-        <div className="overflow-x-autoundo red-xl border border-gray-400">
-              <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <div className="overflow-x-auto rounded-xl border border-gray-400">
+          <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               {headerGroups.map(headerGroup => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column, index) => (

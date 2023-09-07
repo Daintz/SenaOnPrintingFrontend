@@ -1,11 +1,43 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
 import { GrView } from 'react-icons/gr'
+import clientAxios from '../../config/clientAxios'
+import { useEffect, useState } from 'react'
 
 function DetailsSupplyDetails () {
+  const [loading, setLoading] = useState(true)
+  const [dataWarehause, setDataWarehause] = useState([])
+  const [dataProvider, setDataProvider] = useState([])
+
   const { detailsData } = useSelector((state) => state.modal)
-  const { id, description, supplyCost, entryDate, expirationDate, actualQuantity, statedAt, supplyId, providerId , warehouseId} = detailsData
+  const {  description, entryDate, expirationDate, statedAt, supplyId, providerId, warehouseId } = detailsData
+
+  useEffect(() => {
+    clientAxios('/Warehause')
+      .then(response => {
+        setDataWarehause(response.data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error al obtener datos:', error)
+        setLoading(false)
+      })
+
+    clientAxios('/Provider')
+      .then(response => {
+        setDataProvider(response.data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error al obtener datos:', error)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return <div>Cargando...</div>
+  }
+
   return (
     <>
       {/* <p><b>Lote:</b> {id}</p> */}
@@ -14,8 +46,17 @@ function DetailsSupplyDetails () {
       <p><b>Fecha de entrada:</b> {entryDate}</p>
       <p><b>Fecha de caducidad:</b> {expirationDate}</p>
       <p><b>Insumo:</b> {supplyId}</p>
-      <p><b>Proveedor:</b> {providerId}</p>
-      <p><b>Bodega:</b> {warehouseId}</p>
+      <p>
+      <b>Proveedor: </b>
+      {dataProvider.map((provider) => {
+        return provider.id === providerId && provider.nameCompany
+      })}
+      </p>
+      <p>
+      <b>Bodega: </b>
+      {dataWarehause.map((warehause) => {
+        return warehause.id === warehouseId && warehause.ubication
+      })}</p>
       <p>
       <b>Estado:</b> {' '}
       {statedAt

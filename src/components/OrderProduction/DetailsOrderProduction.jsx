@@ -11,10 +11,19 @@ function DetailsOrderProduction () {
 
   // Manejo de datos del producto
   const { data: productInfo, isLoading, isError } = useGetProductByIdQuery(productId);
+
+  const filteredProductInfo = Object.keys(productInfo || {}).reduce((acc, key) => {
+    if (!Array.isArray(productInfo[key]) && productInfo[key] !== null && productInfo[key] !== undefined) {
+      acc[key] = productInfo[key];
+    }
+    return acc;
+  }, {});
+
+  console.log(filteredProductInfo);
   // const { name, materialReception, programVersion,productId, colorProfile, specialInk, inkCode, idPaperCut, image, observations, statedAt, orderStatus, program, scheme} = detailsData
   // const { data: productInfo, isLoading, isError } = useGetProductByIdQuery(detailsData.productId);
-  console.log(productInfo)
-  const productProperties = Object.entries(productInfo || {});
+  console.log(filteredProductInfo)
+  const productProperties = Object.entries(filteredProductInfo || {});
   const middleIndex = Math.ceil(productProperties.length / 2);
   const firstColumnProperties = productProperties.slice(0, middleIndex);
   const secondColumnProperties = productProperties.slice(middleIndex);

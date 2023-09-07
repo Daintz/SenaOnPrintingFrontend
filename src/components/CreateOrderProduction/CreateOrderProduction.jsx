@@ -381,7 +381,7 @@ function CreateOrderProduction() {
                       placeholder="5"
                     />
                   </div>
-                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Digital' && (
+                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName === 'Offset' && (
                   <div className="w-1/4">
                     <label htmlFor="lineature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Lineatura
