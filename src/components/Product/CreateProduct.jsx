@@ -11,14 +11,48 @@ import {
 } from '../../context/Slices/Modal/ModalSlice'
 import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { AiOutlineCloseCircle, AiOutlinePlusCircle } from 'react-icons/ai'
+import { FaAsterisk } from 'react-icons/fa'
 import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida')
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida').oneOf(['Libreta', 'Souvenir', 'Gran formato', 'Papelería'], 'Selecciona una opción válida'),
+  cost: Yup.string().required('Campo requerido')
+})
+
+const validationSchemaNotebook = Yup.object().shape({
+  name: Yup.string().required('Campo requerido'),
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  notebookSize: Yup.string().required('Campo requerido'),
+  cost: Yup.string().required('Campo requerido'),
+  observations: Yup.string().required('Campo requerido'),
+  frontPage: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  backCover: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  innerSheets: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida')
+})
+
+const validationSchemaSouvenir = Yup.object().shape({
+  name: Yup.string().required('Campo requerido'),
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  costSouvenir: Yup.string().required('Campo requerido'),
+  observationsSouvenir: Yup.string().required('Campo requerido')
+})
+
+const validationSchemaLargeFormat = Yup.object().shape({
+  name: Yup.string().required('Campo requerido'),
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  costLargeFormat: Yup.string().required('Campo requerido'),
+  observationsLargeFormat: Yup.string().required('Campo requerido')
+})
+
+const validationSchemaStationery = Yup.object().shape({
+  name: Yup.string().required('Campo requerido'),
+  typeProduct: Yup.string().notOneOf(['Elige una opción'], 'Selecciona una opción válida'),
+  costStationery: Yup.string().required('Campo requerido'),
+  observationsStationery: Yup.string().required('Campo requerido')
 })
 
 function CreateProduct () {
@@ -211,7 +245,8 @@ function CreateProduct () {
       name: 'name',
       title: 'Nombre',
       type: 'text',
-      placeholder: 'Nombre del producto'
+      placeholder: 'Nombre del producto',
+      obligatory: true
     },
     {
       row: 1,
@@ -223,7 +258,8 @@ function CreateProduct () {
       type: 'select',
       options: ['Elige una opción', 'Libreta', 'Souvenir', 'Gran formato', 'Papelería'],
       value: typeProductSelect,
-      action: handleTypeProduct
+      action: handleTypeProduct,
+      obligatory: true
     },
     {
       row: 1,
@@ -233,24 +269,26 @@ function CreateProduct () {
       name: 'notebookSize',
       title: 'Tamaño',
       type: 'select',
-      options: ['Elije una opción', ...paperCutOptions]
+      options: ['Elije una opción', ...paperCutOptions],
+      obligatory: true
     },
     {
       row: 2,
       page: 2,
-      key: 5,
+      key: 3,
       typeProductOwner: 'Libreta',
       name: 'frontPage',
       title: 'Portada',
       type: 'select',
       options: ['Elige una opción', 'Si', 'No'],
       value: frontPage,
-      action: handleFrontPage
+      action: handleFrontPage,
+      obligatory: true
     },
     {
       row: 2,
       page: 2,
-      key: 5,
+      key: 4,
       typeProductOwner: 'Libreta',
       name: 'frontPageInks',
       title: 'Tintas portada',
@@ -272,7 +310,7 @@ function CreateProduct () {
     {
       row: 2,
       page: 2,
-      key: 5,
+      key: 6,
       typeProductOwner: 'Libreta',
       name: 'pantone',
       title: 'Pantone',
@@ -282,7 +320,7 @@ function CreateProduct () {
     {
       row: 2,
       page: 2,
-      key: 5,
+      key: 7,
       typeProductOwner: 'Libreta',
       name: 'code',
       title: 'Código',
@@ -292,61 +330,78 @@ function CreateProduct () {
     {
       row: 2,
       page: 2,
-      key: 6,
+      key: 8,
       typeProductOwner: 'Libreta',
       name: 'susbtrateFrontPage',
       title: 'Sustrato',
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Bond'
         },
         {
+          key: 2,
           label: 'Periódico'
         },
         {
+          key: 3,
           label: 'Bristol'
         },
         {
+          key: 4,
           label: 'Esmaltado C1S'
         },
         {
+          key: 5,
           label: 'Rústico/Cosido'
         },
         {
+          key: 6,
           label: 'Bond Adhesivo'
         },
         {
+          key: 7,
           label: 'Opalina'
         },
         {
+          key: 8,
           label: 'Esmaltado C2S'
         },
         {
+          key: 9,
           label: 'Esmalt Adhesivo'
         },
         {
+          key: 10,
           label: 'Albanene'
         },
         {
+          key: 11,
           label: 'Kraft'
         },
         {
+          key: 12,
           label: 'Vinilo adhesivo'
         },
         {
+          key: 13,
           label: 'Vinilo Transfer'
         },
         {
+          key: 14,
           label: 'P. Sublimación'
         },
         {
+          key: 15,
           label: 'Cartón Industrial'
         },
         {
+          key: 16,
           label: 'Cartón Duplex'
         },
         {
+          key: 16,
           label: 'Fotográfico'
         }
       ]
@@ -354,19 +409,20 @@ function CreateProduct () {
     {
       row: 3,
       page: 2,
-      key: 7,
+      key: 9,
       typeProductOwner: 'Libreta',
       name: 'backCover',
       title: 'Contraportada',
       type: 'select',
       options: ['Elige una opción', 'Si', 'No'],
       value: backCover,
-      action: handleBackCover
+      action: handleBackCover,
+      obligatory: true
     },
     {
       row: 3,
       page: 2,
-      key: 7,
+      key: 10,
       typeProductOwner: 'Libreta',
       name: 'backCoverInks',
       title: 'Tintas contraportada',
@@ -378,7 +434,7 @@ function CreateProduct () {
     {
       row: 3,
       page: 2,
-      key: 7,
+      key: 11,
       typeProductOwner: 'Libreta',
       name: 'numberInksBackCover',
       title: 'No. de tintas proceso',
@@ -388,7 +444,7 @@ function CreateProduct () {
     {
       row: 3,
       page: 2,
-      key: 7,
+      key: 12,
       typeProductOwner: 'Libreta',
       name: 'pantoneBackCover',
       title: 'Pantone',
@@ -398,7 +454,7 @@ function CreateProduct () {
     {
       row: 3,
       page: 2,
-      key: 7,
+      key: 13,
       typeProductOwner: 'Libreta',
       name: 'codeBackCover',
       title: 'Código',
@@ -408,19 +464,20 @@ function CreateProduct () {
     {
       row: 4,
       page: 3,
-      key: 8,
+      key: 14,
       typeProductOwner: 'Libreta',
       name: 'innerSheets',
       title: 'Interior paginas',
       type: 'select',
       options: ['Elige una opción', 'Si', 'No'],
       value: innerSheets,
-      action: handleInnerSheets
+      action: handleInnerSheets,
+      obligatory: true
     },
     {
       row: 4,
       page: 3,
-      key: 7,
+      key: 15,
       typeProductOwner: 'Libreta',
       name: 'innerSheetsInks',
       title: 'Tintas paginas',
@@ -432,7 +489,7 @@ function CreateProduct () {
     {
       row: 4,
       page: 3,
-      key: 7,
+      key: 16,
       typeProductOwner: 'Libreta',
       name: 'numberInksInnerSheets',
       title: 'No. de tintas proceso',
@@ -442,7 +499,7 @@ function CreateProduct () {
     {
       row: 4,
       page: 3,
-      key: 7,
+      key: 17,
       typeProductOwner: 'Libreta',
       name: 'pantoneInnerSheets',
       title: 'Pantone',
@@ -452,7 +509,7 @@ function CreateProduct () {
     {
       row: 4,
       page: 3,
-      key: 7,
+      key: 18,
       typeProductOwner: 'Libreta',
       name: 'codeInnerSheets',
       title: 'Código',
@@ -462,61 +519,78 @@ function CreateProduct () {
     {
       row: 4,
       page: 3,
-      key: 6,
+      key: 19,
       typeProductOwner: 'Libreta',
       name: 'susbtrateSheets',
       title: 'Sustrato',
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Bond'
         },
         {
+          key: 2,
           label: 'Periódico'
         },
         {
+          key: 3,
           label: 'Bristol'
         },
         {
+          key: 4,
           label: 'Esmaltado C1S'
         },
         {
+          key: 5,
           label: 'Rústico/Cosido'
         },
         {
+          key: 6,
           label: 'Bond Adhesivo'
         },
         {
+          key: 7,
           label: 'Opalina'
         },
         {
+          key: 8,
           label: 'Esmaltado C2S'
         },
         {
+          key: 9,
           label: 'Esmalt Adhesivo'
         },
         {
+          key: 10,
           label: 'Albanene'
         },
         {
+          key: 11,
           label: 'Kraft'
         },
         {
+          key: 12,
           label: 'Vinilo adhesivo'
         },
         {
+          key: 13,
           label: 'Vinilo Transfer'
         },
         {
+          key: 14,
           label: 'P. Sublimación'
         },
         {
+          key: 15,
           label: 'Cartón Industrial'
         },
         {
+          key: 16,
           label: 'Cartón Duplex'
         },
         {
+          key: 16,
           label: 'Fotográfico'
         }
       ]
@@ -524,7 +598,7 @@ function CreateProduct () {
     {
       row: 5,
       page: 1,
-      key: 10,
+      key: 20,
       typeProductOwner: 'Libreta',
       name: 'numberSheets',
       title: 'Numero de paginas',
@@ -534,27 +608,29 @@ function CreateProduct () {
     {
       row: 5,
       page: 1,
-      key: 10,
+      key: 21,
       typeProductOwner: 'Libreta',
       name: 'cost',
       title: 'Costo',
       type: 'text',
-      placeholder: 'Costo del producto'
+      placeholder: 'Costo del producto',
+      obligatory: true
     },
     {
       row: 5,
       page: 1,
-      key: 10,
+      key: 22,
       typeProductOwner: 'Libreta',
       name: 'observations',
       title: 'Observaciones',
       type: 'textarea',
-      placeholder: 'Observaciones del producto'
+      placeholder: 'Observaciones del producto',
+      obligatory: true
     },
     {
       row: 6,
       page: 1,
-      key: 3,
+      key: 23,
       typeProductOwner: 'Libreta',
       name: 'cover',
       title: 'Encuadernacion',
@@ -589,99 +665,113 @@ function CreateProduct () {
     {
       row: 6,
       page: 1,
-      key: 6,
+      key: 24,
       typeProductOwner: 'Libreta',
       name: 'laminated',
       title: 'Acabados',
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Brillo UV'
         },
         {
-          label: 'Sanduchado'
-        },
-        {
+          key: 2,
           label: 'Laminado'
         },
         {
-          label: 'Anillado'
-        },
-        {
+          key: 3,
           label: 'Plegado'
         },
         {
+          key: 4,
+          label: 'Sanduchado'
+        },
+        {
+          key: 4,
+          label: 'Grafa'
+        },
+        {
+          key: 4,
           label: 'Desprendible'
-        },
-        {
-          label: 'Sobrecubierta'
-        },
-        {
-          label: 'Tapa blanda'
-        },
-        {
-          label: 'Caballete'
         }
       ]
     },
     {
       row: 6,
       page: 1,
-      key: 6,
+      key: 25,
       typeProductOwner: 'Libreta',
       name: 'susbtrateNoteBook',
       title: 'Sustrato',
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Bond'
         },
         {
+          key: 2,
           label: 'Periódico'
         },
         {
+          key: 3,
           label: 'Bristol'
         },
         {
+          key: 4,
           label: 'Esmaltado C1S'
         },
         {
+          key: 5,
           label: 'Rústico/Cosido'
         },
         {
+          key: 6,
           label: 'Bond Adhesivo'
         },
         {
+          key: 7,
           label: 'Opalina'
         },
         {
+          key: 8,
           label: 'Esmaltado C2S'
         },
         {
+          key: 9,
           label: 'Esmalt Adhesivo'
         },
         {
+          key: 10,
           label: 'Albanene'
         },
         {
+          key: 11,
           label: 'Kraft'
         },
         {
+          key: 12,
           label: 'Vinilo adhesivo'
         },
         {
+          key: 13,
           label: 'Vinilo Transfer'
         },
         {
+          key: 14,
           label: 'P. Sublimación'
         },
         {
+          key: 15,
           label: 'Cartón Industrial'
         },
         {
+          key: 16,
           label: 'Cartón Duplex'
         },
         {
+          key: 16,
           label: 'Fotográfico'
         }
       ]
@@ -704,7 +794,8 @@ function CreateProduct () {
       name: 'costSouvenir',
       title: 'Costo',
       type: 'text',
-      placeholder: 'Costo de souvenir'
+      placeholder: 'Costo de souvenir',
+      obligatory: true
     },
     {
       row: 2,
@@ -714,7 +805,8 @@ function CreateProduct () {
       name: 'observationsSouvenir',
       title: 'Observaciones',
       type: 'textarea',
-      placeholder: 'Observaciones de souvenir'
+      placeholder: 'Observaciones de souvenir',
+      obligatory: true
     },
     {
       row: 3,
@@ -726,30 +818,39 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Brillo UV'
         },
         {
+          key: 2,
           label: 'Sanduchado'
         },
         {
+          key: 3,
           label: 'Laminado'
         },
         {
+          key: 4,
           label: 'Anillado'
         },
         {
+          key: 5,
           label: 'Plegado'
         },
         {
+          key: 6,
           label: 'Desprendible'
         },
         {
+          key: 7,
           label: 'Sobrecubierta'
         },
         {
+          key: 8,
           label: 'Tapa blanda'
         },
         {
+          key: 9,
           label: 'Caballete'
         }
       ]
@@ -772,7 +873,8 @@ function CreateProduct () {
       name: 'costLargeFormat',
       title: 'Costo',
       type: 'text',
-      placeholder: 'Costo de Gran formato'
+      placeholder: 'Costo de Gran formato',
+      obligatory: true
     },
     {
       row: 2,
@@ -782,7 +884,8 @@ function CreateProduct () {
       name: 'observationsLargeFormat',
       title: 'Observaciones',
       type: 'textarea',
-      placeholder: 'Observaciones de gran formato'
+      placeholder: 'Observaciones de gran formato',
+      obligatory: true
     },
     {
       row: 3,
@@ -794,30 +897,39 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Brillo UV'
         },
         {
+          key: 2,
           label: 'Sanduchado'
         },
         {
+          key: 3,
           label: 'Laminado'
         },
         {
+          key: 4,
           label: 'Anillado'
         },
         {
+          key: 5,
           label: 'Plegado'
         },
         {
+          key: 6,
           label: 'Desprendible'
         },
         {
+          key: 7,
           label: 'Sobrecubierta'
         },
         {
+          key: 8,
           label: 'Tapa blanda'
         },
         {
+          key: 9,
           label: 'Caballete'
         }
       ]
@@ -832,54 +944,71 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Bond'
         },
         {
+          key: 2,
           label: 'Periódico'
         },
         {
+          key: 3,
           label: 'Bristol'
         },
         {
+          key: 4,
           label: 'Esmaltado C1S'
         },
         {
+          key: 5,
           label: 'Rústico/Cosido'
         },
         {
+          key: 6,
           label: 'Bond Adhesivo'
         },
         {
+          key: 7,
           label: 'Opalina'
         },
         {
+          key: 8,
           label: 'Esmaltado C2S'
         },
         {
+          key: 9,
           label: 'Esmalt Adhesivo'
         },
         {
+          key: 10,
           label: 'Albanene'
         },
         {
+          key: 11,
           label: 'Kraft'
         },
         {
+          key: 12,
           label: 'Vinilo adhesivo'
         },
         {
+          key: 13,
           label: 'Vinilo Transfer'
         },
         {
+          key: 14,
           label: 'P. Sublimación'
         },
         {
+          key: 15,
           label: 'Cartón Industrial'
         },
         {
+          key: 16,
           label: 'Cartón Duplex'
         },
         {
+          key: 16,
           label: 'Fotográfico'
         }
       ]
@@ -902,7 +1031,8 @@ function CreateProduct () {
       name: 'costStationery',
       title: 'Costo',
       type: 'text',
-      placeholder: 'Costo de Papelería'
+      placeholder: 'Costo de Papelería',
+      obligatory: true
     },
     {
       row: 2,
@@ -912,7 +1042,8 @@ function CreateProduct () {
       name: 'observationsStationery',
       title: 'Observaciones',
       type: 'textarea',
-      placeholder: 'Observaciones de papeleria'
+      placeholder: 'Observaciones de papeleria',
+      obligatory: true
     },
     {
       row: 3,
@@ -924,30 +1055,39 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Brillo UV'
         },
         {
+          key: 2,
           label: 'Sanduchado'
         },
         {
+          key: 3,
           label: 'Laminado'
         },
         {
+          key: 4,
           label: 'Anillado'
         },
         {
+          key: 5,
           label: 'Plegado'
         },
         {
+          key: 6,
           label: 'Desprendible'
         },
         {
+          key: 7,
           label: 'Sobrecubierta'
         },
         {
+          key: 8,
           label: 'Tapa blanda'
         },
         {
+          key: 9,
           label: 'Caballete'
         }
       ]
@@ -962,54 +1102,71 @@ function CreateProduct () {
       type: 'checkbox',
       checkboxes: [
         {
+          key: 1,
           label: 'Bond'
         },
         {
+          key: 2,
           label: 'Periódico'
         },
         {
+          key: 3,
           label: 'Bristol'
         },
         {
+          key: 4,
           label: 'Esmaltado C1S'
         },
         {
+          key: 5,
           label: 'Rústico/Cosido'
         },
         {
+          key: 6,
           label: 'Bond Adhesivo'
         },
         {
+          key: 7,
           label: 'Opalina'
         },
         {
+          key: 8,
           label: 'Esmaltado C2S'
         },
         {
+          key: 9,
           label: 'Esmalt Adhesivo'
         },
         {
+          key: 10,
           label: 'Albanene'
         },
         {
+          key: 11,
           label: 'Kraft'
         },
         {
+          key: 12,
           label: 'Vinilo adhesivo'
         },
         {
+          key: 13,
           label: 'Vinilo Transfer'
         },
         {
+          key: 14,
           label: 'P. Sublimación'
         },
         {
+          key: 15,
           label: 'Cartón Industrial'
         },
         {
+          key: 16,
           label: 'Cartón Duplex'
         },
         {
+          key: 16,
           label: 'Fotográfico'
         }
       ]
@@ -1091,7 +1248,7 @@ function CreateProduct () {
           Name: values.name,
           TypeProduct: typeProductSelect,
           size: values.notebookSize,
-          Cost: values.cost !== '' ? parseInt(values.cost) : (values.costSouvenir !== '' ? parseInt(values.costSouvenir) : (values.costLargeFormat !== '' ? parseInt(values.costLargeFormat) : (values.costStationary !== '' ? parseInt(values.costStationary) : 0))),
+          Cost: values.cost !== '' ? parseInt(values.cost) : (values.costSouvenir !== '' ? parseInt(values.costSouvenir) : (values.costLargeFormat !== '' ? parseInt(values.costLargeFormat) : (values.costStationary !== '' ? parseInt(values.costStationary) : null))),
           Observations: values.observations !== ''
             ? values.observations
             : (values.observationsSouvenir !== ''
@@ -1129,42 +1286,29 @@ function CreateProduct () {
         // console.log({ ...values, typeProduct: typeProductSelect })
         handleSubmit(dataFormToApi)
       }}
-      validationSchema={validationSchema}
+      validationSchema={typeProductSelect === 'Gran formato' ? validationSchemaLargeFormat : typeProductSelect === 'Papelería' ? validationSchemaStationery : typeProductSelect === 'Souvenir' ? validationSchemaSouvenir : typeProductSelect === 'Libreta' ? validationSchemaNotebook : validationSchema}
   >
   {({ handleChange, values }) => (
     <Form>
-      <div>
-        {currentPage === 1 && (
-          <div>
+      <>
+        {currentPage === 1
+          ? <>
           {rows.map(row => (
           <div key={row} className="flex">
             {inputs
               .filter(input => input.row === row & input.page === 1)
-              .map((input) => (
-                (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
-                (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
-                (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
-                (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
-                (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
-                  ? (
-                    <>
-                    {input.type === 'checkbox' && (
-                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
-                        <label>{input.title}</label>
-                        <div className="grid grid-cols-2 gap-4">
+              .map((input, index) => (
+                (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '')
+                  ? <React.Fragment key={index}>
+                    {input.type === 'checkbox'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-2 mt-5">
+                        <div className='flex flex-row'>
+                          <label>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
                           {input.checkboxes.map((checkbox, index) => (
-                            <div key={index} className="flex items-center">
+                            <div key={checkbox.key} className="flex items-center">
                               <Field
                                 type="checkbox"
                                 name={input.name}
@@ -1178,107 +1322,118 @@ function CreateProduct () {
                           ))}
                         </div>
                       </div>
-                    )}
-                        {input.type === 'select' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                          {input.type === 'select' & input.name === '' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                        {input.type === 'textarea' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as="textarea"
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                        {input.type === 'text' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              type={input.type}
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                      </>
-                    )
-                  : (
-                      <></>
-                    )
-              )
-              )
-            }
+                      : null}
+                    {input.type === 'select'
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                      <div className='flex flex-row'>
+                        <label htmlFor={input.name}>{input.title}</label>
+                        {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                      </div>
+                      <Field
+                        as='select'
+                        name={input.name}
+                        id={input.name}
+                        value={values[input.name]}
+                        onChange={(e) => {
+                          handleChange(e)
+                          input?.action(e)
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                      >
+                          {input.options.map((option, index) => (
+                            <option key={index} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                      </Field>
+                      <ErrorMessage
+                        name={input.name}
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </div>
+                      : null}
+                    {input.type === 'select' & input.name === ''
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          as='select'
+                          name={input.name}
+                          id={input.name}
+                          value={values[input.name]}
+                          onChange={(e) => {
+                            handleChange(e)
+                            input?.action(e)
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                        >
+                            {input.options.map((option, index) => (
+                              <option key={option.key} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                        </Field>
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                    {input.type === 'textarea'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          as="textarea"
+                          name={input.name}
+                          id={input.name}
+                          placeholder={input.placeholder}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        />
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                    {input.type === 'text'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          type={input.type}
+                          name={input.name}
+                          id={input.name}
+                          placeholder={input.placeholder}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        />
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                  </React.Fragment>
+                  : null
+              ))}
           </div>
           ))}
-        </div>
-        )}
+        </>
+          : null
+        }
 
         {currentPage === 2 && (
           <div>
@@ -1298,19 +1453,17 @@ function CreateProduct () {
                 (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                 (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                 (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
-                (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
-                (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
-                  ? (
-                    <>
-                    {input.type === 'checkbox' && (
-                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
-                        <label>{input.title}</label>
-                        <div className="grid grid-cols-2 gap-4">
+                (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks'))
+                  ? <>
+                    {input.type === 'checkbox'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-2 mt-5">
+                        <div className='flex flex-row'>
+                          <label>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
                           {input.checkboxes.map((checkbox, index) => (
-                            <div key={index} className="flex items-center">
+                            <div key={checkbox.key} className="flex items-center">
                               <Field
                                 type="checkbox"
                                 name={input.name}
@@ -1324,100 +1477,91 @@ function CreateProduct () {
                           ))}
                         </div>
                       </div>
-                    )}
-                        {input.type === 'select' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                          {input.type === 'select' & input.name === '' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                        {input.type === 'textarea' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as="textarea"
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                        {input.type === 'text' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              type={input.type}
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                      </>
-                    )
-                  : (
-                      <></>
-                    )
+                      : null}
+                    {input.type === 'select'
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                      <div className='flex flex-row'>
+                        <label htmlFor={input.name}>{input.title}</label>
+                        {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                      </div>
+                      <Field
+                        as='select'
+                        name={input.name}
+                        id={input.name}
+                        value={values[input.name]}
+                        onChange={(e) => {
+                          handleChange(e)
+                          input?.action(e)
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                      >
+                          {input.options.map((option, index) => (
+                            <option key={option.key} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                      </Field>
+                      <ErrorMessage
+                        name={input.name}
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </div>
+                      : null}
+                    {input.type === 'select' & input.name === ''
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          as='select'
+                          name={input.name}
+                          id={input.name}
+                          value={values[input.name]}
+                          onChange={(e) => {
+                            handleChange(e)
+                            input?.action(e)
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                        >
+                            {input.options.map((option, index) => (
+                              <option key={option.key} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                        </Field>
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                    {input.type === 'text'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          type={input.type}
+                          name={input.name}
+                          id={input.name}
+                          placeholder={input.placeholder}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        />
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                  </>
+                  : null
               )
               )
             }
@@ -1434,29 +1578,21 @@ function CreateProduct () {
               .filter(input => input.row === row & input.page === 3)
               .map((input) => (
                 (input.typeProductOwner === typeProductSelect || input.typeProductOwner === '') &&
-                (input.name !== 'frontPageInks' || (frontPage === 'Si' && input.name === 'frontPageInks')) &&
-                (input.name !== 'numberInks' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'pantone' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'code' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'susbtrateFrontPage' || (frontPageInks === 'Si' && frontPage === 'Si')) &&
-                (input.name !== 'backCoverInks' || (backCover === 'Si' && input.name === 'backCoverInks')) &&
-                (input.name !== 'numberInksBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'pantoneBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'codeBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
-                (input.name !== 'susbtrateBackCover' || (backCoverInks === 'Si' && backCover === 'Si')) &&
                 (input.name !== 'innerSheetsInks' || (innerSheets === 'Si' && input.name === 'innerSheetsInks')) &&
                 (input.name !== 'numberInksInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
                 (input.name !== 'pantoneInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
                 (input.name !== 'codeInnerSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si')) &&
                 (input.name !== 'susbtrateSheets' || (innerSheetsInks === 'Si' && innerSheets === 'Si'))
-                  ? (
-                    <>
-                    {input.type === 'checkbox' && (
-                      <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-6">
-                        <label>{input.title}</label>
-                        <div className="grid grid-cols-2 gap-4">
+                  ? <>
+                    {input.type === 'checkbox'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 space-y-2 mt-5">
+                        <div className='flex flex-row'>
+                          <label>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
                           {input.checkboxes.map((checkbox, index) => (
-                            <div key={index} className="flex items-center">
+                            <div key={checkbox.key} className="flex items-center">
                               <Field
                                 type="checkbox"
                                 name={input.name}
@@ -1470,100 +1606,91 @@ function CreateProduct () {
                           ))}
                         </div>
                       </div>
-                    )}
-                        {input.type === 'select' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                          {input.type === 'select' & input.name === '' &&
-                          <div key={input.name} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as='select'
-                              name={input.name}
-                              id={input.name}
-                              value={values[input.name]}
-                              onChange={(e) => {
-                                handleChange(e)
-                                input.action && input.action(e)
-                              }}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
-                            >
-                                {input.options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                            </Field>
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          }
-                        {input.type === 'textarea' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              as="textarea"
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                        {input.type === 'text' &&
-                          <div key={input.key} className="flex-1 mr-4 last:mr-0">
-                            <label htmlFor={input.name}>{input.title}</label>
-                            <Field
-                              type={input.type}
-                              name={input.name}
-                              id={input.name}
-                              placeholder={input.placeholder}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                            />
-                            <ErrorMessage
-                              name={input.name}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        }
-                      </>
-                    )
-                  : (
-                      <></>
-                    )
+                      : null}
+                    {input.type === 'select'
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                      <div className='flex flex-row'>
+                        <label htmlFor={input.name}>{input.title}</label>
+                        {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                      </div>
+                      <Field
+                        as='select'
+                        name={input.name}
+                        id={input.name}
+                        value={values[input.name]}
+                        onChange={(e) => {
+                          handleChange(e)
+                          input?.action(e)
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                      >
+                          {input.options.map((option, index) => (
+                            <option key={option.key} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                      </Field>
+                      <ErrorMessage
+                        name={input.name}
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </div>
+                      : null}
+                    {input.type === 'select' & input.name === ''
+                      ? <div key={input.name} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          as='select'
+                          name={input.name}
+                          id={input.name}
+                          value={values[input.name]}
+                          onChange={(e) => {
+                            handleChange(e)
+                            input?.action(e)
+                          }}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custo-light block w-full p-2.5"
+                        >
+                            {input.options.map((option, index) => (
+                              <option key={option.key} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                        </Field>
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                    {input.type === 'text'
+                      ? <div key={input.key} className="flex-1 mr-4 last:mr-0 mt-5">
+                        <div className='flex flex-row'>
+                          <label htmlFor={input.name}>{input.title}</label>
+                          {input.obligatory ? <FaAsterisk className='w-2 h-2  ml-1 text-red-900' /> : null}
+                        </div>
+                        <Field
+                          type={input.type}
+                          name={input.name}
+                          id={input.name}
+                          placeholder={input.placeholder}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        />
+                        <ErrorMessage
+                          name={input.name}
+                          component="div"
+                          className="text-red-500"
+                        />
+                      </div>
+                      : null
+                    }
+                  </>
+                  : null
               )
               )
             }
@@ -1574,7 +1701,8 @@ function CreateProduct () {
 
         {currentPage === 4 && (
           <>
-          <div className="w-full md:w-1/2 space-y-6">
+          <h1 className='text-xl font-semibold text-gray-900 lg:text-2xl'>Agregar insumos al producto</h1>
+          <div className="w-full md:w-1/2 mt-5">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
                 Search
@@ -1606,7 +1734,7 @@ function CreateProduct () {
               </div>
             </form>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-gray-400">
+          <div className="overflow-x-auto rounded-xl border border-gray-400 mt-5">
             <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 {headerGroups.map(headerGroup => (
@@ -1724,9 +1852,9 @@ function CreateProduct () {
             </nav>
           </div>
 
-      <h className='text-xl font-semibold text-gray-900 lg:text-2xl'>Lista de insumos del producto</h>
+      <h1 className='text-xl font-semibold text-gray-900 lg:text-2xl mt-10'>Lista de insumos del producto</h1>
 
-      <div className="overflow-x-auto rounded-xl border border-gray-400">
+      <div className="overflow-x-auto rounded-xl border border-gray-400  mt-5">
         <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             {headerGroups.map(headerGroup => (
@@ -1776,14 +1904,19 @@ function CreateProduct () {
       </>
         )
       }
-      </div>
+      </>
       <div className='space-x-5 mt-8'>
-        <button type='button' onClick={handlePrevPage} disabled={currentPage === 1} className='text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center'>
+        {currentPage > 1 & currentPage <= totalPages
+          ? <button type='button' onClick={handlePrevPage} disabled={currentPage === 1} className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
           Página anterior
         </button>
-        <button type='button' onClick={handleNextPage} disabled={currentPage === totalPages} className='text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center'>
+          : null}
+        {currentPage > 0 & currentPage < totalPages
+          ? <button type='button' onClick={handleNextPage} disabled={currentPage === totalPages} className="text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center">
           Siguiente página
         </button>
+          : null}
+
       </div>
 
       <button
@@ -1802,7 +1935,7 @@ export function CreateButtonProduct () {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    dispatch(setWidth({ width: 'w-[1500px]' }))
+    dispatch(setWidth({ width: 'w-[1600px]' }))
     dispatch(setAction({ action: 'creating' }))
     dispatch(openModal({ title: 'Crear producto' }))
   }

@@ -6,12 +6,12 @@ const commonEndpointsApi = (entityName, entityUrl) => {
     baseQuery: fetchBaseQuery({
       baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`,
       prepareHeaders: (headers) => {
-        const token = localStorage.getItem('session_token');
+        const token = localStorage.getItem('session_token')
         if (token) {
-          headers.set('Authorization', `Bearer ${token}`);
+          headers.set('Authorization', `Bearer ${token}`)
         }
-        return headers;
-      },
+        return headers
+      }
     }),
     endpoints: (builder) => ({
       getAll: builder.query({

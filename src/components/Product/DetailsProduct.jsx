@@ -8,52 +8,135 @@ function DetailsProduct () {
   console.log(detailsData)
 
   return (
-    <div className="grid grid-cols-3 gap-16 ">
-      <div>
-        <p><b>Nombre:</b> {name}</p>
-        <p><b>Tipo de producto:</b> {typeProduct}</p>
-        <p><b>Observaciones:</b> {observations}</p>
-        <p><b>Costo:</b> {cost}</p>
-        <p><b>Tamaño:</b> {size}</p>
-        <p><b>Portada:</b> {frontPage === true ? 'Si' : 'No'}</p>
-        <p><b>Tintas portada:</b> {frontPageInks === true ? 'Si' : 'No'}</p>
-        <p><b>Portada pantone:</b> {FrontPagePantone}</p>
-        <p><b>Portada codigo:</b> {frontPageCode}</p>
-        <p><b>Sutratos Portada:</b> {susbtrateFrontPage}</p>
-        <p><b>Contraportada:</b> {backCover === true ? 'Si' : 'No'}</p>
-      </div>
-      <div>
-        <p><b>Tintas contraportada:</b> {backCoverInks === true ? 'Si' : 'No'}</p>
-        <p><b>Contraportada pantone:</b> {backCoverPantone}</p>
-        <p><b>Contraportada codigo:</b> {backCoverCode}</p>
-        <p><b>Sustratos contraportada:</b> {susbtrateSheets}</p>
-        <p><b>Interior hojas:</b> {inside === true ? 'Si' : 'No'}</p>
-        <p><b>Tintas interior hojas:</b> {insideInks === true ? 'Si' : 'No'}</p>
-        <p><b>Interior hojas pantone:</b> {insidePantone}</p>
-        <p><b>Interior hojas codigo:</b> {insideCode}</p>
-        <p><b>Numero de paginas:</b> {numberPages}</p>
-        <p><b>Dimension:</b> {dimension}</p>
-        <p><b>Encuadernacion:</b> {cover}</p>
-      </div>
-      <div>
-        <p><b>Acabados:</b> {bindings}</p>
-        <p><b>Sustratos gran formato:</b> {susbtrateLargeFormat}</p>
-        <p><b>Sustratos papeleria:</b> {susbtrateStationery}</p>
-        <p><b>Sustratos:</b> {substratum}</p>
-        <p><b>Insumos:</b> {supplies[0].supply.name}</p>
-      </div>
-
-      <p>
-      <b>Estado:</b> {' '}
-      {statedAt
-        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>}
-      </p>
-    </div>
+    <>
+      {typeProduct === 'Libreta'
+        ? <div className="grid grid-cols-3 gap-16">
+            <div>
+              <p><b>Nombre:</b> {name}</p>
+              <p><b>Tipo de producto:</b> {typeProduct}</p>
+              <p><b>Costo:</b> {cost}</p>
+              <p><b>Tamaño:</b> {size}</p>
+              <p><b>Portada:</b> {frontPage === true ? 'Si' : 'No'}</p>
+              <p><b>Tintas portada:</b> {frontPageInks === true ? 'Si' : 'No'}</p>
+              <p><b>Portada pantone:</b> {FrontPagePantone}</p>
+              <p><b>Portada codigo:</b> {frontPageCode}</p>
+              <p><b>Sutratos Portada:</b> {susbtrateFrontPage}</p>
+              <p><b>Contraportada:</b> {backCover === true ? 'Si' : 'No'}</p>
+            </div>
+            <div>
+              <p><b>Tintas contraportada:</b> {backCoverInks === true ? 'Si' : 'No'}</p>
+              <p><b>Contraportada pantone:</b> {backCoverPantone}</p>
+              <p><b>Contraportada codigo:</b> {backCoverCode}</p>
+              <p><b>Sustratos contraportada:</b> {susbtrateSheets}</p>
+              <p><b>Interior hojas:</b> {inside === true ? 'Si' : 'No'}</p>
+              <p><b>Tintas interior hojas:</b> {insideInks === true ? 'Si' : 'No'}</p>
+              <p><b>Interior hojas pantone:</b> {insidePantone}</p>
+              <p><b>Interior hojas codigo:</b> {insideCode}</p>
+              <p><b>Numero de paginas:</b> {numberPages}</p>
+              <p><b>Encuadernacion:</b> {cover}</p>
+            </div>
+            <div>
+              <p><b>Acabados:</b> {bindings}</p>
+              <p><b>Sustratos:</b> {substratum}</p>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
+              <p><b>Observaciones:</b> {observations}</p>
+            </div>
+            <p>
+            <b>Estado:</b> {' '}
+            {statedAt
+              ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                  Activo
+                </span>
+              : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                  Inactivo
+                </span>}
+            </p>
+          </div>
+        : null}
+      {typeProduct === 'Gran formato'
+        ? <div className="grid grid-cols-3 gap-16 ">
+            <div>
+              <p><b>Nombre:</b> {name}</p>
+              <p><b>Tipo de producto:</b> {typeProduct}</p>
+              <p><b>Costo:</b> {cost}</p>
+            </div>
+            <div>
+              <p><b>Dimension:</b> {dimension}</p>
+              <p><b>Acabados:</b> {bindings}</p>
+              <p><b>Sustratos:</b> {susbtrateLargeFormat}</p>
+            </div>
+            <div>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
+              <p><b>Observaciones:</b> {observations}</p>
+            </div>
+            <p>
+            <b>Estado:</b> {' '}
+            {statedAt
+              ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                  Activo
+                </span>
+              : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                  Inactivo
+                </span>}
+            </p>
+          </div>
+        : null}
+      {typeProduct === 'Souvenir'
+        ? <div className="grid grid-cols-3 gap-16 ">
+            <div>
+              <p><b>Nombre:</b> {name}</p>
+              <p><b>Tipo de producto:</b> {typeProduct}</p>
+              <p><b>Costo:</b> {cost}</p>
+            </div>
+            <div>
+              <p><b>Dimension:</b> {dimension}</p>
+              <p><b>Acabados:</b> {bindings}</p>
+            </div>
+            <div>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
+              <p><b>Observaciones:</b> {observations}</p>
+            </div>
+            <p>
+            <b>Estado:</b> {' '}
+            {statedAt
+              ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                  Activo
+                </span>
+              : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                  Inactivo
+                </span>}
+            </p>
+          </div>
+        : null}
+      {typeProduct === 'Papelería'
+        ? <div className="grid grid-cols-3 gap-16 ">
+            <div>
+              <p><b>Nombre:</b> {name}</p>
+              <p><b>Tipo de producto:</b> {typeProduct}</p>
+              <p><b>Costo:</b> {cost}</p>
+            </div>
+            <div>
+              <p><b>Dimension:</b> {dimension}</p>
+              <p><b>Acabados:</b> {bindings}</p>
+              <p><b>Sustratos:</b> {susbtrateStationery}</p>
+            </div>
+            <div>
+              <p><b>Insumos:</b> {supplies.map((supply, index) => supplies[index].supply.name).join(', ')}</p>
+              <p><b>Observaciones:</b> {observations}</p>
+            </div>
+            <p>
+            <b>Estado:</b> {' '}
+            {statedAt
+              ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                  Activo
+                </span>
+              : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                  Inactivo
+                </span>}
+            </p>
+          </div>
+        : null}
+    </>
   )
 }
 
