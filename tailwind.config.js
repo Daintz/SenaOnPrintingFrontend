@@ -18,8 +18,9 @@ module.exports = {
       colors: {
         'custom-blue': {
           DEFAULT: 'rgb(0, 49, 77)',
-          lighter: 'rgba(0, 49, 77, 0.7)',
+          light: 'rgba(0, 38, 60, 0.7)',
         },
+        'custom-blue-light': 'rgb(0, 38, 60)',
         'custom-green': 'rgb(57, 169, 0)',
       },
     },
