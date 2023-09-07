@@ -24,16 +24,25 @@ import clientAxios from '../../config/clientAxios'
 import { GiCheckMark } from 'react-icons/gi'
 import { BsImages } from 'react-icons/bs';
 
-
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
-  scheme: Yup.string().required('Campo requerido')
+  // materialReception: Yup.string().required('La recepción de material es requerida'),
+  // programVersion: Yup.string().required('La versión del programa es requerida'),
+  // indented: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // colorProfile: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // image: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // observations: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // statedAt: Yup.boolean().required('El campo "statedAt" es requerido'),
+  // orderStatus: Yup.number().required('El estado del pedido es requerido').min(1, 'El estado del pedido debe ser mayor o igual a 1'),
+  // program: Yup.string().required('El programa es requerido'),
   // typePoint: Yup.string().required('Campo requerido')
-  // .matches(/^[\d.]+$/, 'Solo se permite . y números')
-  ,
+  // .matches(/^[\d.]+$/, 'Solo se permite . y números'), // Puedes agregar validaciones adicionales si es necesario
+  // impositionPlanchId: Yup.number().required('El ID de imposición de plancha es requerido').min(0, 'El ID de imposición de plancha no puede ser negativo'),
+  // machineId: Yup.number().required('El ID de la máquina es requerido').min(0, 'El ID de la máquina no puede ser negativo'),
+  // scheme: Yup.string() // Puedes agregar validaciones adicionales si es necesario
+  
+  
   // scheme: Yup.string().required('Campo requerido')
 })
-
 
 
 
@@ -43,11 +52,11 @@ function CreateOrderProduction() {
   // const { isAction
   // } = useSelector((state) => state.modal)
   const [productoActivo, setProductoActivo] = useState(null);
-  const [productosList, setProductosList] = useState([]);
+  const [productList, setProductList] = useState([]);
   const dispatch = useDispatch()
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
-
+  const [applyBleed, setApplyBleed] = useState('no');
 
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [selectedImage1, setSelectedImage1] = useState(null);
@@ -64,7 +73,8 @@ function CreateOrderProduction() {
   const originalDateStr = detailsData.deliverDate;
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
-
+  const [materialReception, setMaterialReception] = useState('0');
+  const [otherMaterial, setOtherMaterial] = useState('');
 
   useEffect(() => {
     fetchOptions()
@@ -90,7 +100,6 @@ function CreateOrderProduction() {
     })
   }
 
-
   const getMachine = () => {
     return new Promise((resolve, reject) => {
       clientAxios.get('/Machine').then(
@@ -108,7 +117,6 @@ function CreateOrderProduction() {
     });
   };
 
-
   const fetchOptions = () => {
 
     getImpositionPlanch().then((options) => {
@@ -118,24 +126,20 @@ function CreateOrderProduction() {
       setMachineOptions(options)
     })
 
-
   }
 
+  const handleButtonClick = (values, {setFieldValue }) => {
 
-  const handleButtonClick = (values) => {
-    
     const productoActual = detailsData.quotationClientDetails === productoActivo;
     const indiceSiguiente = (productoActual + 1) % detailsData.quotationClientDetails.length;
-    
-    
-    // Obtén el ID del próximo producto
+
     const nuevoProductoActivo = detailsData.quotationClientDetails[indiceSiguiente].id;
 
     console.log(productoActivo)
     const orderProduction = {
       quotationClientDetailId: productoActivo,
       userId: parseInt(userId),
-      materialReception: values.materialReception,
+      materialReception: materialReception === 'Otro' ? otherMaterial : materialReception,
       program: values.program,
       programVersion: values.programVersion,
       indented: parseInt(values.indented),
@@ -154,49 +158,48 @@ function CreateOrderProduction() {
     setProductoActivo(nuevoProductoActivo);
 
     console.log(orderProduction)
-    // Establece el nuevo producto activo
-    setProductosList((prevList) => {
+
+    setProductList((prevList) => {
       const newList = [...prevList, orderProduction];
 
-      console.log('Lista después de agregar el producto:', newList); // Muestra la lista actualizada
-      if (newList.length == detailsData.quotationClientDetails.length){
+      console.log('Lista después de agregar el producto:', newList);
+      if (newList.length == detailsData.quotationClientDetails.length) {
 
-          handleSubmit(newList) // Supongo que createOrderProduction envía la orden al servidor
+        handleSubmit(newList)
 
       }
       return newList;
     });
-
-  // Itera a través de la lista de productos y envía cada uno al servidor
-
-    
+    // setPreviewImage1(null)
+    // setPreviewImage2(null)
+    setMaterialReception('0')
+    setApplyBleed('no')
+  
   };
-
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
 
-
     for (const value of values) {
       const formData = new FormData();
-    formData.append('quotationClientDetailId', value.quotationClientDetailId);
-    formData.append('userId', value.userId);
-    formData.append('materialReception', value.materialReception);
-    formData.append('programVersion', value.programVersion);
-    formData.append('indented', value.indented);
-    formData.append('colorProfile', value.colorProfile);
-    formData.append('imageInfo', selectedImage1);
-    formData.append('lineature', value.lineature);
-    formData.append('observations', value.observations);
-    formData.append('machineId', value.machineId)
-    formData.append('impositionPlanchId', value.impositionPlanchId)
-    formData.append('statedAt', true);
-    formData.append('orderStatus', 2);
-    formData.append('program', value.program);
-    formData.append('typePoint', value.typePoint);
-    formData.append('schemeInfo', selectedImage2);
-    console.log(formData)
-    await createOrderProduction(formData);
+      formData.append('quotationClientDetailId', value.quotationClientDetailId);
+      formData.append('userId', value.userId);
+      formData.append('materialReception', value.materialReception);
+      formData.append('programVersion', value.programVersion);
+      formData.append('indented', value.indented);
+      formData.append('colorProfile', value.colorProfile);
+      formData.append('imageInfo', value.imageInfo);
+      formData.append('lineature', value.lineature);
+      formData.append('observations', value.observations);
+      formData.append('machineId', value.machineId)
+      formData.append('impositionPlanchId', value.impositionPlanchId)
+      formData.append('statedAt', true);
+      formData.append('orderStatus', 2);
+      formData.append('program', value.program);
+      formData.append('typePoint', value.typePoint);
+      formData.append('schemeInfo', value.schemeInfo);
+      console.log(formData)
+      await createOrderProduction(formData);
 
     }
 
@@ -209,7 +212,6 @@ function CreateOrderProduction() {
       autoClose: 1000
     })
   }
-
 
   const handleFileChange = (event, setImage, setPreviewImage) => {
     const file = event.target.files[0];
@@ -226,9 +228,7 @@ function CreateOrderProduction() {
     }
   };
 
-
   return (
-
 
     <Formik
       initialValues={{
@@ -248,20 +248,18 @@ function CreateOrderProduction() {
         machineId: 0,
         scheme: ''
       }}
-      onSubmit={(values) => {
-        handleButtonClick(values)
+      onSubmit={(values, {setFieldValue }) => {
+        handleButtonClick(values, {setFieldValue })
       }}
     // validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
 
-
         <Form>
-          <div className="relative bg-white py-5 px-10 shadow-2xl mdm:py-10 mdm:px-8">
-
+          <div className="relative bg-white py-5 px-10 shadow-2xl md:py-10 md:px-8">
 
             <div>
-              <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px', fontWeight: 'bold' }}>Crear orden de producción</h1>
+              <h1 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Crear orden de producción</h1>
             </div>
             <div>
               <div className="py-4">
@@ -269,7 +267,6 @@ function CreateOrderProduction() {
                   <div className="w-2/4">
                     <p><b>Código:</b> {detailsData.code}</p>
                     <p><b>Fecha entrega:</b> {formattedDate}</p>
-
 
                   </div>
                   <div className="w-2/4">
@@ -279,56 +276,81 @@ function CreateOrderProduction() {
                 </div>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="w-1/5">
-                {detailsData.quotationClientDetails.map((product, index) => (
-                  <div       className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ${productoActivo === product.id ? 'border-black' : ''}`}
-                  key={index}
-                  onClick={() => setProductoActivo(product.id)}>
-                    <div className="flex gap-5 grid-cols-4 mb-3" >
-                      <div className="w-full">
-                        <p><b>Producto:</b> {product.productName}</p>
-                        <p><b>Cantidad:</b> {product.quantity}</p>
-                      </div>
-                      <div className="flex items-center justify-center w-15 h-15">
-                        <BsCheckCircle className="text-blue-500 h-6 w-6" />
+
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/5">
+                {detailsData.quotationClientDetails.map((product, index) => {
+                  // Verifica si hay un registro relacionado con el producto actual en tu lista
+                  const productoTieneRegistro = productList.some((item) => item.quotationClientDetailId === product.id);
+
+                  return (
+                    <div
+                      className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ${productoActivo === product.id ? 'border-black' : ''
+                        }`}
+                      key={index}
+                      onClick={() => setProductoActivo(product.id)}
+                    >
+                      <div className="flex flex-col md:flex-row gap-5">
+                        <div className="w-full md:w-3/4">
+                          <p><b>Producto:</b> {product.productName}</p>
+                          <p><b>Cantidad:</b> {product.quantity}</p>
+                        </div>
+                        {productoTieneRegistro && (
+                          <div className="flex items-center justify-center w-1/4 md:w-1/4 h-15">
+                            <BsCheckCircle className="text-custom-blue h-6 w-6" />
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>))}
+                  );
+                })}
               </div>
 
-              <div className="w-4/5 border-l-[3px] border-gray pl-4">
+              <div className="w-full border-l-[3px] border-gray pl-4">
 
-                <div className="flex gap-5 grid-cols-4 mb-3">
-
-
-
-                </div>
-
-
-                <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-1/4">
-
-
+                <div className="flex flex-col md:flex-row md:gap-5 mb-3">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Recepción material
                     </label>
-                    <Field
-                      as="select"
-                      type="text"
+                    <select
                       name="materialReception"
                       id="materialReception"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      onChange={(e) => setMaterialReception(e.target.value)}
+                      value={materialReception}
+                    >
                       <option value="0">Selecciona</option>
                       <option value="USB">USB</option>
                       <option value="Gmail">Gmail</option>
                       <option value="Drive">Drive</option>
                       <option value="Otro">Otro</option>
                       <option value="No aplica">No aplica</option>
-                    </Field>
-
+                    </select>
+                    {/* <ErrorMessage
+                name="materialReception"
+       
+                component="div"
+                className="text-red-500"
+              /> */}
                   </div>
-                  <div className="w-1/4">
+                  {materialReception === 'Otro' && (
+                    <div className="w-full md:w-1/4 mb-3 md:mb-0">
+                      <label htmlFor="otherMaterial" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                        Medio recepción
+                      </label>
+                      <input
+                        type="text"
+                        name="otherMaterial"
+                        id="otherMaterial"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        placeholder="WhatsApp"
+                        value={otherMaterial}
+                        onChange={(e) => setOtherMaterial(e.target.value)}
+                      />
+                    </div>
+                  )}
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="program" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Programa
                     </label>
@@ -340,7 +362,7 @@ function CreateOrderProduction() {
                       placeholder="Adobe"
                     />
                   </div>
-                  <div className="w-1/4">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="programVersion" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Versión del programa
                     </label>
@@ -352,8 +374,7 @@ function CreateOrderProduction() {
                       placeholder="1.0.5"
                     />
                   </div>
-
-                  <div className="w-1/4">
+                  <div className="w-full md:w-1/4">
                     <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Perfil de color
                     </label>
@@ -368,52 +389,72 @@ function CreateOrderProduction() {
                 </div>
 
 
-                <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-1/4">
-                    <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Sangrado
-                    </label>
-                    <Field
-                      type="text"
-                      name="indented"
-                      id="indented"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="5"
-                    />
-                  </div>
-                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Digital' && (
-                  <div className="w-1/4">
-                    <label htmlFor="lineature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Lineatura
-                    </label>
-                    <Field
-                      type="text"
-                      name="lineature"
-                      id="lineature"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                      placeholder="20 lpi"
-                    />
-                  </div>
-                  )}
-
-{detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Offset' && (
-                  <div className="w-1/4">
-                    <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Tipo de punto
+                <div className="flex flex-col md:flex-row md:gap-5 mb-3">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
+                    <label htmlFor="applyBleed" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                      Aplicar sangrados
                     </label>
                     <Field
                       as="select"
-                      name="typePoint"
-                      id="typePoint"
+                      name="applyBleed"
+                      id="applyBleed"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      value={applyBleed}
+                      onChange={(e) => setApplyBleed(e.target.value)}
                     >
-                      <option value="0">Seleccione</option>
-                      <option value="Giro pinza">Punto redondo</option>
-                      <option value="Doble punto">Punto eliptico</option>
+                      <option value="no">No</option>
+                      <option value="si">Sí</option>
                     </Field>
                   </div>
-                )}
-                  <div className="w-1/4">
+
+                  {applyBleed === 'si' && (
+                    <div className="w-full md:w-1/4 mb-3 md:mb-0">
+                      <label htmlFor="indented" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                        Sangrado
+                      </label>
+                      <Field
+                        type="text"
+                        name="indented"
+                        id="indented"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        placeholder="5"
+                      />
+                    </div>
+                  )}
+
+                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName === 'Offset' && (
+                    <div className="w-full md:w-1/4 mb-3 md:mb-0">
+                      <label htmlFor="lineature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                        Lineatura
+                      </label>
+                      <Field
+                        type="text"
+                        name="lineature"
+                        id="lineature"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                        placeholder="20 lpi"
+                      />
+                    </div>
+                  )}
+
+                  {detailsData.quotationClientDetails.find(product => product.id === productoActivo)?.typeServiceName !== 'Offset' && (
+                    <div className="w-full md:w-1/4 mb-3 md:mb-0">
+                      <label htmlFor="typePoint" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                        Tipo de punto
+                      </label>
+                      <Field
+                        as="select"
+                        name="typePoint"
+                        id="typePoint"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                      >
+                        <option value="0">Seleccione</option>
+                        <option value="Punto redondo">Punto redondo</option>
+                        <option value="Punto eliptico">Punto eliptico</option>
+                      </Field>
+                    </div>
+                  )}
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="impositionPlanchId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Imposición plancha
                     </label>
@@ -431,7 +472,7 @@ function CreateOrderProduction() {
                     </Field>
                   </div>
 
-                  <div className="w-1/4">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="machineId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Maquina
                     </label>
@@ -451,14 +492,8 @@ function CreateOrderProduction() {
                   </div>
                 </div>
 
-
-
-
-                <div className="flex gap-5 grid-cols-5 mb-3">
-                
-                </div>
-                <div className="flex gap-5 grid-cols-5 mb-3">
-                  <div className="w-1/4">
+                <div className="flex flex-col md:flex-row md:gap-5 mb-3">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-700">
                       Esquema
                     </label>
@@ -475,8 +510,8 @@ function CreateOrderProduction() {
                         </div>
                       )}
                     </div>
-                    <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer">
-                      Selecciona el archivo
+                    <label htmlFor="scheme" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer border border-gray-300 p-2 rounded-md hover:bg-custom-blue hover:text-white transition-all duration-300 ease-in-out">
+                      {selectedImage2 ? "Cambiar esquema" : "Seleccionar esquema"}
                       <input
                         type="file"
                         name="scheme"
@@ -487,8 +522,7 @@ function CreateOrderProduction() {
                     </label>
                   </div>
 
-
-                  <div className="w-1/4">
+                  <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-700">
                       Imagen
                     </label>
@@ -507,8 +541,8 @@ function CreateOrderProduction() {
                       )}
                     </div>
 
-                    <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer">
-                      Selecciona un archivo
+                    <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-700 cursor-pointer border border-gray-300 p-2 rounded-md hover:bg-custom-blue hover:text-white transition-all duration-300 ease-in-out">
+                      {selectedImage1 ? "Cambiar imagen" : "Seleccionar imagen"}
                       <input
                         type="file"
                         name="image"
@@ -517,8 +551,9 @@ function CreateOrderProduction() {
                         onChange={(event) => handleFileChange(event, setSelectedImage1, setPreviewImage1)}
                       />
                     </label>
+
                   </div>
-                  <div className="w-2/4">
+                  <div className="w-full md:w-2/4">
                     <label htmlFor="observations" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Observaciones
                     </label>
@@ -528,36 +563,31 @@ function CreateOrderProduction() {
                       name="observations"
                       id="observations"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full  p-2.5 h-48 resize-none"
-                      placeholder="20"
                     />
                   </div>
                 </div>
                 <button
-  type="submit"
-  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
->
-  {productoActivo === detailsData.quotationClientDetails[detailsData.quotationClientDetails.length - 1].id ? (
-    "Guardar"
-  ) : (
-    <>
-      <Link to={"/OrderProduction"}></Link>
-      <GiCheckMark />
-    </>
-  )}
-</button>
-
+                  type="submit"
+                  className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
+                >
+                  {productoActivo === detailsData.quotationClientDetails[detailsData.quotationClientDetails.length - 1].id ? (
+                    "Guardar"
+                  ) : (
+                    <>
+                      <GiCheckMark />
+                    </>
+                  )}
+                </button>
 
               </div>
             </div>
           </div>
-
 
         </Form>
       )}
     </Formik>
   )
 }
-
 
 export function CreateButtomOrderProduction({ quotationClient }) {
 
@@ -573,7 +603,6 @@ export function CreateButtomOrderProduction({ quotationClient }) {
   }
   // ?
 
-
   return (
     <button
       type="button"
@@ -586,6 +615,4 @@ export function CreateButtomOrderProduction({ quotationClient }) {
   )
 }
 
-
 export default CreateOrderProduction
-
