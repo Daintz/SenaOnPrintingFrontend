@@ -21,7 +21,7 @@ function UpdateRole () {
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
-    // await updateRole(values)
+    await updateRole(values)
     console.log(values)
 
     dispatch(changeAction())

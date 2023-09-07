@@ -6,21 +6,21 @@ import { UpdateButtomWarehause } from './UpdateWarehause';
 import { ChangeStateButtonWarehause } from './ChangeStateWarehause';
 import { CreateButtomWarehause } from './CreateWarehause';
 import { DetailsButtomWarehause } from './DetailsWarehause';
-
+import Spinner from '../Spinner/Spinner'
 const ListWarehause = () => {
-  const { data: dataApi, refetch } = useGetAllWarehausesQuery();
+  const { data: dataApi,error,isLoading, refetch } = useGetAllWarehausesQuery();
 
 
   const { isAction } = useSelector((state) => state.modal);
   useEffect(() => {
     refetch();
   }, [isAction]);
-
+ console.log(dataApi)
   const columns = useMemo(
     () => [
       {
         Header: 'Nombre',
-        accessor: 'typeServiceId',
+        accessor: 'typeServices.name',
       },
       { Header: 'Ubicación', accessor: 'ubication' },
       {
@@ -65,6 +65,9 @@ const ListWarehause = () => {
     usePagination)
 
   const { pageIndex, globalFilter } = state
+
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
 
   if (!dataApi) {
     return <div>Loading...</div>

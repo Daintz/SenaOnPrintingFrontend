@@ -82,11 +82,11 @@ const ListUser = () => {
 
   const columns = useMemo(() => [
     { Header: 'Número de Documento', accessor: 'documentNumber' },
-    { Header: 'Tipo de Documento', accessor: 'typeDocumentId' },
+    { Header: 'Tipo de Documento', accessor: 'typeDocument.abbreviation' },
     { Header: 'Nombres', accessor: 'names' },
     { Header: 'Apellidos', accessor: 'surnames' },
     { Header: 'Correo Electrónico', accessor: 'email' },
-    { Header: 'Rol', accessor: 'roleId' },
+    { Header: 'Rol', accessor: 'role.name' },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -126,7 +126,7 @@ const ListUser = () => {
   if (!dataApi) {
     return <div>Cargando...</div>
   }
-
+  console.log(dataApi)
   return (
     <>
       <div className='hidden'>

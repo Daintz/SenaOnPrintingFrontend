@@ -34,13 +34,13 @@ const ListQuotation = () => {
     refetch1()
     refetch2()
   }, [isAction])
-
+console.log(dataApi)
   const columns = useMemo(
     () => [
       { Header: 'Código', accessor: 'id' },
       { Header: 'Fecha de orden', accessor: 'orderDate' },
       { Header: 'Fecha de Entrega', accessor: 'deliverDate' },
-      { Header: 'Cliente Id', accessor: 'clientId' },
+      { Header: 'Cliente', accessor: 'client.name' },
       {
         Header: 'Estado Cotizacion',
         accessor: 'quotationStatus',

@@ -110,7 +110,7 @@ const getLastQuotationCode = async () => {
     return nextCode;
   } catch (error) {
     console.error('Error al obtener el último código de cotización:', error);
-    return 0; // En caso de error, establecer un valor predeterminado
+    return 21; // En caso de error, establecer un valor predeterminado
   }
 };
 function CreateQuotation({}) {

@@ -25,9 +25,9 @@ function CreateRole() {
 
   const handleSubmit = async values => {
     if (isLoading) return <Spinner />
-    //if (error) return <Error type={error.status} message={error.error} />
+    if (error) return <Error type={error.status} message={error.error} />
 
-    // await createRole(values)
+    await createRole(values)
 
     console.log(values)
 
@@ -64,7 +64,7 @@ function CreateRole() {
       }}
       onSubmit={(values) => {
         console.log(values)
-        // handleSubmit(values)
+        handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >

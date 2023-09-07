@@ -37,7 +37,7 @@ const ListQuotationProviders = () => {
     {Header: 'Fecha', accessor: 'quotationDate' },
     { Header: 'Documento', accessor: 'quotationFile' },
     {Header: 'Valor', accessor: 'fullValue'},
-    {Header: 'Id Proveedor', accessor: 'providerId'},
+    {Header: 'Id Proveedor', accessor: 'provider.nameCompany'},
     {Header: 'Estado',
     accessor: 'statedAt',
     Cell: ({ value }) => (value
