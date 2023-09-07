@@ -16,7 +16,7 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik'
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
   description: Yup.string().required('Campo requerido'),
-  permissionIds: Yup.array().min(1, 'Campo requerido')
+  permissionIds: Yup.array().min(1, 'Seleccione un permiso')
 })
 
 function CreateRole() {
@@ -27,7 +27,9 @@ function CreateRole() {
     if (isLoading) return <Spinner />
     //if (error) return <Error type={error.status} message={error.error} />
 
-    await createRole(values)
+    // await createRole(values)
+
+    console.log(values)
 
     dispatch(changeAction())
     if (!error) {
@@ -61,7 +63,8 @@ function CreateRole() {
         permissionIds: []
       }}
       onSubmit={(values) => {
-        handleSubmit(values)
+        console.log(values)
+        // handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
@@ -83,21 +86,24 @@ function CreateRole() {
             />
           </div>
         ))}
-        <div id="permissions" className="title">Lista de Permisos:</div>
-        <div id="permissions_container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} role="group" aria-labelledby="permissions">
-          <FieldArray name="permissionIds">
-            {({ push, remove }) => (
-              <div>
+        <div id="permissionIds" className="title">Lista de Permisos:</div>
+        <div id="permissions_container">
+          <FieldArray
+            name="permissionIds"
+            render={arrayHelper => (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} role="group" aria-labelledby="permissionIds">
                 {permissions.map((option, index) => (
-                  <label key={option.value}>
+                  <label key={`permission${index}`} className='ml-5'>
                     <input
+                      className='mr-2'
                       type="checkbox"
                       onChange={e => {
-                        if (e.target.checked) push(option.value);
+                        if (e.target.checked) arrayHelper.push(option.value);
                         else {
-                          const idx = values.permissionIds.indexOf(option.value);
-                          remove(idx);
+                          const idx = arrayHelper.form.values.permissionIds.indexOf(option.value);
+                          arrayHelper.remove(idx);
                         }
+                        console.log(arrayHelper.form.values.permissionIds)
                       }}
                     />
                     {option.label}
@@ -105,8 +111,12 @@ function CreateRole() {
                 ))}
               </div>
             )}
-          </FieldArray>
-
+          />
+          <ErrorMessage
+              name={"permissionIds"}
+              component="div"
+              className="text-red-500"
+            />
         </div>
 
         <button
