@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage, useFormikContext, FieldArray  } from 'formik'
+import { Formik, Form, Field, ErrorMessage, useFormikContext, FieldArray } from 'formik'
 
 import * as Yup from 'yup'
 import { usePostQuotationClientMutation, usePostQuotationClientDetailMutation } from '../../context/Api/Common'
@@ -93,6 +93,7 @@ const getProduct = () => {
           
         }))
         resolve(Product)
+        console.log(Product)
       },
       (error) => {
         reject(error)
@@ -101,8 +102,18 @@ const getProduct = () => {
   })
 }
 
-
-function CreateQuotation() {
+const getLastQuotationCode = async () => {
+  try {
+    const response = await clientAxios.get('/QuotationClient/lastCode'); // Reemplaza la ruta con la correcta
+    const lastCode = response.data; // Supongamos que la API devuelve el último código como un número
+    const nextCode = lastCode + 1;
+    return nextCode;
+  } catch (error) {
+    console.error('Error al obtener el último código de cotización:', error);
+    return 0; // En caso de error, establecer un valor predeterminado
+  }
+};
+function CreateQuotation({}) {
   const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
   const [createQuotationclientDetail, { error: detailError, isLoading: detailIsLoading }] = usePostQuotationClientDetailMutation()
 
@@ -118,7 +129,27 @@ function CreateQuotation() {
   const [currentDate1, setCurrentDate1] = useState(new Date().toISOString().split('T')[0]);
   const [lastCode, setLastCode] = useState(0);
   const navigate = useNavigate();
+  const [selectedProductCost, setSelectedProductCost] = useState(0);
+  const [quotationClientDetailCreateDto, setQuotationClientDetailCreateDto] = useState([]);
+  const [values, setValues] = useState({
+    // ...otras propiedades...
+    quotationClientDetailCreateDto: [{ ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0, StatedAt: true }],
+  });
+  const [code, setCode] = useState(0)
 
+  useEffect(() => {
+    // Llama a la función para obtener el último código de cotización
+    getLastQuotationCode()
+      .then((lastCode) => {
+        // Asigna el último código obtenido al estado local
+        setCode(lastCode);
+      })
+      .catch((error) => {
+        console.error('Error al obtener el último código de cotización:', error);
+      });
+  }, []); // Asegúrate de que esta llamada se realice una vez al cargar el componente
+
+ 
 
 
   const fetchOptions = () => {
@@ -170,6 +201,39 @@ const handleSubmit = async (values) => {
   }
 };
 
+
+const handleProductChange = (e, index, values, setFieldValue) => {
+  const selectedProductId = parseInt(e.target.value);
+  const selectedProduct = productOptions.find((option) => option.value === selectedProductId);
+
+  if (selectedProduct) {
+    // Copia el array actual de detalles de cotización
+    const newQuotationDetails = [...values.quotationClientDetailCreateDto];
+    // Actualiza el valor de ProductId en el elemento específico del array
+    newQuotationDetails[index].ProductId = selectedProductId;
+    // Actualiza el valor de Cost en el elemento específico del array
+    newQuotationDetails[index].Cost = selectedProduct.Cost;
+
+    // Actualiza los valores en el formulario usando setFieldValue
+    setFieldValue(`quotationClientDetailCreateDto[${index}].ProductId`, selectedProductId);
+    setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, selectedProduct.Cost);
+
+    // Actualiza el estado con el nuevo array de detalles de cotización
+    setQuotationClientDetailCreateDto(newQuotationDetails);
+    setSelectedProductCost(selectedProduct.Cost);
+  }
+};
+
+
+const updateFullValue = (values, setFieldValue) => {
+  const totalValue = values.quotationClientDetailCreateDto.reduce((accumulator, product) => {
+    const productValue = product.Quantity * product.Cost;
+    return accumulator + productValue;
+  }, 0);
+
+  setFieldValue('FullValue', totalValue);
+};
+
   return (
     <Formik
       initialValues={{
@@ -177,15 +241,18 @@ const handleSubmit = async (values) => {
         deliverDate: currentDate1,
         userId: 0,
         clientId: 0,
-        code: 19,
+        code: code,
         quotationStatus: 1,
-        FullValue: 87,
+        FullValue: 0,
         StatedAt: true,
         quotationClientDetailCreateDto: [{ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0, StatedAt: true}], 
       }}
       onSubmit={(values) => {
         handleSubmit(values);
         //console.log(values);
+      }}
+      onChange={(values) => {
+        handleProductChange(values)
       }}
       validationSchema={validationSchema}
     >
@@ -196,7 +263,7 @@ const handleSubmit = async (values) => {
           <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
           <div className="flex gap-5 grid-cols-5 mb-3">
           <div className="w-4/4">
-          Codigo {1}
+          Codigo {code}
             </div>
             <div className="w-4/4">
              <b>Fecha: {new Date().toISOString().split('T')[0]}</b>
@@ -282,6 +349,16 @@ const handleSubmit = async (values) => {
             
           </div>
           <div>
+            <label>
+              Valor Total
+            </label>
+            <Field
+            type="number"
+            name="FullValue"
+            id="FullValue"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            readOnly // Para que el campo sea solo de lectura
+          />
           </div>
         <div className="flex gap-5 grid-cols-5 mb-3">
           <div className="w-4/4">
@@ -326,8 +403,9 @@ const handleSubmit = async (values) => {
                       id={`quotationClientDetailCreateDto[${index}].ProductId`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                       placeholder="Seleccionar producto"
+                      onChange={(e) => handleProductChange(e, index, values, setFieldValue)}
                     >
-                       <option value={0}>Seleccione</option>
+                    <option value={0}>Seleccione</option>
                   {productOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -344,7 +422,11 @@ const handleSubmit = async (values) => {
                       name={`quotationClientDetailCreateDto[${index}].Quantity`}
                       id={`quotationClientDetailCreateDto[${index}].Quantity`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                      
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value);
+                        setFieldValue(`quotationClientDetailCreateDto[${index}].Quantity`, newValue);
+                        updateFullValue({ ...values, quotationClientDetailCreateDto: values.quotationClientDetailCreateDto }, setFieldValue);
+                      }}
                     >
                    
                     </Field>
@@ -358,6 +440,12 @@ const handleSubmit = async (values) => {
                       name={`quotationClientDetailCreateDto[${index}].Cost`}
                       id={`quotationClientDetailCreateDto[${index}].Cost`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                      value={selectedProductCost}
+                      onChange={(e) => {
+                        const newValue = parseFloat(e.target.value);
+                        setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, newValue);
+                        updateFullValue({ ...values, quotationClientDetailCreateDto: values.quotationClientDetailCreateDto }, setFieldValue);
+                      }}
                     >
                      
                     </Field>
