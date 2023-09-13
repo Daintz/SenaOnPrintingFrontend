@@ -25,22 +25,20 @@ import { GiCheckMark } from 'react-icons/gi'
 import { BsImages } from 'react-icons/bs';
 
 const validationSchema = Yup.object().shape({
-  // materialReception: Yup.string().required('La recepción de material es requerida'),
-  // programVersion: Yup.string().required('La versión del programa es requerida'),
-  // indented: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // materialReception: Yup.string().required('Campo requerido'),
+  // programVersion: Yup.string().required('Campo requerido'),
+  // indented: Yup.string().required('Campo requerido'),
   // colorProfile: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
-  // image: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
+  // image: Yup.string().required('Imagen requerida'),
   // observations: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
-  // statedAt: Yup.boolean().required('El campo "statedAt" es requerido'),
-  // orderStatus: Yup.number().required('El estado del pedido es requerido').min(1, 'El estado del pedido debe ser mayor o igual a 1'),
-  // program: Yup.string().required('El programa es requerido'),
-  // typePoint: Yup.string().required('Campo requerido')
-  // .matches(/^[\d.]+$/, 'Solo se permite . y números'), // Puedes agregar validaciones adicionales si es necesario
-  // impositionPlanchId: Yup.number().required('El ID de imposición de plancha es requerido').min(0, 'El ID de imposición de plancha no puede ser negativo'),
-  // machineId: Yup.number().required('El ID de la máquina es requerido').min(0, 'El ID de la máquina no puede ser negativo'),
-  // scheme: Yup.string() // Puedes agregar validaciones adicionales si es necesario
-  
-  
+  // program: Yup.string().required('Campo requerido'),
+  // typePoint: Yup.string().required('Campo requerido'), // Puedes agregar validaciones adicionales si es necesario
+  // impositionPlanchId: Yup.number().required('Campo requerido').min(0, 'El ID de imposición de plancha no puede ser negativo'),
+  // machineId: Yup.number().notOneOf(['0'], 'Selecciona una máquina válida')
+  // .required('La selección de máquina es requerida'),
+  // scheme: Yup.string().required('Esquema requerido'),
+
+
   // scheme: Yup.string().required('Campo requerido')
 })
 
@@ -57,6 +55,8 @@ function CreateOrderProduction() {
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
   const [applyBleed, setApplyBleed] = useState('no');
+  const [materialReception, setMaterialReception] = useState('');
+  const [otherMaterial, setOtherMaterial] = useState('');
 
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
   const [selectedImage1, setSelectedImage1] = useState(null);
@@ -66,15 +66,14 @@ function CreateOrderProduction() {
   const [previewImage2, setPreviewImage2] = useState(null);
 
   const { detailsData } = useSelector((state) => state.modal)
-  console.log(detailsData.id)
+  // console.log(detailsData.id)
   const userId = localStorage.getItem('UserId');
-  console.log(userId)
+  // console.log(userId)
+  console.log(materialReception)
   //Formato de fecha
   const originalDateStr = detailsData.deliverDate;
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
-  const [materialReception, setMaterialReception] = useState('0');
-  const [otherMaterial, setOtherMaterial] = useState('');
 
   useEffect(() => {
     fetchOptions()
@@ -128,7 +127,7 @@ function CreateOrderProduction() {
 
   }
 
-  const handleButtonClick = (values, {setFieldValue }) => {
+  const handleButtonClick = (values, { setFieldValue }) => {
 
     const productoActual = detailsData.quotationClientDetails === productoActivo;
     const indiceSiguiente = (productoActual + 1) % detailsData.quotationClientDetails.length;
@@ -170,11 +169,11 @@ function CreateOrderProduction() {
       }
       return newList;
     });
-    // setPreviewImage1(null)
-    // setPreviewImage2(null)
+    setPreviewImage1(null)
+    setPreviewImage2(null)
     setMaterialReception('0')
     setApplyBleed('no')
-  
+
   };
 
   const handleSubmit = async values => {
@@ -248,10 +247,10 @@ function CreateOrderProduction() {
         machineId: 0,
         scheme: ''
       }}
-      onSubmit={(values, {setFieldValue }) => {
-        handleButtonClick(values, {setFieldValue })
+      onSubmit={(values, { setFieldValue }) => {
+        handleButtonClick(values, { setFieldValue })
       }}
-    // validationSchema={validationSchema}
+      validationSchema={validationSchema}
     >
       {({ setFieldValue }) => (
 
@@ -285,7 +284,8 @@ function CreateOrderProduction() {
 
                   return (
                     <div
-                      className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ${productoActivo === product.id ? 'border-black' : ''
+                      // className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px] border-gray-300 ${productoActivo === product.id ? 'border-black' : ''
+                      className={`bg-white shadow-2xl py-4 p-4 rounded-lg mb-2 border-[1px]  ${productoActivo === product.id ? 'border-black' : 'border-gray-300'
                         }`}
                       key={index}
                       onClick={() => setProductoActivo(product.id)}
@@ -313,7 +313,8 @@ function CreateOrderProduction() {
                     <label htmlFor="materialReception" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Recepción material
                     </label>
-                    <select
+                    <Field
+                      as="select"
                       name="materialReception"
                       id="materialReception"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
@@ -326,13 +327,13 @@ function CreateOrderProduction() {
                       <option value="Drive">Drive</option>
                       <option value="Otro">Otro</option>
                       <option value="No aplica">No aplica</option>
-                    </select>
+                    </Field>
                     {/* <ErrorMessage
-                name="materialReception"
-       
-                component="div"
-                className="text-red-500"
-              /> */}
+                      name="materialReception"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
+
                   </div>
                   {materialReception === 'Otro' && (
                     <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -361,6 +362,11 @@ function CreateOrderProduction() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="Adobe"
                     />
+                    {/* <ErrorMessage
+                      name="program"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="programVersion" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -373,6 +379,11 @@ function CreateOrderProduction() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="1.0.5"
                     />
+                      {/* <ErrorMessage
+                      name="programVersion"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                   <div className="w-full md:w-1/4">
                     <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -385,6 +396,11 @@ function CreateOrderProduction() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="CMYK"
                     />
+                    {/* <ErrorMessage
+                      name="colorProfile"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                 </div>
 
@@ -419,6 +435,11 @@ function CreateOrderProduction() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                         placeholder="5"
                       />
+                      {/* <ErrorMessage
+                        name="indented"
+                        component="div"
+                        className="text-red-500"
+                      /> */}
                     </div>
                   )}
 
@@ -434,6 +455,11 @@ function CreateOrderProduction() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                         placeholder="20 lpi"
                       />
+                      {/* <ErrorMessage
+                        name="lineature"
+                        component="div"
+                        className="text-red-500"
+                      /> */}
                     </div>
                   )}
 
@@ -452,6 +478,11 @@ function CreateOrderProduction() {
                         <option value="Punto redondo">Punto redondo</option>
                         <option value="Punto eliptico">Punto eliptico</option>
                       </Field>
+                      {/* <ErrorMessage
+                        name="typePoint"
+                        component="div"
+                        className="text-red-500"
+                      /> */}
                     </div>
                   )}
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -470,6 +501,11 @@ function CreateOrderProduction() {
                         </option>
                       ))}
                     </Field>
+                    {/* <ErrorMessage
+                      name="impositionPlanchId"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
 
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -489,6 +525,11 @@ function CreateOrderProduction() {
                         </option>
                       ))}
                     </Field>
+                    {/* <ErrorMessage
+                      name="machineId"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                 </div>
 
@@ -520,6 +561,11 @@ function CreateOrderProduction() {
                         onChange={(event) => handleFileChange(event, setSelectedImage2, setPreviewImage2)}
                       />
                     </label>
+                    {/* <ErrorMessage
+                      name="scheme"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
 
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -551,7 +597,11 @@ function CreateOrderProduction() {
                         onChange={(event) => handleFileChange(event, setSelectedImage1, setPreviewImage1)}
                       />
                     </label>
-
+                    {/* <ErrorMessage
+                      name="image"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                   <div className="w-full md:w-2/4">
                     <label htmlFor="observations" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -564,6 +614,11 @@ function CreateOrderProduction() {
                       id="observations"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full  p-2.5 h-48 resize-none"
                     />
+                    {/* <ErrorMessage
+                      name="observations"
+                      component="div"
+                      className="text-red-500"
+                    /> */}
                   </div>
                 </div>
                 <button
