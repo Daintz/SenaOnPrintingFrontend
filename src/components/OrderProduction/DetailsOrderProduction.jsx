@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
 import { GrView } from 'react-icons/gr'
 import { useGetProductByIdQuery } from '../../context/Api/Common'
-
-
+import { jsPDF } from 'jspdf';
+import { BsFillFileEarmarkPdfFill } from 'react-icons/bs'
 function DetailsOrderProduction () {
   const { detailsData } = useSelector((state) => state.modal);
   const { productId } = detailsData;
@@ -41,24 +41,7 @@ function DetailsOrderProduction () {
     "substratumInside": "Sustrato Interior",
     "substratum": "Sustrato"
   };
-  
-  // const filteredProductInfo = Object.keys(productInfo || {}).reduce((acc, key) => {
-  //   if (!Array.isArray(productInfo[key]) && productInfo[key] !== null && productInfo[key] !== undefined ) {
-  //     acc[key] = productInfo[key];
-  //   }
-  //   return acc;
-  // }, {});
 
-  // console.log(filteredProductInfo);
-  // const { name, materialReception, programVersion,productId, colorProfile, specialInk, inkCode, idPaperCut, image, observations, statedAt, orderStatus, program, scheme} = detailsData
-  // const { data: productInfo, isLoading, isError } = useGetProductByIdQuery(detailsData.productId);
-  // console.log(filteredProductInfo)
-  // const productProperties = Object.entries(filteredProductInfo || {});
-  // const middleIndex = Math.ceil(productProperties.length / 2);
-  // const firstColumnProperties = productProperties.slice(0, middleIndex);
-  // const secondColumnProperties = productProperties.slice(middleIndex);
-
-// Define filteredProductInfo aplicando el mapeo de nombres
 const filteredProductInfo = Object.keys(productInfo || {}).reduce((acc, key) => {
   const mappedProperty = propertyMapping[key] || key;
   if (!Array.isArray(productInfo[key]) && productInfo[key] !== null && productInfo[key] !== undefined) {
@@ -74,10 +57,42 @@ const productProperties = Object.entries(filteredProductInfo || {});
 const middleIndex = Math.ceil(productProperties.length / 2);
 const firstColumnProperties = productProperties.slice(0, middleIndex);
 const secondColumnProperties = productProperties.slice(middleIndex);
+
+
+const generatePDF = () => {
+  const doc = new jsPDF();
+
+  // Título del PDF
+  doc.setFontSize(16);
+  doc.text('Detalles de la Orden de Producción', 10, 10);
+
+  // Contenido de la primera columna
+  doc.setFontSize(12);
+  let yPosition = 30;
+
+  Object.entries(filteredProductInfo || {}).forEach(([property, value]) => {
+    doc.text(`${property}: ${value}`, 20, yPosition);
+    yPosition += 10;
+  });
+
+  // Contenido de la segunda columna
+  yPosition = 30;
+  const secondColumnX = 100;
+
+  Object.entries(detailsData || {}).forEach(([property, value]) => {
+    doc.text(`${property}: ${value}`, secondColumnX, yPosition);
+    yPosition += 10;
+  });
+
+  // Guardar el PDF
+  const fileName = 'detalles_orden_produccion.pdf';
+  doc.save(fileName);
+};
   return (
     <>
     <div className="flex gap-5 grid-cols-4 mb-3">
     <div className="w-2/4">
+
     <p><b>Creada por:</b> {detailsData.userName}</p>
     <p><b>Cliente:</b> {detailsData.name}</p>
     <p><b>Producto:</b> {detailsData.product}</p>
@@ -116,20 +131,19 @@ const secondColumnProperties = productProperties.slice(middleIndex);
   <li key={property}>
     <strong>{property}:</strong> {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : value}
   </li>
-))}
+))}    <button
+className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+onClick={ generatePDF }
+type="button"
+>
+<BsFillFileEarmarkPdfFill className='w-5 h-5'/>
+
+</button>
         </ul>
     </div>
+
     </div>
-      {/* <p>
-      <b>Estado:</b> {' '}
-      {detailsData.statedAt
-        ? <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-            Activo
-          </span>
-        : <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-            Inactivo
-          </span>}
-      </p> */}
+
     </>
   )
 }
