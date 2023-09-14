@@ -85,6 +85,11 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Codigo del pictograma"
         />
+        <ErrorMessage
+                name="code"
+                component="div"
+                className="text-red-500"
+              />
         <label
           htmlFor="name"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -98,6 +103,11 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Nombre del pictograma"
         />
+        <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500"
+              />
          <label
           htmlFor="description"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -111,6 +121,12 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Descripción del pictograma"
         />
+        
+        <ErrorMessage
+                name="description"
+                component="div"
+                className="text-red-500"
+              />
         <div>
         <label
               htmlFor="pictogramFile"
@@ -132,10 +148,16 @@ function CreateSupplyPictograms () {
         </div>
 
         <button
+          onClick={() => {
+            handleSubmit(values);
+            console.log(values);
+          }}
           type="submit"
           className="flex items-center justify-center border border-gray-700 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-700 font-medium rounded-lg text-sm px-10 py-2"
+              
           >
           Crear Pictograma
+          
         </button>
       </Form>
       )}
