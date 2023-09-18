@@ -37,7 +37,7 @@ const getTypeDocuments = () => {
   });
 };
 
-const getUser = async (user_id) => {
+/* const getUser = async (user_id) => {
   return new Promise((resolve, reject) => {
     clientAxios.get(`/user/${user_id}`).then(
       (result) => {
@@ -51,13 +51,13 @@ const getUser = async (user_id) => {
 
 };
 
+ */
 
 
-
-const EditProfileForm = () => {
+const EditProfileForm  = () => {
   const [success, setSuccess] = useState(false);
   const [typeDocumentOptions, setTypeDocumentOptions] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
+  const [userInfo, setUserInfo] = useState({ id: "", names: "", surnames: "", typeDocumentId: "", documentNumber: "", phone: "", address: "" });
 
   const user_id = 1;
 
@@ -65,45 +65,57 @@ const EditProfileForm = () => {
     getTypeDocuments().then((options) => {
       setTypeDocumentOptions(options);
     });
-    getUser(user_id).then((options) => {
-      setUserInfo(options)
-    })
   };
 
   useEffect(() => {
     fetchOptions();
-  }, []);
 
-  const handleSubmit = async(values, { setSubmitting }) => {
-    try {
-      const response = await fetch(`/user/${user_id}/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
+    const userData = async () => {
+      const response = await clientAxios.get(`/user/${user_id}`).then(
+        (result) => {
+          setUserInfo([result.data].map((user) => (
+            { id: user.id, names: user.names, surnames: user.surnames, typeDocumentId: user.typeDocumentId, documentNumber: user.documentNumber, phone: user.phone, address: user.address }
+          ))[0]);
         },
-        body: JSON.stringify(values)
-      });
+        (error) => {
+          reject(error);
+        }
+      );
+    };
+    userData();
+  }, [user_id]);
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    let status = false
+    try {
+      const response = await clientAxios.put(`/user/${user_id}/profile`,
+        values
+      );
 
       if (!response.ok) {
         toast.error(`Error: ${response.body.message}`)
+      } else {
+        status = true
       }
-
-      setSubmitting(false);
-      setSuccess(true);
       toast.success('Usuario actualizado con exito')
     } catch (error) {
       console.error(error);
-      setSubmitting(false);
+      toast.error(`Error: ${error.response.data.message}`)
+    }
+    if (status){
+      toast.success('Usuario actualizado con exito')
     }
   };
 
   console.log(userInfo)
+
   return (
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
         <div className="max-w-md mx-auto">
           <h2 className="text-2xl font-bold w-1/2 mr-2 mb-5">Mi perfil</h2>
           <Formik
+            enableReinitialize={true}
             initialValues={{
               id: userInfo.id,
               names: userInfo.names,
@@ -125,11 +137,11 @@ const EditProfileForm = () => {
                   <div key='0' className="w-1/2 mr-2">
                     <label htmlFor="names">Nombres</label>
                     <Field
-                        type="text"
-                        name="names"
-                        id="names"
-                        placeholder="Nombres del Usuario"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
+                      type="text"
+                      name="names"
+                      id="names"
+                      placeholder="Nombres del Usuario"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                     />
                     <ErrorMessage
                       name="names"
@@ -138,13 +150,13 @@ const EditProfileForm = () => {
                     />
                   </div>
                   <div key='1' className="w-1/2 mr-2">
-                    <label htmlFor="names">Apellidos</label>
+                    <label htmlFor="surnames">Apellidos</label>
                     <Field
-                        type="text"
-                        name="surnames"
-                        id="surnames"
-                        placeholder="Apellidos del Usuario"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
+                      type="text"
+                      name="surnames"
+                      id="surnames"
+                      placeholder="Apellidos del Usuario"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                     />
                     <ErrorMessage
                       name="surnames"
@@ -172,11 +184,11 @@ const EditProfileForm = () => {
                   <div key='3' className="w-1/2 mr-2">
                     <label htmlFor="documentNumber">Número de Documento</label>
                     <Field
-                        type="text"
-                        name="documentNumber"
-                        id="documentNumber"
-                        placeholder="Número de Documento del Usuario"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
+                      type="text"
+                      name="documentNumber"
+                      id="documentNumber"
+                      placeholder="Número de Documento del Usuario"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                     />
                     <ErrorMessage
                       name="documentNumber"
@@ -189,11 +201,11 @@ const EditProfileForm = () => {
                   <div key='4' className="w-1/2 mr-2">
                     <label htmlFor="phone">Teléfono</label>
                     <Field
-                        type="text"
-                        name="phone"
-                        id="phone"
-                        placeholder="Teléfono del Usuario"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      placeholder="Teléfono del Usuario"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                     />
                     <ErrorMessage
                       name="phone"
@@ -204,11 +216,11 @@ const EditProfileForm = () => {
                   <div key='6' className="w-1/2 mr-2">
                     <label htmlFor="address">Dirección</label>
                     <Field
-                        type="text"
-                        name="address"
-                        id="address"
-                        placeholder="Dirección del Usuario"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
+                      type="text"
+                      name="address"
+                      id="address"
+                      placeholder="Dirección del Usuario"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                     />
                     <ErrorMessage
                       name="address"
