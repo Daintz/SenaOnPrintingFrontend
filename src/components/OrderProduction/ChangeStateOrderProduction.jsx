@@ -43,11 +43,15 @@ function ChangeStateOrderProduction ({ orderProduction }) {
 export function ChangeStateButtonOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
+    if (orderProduction.orderStatus !== 2) {
+      // Puedes mostrar una notificación o realizar alguna acción en caso de que no cumpla la condición
+      toast.error('No puedes cambiar el estado de esta orden porque ya se encuentra en producción');
+    } else {
     dispatch(setWidth({ width: '800px' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: orderProduction }))
-  }
+  }}
 
   return (
     <button type="button" onClick={ handleOpen }>

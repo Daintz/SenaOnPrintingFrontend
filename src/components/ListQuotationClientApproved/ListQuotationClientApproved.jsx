@@ -8,6 +8,9 @@ import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrde
 import { DetailsButtonOrderProduction } from '../../components/OrderProduction/DetailsOrderProduction'
 import { Link } from 'react-router-dom'
 import Spinner from '../Spinner/Spinner'
+import { format } from 'date-fns';
+
+
 const ListQuotationClientApproved = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi,error, isLoading, refetch } = useGetAllQuotationClientApprovedQuery()
@@ -21,8 +24,24 @@ const ListQuotationClientApproved = () => {
 console.log(dataApi)
   const columns = useMemo(() => [
     { Header: 'Codigo', accessor: 'code' },
-    { Header: 'Fecha de orden', accessor: 'orderDate' },
-    { Header: 'Fecha de entrega', accessor: 'deliverDate' },
+    {
+      Header: 'Fecha de orden',
+      accessor: 'orderDate',
+      Cell: ({ value }) => {
+        const formattedDate = format(new Date(value), 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
+    
+    {
+      Header: 'Fecha de entrega',
+      accessor: 'deliverDate',
+      Cell: ({ value }) => {
+        const formattedDate = format(new Date(value), 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
+    
     { Header: 'Cliente', accessor: 'name' },
     {
       Header: 'Productos',

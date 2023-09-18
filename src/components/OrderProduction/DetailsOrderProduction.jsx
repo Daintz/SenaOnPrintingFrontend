@@ -11,35 +11,52 @@ function DetailsOrderProduction () {
   // Manejo de datos del producto
   const { data: productInfo, isLoading, isError } = useGetProductByIdQuery(productId);
   const propertyMapping = {
-    // "name": "Nombre",
-    "typeProduct": "Tipo de Producto",
-    "paperCutId": "ID de Corte de Papel",
+    "name": "Nombre",
+    "typeProduct": "Tipo de producto",
+    "paperCutId": "Corte de papel",
     "cost": "Costo",
     "observations": "Observaciones",
-    "statedAt": "Estado",
+    // "statedAt": "Estado",
     "size": "Tamaño",
     "frontPage": "Portada",
-    "frontPageInks": "Tinta de Portada",
-    "frontPageNumberInks": "Número de Tintas en Portada",
-    "frontPagePantone": "Pantone de Portada",
-    "frontPageCode": "Código de Portada",
+    "frontPageInks": "Tinta portada",
+    "frontPageNumberInks": "Número de tintas portada",
+    "frontPagePantone": "Pantone de portada",
+    "frontPageCode": "Código pantone portada",
     "backCover": "Contraportada",
-    "backCoverInks": "Tinta de Contraportada",
-    "backCoverNumberInks": "Número de Tintas en Contraportada",
-    "backCoverPantone": "Pantone de Contraportada",
-    "backCoverCode": "Código de Contraportada",
-    "inside": "Interior",
-    "insideInks": "Tinta Interior",
-    "insideNumberInks": "Número de Tintas Interiores",
-    "insidePantone": "Pantone Interior",
-    "insideCode": "Código Interior",
-    "numberPages": "Número de Páginas",
+    "backCoverInks": "Tinta de contraportada",
+    "backCoverNumberInks": "Número de tintas contraportada",
+    "backCoverPantone": "Pantone de contraportada",
+    "backCoverCode": "Código pantone contraportada",
+    "inside": "Interiores",
+    "insideInks": "Tinta interior",
+    "insideNumberInks": "Número de tintas interiores",
+    "insidePantone": "Pantone interior",
+    "insideCode": "Código pantone interior",
+    "numberPages": "Número de páginas",
     "cover": "Portada",
-    "bindings": "Encuadernación",
+    "bindings": "Acabados",
     "dimension": "Dimensión",
-    "substratumFrontPage": "Sustrato de Portada",
-    "substratumInside": "Sustrato Interior",
-    "substratum": "Sustrato"
+    "substratumFrontPage": "Sustrato portada",
+    "substratumInside": "Sustrato interior",
+    "substratum": "Sustrato",
+    "materialReception": "Recepción material",
+    "program": "Programa",
+    "programVersion": "Versión programa",
+    "indented": "Sangrados",
+    "lineature": "Lineatura",
+    "colorProfile": "Perfil de color",
+    "typePoint": "Tipo de punto",
+    "observations": "Observaciones",
+    "image": "Imagen",
+    "scheme": "Esquema",
+    "impositionPlanchName": "Imposición plancha",
+    "machineName": "Máquina",
+    "typeService": "Sistema de impresión",
+    "quantity": "Cantidad",
+    "deliverDate": "Fecha de entrega",
+    "userName": "Creado por",
+
   };
 
 const filteredProductInfo = Object.keys(productInfo || {}).reduce((acc, key) => {
@@ -58,7 +75,10 @@ const middleIndex = Math.ceil(productProperties.length / 2);
 const firstColumnProperties = productProperties.slice(0, middleIndex);
 const secondColumnProperties = productProperties.slice(middleIndex);
 
-
+const formatDate = (dateStr) => {
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  return new Date(dateStr).toLocaleDateString(undefined, options);
+};
 const generatePDF = () => {
   const doc = new jsPDF();
 
@@ -71,8 +91,43 @@ const generatePDF = () => {
   let yPosition = 30;
 
   Object.entries(filteredProductInfo || {}).forEach(([property, value]) => {
-    doc.text(`${property}: ${value}`, 20, yPosition);
-    yPosition += 10;
+    // Utiliza el objeto propertyMapping para traducir la propiedad
+    const translatedProperty = propertyMapping[property] || property;
+
+    // Excluye las propiedades no deseadas y los valores nulos o indefinidos
+    if (
+      ![
+        'id',
+        'quotationClientDetailId',
+        'userId',
+        'impositionPlanchId',
+        'machineId',
+        'orderDate',
+        'orderStatus',
+        'statedAt',
+        'impositionPlanch',
+        'machine',
+        'quotationClientDetail',
+        'user',
+        'productId',
+        'product',
+      ].includes(property) &&
+      value !== null &&
+      value !== undefined
+    ) {
+      if (typeof value === 'boolean') {
+        // Formatea propiedades booleanas
+        doc.text(`${translatedProperty}: ${value ? 'Sí' : 'No'}`, 20, yPosition);
+      } else if (property === 'deliverDate') {
+        // Formatea la fecha de entrega
+        const formattedDate = formatDate(value);
+        doc.text(`${translatedProperty}: ${formattedDate}`, 20, yPosition);
+      } else {
+        doc.text(`${translatedProperty}: ${value}`, 20, yPosition);
+      }
+
+      yPosition += 10;
+    }
   });
 
   // Contenido de la segunda columna
@@ -80,14 +135,53 @@ const generatePDF = () => {
   const secondColumnX = 100;
 
   Object.entries(detailsData || {}).forEach(([property, value]) => {
-    doc.text(`${property}: ${value}`, secondColumnX, yPosition);
-    yPosition += 10;
+    // Utiliza el objeto propertyMapping para traducir la propiedad
+    const translatedProperty = propertyMapping[property] || property;
+
+    // Excluye las propiedades no deseadas y los valores nulos o indefinidos
+    if (
+      ![
+        'id',
+        'quotationClientDetailId',
+        'userId',
+        'impositionPlanchId',
+        'machineId',
+        'orderDate',
+        'orderStatus',
+        'statedAt',
+        'impositionPlanch',
+        'machine',
+        'quotationClientDetail',
+        'user',
+        'productId',
+        'product',
+      ].includes(property) &&
+      value !== null &&
+      value !== undefined
+    ) {
+      if (typeof value === 'boolean') {
+        // Formatea propiedades booleanas
+        doc.text(`${translatedProperty}: ${value ? 'Sí' : 'No'}`, secondColumnX, yPosition);
+      } else if (property === 'deliverDate') {
+        // Formatea la fecha de entrega
+        const formattedDate = formatDate(value);
+        doc.text(`${translatedProperty}: ${formattedDate}`, secondColumnX, yPosition);
+      } else {
+        doc.text(`${translatedProperty}: ${value}`, secondColumnX, yPosition);
+      }
+
+      yPosition += 10;
+    }
   });
 
   // Guardar el PDF
-  const fileName = 'detalles_orden_produccion.pdf';
+  const fileName = `Orden_produccion_${detailsData.product}.pdf`;
   doc.save(fileName);
 };
+
+
+
+
   return (
     <>
     <div className="flex gap-5 grid-cols-4 mb-3">
@@ -172,4 +266,3 @@ export function DetailsButtonOrderProduction ({ orderProduction }) {
 }
 
 export default DetailsOrderProduction
-
