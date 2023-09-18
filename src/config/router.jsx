@@ -20,6 +20,7 @@ import QuotationClientDetail from '../pages/QuotationClientDetail/QuotationClien
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
+import Profile from '../pages/User/Profile';
 import Login from '../pages/Login/Login'
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword'
 import ForgotPasswordEmail from '../pages/ForgotPassword/ForgotPasswordEmail'
@@ -128,6 +129,15 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <User />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="perfil"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />
