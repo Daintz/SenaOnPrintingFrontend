@@ -11,6 +11,7 @@ import { DetailsButtonOrderProduction } from './DetailsOrderProduction'
 import { Link } from 'react-router-dom'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
+import { format } from 'date-fns';
 
 const ListOrderProduction = () => {
   const [selectedOption, setSelectedOption] = useState('orderProduction'); // Estado para almacenar la opción seleccionada
@@ -26,7 +27,20 @@ const ListOrderProduction = () => {
 
   const columns = useMemo(() => [
     { Header: 'Cotización', accessor: 'quotationClientDetailId' },
-    { Header: 'Fecha de entrega', accessor: 'deliverDate' },
+    {
+      Header: 'Fecha entrega',
+      accessor: 'deliverDate',
+      Cell: ({ value }) => {
+        const dateValue = new Date(value);
+        if (isNaN(dateValue.getTime())) {
+          // El valor no es una fecha válida, manejarlo apropiadamente
+          return <span>Fecha no válida</span>;
+        }
+        const formattedDate = format(dateValue, 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
+    
     { Header: 'Cliente', accessor: 'name' },
     { Header: 'Producto', accessor: 'product' },
     {

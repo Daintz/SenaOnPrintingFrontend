@@ -392,6 +392,7 @@ export function UpdateButtomOrderProduction({ orderProduction }) {
       onClick={() => {
         handleEdit(orderProduction);
       }}
+      title="Editar OP"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
