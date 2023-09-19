@@ -235,7 +235,7 @@ function CreateOrderProduction() {
         quotationClientDetailId: productoActivo,
         materialReception: '',
         programVersion: '',
-        indented: '',
+        indented: 0,
         colorProfile: '',
         image: '',
         observations: '',

@@ -28,10 +28,15 @@ const ListOrderProduction = () => {
   const columns = useMemo(() => [
     { Header: 'Cotización', accessor: 'quotationClientDetailId' },
     {
-      Header: 'Fecha de entrega',
+      Header: 'Fecha entrega',
       accessor: 'deliverDate',
       Cell: ({ value }) => {
-        const formattedDate = format(new Date(value), 'dd MMM yyyy');
+        const dateValue = new Date(value);
+        if (isNaN(dateValue.getTime())) {
+          // El valor no es una fecha válida, manejarlo apropiadamente
+          return <span>Fecha no válida</span>;
+        }
+        const formattedDate = format(dateValue, 'dd MMM yyyy');
         return <span>{formattedDate}</span>;
       }
     },

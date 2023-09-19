@@ -5,10 +5,11 @@ import { useGetAllSupplyPictogramsQuery } from '../../context/Api/Common'
 import { ChangeStateButtonSupplyPictograms } from '../SupplyPictograms/ChangeStatedSupplyPictograms'
 import { CreateButtomSupplyPictograms } from '../SupplyPictograms/CreateSupplyPictograms'
 import { DetailsButtomSupplyPictograms } from '../SupplyPictograms/DetailsSypplyPictograms'
-
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 const ListSupplyPictograms = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllSupplyPictogramsQuery()
+  const { data: dataApi, error, isLoading, refetch } = useGetAllSupplyPictogramsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector(state => state.modal)
@@ -60,9 +61,9 @@ const ListSupplyPictograms = () => {
 
   const { pageIndex, globalFilter } = state
 
-  if (!dataApi) {
-    return <div>Loading...</div>
-  }
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
+
 
   return (
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">

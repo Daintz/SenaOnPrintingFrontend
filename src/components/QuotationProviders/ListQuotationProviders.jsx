@@ -8,8 +8,9 @@ import { DetailsButtomQuotationProviders } from './DetailsQuotationProviders'
 import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import  ReportQuotationProviders  from './ReportQuotationProviders'
-
-
+import { format } from 'date-fns';
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 const ListQuotationProviders = () => {
 
   const tablePDF = useRef()
@@ -20,7 +21,7 @@ const ListQuotationProviders = () => {
   })
 
 
-  const { data: dataApi, refetch } = useGetAllQuotationProvidersQuery()
+  const { data: dataApi, error, isLoading, refetch } = useGetAllQuotationProvidersQuery()
 
   const { isAction } = useSelector(state => state.modal)
   useEffect(() => {
@@ -34,7 +35,19 @@ const ListQuotationProviders = () => {
 
 
   const columns = useMemo(()=>[
-    {Header: 'Fecha', accessor: 'quotationDate' },
+    {
+      Header: 'Fecha',
+      accessor: 'quotationDate',
+      Cell: ({ value }) => {
+        const dateValue = new Date(value);
+        if (isNaN(dateValue.getTime())) {
+          // El valor no es una fecha válida, manejarlo apropiadamente
+          return <span>Fecha no válida</span>;
+        }
+        const formattedDate = format(dateValue, 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
     { Header: 'Documento', accessor: 'quotationFile' },
     {Header: 'Valor', accessor: 'fullValue'},
     {Header: 'Id Proveedor', accessor: 'provider.nameCompany'},
@@ -78,9 +91,9 @@ const ListQuotationProviders = () => {
 
   const { pageIndex, globalFilter } = state
 
-  if (!dataApi) {
-    return <div>Loading...</div>
-  }
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
+
 
   return (
     <>
