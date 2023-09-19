@@ -26,15 +26,17 @@ import { BsImages } from 'react-icons/bs';
 
 const validationSchema = Yup.object().shape({
   // materialReception: Yup.string().required('Campo requerido'),
-  // programVersion: Yup.string().required('Campo requerido'),
+  programVersion: Yup.string().required('Campo requerido'),
   // indented: Yup.string().required('Campo requerido'),
   // colorProfile: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
   // image: Yup.string().required('Imagen requerida'),
   // observations: Yup.string(), // Puedes agregar validaciones adicionales si es necesario
-  // program: Yup.string().required('Campo requerido'),
-  // typePoint: Yup.string().required('Campo requerido'), // Puedes agregar validaciones adicionales si es necesario
-  // impositionPlanchId: Yup.number().required('Campo requerido').min(0, 'El ID de imposición de plancha no puede ser negativo'),
-  // machineId: Yup.number().notOneOf(['0'], 'Selecciona una máquina válida')
+  program: Yup.string().required('Campo requerido'),
+  // typePoint: Yup.string()
+  //   .required('Campo requerido')
+  //   .oneOf(['Punto redondo', 'Punto elíptico'], 'Selecciona una opción válida'),
+  impositionPlanchId: Yup.number().required('Campo requerido').min(1, 'Selecciona una opción válida'),
+  machineId: Yup.number().required('Campo requerido').min(1, 'Selecciona una opción válida'),
   // .required('La selección de máquina es requerida'),
   // scheme: Yup.string().required('Esquema requerido'),
 
@@ -169,6 +171,7 @@ function CreateOrderProduction() {
       }
       return newList;
     });
+    setDatosGuardados(true);
     setPreviewImage1(null)
     setPreviewImage2(null)
     setMaterialReception('0')
@@ -227,9 +230,15 @@ function CreateOrderProduction() {
     }
   };
 
+  const [datosGuardados, setDatosGuardados] = useState(false);
+
+
+
   return (
 
     <Formik
+    key={datosGuardados ? 'formulario-limpiado' : 'formulario-original'}
+    enableReinitialize={true}
       initialValues={{
         userId: userId,
         quotationClientDetailId: productoActivo,
@@ -362,11 +371,11 @@ function CreateOrderProduction() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="Adobe"
                     />
-                    {/* <ErrorMessage
+                    <ErrorMessage
                       name="program"
                       component="div"
                       className="text-red-500"
-                    /> */}
+                    />
                   </div>
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
                     <label htmlFor="programVersion" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -379,11 +388,11 @@ function CreateOrderProduction() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       placeholder="1.0.5"
                     />
-                      {/* <ErrorMessage
+                      <ErrorMessage
                       name="programVersion"
                       component="div"
                       className="text-red-500"
-                    /> */}
+                    />
                   </div>
                   <div className="w-full md:w-1/4">
                     <label htmlFor="colorProfile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -476,13 +485,13 @@ function CreateOrderProduction() {
                       >
                         <option value="0">Seleccione</option>
                         <option value="Punto redondo">Punto redondo</option>
-                        <option value="Punto eliptico">Punto eliptico</option>
+                        <option value="Punto elíptico">Punto elíptico</option>
                       </Field>
-                      {/* <ErrorMessage
+                      <ErrorMessage
                         name="typePoint"
                         component="div"
                         className="text-red-500"
-                      /> */}
+                      />
                     </div>
                   )}
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -501,11 +510,11 @@ function CreateOrderProduction() {
                         </option>
                       ))}
                     </Field>
-                    {/* <ErrorMessage
+                    <ErrorMessage
                       name="impositionPlanchId"
                       component="div"
                       className="text-red-500"
-                    /> */}
+                    />
                   </div>
 
                   <div className="w-full md:w-1/4 mb-3 md:mb-0">
@@ -525,11 +534,11 @@ function CreateOrderProduction() {
                         </option>
                       ))}
                     </Field>
-                    {/* <ErrorMessage
+                    <ErrorMessage
                       name="machineId"
                       component="div"
                       className="text-red-500"
-                    /> */}
+                    />
                   </div>
                 </div>
 
