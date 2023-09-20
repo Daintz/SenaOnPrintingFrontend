@@ -12,9 +12,7 @@ import clientAxios from '../../config/clientAxios'
 
 const ListSupplyDetails = () => {
   const [loading, setLoading] = useState(true)
-  const [dataWarehause, setDataWarehause] = useState([])
   const [dataProvider, setDataProvider] = useState([])
-
   const tablePDF = useRef()
 
   const generatePDF = useReactToPrint({
@@ -28,15 +26,19 @@ const ListSupplyDetails = () => {
   const { isAction } = useSelector((state) => state.modal)
 
   const columns = useMemo(() => [
-    // { Header: 'Lote', accessor: 'id' },
+    { Header: 'Lote', accessor: 'id' },
     { Header: 'Descripción', accessor: 'description' },
     // { Header: 'Costo insumo', accessor: 'averageCost' },
     { Header: 'Fecha de entrada', accessor: 'entryDate' },
-    { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
-    { Header: 'Insumo', accessor: 'supplyId' },
-    {Header: 'Proveedor',accessor: 'providerId'},
-    {Header: 'Bodega', accessor: 'warehouseId'},
+    {
+      Header: 'Proveedor',
+      accessor: 'providerId',
+      Cell: ({ value }) => {
+        const provider = dataProvider.find(provider => provider.id === value)
+        return provider ? provider.nameCompany : ''
+      }
+    },
     {
       Header: 'Estado',
       accessor: 'statedAt',

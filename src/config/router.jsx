@@ -245,7 +245,7 @@ const router = createBrowserRouter(
 
 
       <Route
-        path="supplyDetails"
+        path="BuySupplies"
         element={
           <ProtectedRoute>
             <SupplyDetails />

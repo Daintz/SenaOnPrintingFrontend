@@ -10,7 +10,7 @@ function DetailsSupplyDetails () {
   const [dataProvider, setDataProvider] = useState([])
 
   const { detailsData } = useSelector((state) => state.modal)
-  const {  description, entryDate, expirationDate, statedAt, supplyId, providerId, warehouseId } = detailsData
+  const { description, entryDate, expirationDate, statedAt, supplyId, providerId, warehouseId } = detailsData
 
   useEffect(() => {
     clientAxios('/Warehause')
