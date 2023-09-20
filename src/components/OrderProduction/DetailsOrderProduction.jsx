@@ -15,7 +15,7 @@ function DetailsOrderProduction () {
     "typeProduct": "Tipo de producto",
     "paperCutId": "Corte de papel",
     "cost": "Costo",
-    "observations": "Observaciones",
+    // "observations": "Observaciones",
     // "statedAt": "Estado",
     "size": "Tamaño",
     "frontPage": "Portada",
@@ -61,7 +61,7 @@ function DetailsOrderProduction () {
 
 const filteredProductInfo = Object.keys(productInfo || {}).reduce((acc, key) => {
   const mappedProperty = propertyMapping[key] || key;
-  if (!Array.isArray(productInfo[key]) && productInfo[key] !== null && productInfo[key] !== undefined) {
+  if (!Array.isArray(productInfo[key]) && productInfo[key] !== null && productInfo[key] !== undefined && productInfo[key] !== '') {
     acc[mappedProperty] = productInfo[key];
   }
   return acc;
@@ -89,7 +89,7 @@ const generatePDF = () => {
   // Contenido de la primera columna
   doc.setFontSize(12);
   let yPosition = 30;
-
+console.log(filteredProductInfo)
   Object.entries(filteredProductInfo || {}).forEach(([property, value]) => {
     // Utiliza el objeto propertyMapping para traducir la propiedad
     const translatedProperty = propertyMapping[property] || property;
@@ -111,9 +111,11 @@ const generatePDF = () => {
         'user',
         'productId',
         'product',
+        
       ].includes(property) &&
       value !== null &&
-      value !== undefined
+      value !== undefined && 
+      value !== ''
     ) {
       if (typeof value === 'boolean') {
         // Formatea propiedades booleanas
@@ -122,7 +124,20 @@ const generatePDF = () => {
         // Formatea la fecha de entrega
         const formattedDate = formatDate(value);
         doc.text(`${translatedProperty}: ${formattedDate}`, 20, yPosition);
-      } else {
+      } else if (property === 'Observaciones' && value) {
+        doc.text('Observaciones:', 20, yPosition);
+        yPosition += 10;
+      
+        const columnWidth = 75; // Ancho de la columna para observaciones
+        const lines = doc.splitTextToSize(value, columnWidth);
+      
+        lines.forEach((line) => {
+          doc.text(line, 20, yPosition);
+          yPosition += 10;
+        });
+      }
+      
+      else {
         doc.text(`${translatedProperty}: ${value}`, 20, yPosition);
       }
 
@@ -166,10 +181,59 @@ const generatePDF = () => {
         // Formatea la fecha de entrega
         const formattedDate = formatDate(value);
         doc.text(`${translatedProperty}: ${formattedDate}`, secondColumnX, yPosition);
+      } else if (property === 'image' && value) {
+        // Si la propiedad es 'image' y tiene un valor, crea un enlace personalizado para "Imagen: [ver imagen]"
+        const linkText = 'Imagen: ';
+        doc.text(linkText, secondColumnX, yPosition);
+  
+        // Cambiar la fuente a negrita solo para "Ver imagen"
+        doc.setFont('helvetica', 'bold'); // Establecer fuente y estilo en negrita
+  
+        // Agregar el enlace "Ver imagen"
+        const linkX = secondColumnX + doc.getStringUnitWidth(linkText) * 4; // Alinea el enlace con el texto
+        const linkY = yPosition;
+        doc.textWithLink('[Ver imagen]', linkX, linkY, { url: value });
+  
+        // Restaurar la fuente normal
+        doc.setFont('helvetica', 'normal'); // Restaurar fuente normal
+      } else if (property === 'scheme' && value) {
+        // Si la propiedad es 'scheme' y tiene un valor, crea un enlace personalizado para "Esquema: [ver esquema]"
+        const linkText = 'Esquema: ';
+        doc.text(linkText, secondColumnX, yPosition);
+  
+        // Cambiar la fuente a negrita solo para "Ver esquema"
+        doc.setFont('helvetica', 'bold'); // Establecer fuente y estilo en negrita
+  
+        // Agregar el enlace "Ver esquema"
+        const linkX = secondColumnX + doc.getStringUnitWidth(linkText) * 4; // Alinea el enlace con el texto
+        const linkY = yPosition;
+        doc.textWithLink('[Ver esquema]', linkX, linkY, { url: value });
+  
+        // Restaurar la fuente normal
+        doc.setFont('helvetica', 'normal'); // Restaurar fuente normal
+      } else if (property === 'observations') {
+        // Ajustar observaciones al espacio de la columna
+        const columnWidth = 90; // Ancho de la columna donde se mostrarán las observaciones
+        const fontSize = 12; // Tamaño de fuente
+      
+        if (value) {
+          doc.text('Observaciones:', secondColumnX, yPosition);
+          yPosition += fontSize;
+      
+          // Divide las observaciones en líneas que se ajusten al ancho de la columna
+          const lines = doc.splitTextToSize(value, columnWidth);
+      
+          // Imprime cada línea en la columna
+          lines.forEach((line) => {
+            doc.text(line, secondColumnX, yPosition);
+            yPosition += fontSize;
+          });
+        }
       } else {
         doc.text(`${translatedProperty}: ${value}`, secondColumnX, yPosition);
       }
-
+      
+  
       yPosition += 10;
     }
   });
@@ -200,7 +264,7 @@ const generatePDF = () => {
     <ul>
   {firstColumnProperties.map(([property, value]) => (
     // Omitir las propiedades 'name' y 'cost' en la primera columna
-    (property !== 'name' && property !== 'id') && (
+    (property !== 'name' && property !== 'id' && property !== 'statedAt') && (
       <li key={property}>
     <strong>{property}:</strong> {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : value}
       </li>
