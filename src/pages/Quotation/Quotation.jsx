@@ -11,6 +11,7 @@ import ErrorBoundary from '../../components/Error/ErrorBoundary'
 const QuotationClient = () => {
   // ? Esta linea de codigo me trae el estado 'isEditing' de src\context\Slices\Modal\ModalSlice.js que esto seria los estados del componente modal
   const { action } = useSelector((state) => state.modal)
+  
 
   return (
     <div className="border-gray-200 border-dashed">

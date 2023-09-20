@@ -102,20 +102,9 @@ const getProduct = () => {
   })
 }
 
-const getLastQuotationCode = async () => {
-  try {
-    const response = await clientAxios.get('/QuotationClient/lastCode'); // Reemplaza la ruta con la correcta
-    const lastCode = response.data; // Supongamos que la API devuelve el último código como un número
-    const nextCode = lastCode + 1;
-    return nextCode;
-  } catch (error) {
-    console.error('Error al obtener el último código de cotización:', error);
-    return 21; // En caso de error, establecer un valor predeterminado
-  }
-};
+
 function CreateQuotation({}) {
   const [createQuotationClient, { error: clientError, isLoading: clientIsLoading }] = usePostQuotationClientMutation()
-  const [createQuotationclientDetail, { error: detailError, isLoading: detailIsLoading }] = usePostQuotationClientDetailMutation()
 
   const [clientsOptions, setClientsOptions] = useState([])
   const [userOptions, setUserOptions] = useState([])
@@ -127,7 +116,7 @@ function CreateQuotation({}) {
   const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentDate1, setCurrentDate1] = useState(new Date().toISOString().split('T')[0]);
-  const [lastCode, setLastCode] = useState(0);
+  const [lastCode, setLastCode] = useState(null);
   const navigate = useNavigate();
   const [selectedProductCost, setSelectedProductCost] = useState(0);
   const [quotationClientDetailCreateDto, setQuotationClientDetailCreateDto] = useState([]);
@@ -135,19 +124,29 @@ function CreateQuotation({}) {
     // ...otras propiedades...
     quotationClientDetailCreateDto: [{ ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0, StatedAt: true }],
   });
-  const [code, setCode] = useState(0)
+  const [newCode, setNewCode] = useState(null);
 
   useEffect(() => {
-    // Llama a la función para obtener el último código de cotización
-    getLastQuotationCode()
-      .then((lastCode) => {
-        // Asigna el último código obtenido al estado local
-        setCode(lastCode);
-      })
-      .catch((error) => {
-        console.error('Error al obtener el último código de cotización:', error);
-      });
-  }, []); // Asegúrate de que esta llamada se realice una vez al cargar el componente
+    // Llamar a la acción para obtener el último código
+    const fetchLastQuotationCode = async () => {
+      try {
+        const response = await clientAxios.get('/QuotationClient/LastCode');
+        const lastCode = response.data;
+
+        // Sumar 1 al último código
+        const calculatedCode = lastCode + 1;
+
+        // Establecer el nuevo código en la variable de estado
+        setNewCode(calculatedCode);
+      } catch (error) {
+        console.error('Error al obtener el último código:', error);
+      }
+     
+    };
+
+    // Llamar a la función para obtener el último código cuando el componente se monta
+    fetchLastQuotationCode();
+  }, []);
 
  
 
@@ -176,14 +175,15 @@ function CreateQuotation({}) {
 const handleSubmit = async (values) => {
   try {
     // Realiza la llamada a la mutación para crear la cotización
-   const clientResponse = await createQuotationClient(values); 
+    const clientResponse = await createQuotationClient(values); 
     console.log(values)
     // Verifica si hubo errores en la respuesta
     if (clientResponse.error) {
       // Maneja el error, muestra un mensaje, etc.
       console.error('Error en la creación de la cotización (client):', clientResponse.error);
       return;
-    }
+    } 
+    console.log(values)
 
     // Obtén el ID de la cotización creada
  
@@ -194,7 +194,7 @@ const handleSubmit = async (values) => {
     // Si todo se creó correctamente, puedes redirigir al usuario a la página de cotizaciones o mostrar un mensaje de éxito.
     toast.success('La cotización se creó correctamente');
     // Aquí puedes redirigir al usuario a la página de cotizaciones, por ejemplo:
-     navigate('/Quotation');
+   navigate('/Quotation');
   } catch (error) {
     console.error('Error:', error);
     // Handle any unexpected errors here
@@ -234,14 +234,47 @@ const updateFullValue = (values, setFieldValue) => {
   setFieldValue('FullValue', totalValue);
 };
 
+useEffect(() => {
+  // Función para simular clic en el campo de Cantidad
+  const simulateClickQuantity = () => {
+    const index = 0; // Cambia esto al índice del campo que deseas clickear
+    const quantityField = document.getElementById(`quotationClientDetailCreateDto[${index}].Quantity`);
+    if (quantityField) {
+      quantityField.click();
+    }
+  };
+
+  // Función para simular clic en el campo de Precio Unitario
+  const simulateClickCost = () => {
+    const index = 0; // Cambia esto al índice del campo que deseas clickear
+    const costField = document.getElementById(`quotationClientDetailCreateDto[${index}].Cost`);
+    if (costField) {
+      costField.click();
+    }
+  };
+
+  // Configura un intervalo para simular el clic cada segundo
+  const intervalId = setInterval(() => {
+    simulateClickQuantity();
+    simulateClickCost();
+  }, 0);
+
+  // Limpia el intervalo cuando el componente se desmonta
+  return () => {
+    clearInterval(intervalId);
+  };
+}, []);
+
+console.log(newCode)
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={{
         orderDate: currentDate,
         deliverDate: currentDate1,
         userId: 0,
         clientId: 0,
-        code: code,
+        code: newCode !== null ? newCode : '',
         quotationStatus: 1,
         FullValue: 0,
         StatedAt: true,
@@ -263,7 +296,10 @@ const updateFullValue = (values, setFieldValue) => {
           <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6 w-200 h-100">
           <div className="flex gap-5 grid-cols-5 mb-3">
           <div className="w-4/4">
-          Codigo {code}
+          <div className="form-group">
+            <label>Código:</label>
+            <div>{newCode !== null ? newCode : 'Cargando...'}</div>
+          </div>
             </div>
             <div className="w-4/4">
              <b>Fecha: {new Date().toISOString().split('T')[0]}</b>
@@ -422,7 +458,7 @@ const updateFullValue = (values, setFieldValue) => {
                       name={`quotationClientDetailCreateDto[${index}].Quantity`}
                       id={`quotationClientDetailCreateDto[${index}].Quantity`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                      onChange={(e) => {
+                      onClick={(e) => {
                         const newValue = parseInt(e.target.value);
                         setFieldValue(`quotationClientDetailCreateDto[${index}].Quantity`, newValue);
                         updateFullValue({ ...values, quotationClientDetailCreateDto: values.quotationClientDetailCreateDto }, setFieldValue);
@@ -441,7 +477,7 @@ const updateFullValue = (values, setFieldValue) => {
                       id={`quotationClientDetailCreateDto[${index}].Cost`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                       value={selectedProductCost}
-                      onChange={(e) => {
+                      onClick={(e) => {
                         const newValue = parseFloat(e.target.value);
                         setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, newValue);
                         updateFullValue({ ...values, quotationClientDetailCreateDto: values.quotationClientDetailCreateDto }, setFieldValue);
@@ -472,15 +508,15 @@ const updateFullValue = (values, setFieldValue) => {
                   </div>
                 </div>
               
-                <button type="button" onClick={() => remove(index)}>
+                <button type="button" className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto" onClick={() => remove(index)}>
                   Eliminar Producto
                 </button>
               </div>
             ))}
-            
+            <br></br>
        
             <button
-              type="button"
+              type="button" className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto"
               onClick={() => push({ ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0 })}
             >
               Agregar Producto
