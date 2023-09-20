@@ -30,7 +30,7 @@ function ChangeStatusQuotation ({ quotation }) {
 
   return (
     <>
-<p className="text-lg">Para cambiar de proceso esta orden de producción debes darle click en <b>aceptar</b>.</p>
+<p className="text-lg">Para cambiar el estado de esta Cotización debes darle click en <b>aceptar</b>.</p>
       <div className="px-6 py-4 grid grid-cols-2  place-content-center" >
       <button type="button" className="focus:outline-none text-white bg-custom-blue hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Aceptar</button>
         <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
@@ -43,7 +43,7 @@ export function ChangeStatusButtonQuotation ({ quotation }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
     dispatch(setWidth({ width: '800px' }))
-    dispatch(openModal({ title: 'Cambiar proceso' }))
+    dispatch(openModal({ title: 'Cambiar Estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: quotation }))
   }

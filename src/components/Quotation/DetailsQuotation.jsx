@@ -11,7 +11,7 @@ function DetailsQuotation() {
   };
 
   const { detailsData } = useSelector((state) => state.modal);
-  const { orderDate, deliverDate, userId, clientId, quotationStatus, typeServiceId, products = [] } = detailsData;
+  const { orderDate, deliverDate, userId, clientId, quotationStatus, fullValue, productId } = detailsData;
 
   return (
     <>
@@ -28,6 +28,9 @@ function DetailsQuotation() {
           </p>
           <p>
             <b>Cliente:</b> {clientId}
+          </p>
+          <p>
+            <b>Valor Total:  $</b> {fullValue}
           </p>
           <p>
             <b>Estado de la cotización:</b>{' '}
@@ -49,19 +52,11 @@ function DetailsQuotation() {
           </p>
         </div>
         <div className="w-4/4">
-          <label htmlFor="typeServiceId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-            Tipo de servicio:
-          </label>
-          <p>{typeServiceId}</p>
-        </div>
-        <div className="w-4/4">
           <label htmlFor="products" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
             Productos:
           </label>
           <ul>
-            {products.map((product, index) => (
-              <li key={index}>{product.name}</li>
-            ))}
+            {productId}
           </ul>
         </div>
       </div>

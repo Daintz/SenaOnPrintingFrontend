@@ -14,7 +14,7 @@ const Reportquotation = ({ dataApi }) => {
     { name: 'Fecha de Orden', key: 'orderDate' },
     { name: 'Fecha de Entrega', key: 'deliverDate' },
     { name: 'Cliente', key: 'clientId' },
-    { name: 'Tipo De Servicio', key: 'typeServiceId' },
+    { name: 'Valor Total', key: 'fullValue' },
 
     /*  { name: 'Producto', key: 'productId' },
      { name: 'Cantidad de producto', key: 'productQuantity' },
@@ -31,7 +31,7 @@ const Reportquotation = ({ dataApi }) => {
       orderDate: quotation.orderDate,
       deliverDate: quotation.deliverDate,
       clientId: quotation.clientId,
-      typeServiceId: quotation.typeServiceId,
+      fullValue: quotation.fullValue,
       quotationStatus: quotation.quotationStatus
     }))
     : []
