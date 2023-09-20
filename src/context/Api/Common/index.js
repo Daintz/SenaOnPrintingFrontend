@@ -77,7 +77,7 @@ export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseTy
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 export const SupplyApi = commonEndpointsApi('Supply', 'supply')
-export const SupplyDetailsApi = commonEndpointsApi('SupplyDetails', 'supplyDetails')
+export const BuySupplyApi = commonEndpointsApi('BuySupplies', 'buySupplies')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -282,4 +282,4 @@ export const {
   usePostMutation: usePostSupplyDetailsMutation,
   usePutByIdMutation: usePutSupplyDetailsByIdMutation,
   useDeleteByIdMutation: useDeleteSupplyDetailsByIdMutation
-} = SupplyDetailsApi
+} = BuySupplyApi
