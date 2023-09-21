@@ -57,7 +57,7 @@ function CreateOrderProduction() {
   const [impositionPlanchOptions, setImpositionPlanchOptions] = useState([])
   const [machineOptions, setMachineOptions] = useState([])
   const [applyBleed, setApplyBleed] = useState('no');
-  const [materialReception, setMaterialReception] = useState('');
+  const [materialReception, setMaterialReception] = useState('USB');
   const [otherMaterial, setOtherMaterial] = useState('');
 
   const [createOrderProduction, { error, isLoading }] = usePostOrderProductionMutation()
@@ -161,15 +161,24 @@ function CreateOrderProduction() {
     console.log(orderProduction)
 
     setProductList((prevList) => {
-      const newList = [...prevList, orderProduction];
-
-      console.log('Lista después de agregar el producto:', newList);
-      if (newList.length == detailsData.quotationClientDetails.length) {
-
-        handleSubmit(newList)
-
+      // Verificar si el producto ya existe en la lista
+      const existingProduct = prevList.find((product) => product.quotationClientDetailId === productoActivo);
+  
+      if (!existingProduct) {
+        // Si no existe, agrégalo a la lista
+        const newList = [...prevList, orderProduction];
+  
+        console.log('Lista después de agregar el producto:', newList);
+  
+        if (newList.length === detailsData.quotationClientDetails.length) {
+          handleSubmit(newList);
+        }
+  
+        return newList;
+      } else {
+        // Si ya existe, simplemente retorna la lista existente sin cambios
+        return prevList;
       }
-      return newList;
     });
     setDatosGuardados(true);
     setPreviewImage1(null)
@@ -330,7 +339,6 @@ function CreateOrderProduction() {
                       onChange={(e) => setMaterialReception(e.target.value)}
                       value={materialReception}
                     >
-                      <option value="0">Selecciona</option>
                       <option value="USB">USB</option>
                       <option value="Gmail">Gmail</option>
                       <option value="Drive">Drive</option>
@@ -483,7 +491,7 @@ function CreateOrderProduction() {
                         id="typePoint"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                       >
-                        <option value="0">Seleccione</option>
+                        <option value="">Seleccione</option>
                         <option value="Punto redondo">Punto redondo</option>
                         <option value="Punto elíptico">Punto elíptico</option>
                       </Field>
