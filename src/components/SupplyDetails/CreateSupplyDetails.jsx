@@ -3,7 +3,8 @@ import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
-import { Link } from 'react-router-dom'
+import { usePostSupplyDetailsMutation} from '../../context/Api/Common'
+import { useNavigate, Link } from 'react-router-dom'
 
 const validationSchema = Yup.object().shape({
 })
@@ -82,15 +83,45 @@ const initialValues = {
 
 };
 
-const onSubmit = (values) => {
-  console.log(values);
-};
+
 
 const CreateSupplyDetails = () => {
   const [providerOptions, setProviderOptions] = useState([])
   const [warehouseOptions, setWarehouseOptions] = useState([])
   const [unitMeasureOptions, setUnitMeasureOptions] = useState([])
   const [supplyOptions, setSupplyOptions] = useState([])
+  const [createSupplyDetail, { error, isLoading }] = usePostSupplyDetailsMutation()
+  const navigate = useNavigate();
+
+
+  const onSubmit = async (values) => {
+    const formData = new FormData();
+
+    formData.append('description', values.description);
+    formData.append('providerId', values.providerId);
+    formData.append('entryDate', values.entryDate);
+
+    values.buySuppliesDetails.forEach((detail, index) => {
+      formData.append(`buySuppliesDetails[${index}].supplyId`, detail.supplyId);
+      formData.append(`buySuppliesDetails[${index}].supplyCost`, detail.supplyCost);
+      formData.append(`buySuppliesDetails[${index}].supplyQuantity`, detail.supplyQuantity);
+      formData.append(`buySuppliesDetails[${index}].expirationDate`, detail.expirationDate);
+      formData.append(`buySuppliesDetails[${index}].warehouseId`, detail.warehouseId);
+      formData.append(`buySuppliesDetails[${index}].unitMeasuresId`, detail.unitMeasuresId);
+      formData.append(`buySuppliesDetails[${index}].securityFileInfo`, detail.securityFileInfo);
+    });
+    if (isLoading) return <Spinner />
+
+    const response = clientAxios.post('/buy_supplies', formData).then((response) => {
+      return response.data
+    }).then((resp) => {
+      //alert(resp.message)
+      toast.success('Compra creada con exito')
+      navigate('/BuySupplies');
+    }).catch((err) => {
+      toast.error('Error al crear la compra')
+    })
+  };
 
   const fetchOptions = () => {
     getProviders().then((options) => {
@@ -124,7 +155,7 @@ const CreateSupplyDetails = () => {
             supplyQuantity: 0,
             expirationDate: '',
             warehouseId: 0,
-            securityFileInfo: '',
+            securityFileInfo: null,
             unitMeasuresId: 0,
           },
         ],
@@ -136,28 +167,34 @@ const CreateSupplyDetails = () => {
         <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
           <div className="bg-white sm:rounded-lg overflow-hidden">
             <Form className="max-w-3xl mx-auto">
-              <div className="mb-4">
-                <label htmlFor="entryDate" className="block font-medium mb-1">
-                  Fecha de la Compra
-                </label>
-                <Field
-                  name="entryDate"
-                  type="date"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
-                />
+              <div className="flex mb-4">
+                <div className="w-1/2 mr-2">
+                  <label htmlFor="entryDate" className="block font-medium mb-1">
+                    Fecha de la Compra
+                  </label>
+                  <div>
+                    <Field
+                      name="entryDate"
+                      type="date"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                    />
+                  </div>
+                </div>
+                <div className="w-1/2 ml-2">
+                  <label htmlFor="providerId" className="block font-medium mb-1">
+                    Proveedor
+                  </label>
+                  <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+                    <option value="0">Seleccione un proveedor</option>
+                    {providerOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Field>
+                </div>
               </div>
               <div className="mb-4">
-                <label htmlFor="providerId" className="block font-medium mb-1">
-                  Proveedor
-                </label>
-                <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
-                  <option value="0">Seleccione un proveedor</option>
-                  {providerOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </Field>
               </div>
               <div className="mb-4">
                 <label htmlFor="description" className="block font-medium mb-1">
@@ -198,12 +235,12 @@ const CreateSupplyDetails = () => {
                           <label htmlFor={`buySuppliesDetails.${index}.supplyId`} className="block font-medium mb-1">
                             Insumo
                           </label>
-                          <Field name={`buySuppliesDetails.${index}.supplyId`} as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5" onChange={(event) => {
-                            const supplyId = event.target.value;
-                            const supply = supplyOptions.find((option) => option.value === supplyId);
-                            setFieldValue(`buySuppliesDetails.${index}.unitMeasures`, supply?.unitMeasures || []);
-                          }}>
-                            <option value="">Seleccione un insumo</option>
+                          <Field
+                            name={`buySuppliesDetails.${index}.supplyId`}
+                            as="select"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          >
+                            <option value="0">Seleccione un insumo</option>
                             {supplyOptions.map((option) => (
                               <option key={option.value} value={option.value}>
                                 {option.label}
@@ -276,9 +313,13 @@ const CreateSupplyDetails = () => {
                           <label htmlFor={`buySuppliesDetails.${index}.securityFileInfo`} className="block font-medium mb-1">
                             Ficha de Seguridad
                           </label>
-                          <Field
-                            name={`buySuppliesDetails.${index}.securityFileInfo`}
+                          <input
                             type="file"
+                            onChange={(event) => {
+                              const file = event.target.files[0];
+                              setFieldValue(`buySuppliesDetails.${index}.securityFileInfo`, file);
+                            }}
+                            multiple={false}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
                           />
                         </div>

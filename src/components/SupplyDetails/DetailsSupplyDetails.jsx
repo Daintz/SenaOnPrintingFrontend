@@ -5,10 +5,14 @@ import { BsQrCode } from "react-icons/bs";
 import { useState } from 'react'
 
 const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
-  const date = new Date(dateString);
-  const formattedDate = date.toLocaleDateString(undefined, format);
+  if (dateString != null){
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString(undefined, format);
 
-  return formattedDate;
+    return formattedDate;
+  }else {
+    return "N/A"
+  }
 };
 
 function DetailsSupplyDetails () {
