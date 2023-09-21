@@ -7,11 +7,12 @@ function DetailsQuotation() {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString(undefined, options);
+    
     return formattedDate;
   };
 
   const { detailsData } = useSelector((state) => state.modal);
-  const { orderDate, deliverDate, userId, clientId, quotationStatus, fullValue, productId } = detailsData;
+  const { orderDate, deliverDate, userId, clientId, quotationStatus, fullValue, productId, quotationClientDetails } = detailsData;
 
   return (
     <>
@@ -56,7 +57,11 @@ function DetailsQuotation() {
             Productos:
           </label>
           <ul>
-            {productId}
+            {quotationClientDetails.map((detail, index) => (
+              <li key={index}>
+                {detail.product.name}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

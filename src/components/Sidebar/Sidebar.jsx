@@ -282,7 +282,7 @@ function Sidebar () {
                   </li>
                   <li>
                     <Link
-                      to={'/supplyDetails'}
+                      to={'/buySupplies'}
                       className={`flex items-center p-3 text-gray-900 hover:text-white rounded-lg hover:bg-custom-blue ${path === '/supplyDetails' ? 'bg-custom-blue text-white' : null}`}
                     >
 
