@@ -35,6 +35,7 @@ import TypeServices from '../pages/TypeServices/TypeServices'
 import SupplyPictogrmas from '../pages/SupplyPictograms/SupplyPictograms'
 import QuotationProviders from '../pages/QuotationProviders/QuotationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
+import CreateSupplyDetails from '../components/SupplyDetails/CreateSupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
 import QuotationClientApproved from '../pages/ListQuotationClientApproved/QuotationClientApproved'
 import Quotation from '../pages/Quotation/Quotation'
@@ -253,6 +254,14 @@ const router = createBrowserRouter(
         }
       />
 
+      <Route
+        path="BuySupplies/create"
+        element={
+          <ProtectedRoute>
+            <CreateSupplyDetails />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="product"

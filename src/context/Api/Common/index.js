@@ -77,7 +77,7 @@ export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseTy
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 export const SupplyApi = commonEndpointsApi('Supply', 'supply')
-export const BuySupplyApi = commonEndpointsApi('BuySupplies', 'buySupplies')
+export const BuySupplyApi = commonEndpointsApi('BuySupply', 'buy_supplies')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
