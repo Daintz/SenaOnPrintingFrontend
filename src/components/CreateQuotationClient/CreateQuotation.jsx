@@ -93,7 +93,7 @@ const getProduct = () => {
           
         }))
         resolve(Product)
-        console.log(Product)
+       /*  console.log(Product) */
       },
       (error) => {
         reject(error)
@@ -183,7 +183,7 @@ const handleSubmit = async (values) => {
       console.error('Error en la creación de la cotización (client):', clientResponse.error);
       return;
     } 
-    console.log(values)
+   /*  console.log(values) */
 
     // Obtén el ID de la cotización creada
  
@@ -265,7 +265,7 @@ useEffect(() => {
   };
 }, []);
 
-console.log(newCode)
+/* console.log(newCode) */
   return (
     <Formik
       enableReinitialize={true}

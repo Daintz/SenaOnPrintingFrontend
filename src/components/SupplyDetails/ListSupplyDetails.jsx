@@ -10,11 +10,16 @@ import { useReactToPrint } from 'react-to-print'
 import ReportSupplyDetails from './ReportSupplyDetails'
 import clientAxios from '../../config/clientAxios'
 
+const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleDateString(undefined, format);
+
+  return formattedDate;
+};
+
 const ListSupplyDetails = () => {
   const [loading, setLoading] = useState(true)
-  const [dataWarehause, setDataWarehause] = useState([])
   const [dataProvider, setDataProvider] = useState([])
-
   const tablePDF = useRef()
 
   const generatePDF = useReactToPrint({
@@ -28,15 +33,20 @@ const ListSupplyDetails = () => {
   const { isAction } = useSelector((state) => state.modal)
 
   const columns = useMemo(() => [
-    // { Header: 'Lote', accessor: 'id' },
+    { Header: 'Lote', accessor: 'id' },
     { Header: 'Descripción', accessor: 'description' },
     // { Header: 'Costo insumo', accessor: 'averageCost' },
-    { Header: 'Fecha de entrada', accessor: 'entryDate' },
-    { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
+    { Header: 'Fecha de compra', accessor: 'entryDate', Cell: ({ value }) => (formatDate(value))},
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
-    { Header: 'Insumo', accessor: 'supplyId' },
-    {Header: 'Proveedor',accessor: 'providerId'},
-    {Header: 'Bodega', accessor: 'warehouseId'},
+    {
+      Header: 'Proveedor',
+      accessor: 'provider.nameCompany'
+    },
+    {
+      Header: 'Costo Total',
+      accessor: 'buySuppliesDetails',
+      Cell: ({ value }) => (`$ ${value.map((detail) => ( detail.supplyCost*detail.supplyQuantity )).reduce((a, b) => a + b, 0).toLocaleString('en-US')}`)
+    },
     {
       Header: 'Estado',
       accessor: 'statedAt',

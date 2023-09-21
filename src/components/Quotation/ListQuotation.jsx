@@ -35,7 +35,7 @@ const ListQuotation = () => {
     refetch1()
     refetch2()
   }, [isAction])
-console.log(dataApi)
+/* console.log(dataApi) */
   const columns = useMemo(
     () => [
       { Header: 'Código', accessor: 'id' },

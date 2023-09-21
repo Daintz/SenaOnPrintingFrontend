@@ -152,7 +152,6 @@ function CreateQuotationClient () {
               />
                <ErrorMessage
                 name="orderDate"
-       
                 component="div"
                 className="text-red-500"
               />

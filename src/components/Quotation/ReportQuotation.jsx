@@ -23,7 +23,7 @@ const Reportquotation = ({ dataApi }) => {
     { name: 'Estado Cotizacion', key: 'quotationStatus' }
   ]
 
-  console.log(dataApi)
+/*   console.log(dataApi) */
 
   const rows = dataApi
     ? dataApi.map(quotation => ({
@@ -38,7 +38,7 @@ const Reportquotation = ({ dataApi }) => {
 
   const currentDate = new Date(Date.now())
   const formattedDate = format(currentDate, 'dddd D [de] MMMM [de] YYYY', 'es')
-  console.log(formattedDate)
+/*   console.log(formattedDate) */
 
   return (
     <>
