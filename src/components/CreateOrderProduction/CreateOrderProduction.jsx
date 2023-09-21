@@ -49,8 +49,8 @@ const validationSchema = Yup.object().shape({
 function CreateOrderProduction() {
   const usenavigate = useNavigate()
   // const { data: dataApi, refetch } = useGetAllOrderProductionsQuery()
-  // const { isAction
-  // } = useSelector((state) => state.modal)
+  const { isAction
+  } = useSelector((state) => state.modal)
   const [productoActivo, setProductoActivo] = useState(null);
   const [productList, setProductList] = useState([]);
   const dispatch = useDispatch()
@@ -67,13 +67,28 @@ function CreateOrderProduction() {
   const [selectedImage2, setSelectedImage2] = useState(null);
   const [previewImage2, setPreviewImage2] = useState(null);
 
-  const { detailsData } = useSelector((state) => state.modal)
+  // const { detailsData } = useSelector((state) => state.modal)
   // console.log(detailsData.id)
+
   const userId = localStorage.getItem('UserId');
+  const storedData = JSON.parse(localStorage.getItem('orderDetails'));
+  // console.log('Datos almacenados en localStorage:', storedData.deliverDate);
+  // const detailsData = storedData ? { ...storedData } : {};
+
+
+  const modalData = useSelector((state) => state.modal);
+
+// Combina los datos de localStorage y Redux/Context si están disponibles
+const detailsData = {
+  ...(storedData || {}),
+  ...(modalData || {}),
+};
   // console.log(userId)
-  console.log(materialReception)
+  // console.log(materialReception)
   //Formato de fecha
   const originalDateStr = detailsData.deliverDate;
+
+  // console.log(originalDateStr)
   const originalDate = parseISO(originalDateStr);
   const formattedDate = format(originalDate, 'dd \'de\' MMM yyyy', { locale: es });
 
@@ -136,7 +151,7 @@ function CreateOrderProduction() {
 
     const nuevoProductoActivo = detailsData.quotationClientDetails[indiceSiguiente].id;
 
-    console.log(productoActivo)
+    // console.log(productoActivo)
     const orderProduction = {
       quotationClientDetailId: productoActivo,
       userId: parseInt(userId),
@@ -158,7 +173,7 @@ function CreateOrderProduction() {
 
     setProductoActivo(nuevoProductoActivo);
 
-    console.log(orderProduction)
+    // console.log(orderProduction)
 
     setProductList((prevList) => {
       // Verificar si el producto ya existe en la lista
@@ -168,7 +183,7 @@ function CreateOrderProduction() {
         // Si no existe, agrégalo a la lista
         const newList = [...prevList, orderProduction];
   
-        console.log('Lista después de agregar el producto:', newList);
+        // console.log('Lista después de agregar el producto:', newList);
   
         if (newList.length === detailsData.quotationClientDetails.length) {
           handleSubmit(newList);
@@ -209,7 +224,7 @@ function CreateOrderProduction() {
       formData.append('program', value.program);
       formData.append('typePoint', value.typePoint);
       formData.append('schemeInfo', value.schemeInfo);
-      console.log(formData)
+      // console.log(formData)
       await createOrderProduction(formData);
 
     }
@@ -663,14 +678,15 @@ function CreateOrderProduction() {
 
 export function CreateButtomOrderProduction({ quotationClient }) {
 
-  console.log(quotationClient)
+  // console.log(quotationClient)
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
-    // console.log(`ID del orderProduction: ${orderProduction}`);
-    // dispatch(setWidth({ width: 'w-[1000]' }))
-    // dispatch(openModal({ title: 'Crear orden de producción' }))
-    // dispatch(setAction({ action: 'creating' }))
+    // console.log(quotationClient)
+    localStorage.setItem('orderDetails', JSON.stringify(quotationClient));
+
+    // Verifica si los datos se han guardado correctamente
+
     dispatch(setDetailsData({ detailsData: quotationClient }))
   }
   // ?
