@@ -10,6 +10,13 @@ import { useReactToPrint } from 'react-to-print'
 import ReportSupplyDetails from './ReportSupplyDetails'
 import clientAxios from '../../config/clientAxios'
 
+const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleDateString(undefined, format);
+
+  return formattedDate;
+};
+
 const ListSupplyDetails = () => {
   const [loading, setLoading] = useState(true)
   const [dataProvider, setDataProvider] = useState([])
@@ -29,15 +36,16 @@ const ListSupplyDetails = () => {
     { Header: 'Lote', accessor: 'id' },
     { Header: 'Descripción', accessor: 'description' },
     // { Header: 'Costo insumo', accessor: 'averageCost' },
-    { Header: 'Fecha de entrada', accessor: 'entryDate' },
+    { Header: 'Fecha de compra', accessor: 'entryDate', Cell: ({ value }) => (formatDate(value))},
     // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
     {
       Header: 'Proveedor',
-      accessor: 'providerId',
-      Cell: ({ value }) => {
-        const provider = dataProvider.find(provider => provider.id === value)
-        return provider ? provider.nameCompany : ''
-      }
+      accessor: 'provider.nameCompany'
+    },
+    {
+      Header: 'Costo Total',
+      accessor: 'buySuppliesDetails',
+      Cell: ({ value }) => (`$ ${value.map((detail) => ( detail.supplyCost*detail.supplyQuantity )).reduce((a, b) => a + b, 0).toLocaleString('en-US')}`)
     },
     {
       Header: 'Estado',
