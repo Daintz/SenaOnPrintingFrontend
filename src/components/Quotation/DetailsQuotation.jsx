@@ -12,7 +12,9 @@ function DetailsQuotation() {
   };
 
   const { detailsData } = useSelector((state) => state.modal);
-  const { orderDate, deliverDate, userId, clientId, quotationStatus, fullValue, productId, quotationClientDetails } = detailsData;
+  const { orderDate, deliverDate, userId, clientId, quotationStatus, fullValue, productId, quotationClientDetails, client, user } = detailsData;
+
+console.log(detailsData)
 
   return (
     <>
@@ -25,10 +27,10 @@ function DetailsQuotation() {
             <b>Fecha de entrega:</b> {formatDate(deliverDate)}
           </p>
           <p>
-            <b>Usuario:</b> {userId}
+            <b>Cotizador:</b> {user.names}
           </p>
           <p>
-            <b>Cliente:</b> {clientId}
+            <b>Cliente:</b> {client.name}
           </p>
           <p>
             <b>Valor Total:  $</b> {fullValue}
