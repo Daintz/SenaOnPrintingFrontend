@@ -4,12 +4,21 @@ import { GrView } from 'react-icons/gr'
 import { useGetProductByIdQuery } from '../../context/Api/Common'
 import { jsPDF } from 'jspdf';
 import { BsFillFileEarmarkPdfFill } from 'react-icons/bs'
+import { useState, useEffect } from 'react'
 function DetailsOrderProduction () {
   const { detailsData } = useSelector((state) => state.modal);
   const { productId } = detailsData;
-
+console.log('id ',productId)
   // Manejo de datos del producto
   const { data: productInfo, isLoading, isError } = useGetProductByIdQuery(productId);
+  useEffect(() => {
+    // Verifica si la carga de datos ha finalizado antes de realizar cualquier acción adicional
+    if (!isLoading && !isError && productInfo) {
+      // Puedes realizar acciones adicionales aquí una vez que los datos estén disponibles
+      console.log('Datos cargados:', productInfo);
+    }
+  }, [isLoading, isError, productInfo]);
+  console.log('info ',productInfo)
   const propertyMapping = {
     "name": "Nombre",
     "typeProduct": "Tipo de producto",
@@ -111,7 +120,7 @@ console.log(filteredProductInfo)
         'user',
         'productId',
         'product',
-        
+        'Costo'
       ].includes(property) &&
       value !== null &&
       value !== undefined && 
@@ -125,7 +134,7 @@ console.log(filteredProductInfo)
         const formattedDate = formatDate(value);
         doc.text(`${translatedProperty}: ${formattedDate}`, 20, yPosition);
       } else if (property === 'Observaciones' && value) {
-        doc.text('Observaciones:', 20, yPosition);
+        doc.text('Observaciones del producto:', 20, yPosition);
         yPosition += 10;
       
         const columnWidth = 75; // Ancho de la columna para observaciones
@@ -148,7 +157,21 @@ console.log(filteredProductInfo)
   // Contenido de la segunda columna
   yPosition = 30;
   const secondColumnX = 100;
-
+  doc.text('Insumos:', secondColumnX, yPosition);
+  yPosition += 10;
+  
+  // Verifica si supplies está definido antes de acceder a él
+  if (productInfo.supplies && productInfo.supplies.length > 0) {
+    // Lista de insumos en la segunda columna
+    doc.setFontSize(12);
+    productInfo.supplies.forEach((supplyItem, index) => {
+      if (supplyItem.supply && supplyItem.supply.name) {
+        doc.text(`-${supplyItem.supply.name}`, secondColumnX + 3, yPosition);
+        yPosition += 10;
+      }
+      // Puedes agregar más propiedades de insumos según sea necesario
+    });
+  }
   Object.entries(detailsData || {}).forEach(([property, value]) => {
     // Utiliza el objeto propertyMapping para traducir la propiedad
     const translatedProperty = propertyMapping[property] || property;
@@ -173,7 +196,9 @@ console.log(filteredProductInfo)
       ].includes(property) &&
       value !== null &&
       value !== undefined
-    ) {
+    ) 
+    
+    {
       if (typeof value === 'boolean') {
         // Formatea propiedades booleanas
         doc.text(`${translatedProperty}: ${value ? 'Sí' : 'No'}`, secondColumnX, yPosition);
@@ -217,7 +242,7 @@ console.log(filteredProductInfo)
         const fontSize = 12; // Tamaño de fuente
       
         if (value) {
-          doc.text('Observaciones:', secondColumnX, yPosition);
+          doc.text('Observaciones de orden:', secondColumnX, yPosition);
           yPosition += fontSize;
       
           // Divide las observaciones en líneas que se ajusten al ancho de la columna
@@ -264,13 +289,36 @@ console.log(filteredProductInfo)
     <ul>
   {firstColumnProperties.map(([property, value]) => (
     // Omitir las propiedades 'name' y 'cost' en la primera columna
-    (property !== 'name' && property !== 'id' && property !== 'statedAt') && (
+    (property !== 'name' && property !== 'id' && property !== 'statedAt' && property !== 'Costo') && (
       <li key={property}>
     <strong>{property}:</strong> {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : value}
       </li>
     )
   ))}
+    <div>
+      {isLoading ? (
+        <p>Cargando...</p>
+      ) : isError ? (
+        <p>Error al cargar los datos</p>
+      ) : productInfo ? (
+        <div>
+          {productInfo.supplies && productInfo.supplies.length > 0 && (
+            <div>
+              <h2><b>Insumos:</b></h2>
+              <ul>
+                {productInfo.supplies.map((supplyItem, index) => (
+                  <li key={index}>{supplyItem.supply.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      ) : null}
+    </div>
+  
+
 </ul>
+
     </div>
     <div className="w-2/4">
     <p><b>Pefil de color:</b> {detailsData.colorProfile}</p>
