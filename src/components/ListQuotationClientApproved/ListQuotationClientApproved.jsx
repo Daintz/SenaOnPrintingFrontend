@@ -21,7 +21,7 @@ const ListQuotationClientApproved = () => {
     refetch()
   }, [isAction])
   // ?
-console.log(dataApi)
+/* console.log(dataApi) */
   const columns = useMemo(() => [
     { Header: 'Codigo', accessor: 'code' },
     {
