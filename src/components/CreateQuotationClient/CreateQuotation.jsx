@@ -110,10 +110,6 @@ function CreateQuotation({}) {
   const [userOptions, setUserOptions] = useState([])
   const [typeServiceOptions, setTypeServiceOptions] = useState([])
   const [productOptions, setProductOptions] = useState([])
-  const [isOpen, setIsOpen] = useState(false);
-  const [discount, setDiscount] = useState('');
-  const [tax, setTax] = useState('');
-  const [invoiceNumber, setInvoiceNumber] = useState(1);
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentDate1, setCurrentDate1] = useState(new Date().toISOString().split('T')[0]);
   const [lastCode, setLastCode] = useState(null);
@@ -125,6 +121,8 @@ function CreateQuotation({}) {
     quotationClientDetailCreateDto: [{ ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0, StatedAt: true }],
   });
   const [newCode, setNewCode] = useState(null);
+  const [priceManuallyModified, setPriceManuallyModified] = useState(Array(values.quotationClientDetailCreateDto.length).fill(false));
+
 
   useEffect(() => {
     // Llamar a la acción para obtener el último código
@@ -209,20 +207,24 @@ const handleProductChange = (e, index, values, setFieldValue) => {
   if (selectedProduct) {
     // Copia el array actual de detalles de cotización
     const newQuotationDetails = [...values.quotationClientDetailCreateDto];
-    // Actualiza el valor de ProductId en el elemento específico del array
-    newQuotationDetails[index].ProductId = selectedProductId;
-    // Actualiza el valor de Cost en el elemento específico del array
-    newQuotationDetails[index].Cost = selectedProduct.Cost;
 
-    // Actualiza los valores en el formulario usando setFieldValue
-    setFieldValue(`quotationClientDetailCreateDto[${index}].ProductId`, selectedProductId);
-    setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, selectedProduct.Cost);
+    // Actualiza el valor de ProductId en la fila específica
+    newQuotationDetails[index].ProductId = selectedProductId;
+
+    // Verifica si el campo "Precio Unitario X" ha sido modificado manualmente
+    if (!priceManuallyModified[index]) {
+      // Si no ha sido modificado manualmente, actualiza el costo
+      newQuotationDetails[index].Cost = selectedProduct.Cost;
+      // Actualiza los valores en el formulario usando setFieldValue solo para la fila específica
+      setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, selectedProduct.Cost);
+    }
 
     // Actualiza el estado con el nuevo array de detalles de cotización
     setQuotationClientDetailCreateDto(newQuotationDetails);
     setSelectedProductCost(selectedProduct.Cost);
   }
 };
+
 
 
 const updateFullValue = (values, setFieldValue) => {
@@ -256,7 +258,6 @@ useEffect(() => {
   // Configura un intervalo para simular el clic cada segundo
   const intervalId = setInterval(() => {
     simulateClickQuantity();
-    simulateClickCost();
   }, 0);
 
   // Limpia el intervalo cuando el componente se desmonta
@@ -278,7 +279,7 @@ useEffect(() => {
         quotationStatus: 1,
         FullValue: 0,
         StatedAt: true,
-        quotationClientDetailCreateDto: [{ProductId: 0, Quantity: 0, Cost: 0, TypeServiceId: 0, StatedAt: true}], 
+        quotationClientDetailCreateDto: [], 
       }}
       onSubmit={(values) => {
         handleSubmit(values);
@@ -468,24 +469,16 @@ useEffect(() => {
                     </Field>
                   </div>
                   <div className="w-4/4">
-                    <label htmlFor={`quotationClientDetailCreateDto[${index}].Cost`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                      Precio Unitario {index + 1}
-                    </label>
-                    <Field
-                      type="number"
-                      name={`quotationClientDetailCreateDto[${index}].Cost`}
-                      id={`quotationClientDetailCreateDto[${index}].Cost`}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-                      value={selectedProductCost}
-                      onClick={(e) => {
-                        const newValue = parseFloat(e.target.value);
-                        setFieldValue(`quotationClientDetailCreateDto[${index}].Cost`, newValue);
-                        updateFullValue({ ...values, quotationClientDetailCreateDto: values.quotationClientDetailCreateDto }, setFieldValue);
-                      }}
-                    >
-                     
-                    </Field>
-                  </div>
+              <label htmlFor={`quotationClientDetailCreateDto[${index}].Cost`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                Precio Unitario {index + 1}
+              </label>
+              <Field
+                type="number"
+                name={`quotationClientDetailCreateDto[${index}].Cost`}
+                id={`quotationClientDetailCreateDto[${index}].Cost`}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              />
+            </div>
                   <div className="w-4/4">
                     <label htmlFor={`quotationClientDetailCreateDto[${index}].TypeServiceId`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                       Tipo de servicio {index + 1}
