@@ -45,7 +45,12 @@ function DetailsSupplyDetails () {
       {/* <p><b>Costo insumo:</b> {supplyCost}</p> */}
       <p><b>Fecha de entrada:</b> {entryDate}</p>
       <p><b>Fecha de caducidad:</b> {expirationDate}</p>
-      <p><b>Insumo:</b> {supplyId}</p>
+      <p><b>Insumo:</b> </p>
+      <p><b>Costo del Insumo:</b> {supplyId}</p>
+      <p><b>Cantidad del Insumo:</b> {supplyId}</p>
+      <p><b>Archivo de Seguridad:</b> {supplyId}</p>
+      <p><b>Informacion del Archivo de Seguridad:</b> {supplyId}</p>
+      <p><b>Unidad de Medida:</b> {supplyId}</p>
       <p>
       <b>Proveedor: </b>
       {dataProvider.map((provider) => {
