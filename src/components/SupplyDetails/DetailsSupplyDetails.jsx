@@ -3,6 +3,7 @@ import { openModal, setAction, setDetailsData, setWidth } from '../../context/Sl
 import { GrView } from 'react-icons/gr'
 import { BsQrCode } from "react-icons/bs";
 import { useState } from 'react'
+import QRCode from 'react-qr-code'
 
 const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
   if (dateString != null){
@@ -14,6 +15,10 @@ const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 
     return "N/A"
   }
 };
+
+function openPDF(pdfUrl) {
+  window.open(pdfUrl, '_blank');
+}
 
 function DetailsSupplyDetails () {
   const [loading, setLoading] = useState(false)
@@ -61,7 +66,10 @@ function DetailsSupplyDetails () {
             </tr>
           </thead>
           <tbody>
-            {buySuppliesDetails.map((detail, index) => (
+            {buySuppliesDetails.map((detail, index) => {
+              
+              const pdfUrl = `https://localhost:7262/api/BuySuppliesDetail/file/${detail.id}`
+              return (
               <tr key={index} className='hover:bg-stone-100'>
                 <td className='border border-slate-400 text-center'>{detail.supply.name}</td>
                 <td className='border border-slate-400 text-center'>{detail.warehouse.ubication}</td>
@@ -71,10 +79,12 @@ function DetailsSupplyDetails () {
                 <td className='border border-slate-400 text-center'>{detail.supplyQuantity}</td>
                 <td className='border border-slate-400 text-center'>$ {(detail.supplyCost*detail.supplyQuantity).toLocaleString('en-US')}</td>
                 <td className='grid justify-items-center'>
-                  <BsQrCode className="opacity-60 h-5 w-5 mr-2" />
+                  <QRCode value={pdfUrl} className="opacity-60 h-20 w-20 mr-1" />
+                  <button onClick={() => openPDF(pdfUrl)}>Open PDF</button>
                 </td>
               </tr>
-            ))}
+              )
+            })}
             <tr className='text-center'>
               <td colSpan={7} className='border border-slate-400'>
                 <b className='pl-2'>Valor Total: </b>

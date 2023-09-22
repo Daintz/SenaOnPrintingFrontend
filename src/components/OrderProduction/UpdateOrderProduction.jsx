@@ -379,10 +379,15 @@ export function UpdateButtomOrderProduction({ orderProduction }) {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch();
   const handleEdit = data => {
+    if (orderProduction.orderStatus !== 2) {
+      // Puedes mostrar una notificación o realizar alguna acción en caso de que no cumpla la condición
+      toast.error('No puedes editar esta orden porque ya se encuentra en producción o terminado');
+    } else {
     dispatch(setWidth({ width: "-[1500px]" }));
     dispatch(openModal({ title: "Editar orden de producción" }));
     dispatch(setAction({ action: "editing" }));
     dispatch(openEditing({ editingData: data }));
+    }
   };
   // ?
 
