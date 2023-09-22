@@ -1,12 +1,13 @@
 import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
-import Listfinish from '../../components/Finish/ListFinish'
+
 import Updatefinish from '../../components/Finish/UpdateFinish'
 import Createfinish from '../../components/Finish/CreateFinish'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
 
 import ChangeStateFinish from '../../components/Finish/ChangeStateFinish'
 import DetailsFinish from '../../components/Finish/detailsFinish'
+import ListFinish from '../../components/Finish/ListFinish'
 
 const finish = () => {
   // ? Esta linea de codigo me trae el estado 'isEditing' de src\context\Slices\Modal\ModalSlice.js que esto seria los estados del componente modal
@@ -16,7 +17,7 @@ const finish = () => {
     <div className="border-gray-200 border-dashed">
       <div className="overflow-x-auto">
         <ErrorBoundary>
-          <Listfinish />
+          <ListFinish />
         </ErrorBoundary>
         {/* Esta logica del modal esta acá para poder ser reutilizable */}
         <NewModal>
