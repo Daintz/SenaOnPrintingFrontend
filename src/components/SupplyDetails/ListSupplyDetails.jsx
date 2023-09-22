@@ -11,10 +11,14 @@ import ReportSupplyDetails from './ReportSupplyDetails'
 import clientAxios from '../../config/clientAxios'
 
 const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
+  if (dateString != null){
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString(undefined, format);
 
   return formattedDate;
+}else {
+  return "Sin fecha"
+}
 };
 
 const ListSupplyDetails = () => {
