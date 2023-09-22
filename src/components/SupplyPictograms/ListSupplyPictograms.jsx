@@ -84,7 +84,9 @@ const ListSupplyPictograms = () => {
         </div>
 
         <div className="flex flex-wrap justify-center -mx-4">
+          {console.log(dataApi)}
           {dataApi.map(supplyPictogram => (
+            
             <div
               key={supplyPictogram.id}
               className="w-1/4 max-w-sm p-4 mx-4 my-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:border-gray-300"
