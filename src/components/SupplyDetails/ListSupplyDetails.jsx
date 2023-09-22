@@ -49,7 +49,14 @@ const ListSupplyDetails = () => {
     {
       Header: 'Costo Total',
       accessor: 'buySuppliesDetails',
-      Cell: ({ value }) => (`$ ${value.map((detail) => ( detail.supplyCost*detail.supplyQuantity )).reduce((a, b) => a + b, 0).toLocaleString('en-US')}`)
+      Cell: ({ value }) => {
+        if (Array.isArray(value)) {
+          return `$ ${value.map((detail) => (detail.supplyCost * detail.supplyQuantity)).reduce((a, b) => a + b, 0).toLocaleString('en-US')}`;
+        } else {
+          // Manejar el caso en que value no sea una matriz, por ejemplo, mostrar un mensaje de error o un valor predeterminado.
+          return 'Valor no válido';
+        }
+      }
     },
     {
       Header: 'Estado',
