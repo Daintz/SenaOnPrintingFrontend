@@ -197,13 +197,13 @@ const ListFinish = () => {
                               })}
                               <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                                 <DetailsButtomfinish
-                                  machine={row.original}
+                                  finish={row.original}
                                 />
                                 <UpdateButtomFinish
-                                  machine={row.original}
+                                  finish={row.original}
                                 />
                                 <ChangeStateButtonfinish
-                                  machine={row.original}
+                                  finish={row.original}
                                 />
                               </td>
                             </tr>
