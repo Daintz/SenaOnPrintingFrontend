@@ -1,6 +1,6 @@
 import { format, setGlobalDateI18n } from 'fecha'
 
-const ReportQuotationProviders = ({ dataApi }) => {
+const ReportFinsh = ({ dataApi }) => {
   setGlobalDateI18n({
     dayNamesShort: ['Sab', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Dom'],
     dayNames: ['Sabado', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
@@ -10,21 +10,19 @@ const ReportQuotationProviders = ({ dataApi }) => {
   })
 
   const columns = [
-    { key: 'quotationDate', name: 'Fecha Cotización' },
-    { key: 'quotationFile', name: 'Cotizacion' },
-    { key: 'fullVAlue', name: 'Valor' },
-    { key: 'statedAt', name: 'Estado Cotizacion'}
+    { key: 'name', name: 'Nombre ' },
+    { key: 'cost', name: 'Costo' },
+    { key: 'statedAt', name: 'Estado Acabados'}
   ]
 
   console.log(dataApi)
 
   const rows = dataApi
-    ? dataApi.map(Providers => ({
-      id: Providers.id,
-      quotationDate: Providers.quotationDate,
-      quotationFile: Providers.quotationFile,
-      fullValue: Providers.fullValue,
-      statedAt : Providers.statedAt
+    ? dataApi.map(Finish => ({
+      id: Finish.id,
+      name: Finish.name,
+      cost: Finish.cost,
+      statedAt : Finish.statedAt
       
     }))
     : []
@@ -42,7 +40,7 @@ const ReportQuotationProviders = ({ dataApi }) => {
             className="h-10 mr-3"
             alt="SENA Logo"
           />
-          <h1 className="font-black text-3xl">Informe Cotizaciones</h1>
+          <h1 className="font-black text-3xl">Informe Acabados</h1>
           <p className="text-xl">Creado el dia: {formattedDate}</p>
         </div>
       </div>
@@ -57,21 +55,21 @@ const ReportQuotationProviders = ({ dataApi }) => {
           </tr>
         </thead>
         <tbody>
-        {rows.map(quotationProviders => (
+        {rows.map( finish=> (
           <tr
             className="border-b border-gray-500"
-            key={quotationProviders.id}
+            key={finish.id}
           >
             <th
               scope="row"
               className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
             >
-              {quotationProviders.quotationDate}
+              {finish.name}
             </th>
-            <td className="px-4 py-3">{quotationProviders.quotationFile}</td>
-            <td className="px-4 py-3">{quotationProviders.fullValue}</td>
+            <td className="px-4 py-3">{finish.cost}</td>
+            
             <td className="px-6 py-4">
-              {quotationProviders.statedAt
+              {finish.statedAt
                 ? (
                   <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                   Activo
@@ -91,4 +89,4 @@ const ReportQuotationProviders = ({ dataApi }) => {
   )
 }
 
-export default ReportQuotationProviders
+export default ReportFinsh
