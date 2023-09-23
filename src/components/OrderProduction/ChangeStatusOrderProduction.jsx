@@ -42,11 +42,15 @@ function ChangeStatusOrderProduction ({ orderProduction }) {
 export function ChangeStatusButtonOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
+    if (!orderProduction.statedAt) {
+      // Puedes mostrar una notificación o realizar alguna acción en caso de que no cumpla la condición
+      toast.error('Para continuar con el proceso recuerda activar la orden');
+    } else {
     dispatch(setWidth({ width: '800px' }))
     dispatch(openModal({ title: 'Cambiar proceso' }))
     dispatch(setAction({ action: 'changingStatus' }))
     dispatch(setChangeStatusData({ changeStatusData: orderProduction }))
-  }
+  }}
 
   return (
     <button type="button" onClick={ handleOpen }>
