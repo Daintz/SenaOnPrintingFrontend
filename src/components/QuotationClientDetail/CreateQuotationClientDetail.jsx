@@ -15,29 +15,27 @@ import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 
 const validationSchema = Yup.object().shape({
-    quotationClientId: Yup.string().required('Campo requerido'),
-    productId: Yup.string().required('Campo requerido'),
-    technicalSpecifications: Yup.string().required('Campo requerido'),
-    productHeight: Yup.string().required('Campo requerido'),
-    productWidth: Yup.string().required('Campo requerido'),
-    numberOfPages: Yup.string().required('Campo requerido'),
-    inkQuantity: Yup.string().required('Campo requerido'),
-    productQuantity: Yup.string().required('Campo requerido'),
-    unitValue: Yup.string().required('Campo requerido'),
-    fullValue: Yup.string().required('Campo requerido'),
+  technicalSpecifications: Yup.string().required('Campo requerido'),
+  productHeight: Yup.string().required('Campo requerido'),
+  productWidth: Yup.string().required('Campo requerido'),
+  numberOfPages: Yup.string().required('Campo requerido'),
+  inkQuantity: Yup.string().required('Campo requerido'),
+  productQuantity: Yup.string().required('Campo requerido'),
+  unitValue: Yup.string().required('Campo requerido'),
+  fullValue: Yup.string().required('Campo requerido'),
 })
 
 const getQuotationClient = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/QuotationClient').then(
-      (result)=> {
+      (result) => {
         const QuotationClient = result.data.map((quotationClient) => ({
-          'label':quotationClient.id,
-          'value': quotationClient.id 
+          'label': quotationClient.id,
+          'value': quotationClient.id
         }))
         resolve(QuotationClient)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
@@ -45,23 +43,23 @@ const getQuotationClient = () => {
 }
 
 const getProduct = () => {
-  return new Promise((resolve, reject)=> {
+  return new Promise((resolve, reject) => {
     clientAxios.get('/Product').then(
-      (result)=> {
-        const Product = result.data.map((product)=> ({
+      (result) => {
+        const Product = result.data.map((product) => ({
           'label': product.name,
           'value': product.id
         }))
         resolve(Product)
       },
-      (error)=> {
+      (error) => {
         reject(error)
       }
     )
   })
 }
 
-function CreateQuotationClientDetail () {
+function CreateQuotationClientDetail() {
 
   const [quotationclientOptions, setQuotationclientOptions] = useState([])
   const [productOptions, setProductOptions] = useState([])
@@ -95,75 +93,76 @@ function CreateQuotationClientDetail () {
   return (
     <Formik
       initialValues={{
-    quotationClientId: '',
-    productId: '',
-    technicalSpecifications: '',
-    productHeight: '',
-    productWidth: '',
-    numberOfPages: '',
-    inkQuantity: '',
-    productQuantity: '',
-    unitValue: '',
-    fullValue: '',
+        quotationClientId: '',
+        productId: '',
+        technicalSpecifications: '',
+        productHeight: '',
+        productWidth: '',
+        numberOfPages: '',
+        inkQuantity: '',
+        productQuantity: '',
+        unitValue: '',
+        fullValue: '',
       }}
       onSubmit={(values) => {
         handleSubmit(values)
       }}
       validationSchema={validationSchema}
     >
-        {({ setFieldValue }) => (
+      {({ setFieldValue }) => (
         <Form>
-        <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+          <div className="flex gap-5 grid-cols-5 mb-3">
+            <div className="w-2/4">
               <label htmlFor="productId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Producto <b className="text-red-700">*</b>
               </label>
               <Field
-              type="text"
+                type="text"
                 as="select"
                 name="productId"
                 id="productId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
+                  <option value={0}>Seleccione</option>
                 {productOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-            {option.label}
-            </option>
-             ))}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="productId"
                 component="div"
                 className="text-red-500"
               />
-              </div>
-          <div className="w-2/4">
+            </div>
+            <div className="w-2/4">
               <label htmlFor="technicalSpecifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Especificaciones tecnicas  <b className="text-red-700">*</b>
+                Especificaciones tecnicas  <b className="text-red-700">*</b>
               </label>
-              <textarea
-                type="text"
+              <Field
+                as="text-area"
                 name="technicalSpecifications"
                 id="technicalSpecifications"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 rows="6" cols="40"
                 placeholder="El producto contara..."
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="technicalSpecifications"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
-            
+
 
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
               <label htmlFor="productHeight" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Altura del producto <b className="text-red-700">*</b>
+                Altura del producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -172,16 +171,16 @@ function CreateQuotationClientDetail () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="productHeight"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="productWidth" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Ancho del producto <b className="text-red-700">*</b>
+                Ancho del producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -190,16 +189,16 @@ function CreateQuotationClientDetail () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-       <ErrorMessage
+              <ErrorMessage
                 name="productWidth"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="numberOfPages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Numero de paginas <b className="text-red-700">*</b>
+                Numero de paginas <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -208,16 +207,16 @@ function CreateQuotationClientDetail () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="numberOfPages"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="inkQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Cantidad de tinta <b className="text-red-700">*</b>
+                Cantidad de tinta <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -226,16 +225,16 @@ function CreateQuotationClientDetail () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="inkQuantity"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-1/4">
               <label htmlFor="productQuantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Cantidad de producto <b className="text-red-700">*</b>
+                Cantidad de producto <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -245,16 +244,16 @@ function CreateQuotationClientDetail () {
                 placeholder="1.0.5"
               />
               <ErrorMessage
-              name="productQuantity"
-              component="div"
-              className="text-red-500"
+                name="productQuantity"
+                component="div"
+                className="text-red-500"
               />
             </div>
           </div>
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+            <div className="w-2/4">
               <label htmlFor="unitValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Valor unico <b className="text-red-700">*</b>
+                Valor unico <b className="text-red-700">*</b>
               </label>
               <Field
                 type="number"
@@ -263,60 +262,61 @@ function CreateQuotationClientDetail () {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="1.0.5"
               />
-               <ErrorMessage
+              <ErrorMessage
                 name="unitValue"
-       
+
                 component="div"
                 className="text-red-500"
               />
             </div>
             <div className="w-2/4">
               <label htmlFor="fullValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-              Valor total <b className="text-red-700">*</b>
+                Valor total <b className="text-red-700">*</b>
               </label>
               <Field
-               type="number"
-               name="fullValue"
-               id="fullValue"
-               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-               placeholder="1.0.5"
+                type="number"
+                name="fullValue"
+                id="fullValue"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="1.0.5"
               />
               <ErrorMessage
-              name="fullValue"
-              component="div"
-              className="text-red-500"
+                name="fullValue"
+                component="div"
+                className="text-red-500"
               />
             </div>
           </div>
 
 
           <div className="flex gap-5 grid-cols-5 mb-3">
-          <div className="w-2/4">
+            <div className="w-2/4">
               <label htmlFor="userId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                 Cotizacion CLiente <b className="text-red-700">*</b>
               </label>
               <Field
-              type="number"
+                type="number"
                 as="select"
                 name="quotationClientId"
                 id="quotationClientId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
                 placeholder="100"
               >
-                 {quotationclientOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-            {option.label}
-            </option>
-            ))}
+                  <option value={0}>Seleccione</option>
+                {quotationclientOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage
                 name="quotationClientId"
-       
+
                 component="div"
                 className="text-red-500"
               />
-              </div>
-          
+            </div>
+
           </div>
           <button
             type="submit"
@@ -325,12 +325,12 @@ function CreateQuotationClientDetail () {
             Crear Cotizacion
           </button>
         </Form>
-             )}
+      )}
     </Formik>
   )
 }
 
-export function CreateButtomQuotationClientDetail () {
+export function CreateButtomQuotationClientDetail() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
@@ -346,7 +346,7 @@ export function CreateButtomQuotationClientDetail () {
       type="button"
       onClick={() => handleOpen()}
     >
-    <svg
+      <svg
         className="h-3.5 w-3.5 mr-2"
         fill="currentColor"
         viewBox="0 0 20 20"

@@ -2,7 +2,7 @@ import NewModal from '../../components/Modal/NewModal'
 import { useSelector } from 'react-redux'
 import ListLineature from '../../components/Lineature/ListLineature'
 import ErrorBoundary from '../../components/Error/ErrorBoundary'
-import CreateOrderProduction from '../../components/OrderProduction/CreateOrderProduction'
+import CreateOrderProduction from '../../components/CreateOrderProduction/CreateOrderProduction'
 import ListQuotationClientApproved from '../../components/ListQuotationClientApproved/ListQuotationClientApproved'
 
 const QuotationClientApproved = () => {
@@ -16,9 +16,7 @@ const QuotationClientApproved = () => {
           <ListQuotationClientApproved />
         </ErrorBoundary>
         {/* Esta logica del modal esta acá para poder ser reutilizable */}
-        <NewModal>
-          {action === 'creating' ? <CreateOrderProduction /> : undefined}
-        </NewModal>
+        
       </div>
     </div>
 

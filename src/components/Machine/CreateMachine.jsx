@@ -13,13 +13,13 @@ import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Campo requerido'),
+  name: Yup.string('eL campo no es numerico').required('Campo requerido').max(20,'Son permitidos maximo 20 caracteres').min(5,'Debe de tener minimo 5 caracteres '),
   minimumHeight: Yup.number().required('Campo requerido'),
   minimumWidth: Yup.number().required('Campo requerido'),
   maximumHeight: Yup.number().required('Campo requerido'),
   maximumWidth: Yup.number().required('Campo requerido'),
   costByUnit: Yup.number().required('Campo requerido'),
-  costByHour: Yup.number().required('Campo requerido'),
+  costByHour: Yup.number().required('Campo requerido'), 
 })
 
 function CreateMachine () {
@@ -35,7 +35,7 @@ function CreateMachine () {
     if (!error) {
       dispatch(closeModal())
     }
-    toast.success('Maquina creado con exito',{
+    toast.success('Máquina creado con exito',{
       autoClose:1000
 
     })
@@ -87,7 +87,7 @@ function CreateMachine () {
             </div>
             <div className="w-2/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Ancho minimo
+                Ancho mínimo
               </label>
               <Field
                 type="Number"
@@ -107,7 +107,7 @@ function CreateMachine () {
             </div>
             <div className="w-1/4">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-               Alto minimo
+               Alto mínimo
               </label>
               <Field
                 type="Number"
@@ -129,7 +129,7 @@ function CreateMachine () {
           <div className="flex gap-5 grid-cols-5 mb-3">
             <div className="w-1/4">
               <label htmlFor="campo1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-           Ancho maximo
+           Ancho máximo
               </label>
               <Field
                 type="Number"
@@ -148,7 +148,7 @@ function CreateMachine () {
             </div>
             <div className="w-1/4">
               <label htmlFor="campo2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                Alto maximo
+                Alto máximo
               </label>
               <Field
                 type="Number"
@@ -207,9 +207,10 @@ function CreateMachine () {
         
           <button
             type="submit"
-            className="col-span-3 w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="col-span-3 w-full text-white border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        
           >
-            Crear Maquina
+            Crear Máquina
           </button>
         </Form>
       
@@ -222,15 +223,14 @@ export function CreateButtomMaquina () {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '-[1500px]' }))
-    dispatch(openModal({ title: 'Crear Maquina' }))
+    dispatch(openModal({ title: 'Crear Máquina' }))
     dispatch(setAction({ action: 'creating' }))
   }
   // ?
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-      type="button"
+    className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       onClick={() => handleOpen()}
     >
     <svg
@@ -246,7 +246,7 @@ export function CreateButtomMaquina () {
           d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
         />
       </svg>
-      Crear Maquina
+      Crear Máquina
     </button>
   )
 }

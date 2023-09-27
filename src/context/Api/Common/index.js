@@ -4,7 +4,14 @@ const commonEndpointsApi = (entityName, entityUrl) => {
   return createApi({
     reducerPath: 'commonApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`
+      baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api`,
+      prepareHeaders: (headers) => {
+        const token = localStorage.getItem('session_token')
+        if (token) {
+          headers.set('Authorization', `Bearer ${token}`)
+        }
+        return headers
+      }
     }),
     endpoints: (builder) => ({
       getAll: builder.query({
@@ -62,16 +69,15 @@ export const substratesApi = commonEndpointsApi('Substrates', 'substrates')
 export const orderProductionApi = commonEndpointsApi('OrderProduction', 'orderProduction')
 export const typeServices = commonEndpointsApi('TypeServices', 'typeServices')
 export const quotationProviders = commonEndpointsApi('QuotationProviders', 'quotationProviders')
-export const supplyPictograms = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
+export const SupplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 export const finishApi = commonEndpointsApi('Finish', 'finish')
 export const MachineApi = commonEndpointsApi('Machine', 'machine')
 export const UnitMesureApi = commonEndpointsApi('UnitMesure', 'unitmesure')
-export const supplyPictogrmas = commonEndpointsApi('SupplyPictogrmas', 'supplyPictogrmas')
 export const WarehauseTypeApi = commonEndpointsApi('WarehauseType', 'warehauseType')
 export const WarehauseApi = commonEndpointsApi('Warehause', 'warehause')
 export const ProviderApi = commonEndpointsApi('Provider', 'provider')
 export const SupplyApi = commonEndpointsApi('Supply', 'supply')
-export const SupplyDetailsApi = commonEndpointsApi('SupplyDetails', 'supplyDetails')
+export const BuySupplyApi = commonEndpointsApi('BuySupplies', 'buy_supplies')
 
 export const {
   useGetAllQuery: useGetAllSupplyCategoryQuery,
@@ -128,7 +134,7 @@ export const {
   usePostMutation: usePostSupplyPictogramsMutation,
   usePutByIdMutation: usePutSupplyPictogramsByIdMutation,
   useDeleteByIdMutation: useDeleteSupplyPictogramsByIdMutation
-} = supplyPictogrmas
+} = SupplyPictogrmas
 
 export const {
   useGetAllQuery: useGetAllUsersQuery,
@@ -160,13 +166,14 @@ export const {
   useGetByIdQuery: useGetQuotationClientByIdQuery,
   usePostMutation: usePostQuotationClientMutation,
   usePutByIdMutation: usePutQuotationClientByIdMutation,
-  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation
+  useGetAllApprovedQuery: useGetAllQuotationClientApprovedQuery,
+  useDeleteByIdMutation: useDeleteQuotationClientByIdMutation,
+  useDeleteStatusMutation: useDeleteQuotationStatusMutation
 } = quotationClientApi
 
 export const {
   useGetAllQuery: useGetAllQuotationClientDetailsQuery,
   useGetByIdQuery: useGetQuotationClientDetailByIdQuery,
-  useGetAllApprovedQuery: useGetAllQuotationClientDetailApprovedQuery,
   usePostMutation: usePostQuotationClientDetailMutation,
   usePutByIdMutation: usePutQuotationClientDetailByIdMutation,
   useDeleteByIdMutation: useDeleteQuotationClientDetailByIdMutation
@@ -275,4 +282,4 @@ export const {
   usePostMutation: usePostSupplyDetailsMutation,
   usePutByIdMutation: usePutSupplyDetailsByIdMutation,
   useDeleteByIdMutation: useDeleteSupplyDetailsByIdMutation
-} = SupplyDetailsApi
+} = BuySupplyApi

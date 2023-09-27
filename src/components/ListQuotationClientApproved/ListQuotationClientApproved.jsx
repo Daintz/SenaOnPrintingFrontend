@@ -1,15 +1,19 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
-import { useGetAllQuotationClientDetailApprovedQuery } from '../../context/Api/Common'
+import { useGetAllQuotationClientApprovedQuery } from '../../context/Api/Common'
 import { UpdateButtomOrderProduction } from '../../components/OrderProduction/UpdateOrderProduction'
 import { ChangeStateButtonOrderProduction } from '../../components/OrderProduction/ChangeStateOrderProduction'
-import { CreateButtomOrderProduction } from '../../components/OrderProduction/CreateOrderProduction'
+import { CreateButtomOrderProduction } from '../CreateOrderProduction/CreateOrderProduction'
 import { DetailsButtonOrderProduction } from '../../components/OrderProduction/DetailsOrderProduction'
+import { Link } from 'react-router-dom'
+import Spinner from '../Spinner/Spinner'
+import { format } from 'date-fns';
+
 
 const ListQuotationClientApproved = () => {
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
-  const { data: dataApi, refetch } = useGetAllQuotationClientDetailApprovedQuery()
+  const { data: dataApi,error, isLoading, refetch } = useGetAllQuotationClientApprovedQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
@@ -17,15 +21,54 @@ const ListQuotationClientApproved = () => {
     refetch()
   }, [isAction])
   // ?
-
+/* console.log(dataApi) */
   const columns = useMemo(() => [
-    { Header: 'Cotización detalle', accessor: 'id' },
-    { Header: 'Cotización', accessor: 'quotationClientId' },
-    { Header: 'Fecha de orden', accessor: 'orderDate' },
-    { Header: 'Fecha de entrega', accessor: 'deliverDate' },
+    { Header: 'Codigo', accessor: 'code' },
+    {
+      Header: 'Fecha de orden',
+      accessor: 'orderDate',
+      Cell: ({ value }) => {
+        const formattedDate = format(new Date(value), 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
+    
+    {
+      Header: 'Fecha de entrega',
+      accessor: 'deliverDate',
+      Cell: ({ value }) => {
+        const formattedDate = format(new Date(value), 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
+    
     { Header: 'Cliente', accessor: 'name' },
-    { Header: 'Producto', accessor: 'productName' },
-  ], [])
+    {
+      Header: 'Productos',
+      accessor: 'quotationClientDetails',
+      Cell: ({ value }) => {
+        if (value && value.length > 0) {
+          return (
+            <ul>
+            {value.map((detail, index) => (
+              <li key={index}>
+                {`${index + 1}: ${detail.productName}`}
+              </li>
+              ))}
+            </ul>
+          );
+        } else {
+          return 'Sin productos';
+        }
+      },
+    },
+  ], []);
+
+  
+  
+  
+  
+  
 
   const data = useMemo(() => (dataApi || []), [dataApi])
 
@@ -48,15 +91,29 @@ const ListQuotationClientApproved = () => {
     useGlobalFilter,
     usePagination)
 
-  const { pageIndex, globalFilter } = state
+    const { pageIndex, globalFilter } = state
 
-  if (!dataApi) {
-    return <div>Loading...</div>
-  }
+    if (isLoading) return <Spinner />
+    if (error) return <Error type={error.status} message={error.error} />
+
 
   return (
+    <>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
+      {dataApi.length === 0
+      ? (
+        <>
+        <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
+          <h1 className="text-center text-3xl font-bold mb-10">No hay ordenes de producción por planear</h1>
+          <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+          <Link to={'/orderProduction'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Planear OP's</Link>
+            </div>
+        </div>
+        </>
+        )
+        : (
+          <>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
@@ -91,9 +148,10 @@ const ListQuotationClientApproved = () => {
             </form>
           </div>
           <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <a href="/orderProduction" className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</a>
+            <Link to={'/orderProduction'} className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:text-black hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">Ver OP's</Link>
           </div>
         </div>
+
         <div className="overflow-x-auto rounded-xl border border-gray-400">
           <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -125,7 +183,7 @@ const ListQuotationClientApproved = () => {
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                       
                       <CreateButtomOrderProduction
-                        orderProduction={row.original}
+                      quotationClient={row.original}
                       />
                     </td>
                   </tr>
@@ -195,9 +253,12 @@ const ListQuotationClientApproved = () => {
             </ul>
           </nav>
         </div>
+        </>
+          )
+      }
       </div>
     </div>
-    
+    </>
   )
 }
 

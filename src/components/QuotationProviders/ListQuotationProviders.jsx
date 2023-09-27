@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllQuotationProvidersQuery } from '../../context/Api/Common'
@@ -8,7 +8,9 @@ import { DetailsButtomQuotationProviders } from './DetailsQuotationProviders'
 import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
 import { useReactToPrint } from 'react-to-print'
 import  ReportQuotationProviders  from './ReportQuotationProviders'
-
+import { format } from 'date-fns';
+import Spinner from '../Spinner/Spinner'
+import Error from '../Error/Error'
 const ListQuotationProviders = () => {
 
   const tablePDF = useRef()
@@ -19,7 +21,7 @@ const ListQuotationProviders = () => {
   })
 
 
-  const { data: dataApi, refetch } = useGetAllQuotationProvidersQuery()
+  const { data: dataApi, error, isLoading, refetch } = useGetAllQuotationProvidersQuery()
 
   const { isAction } = useSelector(state => state.modal)
   useEffect(() => {
@@ -33,10 +35,22 @@ const ListQuotationProviders = () => {
 
 
   const columns = useMemo(()=>[
-    {Header: 'Fecha', accessor: 'quotationDate' },
+    {
+      Header: 'Fecha',
+      accessor: 'quotationDate',
+      Cell: ({ value }) => {
+        const dateValue = new Date(value);
+        if (isNaN(dateValue.getTime())) {
+          // El valor no es una fecha válida, manejarlo apropiadamente
+          return <span>Fecha no válida</span>;
+        }
+        const formattedDate = format(dateValue, 'dd MMM yyyy');
+        return <span>{formattedDate}</span>;
+      }
+    },
     { Header: 'Documento', accessor: 'quotationFile' },
     {Header: 'Valor', accessor: 'fullValue'},
-    {Header: 'Id Proveedor', accessor: 'providerId'},
+    {Header: 'Proveedor', accessor: 'provider.nameCompany'},
     {Header: 'Estado',
     accessor: 'statedAt',
     Cell: ({ value }) => (value
@@ -48,6 +62,7 @@ const ListQuotationProviders = () => {
         </span>)
   },
   ], [])
+  
 
   const data = useMemo(()=>(dataApi || []),[dataApi])
   useEffect(() => {
@@ -76,9 +91,9 @@ const ListQuotationProviders = () => {
 
   const { pageIndex, globalFilter } = state
 
-  if (!dataApi) {
-    return <div>Loading...</div>
-  }
+  if (isLoading) return <Spinner />
+  if (error) return <Error type={error.status} message={error.error} />
+
 
   return (
     <>
@@ -89,16 +104,31 @@ const ListQuotationProviders = () => {
     </div>
     <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+    className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
       onClick={ generatePDF }
       type="button"
     >
-      <BsFillFileEarmarkBreakFill />
+      <BsFillFileEarmarkBreakFill className='w-5 h-5'/>
       Crear un informe
     </button>
     </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
+      {dataApi.length === 0
+            ? (
+              <>
+                <div className="relative bg-white py-10 px-20 shadow-xl mdm:py-10 mdm:px-8">
+                  <h1 className="text-center text-3xl font-bold mb-10">No hay registros en la base de datos</h1>
+                  <p className="text-center text-xl">Para empezar a visualizar la información debes de crear una cotización</p>
+                  <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-center md:space-x-3 flex-shrink-0 mt-10">
+                    <CreateButtomQuotationProviders />
+                  </div>
+                </div>
+              </>
+            )
+            :
+            (
+  <>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
           <div className="w-full md:w-1/2">
             <form className="flex items-center">
@@ -166,15 +196,13 @@ const ListQuotationProviders = () => {
                         ? row.cells[0].value(row.cells[0])
                         : row.cells[0].render('Cell')}
                     </td>
-                    <td {...row.cells[1].getCellProps()} className="px-4 py-3">
-                      {typeof row.cells[1].value === 'function'
-                        ? row.cells[1].value(row.cells[1])
-                        : row.cells[1].render('Cell')}
-                    </td>
+                   <b> <a href={`https://localhost:7262/api/QuotationProviders/file/${row.original.id}`} download >
+                       Descargar Cotización
+                      </a></b>
                     <td {...row.cells[2].getCellProps()} className="px-4 py-3">
                       {typeof row.cells[2].value === 'function'
                         ? row.cells[2].value(row.cells[2])
-                        : row.cells[2].column.id === 'pictogramFileInfo'
+                        : row.cells[2].column.id === 'QuotationProviderFile'
                           ? <img src={row.cells[2].value} width={100} height={100}/>
                           : row.cells[2].render('Cell')}
                     </td>
@@ -190,13 +218,13 @@ const ListQuotationProviders = () => {
                         : row.cells[4].render('Cell')}
                     </td>
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
-                      <DetailsButtomQuotationProviders
-                        quotationProviders={row.original}
-                      />
+
+                    
                  
                       <ChangeStateButtonQuotationProviders
                         quotationProviders={row.original}
                       />
+                    
                     </td>
                   </tr>
                 )
@@ -237,7 +265,7 @@ const ListQuotationProviders = () => {
               <a
                 className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
-                -
+                
               </a>
             </li>
             <li>
@@ -265,6 +293,9 @@ const ListQuotationProviders = () => {
           </ul>
         </nav>
         </div>
+        </>
+      )
+  }
       </div>
     </div>
     </>

@@ -13,8 +13,8 @@ const validationSchema = Yup.object().shape({
   names: Yup.string().required('Campo requerido'),
   surnames: Yup.string().required('Campo requerido'),
   typeDocumentId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un tipo de documento'),
-  documentNumber: Yup.string('El campo solo puede tener numeros').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
-  phone: Yup.string('El campo solo puede tener numeros').min(10, 'Telefono debe ser de 10 digitos').max(10, 'Telefono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  documentNumber: Yup.string('El campo solo puede tener números').min(6, 'Documento debe tener al menos 6 digitos').max(12, 'Documento no puede tener mas de 12 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  phone: Yup.string('El campo solo puede tener números').min(10, 'Teléfono debe ser de 10 digitos').max(10, 'Teléfono debe ser de 10 digitos').required('Campo requerido').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
   address: Yup.string().required('Campo requerido'),
   email: Yup.string().email().required('Campo requerido'),
   roleId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un rol'),
@@ -90,10 +90,10 @@ function UpdateUser () {
     { key: 0, name: 'names', title: 'Nombres', type: 'text', placeholder: 'Nombres del Usuario' },
     { key: 1, name: 'surnames', title: 'Apellidos', type: 'text', placeholder: 'Apellidos del Usuario' },
     { key: 2, name: 'typeDocumentId', title: 'Tipo de Documento', type: 'select', data: typeDocumentOptions, placeholder: 'Tipo de Documento del Usuario' },
-    { key: 3, name: 'documentNumber', title: 'Numero de Documento', type: 'number', placeholder: 'Numero de Documento del Usuario' },
-    { key: 4, name: 'phone', title: 'Telefono', type: 'number', placeholder: 'Telefono del Usuario' },
+    { key: 3, name: 'documentNumber', title: 'Número de Documento', type: 'number', placeholder: 'Número de Documento del Usuario' },
+    { key: 4, name: 'phone', title: 'Teléfono', type: 'number', placeholder: 'Teléfono del Usuario' },
     { key: 5, name: 'address', title: 'Dirección', type: 'text', placeholder: 'Dirección del Usuario' },
-    { key: 6, name: 'email', title: 'Correo Electronico', type: 'email', placeholder: 'Correo Electronico del Usuario' },
+    { key: 6, name: 'email', title: 'Correo Electrónico', type: 'email', placeholder: 'Correo Electrónico del Usuario' },
     { key: 7, name: 'roleId', title: 'Rol', type: 'select', data: roleOptions, placeholder: 'Rol del Usuario' },
     { key: 8, name: 'passwordDigest', title: 'Contraseña', type: 'password', placeholder: 'Contraseña del Usuario' }
   ]
@@ -126,7 +126,7 @@ function UpdateUser () {
                 name="names"
                 id="names"
                 placeholder="Nombres del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="names"
@@ -141,7 +141,7 @@ function UpdateUser () {
                 name="surnames"
                 id="surnames"
                 placeholder="Apellidos del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="surnames"
@@ -154,7 +154,7 @@ function UpdateUser () {
           <div key='2'>
             <label htmlFor="typeDocumentId">Tipo de Documento</label>
             <br />
-            <Field name="typeDocumentId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="typeDocumentId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione Tipo de Documento</option>
               {typeDocumentOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -167,13 +167,13 @@ function UpdateUser () {
             />
           </div>
           <div key='3' className='w-1/2 ml-2'>
-            <label htmlFor="documentNumber">Numero de Documento</label>
+            <label htmlFor="documentNumber">Número de Documento</label>
             <Field
                 type="text"
                 name="documentNumber"
                 id="documentNumber"
-                placeholder="Numero de Documento del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Número de Documento del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="documentNumber"
@@ -184,13 +184,13 @@ function UpdateUser () {
         </div>
         <div className='flex mb-2'>
           <div key='4' className='w-1/2 mr-2'>
-            <label htmlFor="phone">Telefono</label>
+            <label htmlFor="phone">Teléfono</label>
             <Field
                 type="text"
                 name="phone"
                 id="phone"
-                placeholder="Telefono del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Teléfono del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="phone"
@@ -205,7 +205,7 @@ function UpdateUser () {
                 name="address"
                 id="address"
                 placeholder="Dirección del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="address"
@@ -216,13 +216,13 @@ function UpdateUser () {
         </div>
         <div className='flex mb-2'>
           <div key='6' className='w-1/2 mr-2'>
-            <label htmlFor="email">Correo Electronico</label>
+            <label htmlFor="email">Correo Electrónico</label>
             <Field
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Correo Electronico del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                placeholder="Correo Electrónico del Usuario"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="email"
@@ -233,7 +233,7 @@ function UpdateUser () {
           <div key='7' className='w-1/2 ml-2'>
             <label htmlFor="roleId">Rol</label>
             <br />
-            <Field name="roleId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+            <Field name="roleId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5">
               <option value="0">Seleccione Rol</option>
               {roleOptions.map(option => (
                 <option value={option.value}>{option.label}</option>
@@ -254,7 +254,7 @@ function UpdateUser () {
                 name="passwordDigest"
                 id="passwordDigest"
                 placeholder="Contraseña del Usuario"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
             />
             <ErrorMessage
               name="passwordDigest"
@@ -265,7 +265,7 @@ function UpdateUser () {
         </div>
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Actualizar Usuario
           </button>
@@ -286,7 +286,7 @@ export function UpdateButtomUser ({ user }) {
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" oalt="Icono editar" title="Editar el usuario" onClick={() => {
       handleEdit(user)
     }}>
       <svg

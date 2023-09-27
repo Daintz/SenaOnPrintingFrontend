@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik, FieldArray } from 'formik'
 import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido')
+  description: Yup.string().required('Campo requerido'),
+  permissionIds: Yup.array().min(1, 'Seleccione un permiso')
 })
 
 function UpdateRole () {
@@ -21,23 +22,29 @@ function UpdateRole () {
     if (isLoading) return <Spinner />
     if (error) return <Error type={error.status} message={error.error} />
     await updateRole(values)
+    console.log(values)
 
     dispatch(changeAction())
     dispatch(closeModal())
     toast.success('Rol actualizado con exito')
   }
 
+  const permissions = [{label: "Configuración", value: 1}, {label: "Usuarios", value: 2},{label:  "Bodega", value: 3}, {label: "Insumos", value: 4}, {label: "Proveedores", value: 5}, {label: "Clientes", value: 6}, {label: "Producción", value: 7}];
+
   const inputs = [
     { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre del Rol' },
     { key: 1, name: 'description', title: 'Descripción', type: 'text', placeholder: 'Descripción del Rol' }
   ]
+
+  const selectedPermissions = editingData.permissionsByRoles.map(({ permissionId })=> (permissionId))
 
   return (
     <Formik
       initialValues={{
         id: editingData.id,
         name: editingData.name,
-        description: editingData.description
+        description: editingData.description,
+        permissionIds: selectedPermissions
       }}
       onSubmit={(values) => {
         handleSubmit(values)
@@ -53,7 +60,7 @@ function UpdateRole () {
                 name={input.name}
                 id={input.name}
                 placeholder={input.placeholder}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
               />
               <ErrorMessage
                 name={input.name}
@@ -62,9 +69,43 @@ function UpdateRole () {
               />
             </div>
           ))}
+          <div id="permissionIds" className="title">Lista de Permisos:</div>
+          <div id="permissions_container">
+            <FieldArray
+                name="permissionIds"
+                render={arrayHelper => (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} role="group" aria-labelledby="permissionIds">
+                    {permissions.map((option, index) => (
+                    <label key={`permission.${index}`} className='ml-5'>
+                        <input
+                        className='mr-2'
+                        type="checkbox"
+                        value={option.value}
+                        checked={arrayHelper.form.values.permissionIds.includes(option.value)}
+                        onChange={e => {
+                            if (e.target.checked) arrayHelper.push(option.value);
+                            else {
+                                const idx = arrayHelper.form.values.permissionIds.indexOf(option.value);
+                                arrayHelper.remove(idx);
+                            }
+                            console.log(arrayHelper.form.values.permissionIds)
+                        }}
+                        />
+                        {option.label}
+                    </label>
+                    ))}
+                </div>
+                )}
+            />
+            <ErrorMessage
+                name={"permissionIds"}
+                component="div"
+                className="text-red-500"
+                />
+          </div>
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Actualizar Rol
           </button>
@@ -85,7 +126,7 @@ export function UpdateButtomRole ({ role }) {
   // ?
 
   return (
-    <button type="button" onClick={() => {
+    <button type="button" alt="Icono editar" title="Editar el rol" onClick={() => {
       handleEdit(role)
     }}>
       <svg

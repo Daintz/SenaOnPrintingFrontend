@@ -1,36 +1,63 @@
-import { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
 import { useGetAllSupplyDetailsQuery } from '../../context/Api/Common'
-import { UpdateButtomSupplyDetails } from './UpdateSupplyDetails'
 import { ChangeStateButtonSupplyDetails } from './ChangeStateSupplyDetails'
 import { CreateButtomSupplyDetails } from './CreateSupplyDetails'
 import { DetailsButtomSupplyDetails } from './DetailsSupplyDetails'
+import { BsFillFileEarmarkBreakFill } from 'react-icons/bs'
+import { useReactToPrint } from 'react-to-print'
+import ReportSupplyDetails from './ReportSupplyDetails'
+import clientAxios from '../../config/clientAxios'
 
+const formatDate = (dateString, format = { year: 'numeric', month: 'long', day: 'numeric' }) => {
+  if (dateString != null){
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleDateString(undefined, format);
+
+  return formattedDate;
+}else {
+  return "Sin fecha"
+}
+};
 
 const ListSupplyDetails = () => {
+  const [loading, setLoading] = useState(true)
+  const [dataProvider, setDataProvider] = useState([])
+  const tablePDF = useRef()
+
+  const generatePDF = useReactToPrint({
+    content: () => tablePDF.current,
+    documentTitle: 'Informe de loteo de insumos'
+  })
   // ? Esta linea de codigo se usa para llamar los datos, errores, y el estado de esta cargando las peticiones que se hacen api que se declararon en el context en Api/Common
   const { data: dataApi, refetch } = useGetAllSupplyDetailsQuery()
 
   // ? Este bloque de codigo hace que la pagina haga un refech al api para poder obtener los cambios hechos
   const { isAction } = useSelector((state) => state.modal)
-  useEffect(() => {
-    refetch()
-  }, [isAction])
-  // ?
 
   const columns = useMemo(() => [
-    { Header: 'Descripcion', accessor: 'description' },
-    { Header: 'Costo insumo', accessor: 'supplyCost' },
-    { Header: 'Lote', accessor: 'batch' },
-    { Header: 'Cantidad inicial', accessor: 'initialQuantity' },
-    { Header: 'Fecha de entrada', accessor: 'entryDate' },
-    { Header: 'Fecha de caducidad', accessor: 'expirationDate' },
-    { Header: 'Cantidad actual', accessor: 'actualQuantity' },
-    { Header: 'Id insumo', accessor: 'supplyId' },
-    { Header: 'Id proveedor', accessor: 'providerId' },
-    { Header: 'Id bodega', accessor: 'warehouseId' },
-    
+    { Header: 'Lote', accessor: 'id' },
+    { Header: 'Descripción', accessor: 'description' },
+    // { Header: 'Costo insumo', accessor: 'averageCost' },
+    { Header: 'Fecha de compra', accessor: 'entryDate', Cell: ({ value }) => (formatDate(value))},
+    // { Header: 'Cantidad actual', accessor: 'actualQuantity' },
+    {
+      Header: 'Proveedor',
+      accessor: 'provider.nameCompany'
+    },
+    {
+      Header: 'Costo Total',
+      accessor: 'buySuppliesDetails',
+      Cell: ({ value }) => {
+        if (Array.isArray(value)) {
+          return `$ ${value.map((detail) => (detail.supplyCost * detail.supplyQuantity)).reduce((a, b) => a + b, 0).toLocaleString('en-US')}`;
+        } else {
+          // Manejar el caso en que value no sea una matriz, por ejemplo, mostrar un mensaje de error o un valor predeterminado.
+          return 'Valor no válido';
+        }
+      }
+    },
     {
       Header: 'Estado',
       accessor: 'statedAt',
@@ -45,6 +72,23 @@ const ListSupplyDetails = () => {
   ], [])
 
   const data = useMemo(() => (dataApi || []), [dataApi])
+
+  useEffect(() => {
+    clientAxios('/Provider')
+      .then(response => {
+        setDataProvider(response.data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error al obtener datos:', error)
+        setLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    refetch()
+  }, [isAction])
+  // ?
 
   const {
     getTableProps,
@@ -71,7 +115,27 @@ const ListSupplyDetails = () => {
     return <div>Cargando...</div>
   }
 
+  if (loading) {
+    return <div>Cargando...</div>
+  }
+
   return (
+    <>
+    <div className='hidden'>
+      <div ref={tablePDF}>
+        <ReportSupplyDetails dataApi={dataApi}/>
+      </div>
+    </div>
+    <div className="relative bg-white py-6 px-20 shadow-2xl mdm:py-6 mdm:px-8 mb-2">
+    <button
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 gap-3"
+      onClick={ generatePDF }
+      type="button"
+    >
+      <BsFillFileEarmarkBreakFill />
+      Generar informe
+    </button>
+    </div>
     <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
       <div className="bg-white sm:rounded-lg overflow-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 pb-6">
@@ -111,7 +175,7 @@ const ListSupplyDetails = () => {
             <CreateButtomSupplyDetails />
           </div>
         </div>
-      <div className="overflow-x-auto rounded-xl border border-gray-400">
+        <div className="overflow-x-auto rounded-xl border border-gray-400">
           <table className="w-full text-sm text-left text-gray-500" {...getTableProps()}>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               {headerGroups.map(headerGroup => (
@@ -137,14 +201,10 @@ const ListSupplyDetails = () => {
                     className="border-b border-gray-500"
                   >
                     {row.cells.map((cell, index) => {
-                      console.log(cell)
                       return (<td {...cell.getCellProps()} key={`${cell.column.id}-${index}`} className="px-4 py-3">{typeof cell.value === 'function' ? cell.value(cell) : cell.render('Cell')}</td>)
                     })}
                     <td className="px-6 py-4 grid grid-cols-3  place-content-center" key={5}>
                     <DetailsButtomSupplyDetails
-                      supplyDetails={row.original}
-                      />
-                      <UpdateButtomSupplyDetails
                       supplyDetails={row.original}
                       />
                       <ChangeStateButtonSupplyDetails
@@ -160,7 +220,7 @@ const ListSupplyDetails = () => {
           className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
         >
           <span className="text-sm font-normal text-gray-500">
-            Pagina {' '}
+            Página {' '}
             <span className="font-semibold text-gray-900">{pageIndex + 1}</span>
           </span>
           <ul className="inline-flex items-stretch -space-x-px">
@@ -220,6 +280,7 @@ const ListSupplyDetails = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

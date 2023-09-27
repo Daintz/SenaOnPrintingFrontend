@@ -15,9 +15,9 @@ import { useState } from 'react'
 import { data } from 'autoprefixer'
 
 const validationSchema = Yup.object().shape({
-  code: Yup.string().required('Campo requerido'),
-  name: Yup.string().required('Campo requerido'),
-  description: Yup.string().required('Campo requerido'),
+  code: Yup.string().required('Campo requerido').min(5,'Minimo 5 caracteres').max(10,'Maximo 10 caracteres'),
+  name: Yup.string().required('Campo requerido').min(3,'Minimo 3 caracteres').max(30,'Maximo 30 caracteres'),
+  description: Yup.string().required('Campo requerido').min(10,'Minimo 10 caracteres').max(30,'Maximo 30 caracteres'),
   pictogramFile: Yup.string().required('Campo requerido')
 })
 
@@ -85,6 +85,11 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Codigo del pictograma"
         />
+        <ErrorMessage
+                name="code"
+                component="div"
+                className="text-red-500"
+              />
         <label
           htmlFor="name"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -98,6 +103,11 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Nombre del pictograma"
         />
+        <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500"
+              />
          <label
           htmlFor="description"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -111,6 +121,12 @@ function CreateSupplyPictograms () {
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
           placeholder="Descripción del pictograma"
         />
+        
+        <ErrorMessage
+                name="description"
+                component="div"
+                className="text-red-500"
+              />
         <div>
         <label
               htmlFor="pictogramFile"
@@ -132,10 +148,16 @@ function CreateSupplyPictograms () {
         </div>
 
         <button
+          onClick={() => {
+            handleSubmit(values);
+            console.log(values);
+          }}
           type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
+          className="flex items-center justify-center border border-gray-700 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-700 font-medium rounded-lg text-sm px-10 py-2"
+              
+          >
           Crear Pictograma
+          
         </button>
       </Form>
       )}
@@ -155,23 +177,22 @@ export function CreateButtomSupplyPictograms () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-      type="button"
-      onClick={() => handleOpen()}
+    className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+    onClick={() => handleOpen()}
+  >
+  <svg
+      className="h-3.5 w-3.5 mr-2"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
-      <svg
-        className="h-3.5 w-3.5 mr-2"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          clipRule="evenodd"
-          fillRule="evenodd"
-          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-        />
-      </svg>
+      <path
+        clipRule="evenodd"
+        fillRule="evenodd"
+        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+      />
+    </svg>
       Crear Pictograma
     </button>
   )

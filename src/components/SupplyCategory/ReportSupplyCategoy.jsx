@@ -15,8 +15,6 @@ const ReportSupplyCategory = ({ dataApi }) => {
     { key: 'statedAt', name: 'Estado' }
   ]
 
-  console.log(dataApi)
-
   const rows = dataApi
     ? dataApi.map(category => ({
       id: category.id,
@@ -28,7 +26,6 @@ const ReportSupplyCategory = ({ dataApi }) => {
 
   const currentDate = new Date(Date.now())
   const formattedDate = format(currentDate, 'dddd D [de] MMMM [de] YYYY', 'es')
-  console.log(formattedDate)
 
   return (
     <>
@@ -39,7 +36,7 @@ const ReportSupplyCategory = ({ dataApi }) => {
             className="h-10 mr-3"
             alt="SENA Logo"
           />
-          <h1 className="font-black text-3xl">Informe categoria insumos</h1>
+          <h1 className="font-black text-3xl">Informe categoría insumos</h1>
           <p className="text-xl">Creado el dia: {formattedDate}</p>
         </div>
       </div>

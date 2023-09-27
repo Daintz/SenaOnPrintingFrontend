@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Campo requerido'),
+  cost: Yup.number().required('Campo requerido'),
 
 })
 
@@ -29,12 +30,23 @@ function Updatefinish () {
 
     })
   }
-
   const inputs = [
-    { key: 0, name: 'name', title: 'Nombre', type: 'text', placeholder: 'Nombre' },
-    { key: 0, cost: 'cost', title: 'Costo', type: 'number', placeholder: 'Costo' },
-   
+    {
+      key: 0,
+      name: 'name',
+      title: 'Nombre',
+      type: 'text',
+      placeholder: 'Nombre del producto'
+    },
+    {
+      key: 1,
+      name: 'cost',
+      title: 'Costo',
+      type: 'Number',
+      placeholder: 'Nombre de la empresa'
+    }
   ]
+
 
   return (
     <Formik
@@ -69,7 +81,8 @@ function Updatefinish () {
           ))}
           <button
             type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="col-span-3 w-full border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+            
           >
         Actualizar Acabado
           </button>

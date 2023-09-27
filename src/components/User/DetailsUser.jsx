@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, setAction, setDetailsData, setWidth } from '../../context/Slices/Modal/ModalSlice'
-import { BsClipboard2 } from 'react-icons/bs'
+import { GrView } from 'react-icons/gr'
 
 function DetailsUser () {
   const { detailsData } = useSelector((state) => state.modal)
@@ -10,10 +10,10 @@ function DetailsUser () {
       <p><b>Nombres:</b> {names}</p>
       <p><b>Apellidos:</b> {surnames}</p>
       <p><b>Tipo de Documento:</b> {typeDocumentId}</p>
-      <p><b>Numero de Documento:</b> {documentNumber}</p>
+      <p><b>Número de Documento:</b> {documentNumber}</p>
       <p><b>Telefono:</b> {phone}</p>
       <p><b>Direccion:</b> {address}</p>
-      <p><b>Correo Electronico:</b> {email}</p>
+      <p><b>Correo Electrónico:</b> {email}</p>
       <p><b>Rol:</b> {roleId}</p>
       <p>
       <b>Estado:</b> {' '}
@@ -44,7 +44,7 @@ export function DetailsButtonUser ({ user }) {
       <button type="button" onClick={() => {
         handleOpen()
       }}>
-        <BsClipboard2 className="h-5 w-5 mr-2" />
+        <GrView alt="Icono detalles" title="Ver detalles del usuario" className="opacity-60 h-5 w-5 mr-2" />
       </button>
   )
 }

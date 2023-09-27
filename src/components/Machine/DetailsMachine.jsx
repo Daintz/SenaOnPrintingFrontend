@@ -9,10 +9,10 @@ function DetailsMachine () {
     <>
     
       <p><b>Nombre:</b> {name}</p>
-      <p><b>Ancho Minimo:</b> {minimumHeight}</p>
-      <p><b>Alto Minimo:</b> {minimumWidth}</p>
-      <p><b>Ancho Maximo:</b> {maximumHeight}</p>
-      <p><b>Alto Maximo:</b> {maximumWidth}</p>
+      <p><b>Ancho Mínimo:</b> {minimumHeight}</p>
+      <p><b>Alto Mínimo:</b> {minimumWidth}</p>
+      <p><b>Ancho Máximo:</b> {maximumHeight}</p>
+      <p><b>Alto Máximo:</b> {maximumWidth}</p>
       <p><b>Costo por hora:</b> {costByUnit}</p>
       <p><b>Costo por unid:</b> {costByHour}</p>
       <p>
@@ -34,7 +34,7 @@ export function DetailsButtomMachine ({ machine }) {
   const dispatch = useDispatch()
   const handleOpen = () => {
     dispatch(setWidth({ width: '500px' }))
-    dispatch(openModal({ title: 'Detalles de maquinas ' }))
+    dispatch(openModal({ title: 'Detalles de máquinas ' }))
     dispatch(setAction({ action: 'details' }))
     dispatch(setDetailsData({ detailsData: machine }))
   }

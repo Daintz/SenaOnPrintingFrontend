@@ -14,6 +14,16 @@ module.exports = {
       'sidebarMD': { min: "640px" },
       ...defaultTheme.screens
     },
+    extend: {
+      colors: {
+        'custom-blue': {
+          DEFAULT: 'rgb(0, 49, 77)',
+          light: 'rgba(0, 38, 60, 0.7)',
+        },
+        'custom-blue-light': 'rgb(0, 38, 60)',
+        'custom-green': 'rgb(57, 169, 0)',
+      },
+    },
   },
   plugins: [],
 };

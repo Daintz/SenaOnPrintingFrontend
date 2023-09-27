@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
+import jwtDecode from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -10,7 +11,7 @@ const Login = () => {
   const usenavigate = useNavigate()
 
   useEffect(() => {
-    sessionStorage.clear()
+    localStorage.clear()
   }, [])
 
   const handleLogin = async (e) => {
@@ -21,9 +22,13 @@ const Login = () => {
     }).then((resp) => {
       //alert(resp.message)
       if (resp.token.length !== 0) {
-        sessionStorage.setItem('session_token', resp.token)
-        toast.success(resp.message)
-        usenavigate('/dashboard')
+        const token = resp.token;
+        const decodedToken = jwtDecode(token); // Decodificar el token JWT
+        localStorage.setItem('session_token', token);
+        localStorage.setItem('UserId', decodedToken.id);
+        console.log(decodedToken.id)
+        toast.success(resp.message);
+        usenavigate('/');
       }
     }).catch((err) => {
       toast.error(err.response.data.message)
@@ -38,7 +43,7 @@ const Login = () => {
               <div className="flex flex-col items-center justify-center">
                 <img src="https://oficinavirtualderadicacion.sena.edu.co/oficinavirtual/Resources/logoSenaNaranja.png" alt="Logo" className="mb-2 w-20 h-20" />
                 <h1 className="text-3xl font-semibold text-center text-green-700">
-                  Inicio de Sesion
+                  Inicio de Sesión
                 </h1>
               </div>
                 <form onSubmit={handleLogin} className="mt-6">
@@ -47,11 +52,11 @@ const Login = () => {
                             htmlFor="email"
                             className="block text-sm font-semibold text-gray-800"
                         >
-                            Correo Electronico
+                            Correo Electrónico
                         </label>
                         <input
                             type="email"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -66,7 +71,7 @@ const Login = () => {
                         </label>
                         <input
                             type="password"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue-light focus:border-custom-blue block w-full p-2.5"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
@@ -76,11 +81,11 @@ const Login = () => {
                       className='mt-6 mb-6'
                       to={"/olvide_contraseña"}
                     >
-                      <a className='text-blue'>Olvide mi Contraseña</a>
+                      <a className='text-blue'>Olvidé mi Contraseña</a>
                     </Link>
                     <div className="mt-6">
-                        <button className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Iniciar Sesion
+                        <button className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Iniciar Sesión
                         </button>
                     </div>
                 </form>

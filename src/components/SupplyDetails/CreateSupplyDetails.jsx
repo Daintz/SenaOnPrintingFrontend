@@ -1,420 +1,371 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup'
-import { usePostSupplyDetailsMutation } from '../../context/Api/Common'
-import {
-  changeAction,
-  closeModal,
-  openModal,
-  setAction,
-  setWidth
-} from '../../context/Slices/Modal/ModalSlice'
-import Spinner from '../Spinner/Spinner'
 import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
 import clientAxios from '../../config/clientAxios'
+import { usePostSupplyDetailsMutation} from '../../context/Api/Common'
+import { useNavigate, Link } from 'react-router-dom'
 
 const validationSchema = Yup.object().shape({
-  description: Yup.string().required('Campo requerido'),
-  supplyCost: Yup.number().required('Campo requerido'),
-  batch: Yup.string().required('Campo requerido'),
-  initialQuantity: Yup.number().required('Campo requerido'),
-  entryDate: Yup.date().required('Campo requerido'),
-  expirationDate: Yup.date().required('Campo requerido'),
-  actualQuantity: Yup.number().required('Campo requerido'),
-  supplyId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un insumo'),
-  providerId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir un proveedor'),
-  warehouseId: Yup.number().required('Campo requerido').moreThan(0, 'Debe elegir una bodega'),
 })
 
-const getSupply = () => {
-  return new Promise((resolve, reject) => {
-    clientAxios.get('/Supply').then(
-      (result) => {
-        const supplyId = result.data.map((Supply) => ({
-          'label': Supply.name,
-          'value': Supply.id
-        }));
-        resolve(supplyId);
-      },
-      (error) => {
-        reject(error);
-      }
-    );
-  });
-};
-
-const getProviders = async () => {
+const getProviders = () => {
   return new Promise((resolve, reject) => {
     clientAxios.get('/Provider').then(
       (result) => {
-        const providerId = result.data.map((Provider) => ({
-          'label': Provider.nameCompany,
-          'value': Provider.id
-        }));
-        resolve(providerId);
+        const providers = result.data.map((provider) => ({
+          'label': `${provider.nitCompany} - ${provider.nameCompany}`,
+          'value': parseInt(provider.id)
+        }))
+        resolve(providers)
       },
       (error) => {
-        reject(error);
+        reject(error)
       }
-    );
-  });
-};
+    )
+  })
+}
 
-const getWarehause = () => {
+const getWarehouses = () => {
   return new Promise((resolve, reject) => {
     clientAxios.get('/Warehause').then(
       (result) => {
-        const warehouse_id = result.data.map((Warehause) => ({
-          'label': Warehause.warehouseTypeId,
-          'value': Warehause.warehouseTypeId
-        }));
-        resolve(warehouse_id);
+        const warehouses = result.data.map((warehouse) => ({
+          'label': warehouse.ubication,
+          'value': parseInt(warehouse.id)
+        }))
+        resolve(warehouses)
       },
       (error) => {
-        reject(error);
+        reject(error)
       }
-    );
-  });
+    )
+  })
+}
+
+const getUnitMeasures = () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/UnitMesure').then(
+      (result) => {
+        const unit_measures = result.data.map((unit_measure) => ({
+          'label': unit_measure.name,
+          'value': parseInt(unit_measure.id)
+        }))
+        resolve(unit_measures)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
+
+const getSupplies = () => {
+  return new Promise((resolve, reject) => {
+    clientAxios.get('/Supply').then(
+      (result) => {
+        const supplies = result.data.map((supply) => ({
+          'label': supply.name,
+          'Cost': parseFloat(supply.averageCost),
+          'value': parseInt(supply.id),
+          'unitMeasures': supply.unitMeasuresXSupply.map((um) => ({ value: parseInt(um.id), label: um.name }))
+        }))
+        resolve(supplies)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
+
+const initialValues = {
+
 };
 
-function CreateSupplyDetails () {
-  const [supplyOptions, setSupplyOptions] = useState([]);
-  const [providerOptions, setProviderOptions] = useState([]);
-  const [warehauseOptions, setWarehauseOptions] = useState([]);
 
-  const fetchOptions = () => {
-    getSupply().then((options) => {
-      setSupplyOptions(options);
+
+const CreateSupplyDetails = () => {
+  const [providerOptions, setProviderOptions] = useState([])
+  const [warehouseOptions, setWarehouseOptions] = useState([])
+  const [unitMeasureOptions, setUnitMeasureOptions] = useState([])
+  const [supplyOptions, setSupplyOptions] = useState([])
+  const [createSupplyDetail, { error, isLoading }] = usePostSupplyDetailsMutation()
+  const navigate = useNavigate();
+
+
+  const onSubmit = async (values) => {
+    const formData = new FormData();
+
+    formData.append('description', values.description);
+    formData.append('providerId', values.providerId);
+    formData.append('entryDate', values.entryDate);
+
+    values.buySuppliesDetails.forEach((detail, index) => {
+      formData.append(`buySuppliesDetails[${index}].supplyId`, detail.supplyId);
+      formData.append(`buySuppliesDetails[${index}].supplyCost`, detail.supplyCost);
+      formData.append(`buySuppliesDetails[${index}].supplyQuantity`, detail.supplyQuantity);
+      formData.append(`buySuppliesDetails[${index}].expirationDate`, detail.expirationDate);
+      formData.append(`buySuppliesDetails[${index}].warehouseId`, detail.warehouseId);
+      formData.append(`buySuppliesDetails[${index}].unitMeasuresId`, detail.unitMeasuresId);
+      formData.append(`buySuppliesDetails[${index}].securityFileInfo`, detail.securityFileInfo);
     });
-    getProviders().then((options) => {
-      setProviderOptions(options);
-    });
-    getWarehause().then((options) => {
-      setWarehauseOptions(options);
-    });
-  };
-
-  useEffect(() => {
-    fetchOptions();
-  }, []);
-
-  const dispatch = useDispatch()
-  const [createSupplyDetails, { error, isLoading }] = usePostSupplyDetailsMutation()
-
-  const handleSubmit = async (values) => {
     if (isLoading) return <Spinner />
 
-    await createSupplyDetails(values)
+    const response = clientAxios.post('/buy_supplies', formData).then((response) => {
+      return response.data
+    }).then((resp) => {
+      //alert(resp.message)
+      toast.success('Compra creada con exito')
+      navigate('/BuySupplies');
+    }).catch((err) => {
+      toast.error('Error al crear la compra')
+    })
+  };
 
-    dispatch(changeAction())
-    if (!error) {
-      dispatch(closeModal())
-    }
-    toast.success('Loteo de insumo creado con exito')
+  const fetchOptions = () => {
+    getProviders().then((options) => {
+      setProviderOptions(options)
+    })
+    getWarehouses().then((options) => {
+      setWarehouseOptions(options)
+    })
+    getUnitMeasures().then((options) => {
+      setUnitMeasureOptions(options)
+    })
+    getSupplies().then((options) => {
+      setSupplyOptions(options)
+    })
   }
 
-  const inputs = [
-    {
-      key: 0,
-      name: 'description',
-      title: 'Descripción',
-      type: 'text',
-      placeholder: 'Descripción'
-    },
-    
-    {
-      key: 1,
-      name: 'supplyCost',
-      title: 'Costo insumo',
-      type: 'number',
-      placeholder: 'Costo insumo'
-    },
-
-    {
-      key: 2,
-      name: 'batch',
-      title: 'Lote',
-      type: 'text',
-      placeholder: 'Lote'
-    },
-    {
-      key: 3,
-      name: 'initialQuantity',
-      title: 'Cantidad inicial',
-      type: 'number',
-      placeholder: 'Cantidad inicial'
-    },
-    {
-      key: 4,
-      name: 'entryDate',
-      title: 'Fecha de entrada',
-      type: 'date',
-      placeholder: 'Fecha de entrada'
-    },
-    {
-      key: 5,
-      name: 'expirationDate',
-      title: 'Fecha de caducidad',
-      type: 'date',
-      placeholder: 'Fecha de caducidad'
-    },
-    {
-      key: 6,
-      name: 'actualQuantity',
-      title: 'Cantidad actual',
-      type: 'number',
-      placeholder: 'Cantidad actual'
-    },
-    {
-      key: 7,
-      name: 'supplyId',
-      title: 'Id insumo',
-      type: 'select',
-      data: supplyOptions,
-      placeholder: 'Id insumo'
-    },
-    {
-      key: 8,
-      name: 'providerId',
-      title: 'Id proveedor',
-      type: 'select',
-      data: providerOptions,
-      placeholder: 'Id proveedor'
-    },
-    {
-      key: 9,
-      name: 'warehouseId',
-      title: 'Id bodega',
-      type: 'select',
-      data: warehauseOptions,
-      placeholder: 'Id bodega'
-    },
-
-  ]
+  useEffect(() => {
+    fetchOptions()
+  }, []);
 
   return (
     <Formik
       initialValues={{
         description: '',
-        supplyCost: 0,
-        batch: '',
-        initialQuantity: 0,
-        entryDate: 0,
-        expirationDate: 0,
-        actualQuantity: 0,
-        supplyId: 1,
-        providerId: 1,
-        warehouseId:1
+        providerId: 0,
+        entryDate: '',
+        buySuppliesDetails: [
+          {
+            supplyId: '',
+            supplyCost: 0,
+            supplyQuantity: 0,
+            expirationDate: '',
+            warehouseId: 0,
+            securityFileInfo: null,
+            unitMeasuresId: 0,
+          },
+        ],
       }}
-      onSubmit={(values) => {
-        handleSubmit(values)
-      }}
+      onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      <Form className="space-y-6">
-        <div className='flex mb-2'>
-          <div key='0' className='w-1/2 mr-2'>
-            <label htmlFor="description">Descripción</label>
-            <Field
-                type="text"
-                name="description"
-                id="description"
-                placeholder="Descripción"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="description"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='1' className='w-1/4 ml-2'>
-            <label htmlFor="supplyCost">Costo insumo</label>
-            <Field
-                type="number"
-                name="supplyCost"
-                id="supplyCost"
-                placeholder="Costo insumo"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="supplyCost"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-        </div>
-        <div className='flex mb-2'>
-          <div key='2' className='w-1/7 ml-2'>
-            <label htmlFor="batch">Lote</label>
-            <Field
-                type="text"
-                name="batch"
-                id="batch"
-                placeholder="Lote"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="batch"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+      {({ values, setFieldValue }) => (
+        <div className="relative bg-white py-10 px-20 shadow-2xl mdm:py-10 mdm:px-8">
+          <div className="bg-white sm:rounded-lg overflow-hidden">
+            <Form className="max-w-3xl mx-auto">
+              <div className="flex mb-4">
+                <div className="w-1/2 mr-2">
+                  <label htmlFor="entryDate" className="block font-medium mb-1">
+                    Fecha de la Compra
+                  </label>
+                  <div>
+                    <Field
+                      name="entryDate"
+                      type="date"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                    />
+                  </div>
+                </div>
+                <div className="w-1/2 ml-2">
+                  <label htmlFor="providerId" className="block font-medium mb-1">
+                    Proveedor
+                  </label>
+                  <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+                    <option value="0">Seleccione un proveedor</option>
+                    {providerOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Field>
+                </div>
+              </div>
+              <div className="mb-4">
+              </div>
+              <div className="mb-4">
+                <label htmlFor="description" className="block font-medium mb-1">
+                  Observaciones de la Compra
+                </label>
+                <Field
+                  name="description"
+                  type="textarea"
+                  component="textarea"
+                  row="5"
+                  placeholder="Observaciones generales de la compra"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                />
+              </div>
 
-          <div key='3' className='w-1/4 mr-2'>
-            <label htmlFor="initialQuantity">Cantidad inicial</label>
-            <Field
-                type="number"
-                name="initialQuantity"
-                id="initialQuantity"
-                placeholder="Cantidad inicial"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="initialQuantity"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='4' className='w-1/4 ml-2'>
-            <label htmlFor="entryDate">Fecha de entrada</label>
-            <Field
-                type="date"
-                name="entryDate"
-                id="entryDate"
-                placeholder="Fecha de entrada"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="entryDate"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          </div>
-        <div className='flex mb-2'>
-          <div key='5' className='w-1/4 mr-2'>
-            <label htmlFor="expirationDate">Fecha de caducidad</label>
-            <Field
-                type="date"
-                name="expirationDate"
-                id="expirationDate"
-                placeholder="Fecha de caducidad"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="expirationDate"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div className='flex mb-2'>
-          <div key='6' className='w-1/4 mr-2'>
-            <label htmlFor="actualQuantity">Cantidad actual</label>
-            <Field
-                type="number"
-                name="actualQuantity"
-                id="actualQuantity"
-                placeholder="Cantidad actual"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="actualQuantity"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='7' className='w-1/9 ml-2'>
-            <label htmlFor="supplyId">Id insumo</label>
-            <br />
-            <Field name="supplyId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
-              <option value="0">Seleccione un insumo</option>
-              {supplyOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="supplyId"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='8' className='w-1/9 ml-2'>
-            <label htmlFor="providerId">Id proveedor</label>
-            <br />
-            <Field name="providerId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
-              <option value="0">Seleccione un proveedor</option>
-              {providerOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="providerId"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-          <div key='9' className='w-1/9 ml-2'>
-            <label htmlFor="warehouseId">Id bodega</label>
-            <br />
-            <Field name="warehouseId" as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
-              <option value="0">Seleccione una bodega</option>
-              {warehauseOptions.map(option =>  (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="warehouseId"
-              component="div"
-              className="text-red-500"
-            />
+              <FieldArray name="buySuppliesDetails">
+                {({ push, remove }) => (
+                  <div>
+                    <div className='flex justify-between'>
+                    <button type="button" onClick={() => push(initialValues.buySuppliesDetails)} className="text-white bg-slate-500 hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto mb-5">
+                      Añadir Insumo
+                    </button>
+
+                    <button type="submit" className="text-white bg-custom-blue hover:bg-custom-blue-lighter focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-auto mb-5">
+                      Crear Compra
+                    </button>
+                    </div>
+
+                    {values.buySuppliesDetails.map((_, index) => (
+                      <div key={index} className="border border-gray-300 rounded-md p-4 mb-4">
+                        <div className='flex row justify-between'>
+                          <h3 className="text-lg font-medium mb-2">Insumo {index + 1}</h3>
+                          <button type="button" onClick={() => remove(index)} className="text-white bg-red-900 hover:bg-red-800 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5">
+                            Eliminar Insumo
+                          </button>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.supplyId`} className="block font-medium mb-1">
+                            Insumo
+                          </label>
+                          <Field
+                            name={`buySuppliesDetails.${index}.supplyId`}
+                            as="select"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          >
+                            <option value="0">Seleccione un insumo</option>
+                            {supplyOptions.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.supplyQuantity`} className="block font-medium mb-1">
+                            Cantidad
+                          </label>
+                          <Field
+                            name={`buySuppliesDetails.${index}.supplyQuantity`}
+                            type="number"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.unitMeasuresId`} className="block font-medium mb-1">
+                            Unidad de Medida
+                          </label>
+                          <Field
+                            name={`buySuppliesDetails.${index}.unitMeasuresId`}
+                            as="select"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          >
+                            <option value="0">Seleccione una unidad</option>
+                            {unitMeasureOptions.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.supplyCost`} className="block font-medium mb-1">
+                            Valor Unitario
+                          </label>
+                          <Field
+                            name={`buySuppliesDetails.${index}.supplyCost`}
+                            type="number"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.expirationDate`} className="block font-medium mb-1">
+                            Fecha de Vencimiento
+                          </label>
+                          <Field
+                            name={`buySuppliesDetails.${index}.expirationDate`}
+                            type="date"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.warehouseId`} className="block font-medium mb-1">
+                            Bodega
+                          </label>
+                          <Field name={`buySuppliesDetails.${index}.warehouseId`} as="select" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5">
+                            <option value="0">Seleccione una bodega</option>
+                            {warehouseOptions.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor={`buySuppliesDetails.${index}.securityFileInfo`} className="block font-medium mb-1">
+                            Ficha de Seguridad
+                          </label>
+                          <input
+                            type="file"
+                            onChange={(event) => {
+                              const file = event.target.files[0];
+                              setFieldValue(`buySuppliesDetails.${index}.securityFileInfo`, file);
+                            }}
+                            multiple={false}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-custom-blue focus:border-custom-blue block w-full p-2.5"
+                          />
+                        </div>
+                      </div>
+                    )).reverse()}
+
+                  </div>
+                )}
+              </FieldArray>
+            </Form>
           </div>
         </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          Crear loteo de insumo
-        </button>
-      </Form>
+      )}
     </Formik>
-  )
-}
+  );
+};
 
-export function CreateButtomSupplyDetails () {
-  // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
-  const dispatch = useDispatch()
-  const handleOpen = () => {
-    dispatch(setWidth({ width: '1500px' }))
-    dispatch(openModal({ title: 'Registrar lote de insumo' }))
-    dispatch(setAction({ action: 'creating' }))
-  }
-  // ?
+export function CreateButtomSupplyDetails() {
 
+  const handleOpen = () => {}
   return (
-    <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-      type="button"
-      onClick={() => handleOpen()}
-    >
-    <svg
-        className="h-3.5 w-3.5 mr-2"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          clipRule="evenodd"
-          fillRule="evenodd"
-          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-        />
-      </svg>
-      Registrar Loteo de insumo
-    </button>
-  )
+
+      <Link to="/BuySupplies/create">
+        <button
+          className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+          type="button"
+          onClick={() => handleOpen()}
+        >
+          <svg
+            className="h-3.5 w-3.5 mr-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              clipRule="evenodd"
+              fillRule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            />
+          </svg>
+          Crear Compra
+        </button>
+      </Link>
+
+  );
 }
 
-export default CreateSupplyDetails
+export default CreateSupplyDetails;

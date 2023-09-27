@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../Spinner/Spinner'
 import Error from '../Error/Error'
 import { toast } from 'react-toastify'
+import {AiOutlineMinusCircle} from 'react-icons/ai'
+
 
 function ChangeStateOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
@@ -29,11 +31,10 @@ function ChangeStateOrderProduction ({ orderProduction }) {
 
   return (
     <>
-      <h1 className="text-4xl text-center font-bold">¿Estas seguro?</h1>
-      <p className="text-lg">¿Estas seguro de <b>cambiar de estado</b> esta orden de producción?</p>
+<p className="text-lg">Para cambiar de estado esta orden de producción debes darle click a <b>aceptar</b>.</p>
       <div className="px-6 py-4 grid grid-cols-2  place-content-center" >
-        <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Cambiar de estado</button>
-        <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
+      <button type="button" className="focus:outline-none text-white bg-custom-blue hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handleSubmit}>Aceptar</button>
+        <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" onClick={handle}>Cancelar</button>
       </div>
     </>
   )
@@ -42,28 +43,19 @@ function ChangeStateOrderProduction ({ orderProduction }) {
 export function ChangeStateButtonOrderProduction ({ orderProduction }) {
   const dispatch = useDispatch()
   const handleOpen = async () => {
+    if (orderProduction.orderStatus !== 2) {
+      // Puedes mostrar una notificación o realizar alguna acción en caso de que no cumpla la condición
+      toast.error('No puedes cambiar el estado de esta orden porque ya se encuentra en producción');
+    } else {
     dispatch(setWidth({ width: '800px' }))
     dispatch(openModal({ title: 'Cambiar de estado' }))
     dispatch(setAction({ action: 'changing' }))
     dispatch(setChangeStatusData({ changeStatusData: orderProduction }))
-  }
+  }}
 
   return (
     <button type="button" onClick={ handleOpen }>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
+      <AiOutlineMinusCircle alt="Icono detalles" title="Cambiar estado OP" className="h-6 w-6 mr-2" />
     </button>
   )
 }

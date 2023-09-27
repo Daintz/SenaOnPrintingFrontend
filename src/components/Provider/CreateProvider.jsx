@@ -6,6 +6,7 @@ import { usePostProviderMutation } from '../../context/Api/Common';
 import { changeAction, closeModal, openModal, setAction, setWidth } from '../../context/Slices/Modal/ModalSlice';
 import Spinner from '../Spinner/Spinner';
 import { toast } from 'react-toastify';
+import clientAxios from '../../config/clientAxios'
 
 async function checkNITExistence(NIT) {
   try {
@@ -22,6 +23,24 @@ async function checkNITExistence(NIT) {
     return { exists: false };
   }
 }
+
+
+async function checkNameCompanyExistence(nameCompany) {
+  try {
+    const response = await clientAxios.get('/Provider');
+    const Providers = response.data;
+
+    // Verificar si el NIT ya existe en los proveedores
+    const NameComapanyExist = Providers.some(provider => provider.nameCompany === nameCompany);
+
+    return { exists: NameComapanyExist };
+  } catch (error) {
+    console.error('Error al verificar la existencia del Nombre de la empresa de la empresa:', error);
+    // Manejar el error adecuadamente en tu aplicación
+    return { exists: false };
+  }
+}
+
 
 async function checkEmailExistence(email) {
   try {
@@ -40,21 +59,28 @@ async function checkEmailExistence(email) {
 }
 
 const validationSchema = Yup.object().shape({
-  nitCompany: Yup.string()
+  nitCompany: Yup.string().min(8, 'Minimo 8 digitos').max(15, 'Maximo 15 digitos')
     .required('Campo requerido')
     .test('unique-NIT', 'El NIT ya se encuentra registrado', async function (value) {
       const response = await checkNITExistence(value);
       return !response.exists; // Devuelve false si el NIT ya existe
     }),
-  nameCompany: Yup.string().required('Campo requerido'),
+
+
+  nameCompany: Yup.string()
+    .required('Campo requerido').min(3, 'minimo 3 caracteres').max(50, 'Maximo 50 caracteres')
+    .test('unique-NAME', 'La empresa ya se encuentra registrado', async function (value) {
+      const response = await checkNameCompanyExistence(value);
+      return !response.exists; // Devuelve false si el NIT ya existe
+    }),
   email: Yup.string()
     .required('Campo requerido')
     .test('unique-email', 'El correo ya se encuentra registrado', async function (value) {
       const response = await checkEmailExistence(value);
       return !response.exists; // Devuelve false si el correo ya existe
     }),
-  phone: Yup.string().required('Campo requerido'),
-  companyAddress: Yup.string().required('Campo requerido')
+  phone: Yup.string('digite solo numeros').min(10, 'Minimo 10 digitos').required('Campo requerido').max(10,'Maximo 10 numeros').matches(/^[0-9]+$/, 'El teléfono solo puede contener números'),
+  companyAddress: Yup.string().required('Campo requerido').min(7, 'Minimo 10 digitos').max(100, 'Maximo 100 digitos')
 });
 
 function CreateProvider() {
@@ -145,21 +171,21 @@ function CreateProvider() {
               component="div"
               className="text-red-500"
 
-              />
-            </div>
-          ))}
-          <button
-            type="submit"
-            className="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Registrar Proveedor
-          </button>
-        </Form>
+            />
+          </div>
+        ))}
+        <button
+          type="submit"
+          className="w-full text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:outline-none focus:bg-custom-blue-light font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Registrar Proveedor
+        </button>
+      </Form>
     </Formik>
   )
 }
 
-export function CreateButtomProvider () {
+export function CreateButtomProvider() {
   // ? Este bloque de codigo se usa para poder usar las funciones que estan declaradas en ModalSlice.js y se estan exportando alli
   const dispatch = useDispatch()
   const handleOpen = () => {
@@ -171,11 +197,11 @@ export function CreateButtomProvider () {
 
   return (
     <button
-      className="flex items-center justify-center border border-gray-400 text-black bg-green-600 hover:bg-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
+      className="flex items-center justify-center border border-gray-400 text-white bg-custom-blue hover:bg-custom-blue-light focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
       type="button"
       onClick={() => handleOpen()}
     >
-    <svg
+      <svg
         className="h-3.5 w-3.5 mr-2"
         fill="currentColor"
         viewBox="0 0 20 20"

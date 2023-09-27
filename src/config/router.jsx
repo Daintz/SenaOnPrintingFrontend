@@ -3,9 +3,11 @@ import {
   createRoutesFromElements,
   Route
 } from 'react-router-dom'
+
+import { ProtectedRoute } from '../context/Helpers/protectedRoute';
+
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Provider from '../pages/Provider/Provider'
-import WarehauseType from '../pages/Warehausetype/Warehausetype'
 import Warehause from '../pages/Warehause/Warehause'
 import Supply from '../pages/Supply/Supply'
 import Machine from '../pages/Machine/Machines'
@@ -18,6 +20,7 @@ import QuotationClientDetail from '../pages/QuotationClientDetail/QuotationClien
 import Role from '../pages/Role/Role'
 import TypeDocument from '../pages/TypeDocument/TypeDocument'
 import User from '../pages/User/User'
+import Profile from '../pages/User/Profile';
 import Login from '../pages/Login/Login'
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword'
 import ForgotPasswordEmail from '../pages/ForgotPassword/ForgotPasswordEmail'
@@ -32,242 +35,292 @@ import TypeServices from '../pages/TypeServices/TypeServices'
 import SupplyPictogrmas from '../pages/SupplyPictograms/SupplyPictograms'
 import QuotationProviders from '../pages/QuotationProviders/QuotationProviders'
 import SupplyDetails from '../pages/SupplyDetails/SupplyDetails'
+import CreateSupplyDetails from '../components/SupplyDetails/CreateSupplyDetails'
 import DashboardLayout from '../layout/DashboardLayout'
 import QuotationClientApproved from '../pages/ListQuotationClientApproved/QuotationClientApproved'
 import Quotation from '../pages/Quotation/Quotation'
+import ViewOrderProduction from '../pages/CreateOrderProduction/CreateOrderProduction'
+import ViewQuotationClient from '../components/CreateQuotationClient/CreateQuotation'
+import UpdateQuotation from '../components/UpdateQuotationClient/UpdateQuotation'
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-
-      <Route path="provider"
-        element={<DashboardLayout>
-          <Provider />
-        </DashboardLayout>} />
-      <Route path="warehausetype"
-        element={<DashboardLayout>
-          <WarehauseType />
-        </DashboardLayout>} />
-      <Route path="warehause"
-        element={<DashboardLayout>
-          <Warehause />
-        </DashboardLayout>} />
-       
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/olvide_contraseña" element={<ForgotPasswordEmail />} />
       <Route path="/restaurar_contraseña" element={<ForgotPassword />} />
+
       <Route
-        path="dashboard"
+        path=""
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Dashboard />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
 
-      <Route
-        path="supply"
-        element={
-          <DashboardLayout>
-            <Supply />
-          </DashboardLayout>
-        }
-      />
-      <Route
-        path="supplyCategory"
-        element={
-          <DashboardLayout>
-            <SupplyCategory />
-          </DashboardLayout>
-        }
-      />
+      <Route path="provider"
+        element={<ProtectedRoute>
+          <Provider />
+        </ProtectedRoute>} />
+
+      <Route path="warehause"
+        element={<ProtectedRoute>
+          <Warehause />
+        </ProtectedRoute>} />
 
       <Route path="Machine"
-        element={<DashboardLayout>
+        element={<ProtectedRoute>
           <Machine />
-        </DashboardLayout>} />
+        </ProtectedRoute>} />
+
       <Route path="Finish"
-        element={<DashboardLayout>
+        element={<ProtectedRoute>
           <Finish />
-        </DashboardLayout>} />
+        </ProtectedRoute>} />
+
       <Route
         path="roles"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Role />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="tipos_documentos"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <TypeDocument />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="quotationClient"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <QuotationClient />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
        <Route
         path="quotation"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Quotation />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="quotationclientDetail"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <QuotationClientDetail />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="usuarios"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <User />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
+      <Route
+        path="perfil"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="UnitMesure"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <UnitMesure />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
 
       <Route
         path="clients"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Client />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="grammage_caliber"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <GrammageCaliber />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="paper_cut"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <PaperCut />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="substrate"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Substrate />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="Lineature"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Lineature />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="impositionPlanch"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <ImpositionPlanch />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="OrderProduction"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <OrderProduction />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
 
       <Route
         path="typeServices"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <TypeServices />
-          </DashboardLayout>
-        }
-      />
-      <Route
-        path="supplyPictograms"
-        element={
-          <DashboardLayout>
-            <SupplyPictogrmas />
-          </DashboardLayout>
-        }
-      />
-      <Route
-        path="quotitationProviders"
-        element={
-          <DashboardLayout>
-            <QuotationProviders />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
 
       <Route
-        path="supplyDetails"
+        path="supplyPictograms"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
+            <SupplyPictogrmas />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="quotitationProviders"
+        element={
+          <ProtectedRoute>
+            <QuotationProviders />
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="BuySupplies"
+        element={
+          <ProtectedRoute>
             <SupplyDetails />
-          </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="BuySupplies/create"
+        element={
+          <ProtectedRoute>
+            <CreateSupplyDetails />
+          </ProtectedRoute>
         }
       />
 
       <Route
         path="product"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Product />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="supply"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <Supply />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="supplyCategory"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <SupplyCategory />
-          </DashboardLayout>
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="planOP"
         element={
-          <DashboardLayout>
+          <ProtectedRoute>
             <QuotationClientApproved />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="createOP"
+        element={
+          <ProtectedRoute>
+            <ViewOrderProduction />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="createQuotation"
+        element={
+          <ProtectedRoute>
+            <ViewQuotationClient />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="upadateQuotation"
+        element={
+          <DashboardLayout>
+            <UpdateQuotation />
           </DashboardLayout>
         }
       />
